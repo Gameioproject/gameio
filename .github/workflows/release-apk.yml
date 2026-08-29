@@ -1,0 +1,43 @@
+name: Release APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # QuayPass server keys are not part of this fork; the feature stays dark.
+      - name: Build release APKs (arm64 + armv7 splits)
+        run: ./gradlew :app:assembleRelease -PallAbis -x verifyQuayPassReleaseConfig --no-daemon
+
+      - name: Upload arm64 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: argosy-catalog-arm64
+          path: app/build/outputs/apk/release/*arm64*.apk
+
+      - name: Upload all release APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: argosy-catalog-all
+          path: app/build/outputs/apk/release/*.apk
