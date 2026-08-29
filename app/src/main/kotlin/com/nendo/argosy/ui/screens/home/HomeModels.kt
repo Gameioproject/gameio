@@ -274,7 +274,10 @@ data class HomeUiState(
     val isVideoPreviewLoading: Boolean = false,
     val muteVideoPreview: Boolean = false,
     val videoWallpaperEnabled: Boolean = false,
-    val videoWallpaperDelayMs: Long = 3000L
+    val videoWallpaperDelayMs: Long = 3000L,
+    /** Library only: rows list what is on this device instead of the whole catalog. */
+    val installedOnly: Boolean = false,
+    val compactCovers: Boolean = false
 ) {
     /**
      * The rows on offer, in the order [HomeSectionKind] declares them: the fixed opening run, then

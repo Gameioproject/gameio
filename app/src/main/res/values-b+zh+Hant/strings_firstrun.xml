@@ -73,7 +73,7 @@
     <string name="firstrun_image_cache_folder_note">圖片將儲存在「%1$s」子資料夾中。</string>
 
     <string name="firstrun_platform_select_eyebrow">選擇平台</string>
-    <string name="firstrun_platform_select_title">選擇要同步的平台</string>
+    <string name="firstrun_platform_select_title">選擇要關注的平台</string>
     <plurals name="firstrun_platform_select_selected_count">
         <item quantity="other">已選擇%1$d/%2$d個平台</item>
     </plurals>

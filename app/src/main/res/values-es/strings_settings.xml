@@ -241,6 +241,10 @@
 
     <string name="settings_home_screen_installed_only_title">Solo juegos instalados</string>
     <string name="settings_home_screen_installed_only_subtitle">Mostrar solo los juegos descargados en la pantalla de inicio</string>
+    <!-- Row title. Smaller covers on the home carousel. -->
+    <string name="settings_home_screen_compact_covers_title">Portadas compactas</string>
+    <!-- Second line of that row. -->
+    <string name="settings_home_screen_compact_covers_subtitle">Portadas más pequeñas en la fila de inicio para ver más juegos a la vez</string>
 
     <!-- ===== Saves section ===== -->
 

@@ -187,7 +187,7 @@ class RomMUserPropertyService @Inject constructor(
             val backgroundUrl = rom.backgroundUrls.firstOrNull()
                 ?: screenshotUrls.getOrNull(1)
                 ?: screenshotUrls.getOrNull(0)
-            val coverUrl = rom.coverLarge?.let { apiClient.buildMediaUrl(it) }
+            val coverUrl = rom.coverLarge?.let { apiClient.buildMediaUrl(it) } ?: rom.coverUrl
 
             val boxArtEnabled = userPreferencesRepository.userPreferences.first().boxArtCacheEnabled
             val boxBackUrl = if (boxArtEnabled) {

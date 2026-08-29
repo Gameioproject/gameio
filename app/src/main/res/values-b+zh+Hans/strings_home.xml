@@ -137,4 +137,10 @@
     <string name="home_media_season_local_all">全部%1$d集已在此设备上</string>
     <string name="home_media_season_local_partial">%1$d/%2$d集已在此设备上</string>
     <string name="home_media_download_size_gigabytes">%1$.1f GB</string>
+    <!-- Header switch state: the rows show only games on this device. -->
+    <string name="home_library_only_on">仅显示已下载</string>
+    <!-- Header switch state: the rows show the whole catalog. -->
+    <string name="home_library_only_off">全部游戏</string>
+    <!-- Footer hint for the RT switch. -->
+    <string name="home_footer_library_only">仅显示已下载</string>
 </resources>

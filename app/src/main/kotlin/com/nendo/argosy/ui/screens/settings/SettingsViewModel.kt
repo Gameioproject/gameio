@@ -1228,6 +1228,7 @@ class SettingsViewModel @Inject constructor(
     fun setAmbientLedScreenEnabled(enabled: Boolean) = displayDelegate.setAmbientLedScreenEnabled(viewModelScope, enabled)
     fun setAmbientLedAchievementFlash(enabled: Boolean) = displayDelegate.setAmbientLedAchievementFlash(viewModelScope, enabled)
     fun setInstalledOnlyHome(enabled: Boolean) = displayDelegate.setInstalledOnlyHome(viewModelScope, enabled)
+    fun setHomeCompactCovers(enabled: Boolean) = displayDelegate.setHomeCompactCovers(viewModelScope, enabled)
 
     fun loadPreviewGames() = routeLoadPreviewGames(this)
     fun cyclePrevPreviewGame() = routeCyclePrevPreviewGame(this)

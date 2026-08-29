@@ -153,10 +153,8 @@ class FirstRunViewModel @Inject constructor(
                 FirstRunStep.ROMM_SUCCESS -> FirstRunStep.PERMISSIONS
                 FirstRunStep.PERMISSIONS -> FirstRunStep.ROM_PATH
                 FirstRunStep.ROM_PATH -> FirstRunStep.IMAGE_CACHE
-                FirstRunStep.IMAGE_CACHE -> {
-                    if (state.rommPlatformCount > 10) FirstRunStep.PLATFORM_SELECT
-                    else FirstRunStep.CORE_PROMPT
-                }
+                // The catalog lists every system the server knows, so following is always a choice.
+                FirstRunStep.IMAGE_CACHE -> FirstRunStep.PLATFORM_SELECT
                 FirstRunStep.PLATFORM_SELECT -> FirstRunStep.CORE_PROMPT
                 FirstRunStep.CORE_PROMPT -> FirstRunStep.CORE_DOWNLOAD
                 FirstRunStep.CORE_DOWNLOAD -> FirstRunStep.COMPLETE
@@ -186,10 +184,7 @@ class FirstRunViewModel @Inject constructor(
                 FirstRunStep.ROM_PATH -> FirstRunStep.PERMISSIONS
                 FirstRunStep.IMAGE_CACHE -> FirstRunStep.ROM_PATH
                 FirstRunStep.PLATFORM_SELECT -> FirstRunStep.IMAGE_CACHE
-                FirstRunStep.CORE_PROMPT -> {
-                    if (state.rommPlatformCount > 10) FirstRunStep.PLATFORM_SELECT
-                    else FirstRunStep.IMAGE_CACHE
-                }
+                FirstRunStep.CORE_PROMPT -> FirstRunStep.PLATFORM_SELECT
                 FirstRunStep.CORE_DOWNLOAD -> FirstRunStep.CORE_PROMPT
                 FirstRunStep.COMPLETE -> FirstRunStep.CORE_DOWNLOAD
             }

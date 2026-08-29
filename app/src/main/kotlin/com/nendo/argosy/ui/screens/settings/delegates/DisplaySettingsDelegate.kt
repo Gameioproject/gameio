@@ -900,6 +900,13 @@ class DisplaySettingsDelegate @Inject constructor(
         }
     }
 
+    fun setHomeCompactCovers(scope: CoroutineScope, enabled: Boolean) {
+        scope.launch {
+            preferencesRepository.setHomeCompactCovers(enabled)
+            _state.update { it.copy(homeCompactCovers = enabled) }
+        }
+    }
+
     fun hasScreenCapturePermission(): Boolean = screenCaptureManager.hasPermission.value
 
     fun observeScreenCapturePermission(scope: CoroutineScope) {

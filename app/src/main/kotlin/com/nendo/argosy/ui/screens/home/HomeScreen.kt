@@ -685,11 +685,17 @@ fun HomeScreen(
              * not on screen and shrink the rail for no reason.
              */
             val infoHeight = if (uiState.isMediaRow) 0.dp else reservedGameInfoHeight()
-            val cardSize = rememberCarouselCardSize(
+            val fullCardSize = rememberCarouselCardSize(
                 availableHeight = maxHeight - headerBlockHeight - infoHeight -
                     Dimens.footerHeight - Dimens.spacingLg - Dimens.spacingXl,
                 config = uiState.carouselConfig
             )
+            // Compact covers trade cover size for more of the row on screen at once.
+            val cardSize = if (uiState.compactCovers) {
+                DpSize(fullCardSize.width * COMPACT_COVER_SCALE, fullCardSize.height * COMPACT_COVER_SCALE)
+            } else {
+                fullCardSize
+            }
             val infoAtBottom = uiState.carouselConfig.rowAlignment == HomeRowAlignment.TOP
             val railHeight = when {
                 isAutoGrid || isCustomGrid ->
@@ -716,6 +722,7 @@ fun HomeScreen(
                     onPreviousRow = viewModel::previousRow,
                     onNextRow = viewModel::nextRow,
                     onSelectRow = viewModel::selectRow,
+                    onToggleInstalledOnly = viewModel::toggleInstalledOnly,
                     isStacked = isPortrait,
                     headerOffset = videoModeHeaderOffset,
                     showSections = !isCustomGrid,
@@ -1035,11 +1042,13 @@ fun HomeScreen(
                                 } else {
                                     stringResource(R.string.home_footer_game_favorite)
                                 },
-                                InputButton.X to stringResource(R.string.home_footer_game_details)
+                                InputButton.X to stringResource(R.string.home_footer_game_details),
+                                InputButton.RT to stringResource(R.string.home_footer_library_only)
                             ),
                             variant = FooterVariant.SUBTLE,
                             onHintClick = { button ->
                                 when (button) {
+                                    InputButton.RT -> viewModel.toggleInstalledOnly()
                                     InputButton.A -> {
                                         when {
                                             focusedGame.needsInstall -> viewModel.installApk(focusedGame.id)
@@ -1458,6 +1467,7 @@ private fun HomeHeader(
     onPreviousRow: () -> Unit,
     onNextRow: () -> Unit,
     onSelectRow: (HomeRow) -> Unit,
+    onToggleInstalledOnly: () -> Unit,
     isStacked: Boolean,
     headerOffset: androidx.compose.ui.unit.Dp = 0.dp,
     showSections: Boolean = true,
@@ -1474,6 +1484,7 @@ private fun HomeHeader(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            LibraryOnlyToggle(enabled = uiState.installedOnly, onToggle = onToggleInstalledOnly)
             SystemStatusBar()
         }
         return
@@ -1489,8 +1500,10 @@ private fun HomeHeader(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                LibraryOnlyToggle(enabled = uiState.installedOnly, onToggle = onToggleInstalledOnly)
                 SystemStatusBar()
             }
             PlatformBreadcrumb(
@@ -1522,8 +1535,44 @@ private fun HomeHeader(
             modifier = Modifier.weight(1f)
         )
 
+        LibraryOnlyToggle(enabled = uiState.installedOnly, onToggle = onToggleInstalledOnly)
         SystemStatusBar()
     }
+}
+
+/**
+ * The one switch between the whole catalog and what is on this device. It sits in the header on
+ * every Home layout so the choice is always one tap (or RT) away, and it reads its own state so a
+ * glance says which list the rows are showing.
+ */
+@Composable
+private fun LibraryOnlyToggle(
+    enabled: Boolean,
+    onToggle: () -> Unit
+) {
+    val label = stringResource(
+        if (enabled) R.string.home_library_only_on else R.string.home_library_only_off
+    )
+    val container = if (enabled) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+    }
+    val content = if (enabled) {
+        MaterialTheme.colorScheme.onPrimary
+    } else {
+        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+    }
+    Text(
+        text = label,
+        style = MaterialTheme.typography.labelLarge,
+        color = content,
+        modifier = Modifier
+            .padding(end = Dimens.spacingMd)
+            .background(container, RoundedCornerShape(Dimens.radiusLg))
+            .clickableNoFocus(onClick = onToggle)
+            .padding(horizontal = Dimens.spacingMd, vertical = Dimens.spacingXs)
+    )
 }
 
 @Composable
@@ -1808,6 +1857,8 @@ private fun GameInfoLayout(
  * its bottom edge, so without one the only clearance above it is what [CAROUSEL_CARD_SCALE] happens
  * to leave over, which at square ratios is a few dp and overlaps the game info.
  */
+private const val COMPACT_COVER_SCALE = 0.6f
+
 @Composable
 private fun rememberCarouselCardSize(
     availableHeight: Dp,

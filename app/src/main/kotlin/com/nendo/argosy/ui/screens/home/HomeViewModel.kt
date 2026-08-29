@@ -147,6 +147,7 @@ class HomeViewModel @Inject constructor(
     private val achievementRefetchThresholdMs = 5 * 60 * 1000L
     private var currentBorderStyle: BoxArtBorderStyle = BoxArtBorderStyle.SOLID
     private var lastShowsEveryGame: Boolean? = null
+    private var lastInstalledOnly: Boolean? = null
 
     init {
         modalResetSignal.signal.onEach {
@@ -441,9 +442,18 @@ class HomeViewModel @Inject constructor(
                         carouselConfig = prefs.homeLayout.carousel,
                         autoGridConfig = prefs.homeLayout.autoGrid,
                         customGridConfig = prefs.homeLayout.customGrid,
-                        layoutKind = prefs.homeLayout.selected
+                        layoutKind = prefs.homeLayout.selected,
+                        installedOnly = prefs.installedOnlyHome,
+                        compactCovers = prefs.homeCompactCovers
                     )
                 }
+                if (lastInstalledOnly != null && lastInstalledOnly != prefs.installedOnlyHome) {
+                    libraryDelegate.loadPlatforms()
+                    refreshCurrentRowInternal()
+                    libraryDelegate.loadRecentGames()
+                    libraryDelegate.loadFavorites()
+                }
+                lastInstalledOnly = prefs.installedOnlyHome
                 customGrid.applyConfig(
                     autoFit = prefs.homeLayout.customGrid.autoFit,
                     storedPages = prefs.homeLayout.customGrid.pageCount
@@ -1379,6 +1389,11 @@ class HomeViewModel @Inject constructor(
     // --- Public API: Sync & Changelog ---
 
     override fun syncFromRomm() = syncDelegate.syncFromRomm(viewModelScope) { refreshRecentGames() }
+
+    override fun toggleInstalledOnly() {
+        val next = !_uiState.value.installedOnly
+        viewModelScope.launch { preferencesRepository.setInstalledOnlyHome(next) }
+    }
     fun dismissChangelog() = syncDelegate.dismissChangelog(viewModelScope)
     fun handleChangelogAction(action: RequiredAction): RequiredAction = syncDelegate.handleChangelogAction(viewModelScope, action)
 

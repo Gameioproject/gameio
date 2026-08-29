@@ -93,7 +93,7 @@
     <!-- ===== Step 7: choosing which platforms to sync ===== -->
 
     <string name="firstrun_platform_select_eyebrow">प्लेटफ़ॉर्म चुनें</string>
-    <string name="firstrun_platform_select_title">चुनें कि किन प्लेटफ़ॉर्म को सिंक करना है</string>
+    <string name="firstrun_platform_select_title">वे सिस्टम चुनें जिन्हें आप फ़ॉलो करना चाहते हैं</string>
     <plurals name="firstrun_platform_select_selected_count">
         <item quantity="one">%2$d में से %1$d प्लेटफ़ॉर्म चुना गया</item>
         <item quantity="other">%2$d में से %1$d प्लेटफ़ॉर्म चुने गए</item>

@@ -114,6 +114,12 @@ internal sealed class HomeScreenItem(
         visibleWhen = { it.homeLayout.selected != HomeLayoutKind.CUSTOM_GRID }
     )
 
+    data object CompactCovers : HomeScreenItem(
+        key = "compactCovers",
+        section = "content",
+        visibleWhen = { it.homeLayout.selected == HomeLayoutKind.CAROUSEL }
+    )
+
     companion object {
         /**
          * Mirrors the home screen's own `showArtLayer`: with the theme backdrop off the art layer
@@ -151,6 +157,7 @@ internal sealed class HomeScreenItem(
                     .toTypedArray(),
                 ContentHeader,
                 InstalledOnly,
+                CompactCovers,
                 *homeRailFields().map { LayoutField(it) }.toTypedArray(),
                 BackgroundHeader,
                 Background, GameArtwork, CustomImage, Blur, Saturation, Opacity,
@@ -384,6 +391,14 @@ fun HomeScreenSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
                     isEnabled = display.installedOnlyHome,
                     isFocused = isFocused(item),
                     onToggle = { viewModel.setInstalledOnlyHome(it) }
+                )
+
+                HomeScreenItem.CompactCovers -> SwitchPreference(
+                    title = stringResource(R.string.settings_home_screen_compact_covers_title),
+                    subtitle = stringResource(R.string.settings_home_screen_compact_covers_subtitle),
+                    isEnabled = display.homeCompactCovers,
+                    isFocused = isFocused(item),
+                    onToggle = { viewModel.setHomeCompactCovers(it) }
                 )
             }
     }

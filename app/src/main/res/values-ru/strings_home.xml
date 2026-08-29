@@ -143,4 +143,10 @@
     <string name="home_media_season_local_all">Все %1$d на этом устройстве</string>
     <string name="home_media_season_local_partial">%1$d из %2$d на этом устройстве</string>
     <string name="home_media_download_size_gigabytes">%1$.1f GB</string>
+    <!-- Header switch state: the rows show only games on this device. -->
+    <string name="home_library_only_on">Только библиотека</string>
+    <!-- Header switch state: the rows show the whole catalog. -->
+    <string name="home_library_only_off">Все игры</string>
+    <!-- Footer hint for the RT switch. -->
+    <string name="home_footer_library_only">Только библиотека</string>
 </resources>

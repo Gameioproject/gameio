@@ -748,7 +748,9 @@ class RomMLibrarySyncService @Inject constructor(
         }
 
         val screenshotUrls = rom.screenshotUrls.ifEmpty {
-            rom.screenshotPaths?.map { apiClient.buildMediaUrl(it) } ?: emptyList()
+            rom.remoteScreenshotUrls?.takeIf { it.isNotEmpty() }
+                ?: rom.screenshotPaths?.map { apiClient.buildMediaUrl(it) }
+                ?: emptyList()
         }
 
         val contentChanged = existing != null && existing.title != rom.name
@@ -769,7 +771,8 @@ class RomMLibrarySyncService @Inject constructor(
             else -> null
         }
 
-        val coverUrl = rom.coverLarge?.let { apiClient.buildMediaUrl(it) }
+        // A catalog-only server has no resource files; its covers are plain URLs.
+        val coverUrl = rom.coverLarge?.let { apiClient.buildMediaUrl(it) } ?: rom.coverUrl
         val cachedCover = when {
             existing?.coverSetManually == true -> existing.coverPath
             !contentChanged && existing?.coverPath?.startsWith("/") == true -> existing.coverPath

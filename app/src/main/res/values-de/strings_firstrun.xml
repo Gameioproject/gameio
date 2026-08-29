@@ -75,7 +75,7 @@
     <string name="firstrun_image_cache_folder_note">Bilder werden in einem Unterordner namens \'%1$s\' gespeichert.</string>
 
     <string name="firstrun_platform_select_eyebrow">PLATTFORMEN AUSWÄHLEN</string>
-    <string name="firstrun_platform_select_title">Wählen Sie, welche Plattformen synchronisiert werden sollen</string>
+    <string name="firstrun_platform_select_title">Wähle die Systeme, denen du folgen möchtest</string>
     <plurals name="firstrun_platform_select_selected_count">
         <item quantity="one">%1$d von %2$d Plattform ausgewählt</item>
         <item quantity="other">%1$d von %2$d Plattformen ausgewählt</item>

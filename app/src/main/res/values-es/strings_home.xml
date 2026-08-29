@@ -141,4 +141,10 @@
     <string name="home_media_season_local_all">Los %1$d en este dispositivo</string>
     <string name="home_media_season_local_partial">%1$d de %2$d en este dispositivo</string>
     <string name="home_media_download_size_gigabytes">%1$.1f GB</string>
+    <!-- Header switch state: the rows show only games on this device. -->
+    <string name="home_library_only_on">Solo biblioteca</string>
+    <!-- Header switch state: the rows show the whole catalog. -->
+    <string name="home_library_only_off">Todos los juegos</string>
+    <!-- Footer hint for the RT switch. -->
+    <string name="home_footer_library_only">Solo biblioteca</string>
 </resources>

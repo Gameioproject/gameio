@@ -231,6 +231,10 @@
 
     <string name="settings_home_screen_installed_only_title">Jeux installés uniquement</string>
     <string name="settings_home_screen_installed_only_subtitle">N\'afficher que les jeux téléchargés sur l\'écran d\'accueil</string>
+    <!-- Row title. Smaller covers on the home carousel. -->
+    <string name="settings_home_screen_compact_covers_title">Jaquettes compactes</string>
+    <!-- Second line of that row. -->
+    <string name="settings_home_screen_compact_covers_subtitle">Jaquettes plus petites sur la rangée d\'accueil pour afficher plus de jeux</string>
 
     <!-- ===== Section Sauvegardes ===== -->
 

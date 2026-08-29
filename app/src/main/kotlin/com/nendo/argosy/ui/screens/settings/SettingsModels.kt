@@ -289,7 +289,8 @@ data class DisplayState(
     val hasPhysicalSecondaryDisplay: Boolean = false,
     val dualScreenEnabled: Boolean = false,
     val displayRoleOverride: DisplayRoleOverride = DisplayRoleOverride.AUTO,
-    val installedOnlyHome: Boolean = false
+    val installedOnlyHome: Boolean = false,
+    val homeCompactCovers: Boolean = false
 ) {
     val secondaryDisplayUnsupported: Boolean
         get() = dualScreenEnabled && hasPhysicalSecondaryDisplay && !hasSecondaryDisplay

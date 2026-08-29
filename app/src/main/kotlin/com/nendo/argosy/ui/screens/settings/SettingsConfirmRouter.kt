@@ -820,6 +820,10 @@ private fun routeHomeScreenConfirm(vm: SettingsViewModel, state: SettingsUiState
             vm.setInstalledOnlyHome(!state.display.installedOnlyHome)
             return InputResult.handled(SoundType.TOGGLE)
         }
+        HomeScreenItem.CompactCovers -> {
+            vm.setHomeCompactCovers(!state.display.homeCompactCovers)
+            return InputResult.handled(SoundType.TOGGLE)
+        }
         HomeScreenItem.LayoutSelector -> {
             val kinds = HomeLayoutKind.entries
             val next = kinds[(kinds.indexOf(state.display.homeLayout.selected) + 1).mod(kinds.size)]
