@@ -12,6 +12,7 @@ data class RomMCapabilities(
     val supportsScreenshotUpload: Boolean,
     val supportsMusicApi: Boolean,
     val supportsCoverSearch: Boolean = false,
+    val catalogOnly: Boolean = false,
 ) {
     companion object {
         /**
@@ -44,23 +45,28 @@ data class RomMCapabilities(
         fun from(
             version: String?,
             libretroEnabled: Boolean? = null,
-            steamGridDbEnabled: Boolean? = null
+            steamGridDbEnabled: Boolean? = null,
+            catalogOnly: Boolean = false
         ): RomMCapabilities {
             if (version.isNullOrBlank() || version == "unknown") return NONE
             val syncEngine = compareVersions(version, SYNC_ENGINE_MIN_VERSION) >= 0
             val deviceSync = compareVersions(version, DEVICE_SYNC_MIN_VERSION) >= 0
+            // A catalog-only server has no ROM files, saves, screenshots or music behind the
+            // classic routes; only the library listing, downloads and play sessions apply.
             return RomMCapabilities(
                 serverVersion = version,
                 isSupportedVersion = compareVersions(version, MIN_SUPPORTED_VERSION) >= 0,
-                supportsSyncNegotiate = syncEngine,
+                supportsSyncNegotiate = syncEngine && !catalogOnly,
                 supportsPlaySessionIngest = syncEngine,
-                supportsDeviceSyncMode = deviceSync,
-                supportsLibretroThumbnails = libretroEnabled ?: syncEngine,
-                trustsServerHash = compareVersions(version, HASH_TRUST_MIN_VERSION) >= 0,
+                supportsDeviceSyncMode = deviceSync && !catalogOnly,
+                supportsLibretroThumbnails = (libretroEnabled ?: syncEngine) && !catalogOnly,
+                trustsServerHash = compareVersions(version, HASH_TRUST_MIN_VERSION) >= 0 && !catalogOnly,
                 supportsDeviceAuth = compareVersions(version, DEVICE_AUTH_MIN_VERSION) >= 0,
-                supportsScreenshotUpload = compareVersions(version, SCREENSHOT_UPLOAD_MIN_VERSION) >= 0,
-                supportsMusicApi = compareVersions(version, MUSIC_API_MIN_VERSION) >= 0,
-                supportsCoverSearch = steamGridDbEnabled == true,
+                supportsScreenshotUpload =
+                    compareVersions(version, SCREENSHOT_UPLOAD_MIN_VERSION) >= 0 && !catalogOnly,
+                supportsMusicApi = compareVersions(version, MUSIC_API_MIN_VERSION) >= 0 && !catalogOnly,
+                supportsCoverSearch = steamGridDbEnabled == true && !catalogOnly,
+                catalogOnly = catalogOnly,
             )
         }
 

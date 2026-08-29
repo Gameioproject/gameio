@@ -79,7 +79,7 @@
     <string name="firstrun_image_cache_folder_note">Изображения будут сохранены в подпапке \'%1$s\'.</string>
 
     <string name="firstrun_platform_select_eyebrow">ВЫБОР ПЛАТФОРМ</string>
-    <string name="firstrun_platform_select_title">Выберите платформы для синхронизации</string>
+    <string name="firstrun_platform_select_title">Выберите системы, за которыми следить</string>
     <plurals name="firstrun_platform_select_selected_count">
         <item quantity="one">Выбрана %1$d платформа из %2$d</item>
         <item quantity="few">Выбраны %1$d платформы из %2$d</item>

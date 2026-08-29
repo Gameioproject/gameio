@@ -335,4 +335,10 @@
     <!-- Rough size of a batch of episodes about to be downloaded. %1$.1f is a number of gigabytes.
          "GB" is the unit symbol. -->
     <string name="home_media_download_size_gigabytes">%1$.1f GB</string>
+    <!-- Header switch state: the rows show only games on this device. -->
+    <string name="home_library_only_on">Library only</string>
+    <!-- Header switch state: the rows show the whole catalog. -->
+    <string name="home_library_only_off">All games</string>
+    <!-- Footer hint for the RT switch. -->
+    <string name="home_footer_library_only">Library only</string>
 </resources>

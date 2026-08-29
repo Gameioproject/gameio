@@ -1,4 +1,10 @@
-# Argosy Launcher
+# Argosy Launcher (catalog edition)
+
+This fork pairs Argosy with a metadata-only RomM server ([romm-lite](https://github.com/naifqarni/romm-lite)):
+the server keeps a catalog of games and per-game download links on hosts such as the Internet
+Archive, and never stores ROM files itself. Argosy browses the whole catalog for the systems you
+follow, downloads what you pick straight from the game's host, and keeps play sessions on your
+account. See [What is different in this fork](#what-is-different-in-this-fork).
 
 [![Build](https://github.com/nendotools/argosy-launcher/actions/workflows/build.yml/badge.svg)](https://github.com/nendotools/argosy-launcher/actions/workflows/build.yml)
 [![Latest Release](https://img.shields.io/github/v/release/nendotools/argosy-launcher)](https://github.com/nendotools/argosy-launcher/releases/latest)
@@ -99,6 +105,35 @@ On supported devices (Odin, AYN, Retroid), Quick Settings also includes **Perfor
 | **First-Run Wizard** | Guided setup for new users |
 | **Favorites** | Mark games for quick access |
 | **Hide Games** | Remove games from view without deleting them |
+
+## What is different in this fork
+
+### First run: choose the systems to follow
+Nothing has to be on the device before Argosy is useful. After signing in to the server, the setup
+wizard always asks which systems to follow. Only those platforms are synced and shown on Home; the
+choice can be changed later under Settings > Library > Platforms (the per-platform sync switch).
+
+### Home shows the whole catalog
+Every followed platform is a row on Home, and each row holds every game the server catalogs for that
+system, not only the ones already downloaded. Games look the same whether they are on the device or
+not; opening one that is not downloaded offers to download it from the server, which redirects to the
+file on the game's host. Games the server has no download link for still appear so they can be
+browsed and favorited.
+
+### Library only
+A single switch, always in the Home header (tap it) and on the right trigger (**RT**) anywhere on
+Home, narrows every row to the games actually on this device. Switch it off and the full catalog is
+back. The choice is saved and survives restarts; it is the same setting as
+Settings > Home Screen > Installed Games Only.
+
+### Compact covers
+Settings > Home Screen > Compact Covers shrinks the covers on the Home row so far more of a platform
+fits on screen at once.
+
+### What the lite server does not offer
+Because the server holds no ROM files, save/state sync, screenshots, music and the ROM-based
+RetroAchievements lookups are switched off when Argosy detects a catalog-only server (the heartbeat
+reports `CATALOG_ONLY`). Play sessions are recorded and shared across devices and the web client.
 
 ## Getting Started
 

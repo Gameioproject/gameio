@@ -228,7 +228,7 @@
     <string name="firstrun_platform_select_eyebrow">SELECT PLATFORMS</string>
     <!-- Heading of the platform list. "sync" means keep the games for that platform in step
          with the server. Imperative. -->
-    <string name="firstrun_platform_select_title">Choose which platforms to sync</string>
+    <string name="firstrun_platform_select_title">Choose the systems to follow</string>
     <!-- Running tally under the heading. %1$d is how many platforms the user has switched on,
          %2$d is how many exist in total; the plural form follows the total. -->
     <plurals name="firstrun_platform_select_selected_count">

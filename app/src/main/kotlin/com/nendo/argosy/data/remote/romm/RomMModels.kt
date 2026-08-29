@@ -69,6 +69,8 @@ data class RomMRom(
     @Json(name = "path_cover_small") val coverSmall: String?,
     @Json(name = "path_cover_large") val coverLarge: String?,
     @Json(name = "url_cover") val coverUrl: String? = null,
+    @Json(name = "url_screenshots") val remoteScreenshotUrls: List<String>? = null,
+    @Json(name = "has_download") val hasDownload: Boolean = true,
 
     @Json(name = "regions") val regions: List<String>?,
     @Json(name = "languages") val languages: List<String>?,
@@ -342,6 +344,10 @@ data class RomMHeartbeatResponse(
     val version: String?
         get() = system?.version
 
+    /** A server that keeps only catalog metadata: games arrive from download hosts, never from disk. */
+    val catalogOnly: Boolean
+        get() = system?.catalogOnly == true
+
     val libretroApiEnabled: Boolean?
         get() = metadataSources?.libretroApiEnabled
 
@@ -375,7 +381,8 @@ data class RomMCoverResource(
 @JsonClass(generateAdapter = true)
 data class RomMSystem(
     @Json(name = "VERSION") val version: String? = null,
-    @Json(name = "SHOW_SETUP_WIZARD") val showSetupWizard: Boolean = false
+    @Json(name = "SHOW_SETUP_WIZARD") val showSetupWizard: Boolean = false,
+    @Json(name = "CATALOG_ONLY") val catalogOnly: Boolean = false
 )
 
 @JsonClass(generateAdapter = true)

@@ -89,6 +89,7 @@ interface HomeInputActions {
     fun scrollToFirst(): Boolean
     fun navigateToContinuePlaying(): Boolean
     fun syncFromRomm()
+    fun toggleInstalledOnly()
     fun playFocusedMedia(startOver: Boolean = false)
     fun confirmFocusedMedia()
     fun openMediaResumePrompt(): Boolean
@@ -538,9 +539,18 @@ class HomeInputHandler(
     }
 
     override fun onNextTrigger(): InputResult {
-        if (!actions.uiState.value.showTilePicker) return InputResult.UNHANDLED
-        actions.jumpTilePickerLetter(true)
-        return InputResult.handled(SoundType.SECTION_CHANGE)
+        val state = actions.uiState.value
+        if (state.showTilePicker) {
+            actions.jumpTilePickerLetter(true)
+            return InputResult.handled(SoundType.SECTION_CHANGE)
+        }
+        if (state.showAddToCollectionModal || state.showGameMenu) return InputResult.HANDLED
+        if (state.customGrid.mediaSetup != null || state.customGrid.engagedTileId != null) {
+            return InputResult.HANDLED
+        }
+        // Library only is reachable from anywhere on Home, so the switch is never a menu away.
+        actions.toggleInstalledOnly()
+        return InputResult.handled(SoundType.TOGGLE)
     }
 
     override fun onPrevSection(): InputResult {

@@ -195,6 +195,7 @@ class UserPreferencesRepository @Inject constructor(
             displayRoleOverride = display.displayRoleOverride,
             dualScreenInputFocus = display.dualScreenInputFocus,
             installedOnlyHome = display.installedOnlyHome,
+            homeCompactCovers = display.homeCompactCovers,
             socialSessionToken = sync.socialSessionToken,
             socialUserId = sync.socialUserId,
             socialUsername = sync.socialUsername,
@@ -324,6 +325,7 @@ class UserPreferencesRepository @Inject constructor(
     suspend fun setDisplayRoleOverride(override: DisplayRoleOverride) = displayPrefs.setDisplayRoleOverride(override)
     suspend fun setDualScreenInputFocus(focus: DualScreenInputFocus) = displayPrefs.setDualScreenInputFocus(focus)
     suspend fun setInstalledOnlyHome(enabled: Boolean) = displayPrefs.setInstalledOnlyHome(enabled)
+    suspend fun setHomeCompactCovers(enabled: Boolean) = displayPrefs.setHomeCompactCovers(enabled)
 
     // --- Sync delegates ---
 
@@ -821,6 +823,7 @@ data class UserPreferences(
     val displayRoleOverride: DisplayRoleOverride = DisplayRoleOverride.AUTO,
     val dualScreenInputFocus: DualScreenInputFocus = DualScreenInputFocus.AUTO,
     val installedOnlyHome: Boolean = false,
+    val homeCompactCovers: Boolean = false,
     val socialSessionToken: String? = null,
     val socialUserId: String? = null,
     val socialUsername: String? = null,

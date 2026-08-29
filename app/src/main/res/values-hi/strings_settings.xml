@@ -226,6 +226,10 @@
 
     <string name="settings_home_screen_installed_only_title">केवल इंस्टॉल किए गए गेम</string>
     <string name="settings_home_screen_installed_only_subtitle">होम स्क्रीन पर केवल डाउनलोड किए गए गेम दिखाएँ</string>
+    <!-- Row title. Smaller covers on the home carousel. -->
+    <string name="settings_home_screen_compact_covers_title">कॉम्पैक्ट कवर</string>
+    <!-- Second line of that row. -->
+    <string name="settings_home_screen_compact_covers_subtitle">होम पंक्ति में छोटे कवर ताकि एक साथ अधिक गेम दिखें</string>
 
     <!-- ===== Saves section ===== -->
 

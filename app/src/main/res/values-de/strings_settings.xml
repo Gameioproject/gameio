@@ -236,6 +236,10 @@
 
     <string name="settings_home_screen_installed_only_title">Nur installierte Spiele</string>
     <string name="settings_home_screen_installed_only_subtitle">Nur heruntergeladene Spiele auf dem Startbildschirm anzeigen</string>
+    <!-- Row title. Smaller covers on the home carousel. -->
+    <string name="settings_home_screen_compact_covers_title">Kompakte Cover</string>
+    <!-- Second line of that row. -->
+    <string name="settings_home_screen_compact_covers_subtitle">Kleinere Cover in der Startreihe, damit mehr Spiele auf den Bildschirm passen</string>
 
     <!-- ===== Saves section ===== -->
 
