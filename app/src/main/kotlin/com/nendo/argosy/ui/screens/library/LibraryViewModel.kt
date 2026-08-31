@@ -113,6 +113,7 @@ enum class FilterCategory(@StringRes val labelRes: Int) {
  */
 enum class SourceFilter(@StringRes val labelRes: Int) {
     ALL(R.string.source_filter_all),
+    AVAILABLE(R.string.source_filter_available),
     PLAYABLE(R.string.source_filter_playable),
     FAVORITES(R.string.source_filter_favorites),
     HIDDEN(R.string.source_filter_hidden)
@@ -120,7 +121,8 @@ enum class SourceFilter(@StringRes val labelRes: Int) {
 
 data class ActiveFilters(
     val searchQuery: String = "",
-    val source: SourceFilter = SourceFilter.ALL,
+    // Defaults to the device's own games; "Explore" is what opens the server's catalog.
+    val source: SourceFilter = SourceFilter.PLAYABLE,
     val platforms: Set<String> = emptySet(),
     val genres: Set<String> = emptySet(),
     val players: Set<String> = emptySet(),
@@ -269,6 +271,10 @@ data class LibraryUiState(
     val collectionModalFocusIndex: Int = 0,
     val showCreateCollectionDialog: Boolean = false,
     val gridItems: List<LibraryGridItem> = emptyList(),
+    val searchScope: com.nendo.argosy.data.catalog.SearchScope =
+        com.nendo.argosy.data.catalog.SearchScope.LOCAL,
+    val canSearchServer: Boolean = false,
+    val showSearchKeyboard: Boolean = false,
     val sectionLabels: List<String> = emptyList(),
     val currentSectionLabel: String = "",
     val showSectionOverlay: Boolean = false,
@@ -329,7 +335,8 @@ data class LibraryUiState(
                 } else ""
                 context.getString(option.labelRes) + directionIndicator
             }
-            FilterCategory.SEARCH -> recentSearches
+            FilterCategory.SEARCH ->
+                listOf(context.getString(R.string.library_search_type_new)) + recentSearches
             FilterCategory.SOURCE -> SourceFilter.entries.map { filter ->
                 val label = context.getString(filter.labelRes)
                 if (filter == SourceFilter.HIDDEN && hiddenGameCount > 0)
@@ -418,6 +425,7 @@ class LibraryViewModel @Inject constructor(
     private val playStoreService: PlayStoreService,
     private val imageCacheManager: ImageCacheManager,
     private val apkInstallManager: ApkInstallManager,
+    private val catalogPager: com.nendo.argosy.data.catalog.CatalogPager,
     private val syncPlatformUseCase: SyncPlatformUseCase,
     private val repairImageCacheUseCase: RepairImageCacheUseCase,
     private val modalResetSignal: ModalResetSignal,
@@ -498,7 +506,7 @@ class LibraryViewModel @Inject constructor(
             val option = SortOption.entries.firstOrNull { it.name == prefs.libraryDefaultSort }
                 ?: SortOption.TITLE
             val source = SourceFilter.entries.firstOrNull { it.name == prefs.libraryDefaultSource }
-                ?: SourceFilter.ALL
+                ?: SourceFilter.PLAYABLE
             val platforms = prefs.libraryDefaultPlatform
                 .takeIf { it.isNotBlank() }
                 ?.let { setOf(it) }
@@ -897,6 +905,91 @@ class LibraryViewModel @Inject constructor(
         }
     }
 
+    /** Widen or narrow the library's search: this device, this platform, or the whole catalog. */
+    fun cycleSearchScope() {
+        if (!catalogPager.isCatalogOnly()) return
+        val hasPlatform = currentPlatformId() != null
+        val next = _uiState.value.searchScope.next().let {
+            if (it == com.nendo.argosy.data.catalog.SearchScope.PLATFORM && !hasPlatform) it.next() else it
+        }
+        _uiState.update { it.copy(searchScope = next) }
+        val query = _uiState.value.activeFilters.searchQuery
+        if (query.isNotBlank()) runServerSearch(query)
+    }
+
+    /**
+     * Pull the server's matches into the store so the existing filter can find them. The grid reads
+     * Room, so results appear the moment they land.
+     */
+    private fun runServerSearch(query: String) {
+        val scope = _uiState.value.searchScope
+        if (scope == com.nendo.argosy.data.catalog.SearchScope.LOCAL) return
+        if (!catalogPager.isCatalogOnly() || query.isBlank()) return
+        viewModelScope.launch {
+            catalogPager.searchServer(
+                query = query,
+                platformId = if (scope == com.nendo.argosy.data.catalog.SearchScope.PLATFORM) {
+                    currentPlatformId()
+                } else {
+                    null
+                },
+                limit = 200
+            )
+        }
+    }
+
+    /** The server's A-Z index for the platform in view, so every letter is offered up front. */
+    private var serverSections: List<com.nendo.argosy.data.remote.romm.RomMNameSection> = emptyList()
+    private var serverSectionsPlatformId: Long? = null
+
+    /** Set while a letter jump is fetching and settling, so scroll paging leaves the grid alone. */
+    private var jumpInFlight: Boolean = false
+
+    private suspend fun loadServerSections(platformId: Long) {
+        if (serverSectionsPlatformId == platformId) return
+        val fetched = catalogPager.sections(platformId)
+        if (fetched.isNotEmpty()) {
+            serverSections = fetched
+            serverSectionsPlatformId = platformId
+            _uiState.update {
+                it.copy(
+                    sectionLabels = fetched.filter { s -> s.count > 0 }.map { s -> s.label },
+                    canSearchServer = true
+                )
+            }
+        }
+    }
+
+    private fun currentPlatformId(): Long? {
+        val state = _uiState.value
+        val index = state.currentPlatformIndex
+        if (index < 0) return null
+        return state.platforms.getOrNull(index)?.id
+    }
+
+    /**
+     * The grid reports how far it has been scrolled; on a catalog-only server that is what decides
+     * when the next page is pulled. Cheap to call repeatedly: the pager returns at once when the
+     * window is already covered.
+     */
+    fun onVisibleIndexChanged(lastVisibleIndex: Int) {
+        if (!catalogPager.isCatalogOnly()) return
+        val state = _uiState.value
+        val index = state.currentPlatformIndex
+        if (index < 0) return
+        val platformId = state.platforms.getOrNull(index)?.id ?: return
+        // A jump is mid-flight; paging now would re-sort the grid out from under it.
+        if (jumpInFlight) return
+        viewModelScope.launch {
+            loadServerSections(platformId)
+            if (_uiState.value.activeFilters.source == SourceFilter.AVAILABLE) {
+                catalogPager.ensureAvailable(platformId, lastVisibleIndex + 200)
+            } else {
+                catalogPager.ensureThrough(platformId, lastVisibleIndex)
+            }
+        }
+    }
+
     private fun loadGames() {
         val state = _uiState.value
         val platformIndex = state.currentPlatformIndex
@@ -921,7 +1014,7 @@ class LibraryViewModel @Inject constructor(
                 }
             } else {
                 when (filters.source) {
-                    SourceFilter.ALL -> gameRepository.observeAllList()
+                    SourceFilter.ALL, SourceFilter.AVAILABLE -> gameRepository.observeAllList()
                     SourceFilter.PLAYABLE -> gameRepository.observePlayableList()
                     SourceFilter.FAVORITES -> gameRepository.observeFavoritesList()
                     SourceFilter.HIDDEN -> gameRepository.observeHiddenList()
@@ -955,11 +1048,20 @@ class LibraryViewModel @Inject constructor(
                         val matchesPlayers = filters.players.isEmpty() ||
                             game.gameModes?.split(",")?.map { it.trim() }?.any { it in filters.players } == true
                         val matchesSeries = seriesIds == null || game.id in seriesIds
-                        matchesSearch && matchesPlatform && matchesGenre && matchesPlayers && matchesSeries
+                        val matchesAvailable = filters.source != SourceFilter.AVAILABLE ||
+                            (game.fileSizeBytes ?: 0L) > 0L || game.localPath != null
+                        matchesSearch && matchesPlatform && matchesGenre && matchesPlayers && matchesSeries && matchesAvailable
                     }
 
                     val sections = computeSections(filteredGames, filters.sort, sortPartition)
-                    val sectionLabels = sections.map { it.sidebarLabel }
+                    // Local rows only cover what has been paged in, so on a catalog server the
+                    // sidebar takes its labels from the server's index instead.
+                    val computedLabels = sections.map { it.sidebarLabel }
+                    val sectionLabels = if (serverSections.isNotEmpty() && filters.sort.option == SortOption.TITLE) {
+                        serverSections.filter { it.count > 0 }.map { it.label }
+                    } else {
+                        computedLabels
+                    }
 
                     var gameOffset = 0
                     val gridItems = sections.flatMap { section ->
@@ -1038,7 +1140,37 @@ class LibraryViewModel @Inject constructor(
 
     fun jumpToSection(sectionLabel: String, showOverlay: Boolean = true) {
         resetStickyColumn()
-        val state = _uiState.value
+        var state = _uiState.value
+        // The letter may sit beyond what has been paged in; pull its window (and its neighbours)
+        // before jumping, otherwise the target simply is not there to land on.
+        val platformId = currentPlatformId()
+        if (platformId != null && serverSections.isNotEmpty() &&
+            state.gridItems.none { it is LibraryGridItem.Header && it.label == sectionLabel }
+        ) {
+            jumpInFlight = true
+            viewModelScope.launch {
+                try {
+                    catalogPager.ensureSection(platformId, sectionLabel)
+                    // Room repopulates the grid asynchronously, and a page of covers takes a moment
+                    // to land, so wait generously rather than giving up and leaving focus adrift.
+                    repeat(120) {
+                        if (_uiState.value.gridItems.any {
+                                it is LibraryGridItem.Header && it.label == sectionLabel
+                            }
+                        ) {
+                            jumpInFlight = false
+                            jumpToSection(sectionLabel, showOverlay)
+                            return@launch
+                        }
+                        kotlinx.coroutines.delay(100)
+                    }
+                } finally {
+                    jumpInFlight = false
+                }
+            }
+            return
+        }
+        state = _uiState.value
         val headerIndex = state.gridItems.indexOfFirst {
             it is LibraryGridItem.Header && it.label == sectionLabel
         }
@@ -1434,6 +1566,10 @@ class LibraryViewModel @Inject constructor(
                 state.activeFilters.copy(sort = newSort)
             }
             FilterCategory.SEARCH -> {
+                if (optionIndex == 0) {
+                    _uiState.update { it.copy(showSearchKeyboard = true) }
+                    return
+                }
                 val query = options.getOrNull(optionIndex) ?: return
                 state.activeFilters.copy(searchQuery = query)
             }
@@ -1494,8 +1630,13 @@ class LibraryViewModel @Inject constructor(
         loadGames()
     }
 
+    fun closeSearchKeyboard() {
+        _uiState.update { it.copy(showSearchKeyboard = false) }
+    }
+
     fun updateSearchQuery(query: String) {
         _uiState.update { it.copy(activeFilters = it.activeFilters.copy(searchQuery = query)) }
+        runServerSearch(query)
         loadGames()
     }
 
