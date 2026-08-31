@@ -149,12 +149,6 @@ sealed class HomeRowItem {
         val logoPath: String? = null,
         val sourceFilter: String? = null
     ) : HomeRowItem()
-
-    /**
-     * One platform on the explorer home's platform strip. A press opens the platform's own
-     * library view; the strip replaces the per-platform rows that used to make up the surface.
-     */
-    data class PlatformTile(val platform: HomePlatformUi) : HomeRowItem()
 }
 
 data class HomeShelfUi(
@@ -199,8 +193,6 @@ sealed class HomeRow(
     data object Favorites :
         HomeRow(HomeSectionKind.FAVORITES, R.string.home_breadcrumb_favorites)
     data class Platform(val index: Int) : HomeRow(HomeSectionKind.PLATFORM)
-    data object PlatformStrip :
-        HomeRow(HomeSectionKind.PLATFORM_STRIP, R.string.home_breadcrumb_platforms)
     data class Shelf(val index: Int) : HomeRow(HomeSectionKind.SHELF)
     data object Continue :
         HomeRow(HomeSectionKind.CONTINUE, R.string.home_breadcrumb_continue)
@@ -296,9 +288,7 @@ data class HomeUiState(
     val installedOnly: Boolean = false,
     val libraryFilter: com.nendo.argosy.data.preferences.HomeLibraryFilter =
         com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY,
-    val compactCovers: Boolean = false,
-    val explorerMode: Boolean = false,
-    val shelfPreviews: Map<Int, List<HomeGameUi>> = emptyMap()
+    val compactCovers: Boolean = false
 ) {
     /**
      * The rows on offer, in the order [HomeSectionKind] declares them: the fixed opening run, then
@@ -306,7 +296,7 @@ data class HomeUiState(
      * the sequence here is what keeps this screen and the companion agreeing on order.
      */
     val availableRows: List<HomeRow>
-        get() = if (explorerMode) explorerRows else buildList {
+        get() = buildList {
             HomeSectionKind.LEADING.forEach { kind ->
                 if (kind == HomeSectionKind.FAVORITES) {
                     addAll(shelves.indices.map { HomeRow.Shelf(it) })
@@ -314,25 +304,6 @@ data class HomeUiState(
                 fixedRow(kind)?.let { add(it) }
             }
             HomeSectionKind.REPEATING.forEach { kind -> addAll(repeatingRows(kind)) }
-            HomeSectionKind.TRAILING.forEach { kind -> fixedRow(kind)?.let { add(it) } }
-        }
-
-    /**
-     * The explorer surface: one vertical page. Platforms collapse into a single strip near the
-     * top instead of one row each -- their rows live behind the strip's tiles -- and the curated
-     * shelves follow directly, so the store is one press down from what was played last.
-     */
-    private val explorerRows: List<HomeRow>
-        get() = buildList {
-            fixedRow(HomeSectionKind.CONTINUE)?.let { add(it) }
-            if (platforms.isNotEmpty()) add(HomeRow.PlatformStrip)
-            addAll(shelves.indices.map { HomeRow.Shelf(it) })
-            fixedRow(HomeSectionKind.RECOMMENDATIONS)?.let { add(it) }
-            fixedRow(HomeSectionKind.FAVORITES)?.let { add(it) }
-            fixedRow(HomeSectionKind.ANDROID)?.let { add(it) }
-            fixedRow(HomeSectionKind.STEAM)?.let { add(it) }
-            addAll(pinnedRows)
-            addAll(repeatingRows(HomeSectionKind.MEDIA_LIBRARY))
             HomeSectionKind.TRAILING.forEach { kind -> fixedRow(kind)?.let { add(it) } }
         }
 
@@ -445,7 +416,6 @@ data class HomeUiState(
                     favoriteMediaShown.map { HomeRowItem.Media(it) } +
                     HomeRowItem.ViewAll(sourceFilter = "FAVORITES")
             }
-            HomeRow.PlatformStrip -> platforms.map { HomeRowItem.PlatformTile(it) }
             is HomeRow.Platform -> platformItems
             is HomeRow.Shelf -> shelfItems
             HomeRow.Continue -> when {
@@ -585,26 +555,10 @@ data class HomeUiState(
         is HomeRow.PinnedRegular -> row.name.take(6)
         is HomeRow.PinnedVirtual -> row.name.take(6)
         HomeRow.Continue,
-        HomeRow.PlatformStrip,
         HomeRow.Recommendations,
         HomeRow.Favorites,
         HomeRow.ContinueWatching,
         HomeRow.NextUp -> ""
-    }
-
-    /**
-     * The full name of a row, for surfaces with room for one. Null means the row's
-     * [HomeRow.shortLabelRes] is the whole answer and the caller resolves it.
-     */
-    fun fullTitleFor(row: HomeRow): String? = when (row) {
-        HomeRow.Android -> "Android"
-        HomeRow.Steam -> "Steam"
-        is HomeRow.Platform -> platforms.getOrNull(row.index)?.displayName
-        is HomeRow.Shelf -> shelves.getOrNull(row.index)?.title
-        is HomeRow.MediaLibrary -> mediaLibraries.getOrNull(row.index)?.name
-        is HomeRow.PinnedRegular -> row.name
-        is HomeRow.PinnedVirtual -> row.name
-        else -> null
     }
 
     fun breadcrumbItems(maxNeighbors: Int = 2): List<BreadcrumbItem> {

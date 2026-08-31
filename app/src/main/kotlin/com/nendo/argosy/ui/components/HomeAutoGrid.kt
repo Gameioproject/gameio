@@ -392,7 +392,6 @@ private fun AutoGridCell(
                         .clickableNoFocus(onClick = onTap, onLongClick = onLongPress)
                 )
             }
-            is CarouselItem.PlatformTile -> Unit
             is CarouselItem.ViewAll -> ViewAllCard(
                 isFocused = isFocused,
                 onClick = onTap,

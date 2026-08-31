@@ -73,7 +73,6 @@ class HomeNavigationDelegate @Inject constructor(
         val (rowType, platformIndex) = when (val row = currentRow) {
             HomeRow.Favorites -> ROW_TYPE_FAVORITES to 0
             is HomeRow.Shelf -> ROW_TYPE_CONTINUE to 0
-            HomeRow.PlatformStrip -> ROW_TYPE_CONTINUE to 0
             is HomeRow.Platform -> ROW_TYPE_PLATFORM to row.index
             HomeRow.Continue -> ROW_TYPE_CONTINUE to 0
             HomeRow.Recommendations -> ROW_TYPE_RECOMMENDATIONS to 0
