@@ -156,7 +156,8 @@ fun HomeTilePickerModal(
             ModalSearchField(
                 query = query,
                 onQueryChange = onQueryChange,
-                modifier = Modifier.padding(bottom = Dimens.spacingSm)
+                modifier = Modifier.padding(bottom = Dimens.spacingSm),
+                autoFocus = false
             )
         }
         if (entries.isEmpty()) {

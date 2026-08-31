@@ -58,6 +58,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val PLATFORM_GAMES_LIMIT = 20
+private const val CATALOG_PAGE_SIZE = 100
+private const val CATALOG_MAX_PREFETCH = 10000
 private const val PLATFORM_GAMES_UNCAPPED = Int.MAX_VALUE
 private const val TILE_PICKER_LIMIT = 60
 private const val MAX_DISPLAYED_RECOMMENDATIONS = 16
@@ -107,7 +109,9 @@ class HomeLibraryDelegate @Inject constructor(
     private val downloadFileStatusRepository: DownloadFileStatusRepository,
     private val steamPathResolver: com.nendo.argosy.data.steam.SteamPathResolver,
     private val collectionRepository: com.nendo.argosy.data.repository.CollectionRepository,
-    private val appsRepository: com.nendo.argosy.data.repository.AppsRepository
+    private val appsRepository: com.nendo.argosy.data.repository.AppsRepository,
+    private val catalogPager: com.nendo.argosy.data.catalog.CatalogPager,
+    private val connectionManager: com.nendo.argosy.data.remote.romm.RomMConnectionManager
 ) {
     private val _state = MutableStateFlow(LibraryState())
     val state: StateFlow<LibraryState> = _state.asStateFlow()
@@ -410,12 +414,14 @@ class HomeLibraryDelegate @Inject constructor(
         val uncapped = showsEveryGame(prefs)
         val limit = if (uncapped) PLATFORM_GAMES_UNCAPPED else PLATFORM_GAMES_LIMIT
         var games = gameRepository.getByPlatformSorted(platformId, limit = limit)
+        val catalogWant = if (uncapped) catalogTotalFor(platformId) else limit
+        if (ensureCatalogPage(platformId, games.size, catalogWant)) {
+            games = gameRepository.getByPlatformSorted(platformId, limit = limit)
+        }
         if (discoverGamesIfNeeded(games)) {
             games = gameRepository.getByPlatformSorted(platformId, limit = limit)
         }
-        if (prefs.installedOnlyHome) {
-            games = filterPlayable(games)
-        }
+        games = applyLibraryFilter(games, prefs.homeLibraryFilter)
         if (uncapped) {
             games = orderedForEveryGame(games, prefs)
         }
@@ -425,7 +431,8 @@ class HomeLibraryDelegate @Inject constructor(
             gameItems + HomeRowItem.ViewAll(
                 platformId = platform.id,
                 platformName = platform.name,
-                logoPath = platform.logoPath
+                logoPath = platform.logoPath,
+                sourceFilter = sourceFilterFor(prefs.homeLibraryFilter)
             )
         } else {
             gameItems
@@ -523,9 +530,18 @@ class HomeLibraryDelegate @Inject constructor(
                     platform.id,
                     limit = if (uncapped) PLATFORM_GAMES_UNCAPPED else PLATFORM_GAMES_LIMIT
                 )
-                if (prefs.installedOnlyHome) {
-                    games = filterPlayable(games)
+                if (ensureCatalogPage(
+                        platform.id,
+                        games.size,
+                        if (uncapped) catalogTotalFor(platform.id) else PLATFORM_GAMES_LIMIT
+                    )
+                ) {
+                    games = gameRepository.getByPlatformSorted(
+                        platform.id,
+                        limit = if (uncapped) PLATFORM_GAMES_UNCAPPED else PLATFORM_GAMES_LIMIT
+                    )
                 }
+                games = applyLibraryFilter(games, prefs.homeLibraryFilter)
                 if (uncapped) {
                     games = orderedForEveryGame(games, prefs)
                 }
@@ -536,7 +552,8 @@ class HomeLibraryDelegate @Inject constructor(
                     gameItems + HomeRowItem.ViewAll(
                         platformId = platform.id,
                         platformName = platform.name,
-                        logoPath = platform.logoPath
+                        logoPath = platform.logoPath,
+                        sourceFilter = sourceFilterFor(prefs.homeLibraryFilter)
                     )
                 }
                 _state.update { it.copy(platformItems = items) }
@@ -698,6 +715,32 @@ class HomeLibraryDelegate @Inject constructor(
         }
     }
 
+    /**
+     * On a catalog-only server the library is never mirrored up front, so a row asks the server for
+     * exactly the slice it is about to draw. Returns true when new rows landed and the caller should
+     * re-read the store.
+     */
+    /** The server's own count for a platform, synced with its metadata. */
+    private suspend fun catalogTotalFor(platformId: Long): Int =
+        platformRepository.getById(platformId)?.gameCount ?: PLATFORM_GAMES_LIMIT
+
+    /** The library filter View All opens with, so the screen continues the mode Home is in. */
+    private fun sourceFilterFor(filter: com.nendo.argosy.data.preferences.HomeLibraryFilter): String =
+        when (filter) {
+            com.nendo.argosy.data.preferences.HomeLibraryFilter.ALL -> "ALL"
+            com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE -> "AVAILABLE"
+            com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY -> "PLAYABLE"
+        }
+
+    private suspend fun ensureCatalogPage(platformId: Long, have: Int, want: Int): Boolean {
+        val prefs = preferencesRepository.userPreferences.first()
+        if (prefs.homeLibraryFilter == com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE) {
+            return catalogPager.ensureAvailable(platformId, want.coerceAtLeast(CATALOG_PAGE_SIZE))
+        }
+        if (have >= want) return false
+        return catalogPager.ensureThrough(platformId, want)
+    }
+
     private suspend fun discoverGamesIfNeeded(games: List<GameEntity>): Boolean {
         val gamesNeedingDiscovery = games.filter { game ->
             game.source != GameSource.STEAM &&
@@ -712,6 +755,19 @@ class HomeLibraryDelegate @Inject constructor(
             }
         }
         return true
+    }
+
+    /** Games a host offers a file for; the catalog lists plenty that none does. */
+    private fun filterDownloadable(candidates: List<GameEntity>): List<GameEntity> =
+        candidates.filter { (it.fileSizeBytes ?: 0L) > 0L || it.localPath != null }
+
+    private suspend fun applyLibraryFilter(
+        games: List<GameEntity>,
+        filter: com.nendo.argosy.data.preferences.HomeLibraryFilter
+    ): List<GameEntity> = when (filter) {
+        com.nendo.argosy.data.preferences.HomeLibraryFilter.ALL -> games
+        com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE -> filterDownloadable(games)
+        com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY -> filterPlayable(games)
     }
 
     private suspend fun filterPlayable(candidates: List<GameEntity>): List<GameEntity> {

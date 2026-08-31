@@ -69,7 +69,9 @@ suspend fun GameEntity.toHomeGameUi(
         packageName = packageName,
         needsInstall = needsAndroidInstall,
         youtubeVideoId = youtubeVideoId,
-        isNew = addedAt.isAfter(newThreshold) && lastPlayed == null,
+        // The catalog is served whole, so "added recently" only means "paged in recently"
+        // and would mark almost every game. No badge.
+        isNew = false,
         sortTitle = sortTitle,
         gameModes = gameModes,
         franchises = franchises,
@@ -140,7 +142,9 @@ suspend fun GameListItem.toHomeGameUi(
         isAndroidApp = isAndroidApp,
         packageName = packageName,
         needsInstall = needsAndroidInstall,
-        isNew = addedAt.isAfter(newThreshold) && lastPlayed == null,
+        // The catalog is served whole, so "added recently" only means "paged in recently"
+        // and would mark almost every game. No badge.
+        isNew = false,
         isHidden = isHidden,
         sortTitle = sortTitle,
         gameModes = gameModes,

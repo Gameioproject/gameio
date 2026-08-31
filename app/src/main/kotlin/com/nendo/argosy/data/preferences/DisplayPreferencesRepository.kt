@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
+import kotlinx.coroutines.flow.first
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.nendo.argosy.data.cache.GradientPreset
@@ -102,7 +103,7 @@ data class DisplayPreferences(
     val dualScreenEnabled: Boolean = false,
     val displayRoleOverride: DisplayRoleOverride = DisplayRoleOverride.AUTO,
     val dualScreenInputFocus: DualScreenInputFocus = DualScreenInputFocus.AUTO,
-    val installedOnlyHome: Boolean = false,
+    val homeLibraryFilter: HomeLibraryFilter = HomeLibraryFilter.LIBRARY,
     val homeCompactCovers: Boolean = false
 )
 
@@ -194,6 +195,7 @@ class DisplayPreferencesRepository @Inject constructor(
         val DISPLAY_ROLE_OVERRIDE = stringPreferencesKey("display_role_override")
         val DUAL_SCREEN_INPUT_FOCUS = stringPreferencesKey("dual_screen_input_focus")
         val INSTALLED_ONLY_HOME = booleanPreferencesKey("installed_only_home")
+        val HOME_LIBRARY_FILTER = intPreferencesKey("home_library_filter")
         val HOME_COMPACT_COVERS = booleanPreferencesKey("home_compact_covers")
     }
 
@@ -287,7 +289,11 @@ class DisplayPreferencesRepository @Inject constructor(
             dualScreenEnabled = prefs[Keys.DUAL_SCREEN_ENABLED] ?: DisplayAffinityHelper.isKnownDualScreenDevice(),
             displayRoleOverride = DisplayRoleOverride.fromString(prefs[Keys.DISPLAY_ROLE_OVERRIDE]),
             dualScreenInputFocus = DualScreenInputFocus.fromString(prefs[Keys.DUAL_SCREEN_INPUT_FOCUS]),
-            installedOnlyHome = prefs[Keys.INSTALLED_ONLY_HOME] ?: false,
+            homeLibraryFilter = HomeLibraryFilter.fromOrdinal(
+                prefs[Keys.HOME_LIBRARY_FILTER]
+                    // Home opens on the device's own games; the chip widens from there.
+                    ?: HomeLibraryFilter.LIBRARY.ordinal
+            ),
             homeCompactCovers = prefs[Keys.HOME_COMPACT_COVERS] ?: false
         )
     }
@@ -630,6 +636,10 @@ class DisplayPreferencesRepository @Inject constructor(
 
     suspend fun setDualScreenInputFocus(focus: DualScreenInputFocus) {
         dataStore.edit { it[Keys.DUAL_SCREEN_INPUT_FOCUS] = focus.name }
+    }
+
+    suspend fun setHomeLibraryFilter(filter: HomeLibraryFilter) {
+        dataStore.edit { it[Keys.HOME_LIBRARY_FILTER] = filter.ordinal }
     }
 
     suspend fun setInstalledOnlyHome(enabled: Boolean) {

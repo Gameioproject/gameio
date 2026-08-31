@@ -33,6 +33,7 @@
     <!-- Which slice of the library to show. Noun phrases naming a set of games. -->
     <!-- No filter applied. -->
     <string name="source_filter_all">All Games</string>
+    <string name="source_filter_available">Available</string>
     <!-- Games that are downloaded and can be started right now. -->
     <string name="source_filter_playable">Playable</string>
     <!-- Games the user marked as favourites. -->
