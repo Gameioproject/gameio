@@ -130,10 +130,20 @@ Settings > Home Screen > Installed Games Only.
 Settings > Home Screen > Compact Covers shrinks the covers on the Home row so far more of a platform
 fits on screen at once.
 
-### What the lite server does not offer
-Because the server holds no ROM files, save/state sync, screenshots, music and the ROM-based
-RetroAchievements lookups are switched off when Argosy detects a catalog-only server (the heartbeat
-reports `CATALOG_ONLY`). Play sessions are recorded and shared across devices and the web client.
+### What the lite server offers and skips
+Save and state sync works: the server stores them per catalog game (the classic
+`/api/saves` protocol is served from the asset store), so saves roam across devices.
+Play sessions are recorded and shared across devices and the web client.
+
+RetroAchievements also work in-game: Argosy talks to retroachievements.org directly
+with the credentials entered under Settings, and game hashing happens on the device,
+so unlocks and hardcore mode do not involve the server at all. What the catalog server
+does not provide is the ROM-based server-side RetroAchievements lookup, so RA metadata
+panels that depend on a server-supplied RA id stay empty.
+
+Because the server holds no ROM files, screenshot upload, music streaming and cover
+search are switched off when Argosy detects a catalog-only server (the heartbeat
+reports `CATALOG_ONLY`).
 
 ## Getting Started
 

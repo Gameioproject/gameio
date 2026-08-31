@@ -9,10 +9,15 @@ import javax.inject.Singleton
 class SaveSyncStrategySelector @Inject constructor(
     private val legacy: Lazy<LegacySaveSyncStrategy>,
     private val negotiator: Lazy<NegotiatorSaveSyncStrategy>,
+    private val catalog: Lazy<CatalogSaveSyncStrategy>,
     private val connectionManager: RomMConnectionManager,
 ) {
     fun current(): SaveSyncStrategy {
         val caps = connectionManager.getCapabilities()
-        return if (caps.supportsSyncNegotiate) negotiator.get() else legacy.get()
+        return when {
+            caps.supportsSyncNegotiate -> negotiator.get()
+            caps.catalogOnly -> catalog.get()
+            else -> legacy.get()
+        }
     }
 }
