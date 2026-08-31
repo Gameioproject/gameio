@@ -11,6 +11,8 @@
          games. Shortened noun ("recent games"), not the verb "to recent". Keep it short: the
          chips sit side by side and long words push their neighbours off screen. -->
     <string name="home_breadcrumb_continue">Recent</string>
+    <string name="home_breadcrumb_platforms">Platforms</string>
+    <string name="home_strip_open_platform">Open</string>
     <!-- Breadcrumb chip naming the row of games the launcher suggests. Noun, plural, short for
          "our picks". Keep it short. -->
     <string name="home_breadcrumb_recommendations">Picks</string>

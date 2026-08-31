@@ -191,6 +191,8 @@ class HomeViewModel @Inject constructor(
                         platformItems = lib.platformItems.applyRowGradients(gradients),
                         shelves = lib.shelves,
                         shelfItems = lib.shelfItems.applyRowGradients(gradients),
+                        shelfPreviews = lib.shelfPreviews,
+                        explorerMode = lib.explorerMode,
                         recentGames = lib.recentGames.applyGradients(gradients),
                         favoriteGames = lib.favoriteGames.applyGradients(gradients),
                         recommendedGames = lib.recommendedGames.applyGradients(gradients),
@@ -203,6 +205,16 @@ class HomeViewModel @Inject constructor(
                         pinnedGamesLoading = lib.pinnedGamesLoading,
                         repairedCoverPaths = lib.repairedCoverPaths
                     )
+                }
+                // Flipping into explorer removes the per-platform rows; a cursor restored onto
+                // one of them would strand the reader on a row the surface no longer offers.
+                _uiState.update { state ->
+                    if (state.explorerMode && !state.holdsCurrentRow) {
+                        state.copy(
+                            currentRow = state.availableRows.firstOrNull() ?: HomeRow.Continue,
+                            focusedGameIndex = 0
+                        )
+                    } else state
                 }
             }
         }
@@ -336,6 +348,8 @@ class HomeViewModel @Inject constructor(
                 platformItems = lib.platformItems.applyRowGradients(gradients),
                         shelves = lib.shelves,
                         shelfItems = lib.shelfItems.applyRowGradients(gradients),
+                        shelfPreviews = lib.shelfPreviews,
+                        explorerMode = lib.explorerMode,
                 recentGames = lib.recentGames.applyGradients(gradients),
                 favoriteGames = lib.favoriteGames.applyGradients(gradients),
                 recommendedGames = lib.recommendedGames.applyGradients(gradients),
@@ -619,6 +633,29 @@ class HomeViewModel @Inject constructor(
         saveCurrentState()
     }
 
+    /**
+     * A bumper on the explorer home crosses whole sections rather than stepping one row: the
+     * opening block (Recent and the platform strip), the curated shelves, and everything after
+     * them. Wraps at the ends, so the last section is one press back from the first.
+     */
+    override fun jumpSection(direction: Int) {
+        val state = _uiState.value
+        val rows = state.availableRows
+        if (rows.size < 2) return
+        val starts = buildList {
+            add(0)
+            rows.indexOfFirst { it is HomeRow.Shelf }.takeIf { it > 0 }?.let { add(it) }
+            rows.indexOfFirst { row ->
+                row !is HomeRow.Shelf && row != HomeRow.Continue && row != HomeRow.PlatformStrip
+            }.takeIf { it > 0 }?.let { add(it) }
+        }.distinct().sorted()
+        if (starts.size < 2) return
+        val currentIdx = rows.indexOf(state.currentRow).coerceAtLeast(0)
+        val currentSection = starts.indexOfLast { it <= currentIdx }.coerceAtLeast(0)
+        val target = starts[(currentSection + direction + starts.size) % starts.size]
+        selectRow(rows[target])
+    }
+
     fun selectRow(row: HomeRow) {
         val state = _uiState.value
         if (row == state.currentRow || row !in state.availableRows) return
@@ -665,6 +702,7 @@ class HomeViewModel @Inject constructor(
                     libraryDelegate.loadGamesForPlatformInternal(platform.id, row.index)
                 }
             }
+            HomeRow.PlatformStrip -> Unit
             is HomeRow.Shelf -> libraryDelegate.loadGamesForShelfInternal(row.index)
             HomeRow.Continue -> libraryDelegate.loadRecentGames()
             HomeRow.Favorites -> libraryDelegate.loadFavorites()
@@ -1155,6 +1193,7 @@ class HomeViewModel @Inject constructor(
             }
             is HomeRowItem.Media -> activateFocusedMedia(item.media)
             is HomeRowItem.ViewAll -> navigateToLibrary(item.platformId, item.sourceFilter)
+            is HomeRowItem.PlatformTile -> navigateToLibrary(item.platform.id, null)
         }
     }
 
