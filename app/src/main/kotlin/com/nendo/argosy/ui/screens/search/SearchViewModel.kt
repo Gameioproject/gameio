@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nendo.argosy.R
+import com.nendo.argosy.ui.components.ConsoleKeyboardLayout
 import com.nendo.argosy.core.input.SoundType
 import com.nendo.argosy.data.local.entity.GameEntity
 import com.nendo.argosy.data.local.entity.MediaItemEntity
@@ -84,7 +85,14 @@ data class SearchUiState(
     val isSearching: Boolean = false,
     val mediaSearchable: Boolean = false,
     val focusedIndex: Int = -1,
-    val showKeyboard: Boolean = true
+    val showKeyboard: Boolean = true,
+    val kbRow: Int = 0,
+    val kbCol: Int = 0,
+    val searchThisPlatformOnly: Boolean = true,
+    val availability: com.nendo.argosy.data.preferences.HomeLibraryFilter =
+        com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY,
+    val scopePlatformName: String? = null,
+    val canSearchServer: Boolean = false
 ) {
     val resultCount: Int get() = gameResults.size + mediaResults.size
 
@@ -98,8 +106,21 @@ class SearchViewModel @Inject constructor(
     private val gameRepository: GameRepository,
     private val platformRepository: PlatformRepository,
     private val mediaRepository: MediaRepository,
-    private val gameNavigationContext: GameNavigationContext
+    private val gameNavigationContext: GameNavigationContext,
+    private val catalogPager: com.nendo.argosy.data.catalog.CatalogPager,
+    private val preferencesRepository: com.nendo.argosy.data.preferences.UserPreferencesRepository
 ) : ViewModel() {
+
+    init {
+        viewModelScope.launch {
+            val filter = preferencesRepository.userPreferences.first().homeLibraryFilter
+            _uiState.update { it.copy(availability = filter) }
+        }
+    }
+
+    /** Platform the search screen was opened from; what SearchScope.PLATFORM means. */
+    private var scopePlatformId: Long? = null
+
 
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
@@ -186,9 +207,61 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    /** LT: the platform the search was opened from, or everywhere. */
+    fun togglePlatformScope() {
+        if (scopePlatformId == null) return
+        _uiState.update { it.copy(searchThisPlatformOnly = !it.searchThisPlatformOnly) }
+        rerun()
+    }
+
+    /** RT: the same three-way filter Home browses with. */
+    fun cycleAvailability() {
+        _uiState.update { it.copy(availability = it.availability.next()) }
+        rerun()
+    }
+
+    private fun rerun() {
+        val query = _uiState.value.query
+        if (query.isNotBlank()) updateQuery(query)
+    }
+
+    /** Tells the screen which platform a platform-scoped search should use. */
+    fun setScopePlatform(platformId: Long?, platformName: String?) {
+        scopePlatformId = platformId
+        _uiState.update {
+            it.copy(
+                scopePlatformName = platformName ?: platformId?.let { id -> platformNames.value[id] },
+                searchThisPlatformOnly = platformId != null,
+                canSearchServer = catalogPager.isCatalogOnly()
+            )
+        }
+    }
+
     private suspend fun searchGames(query: String): List<SearchResultUi.Game> {
         val names = platformNames.value
-        return gameRepository.search(query).first()
+        val state = _uiState.value
+        val thisPlatform = state.searchThisPlatformOnly && scopePlatformId != null
+        if (state.availability != com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY) {
+            catalogPager.searchServer(
+                query = query,
+                platformId = if (thisPlatform) scopePlatformId else null,
+                limit = RESULTS_PER_KIND * 2
+            )
+        }
+        val matches = gameRepository.search(query).first()
+        val platformScoped = if (thisPlatform) {
+            matches.filter { it.platformId == scopePlatformId }
+        } else {
+            matches
+        }
+        val available = when (state.availability) {
+            com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY ->
+                platformScoped.filter { it.localPath != null || it.packageName != null }
+            com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE ->
+                platformScoped.filter { (it.fileSizeBytes ?: 0L) > 0L || it.localPath != null }
+            com.nendo.argosy.data.preferences.HomeLibraryFilter.ALL -> platformScoped
+        }
+        return available
             .take(RESULTS_PER_KIND)
             .map { it.toSearchResult(names[it.platformId]) }
     }
@@ -243,6 +316,57 @@ class SearchViewModel @Inject constructor(
         val state = _uiState.value
         if (!state.hasBothKinds) return
         jumpToGroup(forward = state.focusedIndex < state.gameResults.size)
+    }
+
+    fun tapKey(row: Int, col: Int) {
+        _uiState.update { it.copy(showKeyboard = true, focusedIndex = -1, kbRow = row, kbCol = col) }
+        applyKeyAt(row, col)
+    }
+
+    fun applyFocusedKey() {
+        val state = _uiState.value
+        applyKeyAt(state.kbRow, state.kbCol)
+    }
+
+    fun keyboardBackspace() {
+        val query = _uiState.value.query
+        if (query.isNotEmpty()) updateQuery(query.dropLast(1))
+    }
+
+    fun keyboardSpace() {
+        val query = _uiState.value.query
+        if (query.isNotEmpty() && !query.endsWith(" ")) updateQuery("$query ")
+    }
+
+    private fun applyKeyAt(row: Int, col: Int) {
+        if (row == ConsoleKeyboardLayout.ACTION_ROW) {
+            when (ConsoleKeyboardLayout.actions.getOrNull(col)) {
+                ConsoleKeyboardLayout.ActionKey.SPACE -> keyboardSpace()
+                ConsoleKeyboardLayout.ActionKey.DELETE -> keyboardBackspace()
+                ConsoleKeyboardLayout.ActionKey.CLEAR -> updateQuery("")
+                null -> Unit
+            }
+            return
+        }
+        val char = ConsoleKeyboardLayout.charAt(row, col) ?: return
+        updateQuery(_uiState.value.query + char)
+    }
+
+    private fun moveKeyboardFocus(dRow: Int, dCol: Int): Boolean {
+        var moved = false
+        _uiState.update { state ->
+            var row = (state.kbRow + dRow).mod(ConsoleKeyboardLayout.rowCount)
+            var col = state.kbCol + dCol
+            if (dRow != 0) col = col.coerceAtMost(ConsoleKeyboardLayout.maxColFor(row))
+            if (dCol != 0) {
+                val maxCol = ConsoleKeyboardLayout.maxColFor(row)
+                if (col > maxCol) return@update state
+                if (col < 0) col = maxCol
+            }
+            moved = true
+            state.copy(kbRow = row, kbCol = col)
+        }
+        return moved
     }
 
     fun focusKeyboard() {
@@ -307,6 +431,10 @@ class SearchViewModel @Inject constructor(
     ): InputHandler = object : InputHandler {
         override fun onUp(): InputResult {
             val state = _uiState.value
+            if (state.focusedIndex < 0) {
+                moveKeyboardFocus(-1, 0)
+                return InputResult.HANDLED
+            }
             if (state.focusedIndex == 0) {
                 focusKeyboard()
                 return InputResult.HANDLED
@@ -315,11 +443,56 @@ class SearchViewModel @Inject constructor(
         }
 
         override fun onDown(): InputResult {
+            if (_uiState.value.focusedIndex < 0) {
+                moveKeyboardFocus(1, 0)
+                return InputResult.HANDLED
+            }
             return if (moveFocus(1)) InputResult.HANDLED else InputResult.handled(SoundType.BOUNDARY)
         }
 
-        override fun onLeft(): InputResult = InputResult.UNHANDLED
-        override fun onRight(): InputResult = InputResult.UNHANDLED
+        override fun onLeft(): InputResult {
+            val state = _uiState.value
+            if (state.focusedIndex < 0) {
+                moveKeyboardFocus(0, -1)
+                return InputResult.HANDLED
+            }
+            focusKeyboard()
+            return InputResult.HANDLED
+        }
+
+        override fun onRight(): InputResult {
+            val state = _uiState.value
+            if (state.focusedIndex >= 0) return InputResult.UNHANDLED
+            if (moveKeyboardFocus(0, 1)) return InputResult.HANDLED
+            if (resultAt(0) != null) {
+                _uiState.update { it.copy(focusedIndex = 0, showKeyboard = false) }
+                return InputResult.HANDLED
+            }
+            return InputResult.handled(SoundType.BOUNDARY)
+        }
+
+        override fun onContextMenu(): InputResult {
+            keyboardBackspace()
+            return InputResult.HANDLED
+        }
+
+        override fun onSecondaryAction(): InputResult {
+            keyboardSpace()
+            return InputResult.HANDLED
+        }
+
+        override fun onNextTrigger(): InputResult {
+            if (!_uiState.value.canSearchServer) return InputResult.UNHANDLED
+            cycleAvailability()
+            return InputResult.handled(SoundType.TOGGLE)
+        }
+
+        override fun onPrevTrigger(): InputResult {
+            if (!_uiState.value.canSearchServer) return InputResult.UNHANDLED
+            if (scopePlatformId == null) return InputResult.handled(SoundType.BOUNDARY)
+            togglePlatformScope()
+            return InputResult.handled(SoundType.TOGGLE)
+        }
 
         override fun onPrevSection(): InputResult {
             return if (jumpToGroup(forward = false)) {
@@ -338,6 +511,10 @@ class SearchViewModel @Inject constructor(
         }
 
         override fun onConfirm(): InputResult {
+            if (_uiState.value.focusedIndex < 0) {
+                applyFocusedKey()
+                return InputResult.HANDLED
+            }
             when (val selection = selectionAt(_uiState.value.focusedIndex)) {
                 is SearchSelection.OpenGame -> {
                     setGameContext()

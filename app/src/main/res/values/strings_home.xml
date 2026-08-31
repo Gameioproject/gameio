@@ -339,6 +339,18 @@
     <string name="home_library_only_on">Library only</string>
     <!-- Header switch state: the rows show the whole catalog. -->
     <string name="home_library_only_off">All games</string>
+    <string name="home_library_downloadable">Available</string>
+    <string name="home_search_label">Search</string>
+    <string name="home_footer_search">Search</string>
+    <string name="search_footer_scope">Search scope</string>
+    <string name="search_kb_space">Space</string>
+    <string name="search_kb_delete">Delete</string>
+    <string name="search_kb_clear">Clear</string>
+    <string name="search_kb_done">Done</string>
+    <string name="library_search_type_new">Type a search…</string>
+    <string name="search_scope_local">This device</string>
+    <string name="search_scope_platform">This platform</string>
+    <string name="search_scope_server">All platforms</string>
     <!-- Footer hint for the RT switch. -->
     <string name="home_footer_library_only">Library only</string>
 </resources>
