@@ -330,6 +330,16 @@ class RomMLibrarySyncService @Inject constructor(
                 }
 
                 try {
+                    // A catalog-only server lists tens of thousands of games the device does not
+                    // own. Mirroring them all to render twenty per row is the whole first-run cost,
+                    // so rows page them in on demand instead. Platform metadata (including the
+                    // server's gameCount) is already synced above, so the rows still appear.
+                    if (connectionManager.getCapabilities().catalogOnly) {
+                        platformsSynced++
+                        userPreferencesRepository.addSyncResumeCompletedPlatform(storageId)
+                        continue
+                    }
+
                     gameDao.markSyncDirtyForOwner(storageId, ROMM_SOURCES, scope.ownerUserId)
 
                     val result = syncPlatformRoms(currentApi, platform, filters, scope)
@@ -836,6 +846,8 @@ class RomMLibrarySyncService @Inject constructor(
             packageName = installedPackageName,
             rommId = rom.id,
             rommFileName = rom.fileName,
+            // 0 means the catalog knows the game but no host offers a file for it.
+            fileSizeBytes = rom.fileSize.takeIf { it > 0 },
             igdbId = rom.igdbId,
             raId = rom.raId,
             titleId = existing?.titleId,
@@ -940,6 +952,137 @@ class RomMLibrarySyncService @Inject constructor(
         val absorptionPairs: List<Pair<Long, Long>> = emptyList(),
         val decidedRomIds: Set<Long> = emptySet()
     )
+
+    /**
+     * Pull one page of a catalog-only platform into the local store, so a Home row can show games
+     * without the whole catalog having been mirrored first. Reuses [syncRom] so a catalog row is
+     * indistinguishable from a synced one downstream; only the fetch is on demand.
+     */
+    suspend fun fetchCatalogPage(
+        platformId: Long,
+        limit: Int,
+        offset: Int,
+        ownedOnly: Boolean = false
+    ): Int = withContext(NonCancellable + Dispatchers.IO) {
+        val api = apiClient.api ?: return@withContext 0
+        if (!connectionManager.getCapabilities().catalogOnly) return@withContext 0
+
+        val response = try {
+            api.getRoms(
+                apiClient.buildRomsQueryParams(
+                    platformId = platformId,
+                    limit = limit,
+                    offset = offset,
+                    includeFiles = false,
+                    ownedOnly = ownedOnly
+                )
+            )
+        } catch (e: Exception) {
+            Logger.warn(TAG, "fetchCatalogPage: request failed for platform $platformId: ${e.message}")
+            return@withContext 0
+        }
+
+        if (!response.isSuccessful) {
+            Logger.warn(TAG, "fetchCatalogPage: platform $platformId returned ${response.code()}")
+            return@withContext 0
+        }
+
+        val roms = response.body()?.items.orEmpty()
+        if (roms.isEmpty()) return@withContext 0
+
+        // No identifier sweep here: this path only adds what the row is about to show, and never
+        // decides that anything is gone.
+        val scope = SyncScope(
+            ownerUserId = overlayWriter.activeOwnerId(),
+            visibility = visibilityService.fetch(api),
+            serverRomIds = null
+        )
+
+        var written = 0
+        roms.forEach { rom ->
+            try {
+                syncRom(rom, scope, syncFiles = false)
+                written++
+            } catch (e: Exception) {
+                Logger.warn(TAG, "fetchCatalogPage: failed to store ${rom.name}: ${e.message}")
+            }
+        }
+        Logger.info(TAG, "fetchCatalogPage: platform $platformId offset $offset stored $written")
+        written
+    }
+
+    /**
+     * Pull the server's matches for a query into the local store. The search screen then reads them
+     * back out of Room like any other game, so a result can be opened and downloaded normally.
+     * [platformId] null searches the whole catalog.
+     */
+    suspend fun fetchCatalogSearch(
+        query: String,
+        platformId: Long?,
+        limit: Int
+    ): Int = withContext(NonCancellable + Dispatchers.IO) {
+        val api = apiClient.api ?: return@withContext 0
+        if (!connectionManager.getCapabilities().catalogOnly) return@withContext 0
+        if (query.isBlank()) return@withContext 0
+
+        val response = try {
+            api.getRoms(
+                apiClient.buildRomsQueryParams(
+                    platformId = platformId,
+                    searchTerm = query,
+                    limit = limit,
+                    offset = 0,
+                    includeFiles = false
+                )
+            )
+        } catch (e: Exception) {
+            Logger.warn(TAG, "fetchCatalogSearch: request failed: ${e.message}")
+            return@withContext 0
+        }
+        if (!response.isSuccessful) {
+            Logger.warn(TAG, "fetchCatalogSearch: server returned ${response.code()}")
+            return@withContext 0
+        }
+
+        val roms = response.body()?.items.orEmpty()
+        if (roms.isEmpty()) return@withContext 0
+
+        val scope = SyncScope(
+            ownerUserId = overlayWriter.activeOwnerId(),
+            visibility = visibilityService.fetch(api),
+            serverRomIds = null
+        )
+        var written = 0
+        roms.forEach { rom ->
+            try {
+                syncRom(rom, scope, syncFiles = false)
+                written++
+            } catch (e: Exception) {
+                Logger.warn(TAG, "fetchCatalogSearch: failed to store ${rom.name}: ${e.message}")
+            }
+        }
+        Logger.info(TAG, "fetchCatalogSearch: '$query' stored $written")
+        written
+    }
+
+    /** The server's A-Z index for a platform, used to offer every letter before paging that far. */
+    suspend fun fetchCatalogSections(platformId: Long): List<RomMNameSection> =
+        withContext(Dispatchers.IO) {
+            val api = apiClient.api ?: return@withContext emptyList()
+            if (!connectionManager.getCapabilities().catalogOnly) return@withContext emptyList()
+            try {
+                val response = api.getRomSections(mapOf("platform_ids" to platformId.toString()))
+                if (response.isSuccessful) {
+                    response.body().orEmpty()
+                } else {
+                    Logger.warn(TAG, "fetchCatalogSections: server returned ${response.code()}")
+                    emptyList()
+                }
+            } catch (e: Exception) {
+                Logger.warn(TAG, "fetchCatalogSections: request failed: ${e.message}")
+                emptyList()
+            }
+        }
 
     private suspend fun syncPlatformRoms(
         api: RomMApi,

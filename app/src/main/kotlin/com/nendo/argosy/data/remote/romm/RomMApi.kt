@@ -71,6 +71,11 @@ interface RomMApi {
         @QueryMap params: Map<String, String>
     ): Response<RomMRomPage>
 
+    @GET("api/roms/sections")
+    suspend fun getRomSections(
+        @QueryMap params: Map<String, String>
+    ): Response<List<RomMNameSection>>
+
     @GET("api/roms/identifiers")
     suspend fun getRomIdentifiers(): Response<List<Long>>
 
