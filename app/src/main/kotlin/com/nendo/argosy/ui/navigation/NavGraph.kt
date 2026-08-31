@@ -51,6 +51,11 @@ fun NavGraph(
             }
         }
     }
+    val navigateBack = remember {
+        {
+            if (!navController.popBackStack()) navigateToDefault()
+        }
+    }
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -76,6 +81,9 @@ fun NavGraph(
                 onNavigateToCollections = { navController.navigate(Screen.Collections.route) },
                 onGameSelect = { gameId ->
                     navController.navigate(Screen.GameDetail.createRoute(gameId))
+                },
+                onNavigateToSearch = { platformId, _ ->
+                    navController.navigate(Screen.Search.createRoute(platformId))
                 },
                 onNavigateToLibrary = { platformId, sourceFilter ->
                     navController.navigate(Screen.Library.createRoute(platformId, sourceFilter))
@@ -127,7 +135,7 @@ fun NavGraph(
 
         composable(Screen.Collections.route) {
             CollectionsScreen(
-                onBack = navigateToDefault,
+                onBack = navigateBack,
                 onCollectionClick = { collectionId ->
                     navController.navigate(Screen.CollectionDetail.createRoute(collectionId))
                 },
@@ -179,7 +187,7 @@ fun NavGraph(
 
         composable(Screen.Downloads.route) {
             DownloadsScreen(
-                onBack = navigateToDefault,
+                onBack = navigateBack,
                 onDrawerToggle = onDrawerToggle,
                 onNavigateToGame = { gameId ->
                     navController.navigate(Screen.GameDetail.createRoute(gameId))
@@ -189,7 +197,7 @@ fun NavGraph(
 
         composable(Screen.SaveSync.route) {
             com.nendo.argosy.ui.screens.savesync.SaveSyncScreen(
-                onBack = navigateToDefault,
+                onBack = navigateBack,
                 onDrawerToggle = onDrawerToggle,
                 onNavigateToGame = { gameId ->
                     navController.navigate(Screen.GameDetail.createRoute(gameId))
@@ -202,7 +210,7 @@ fun NavGraph(
             deepLinks = listOf(navDeepLink { uriPattern = "argosy://apps" })
         ) {
             AppsScreen(
-                onBack = navigateToDefault,
+                onBack = navigateBack,
                 onDrawerToggle = onDrawerToggle
             )
         }
@@ -276,7 +284,7 @@ fun NavGraph(
         ) { backStackEntry ->
             MediaLibraryScreen(
                 libraryId = backStackEntry.arguments?.getString(Screen.MediaLibrary.ARG_LIBRARY_ID),
-                onBack = navigateToDefault,
+                onBack = navigateBack,
                 onItemSelect = { itemId ->
                     navController.navigate(Screen.MediaDetail.createRoute(itemId))
                 },
@@ -299,15 +307,25 @@ fun NavGraph(
             )
         }
 
-        composable(Screen.Search.route) {
+        composable(
+            route = Screen.Search.route,
+            arguments = listOf(
+                navArgument("platformId") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
+                }
+            )
+        ) { backStackEntry ->
             SearchScreen(
+                scopePlatformId = backStackEntry.arguments?.getString("platformId")?.toLongOrNull(),
                 onGameSelect = { gameId ->
                     navController.navigate(Screen.GameDetail.createRoute(gameId))
                 },
                 onMediaSelect = { itemId ->
                     navController.navigate(Screen.MediaDetail.createRoute(itemId))
                 },
-                onBack = navigateToDefault
+                onBack = navigateBack
             )
         }
 
@@ -319,7 +337,7 @@ fun NavGraph(
 
         composable(Screen.Social.route) {
             SocialScreen(
-                onBack = navigateToDefault,
+                onBack = navigateBack,
                 onDrawerToggle = onDrawerToggle,
                 onOpenEventDetail = { eventId ->
                     navController.navigate(Screen.SocialEventDetail.createRoute(eventId))
@@ -437,7 +455,7 @@ fun NavGraph(
         }
 
         composable(Screen.QuayPass.route) {
-            QuayPassCheckInScreen(onBack = navigateToDefault)
+            QuayPassCheckInScreen(onBack = navigateBack)
         }
     }
 }

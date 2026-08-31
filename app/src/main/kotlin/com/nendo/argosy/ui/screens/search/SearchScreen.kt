@@ -52,7 +52,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import androidx.compose.foundation.layout.widthIn
 import com.nendo.argosy.R
+import com.nendo.argosy.ui.components.ConsoleKeyboard
+import com.nendo.argosy.ui.components.ConsoleKeyboardLayout
+import androidx.compose.ui.unit.dp
 import com.nendo.argosy.ui.common.rememberFileImageModel
 import com.nendo.argosy.ui.components.FocusedScroll
 import com.nendo.argosy.ui.components.FooterHints
@@ -70,12 +74,18 @@ private const val PLACEHOLDER_ALPHA = 0.6f
 
 @Composable
 fun SearchScreen(
+    scopePlatformId: Long? = null,
+    scopePlatformName: String? = null,
     onGameSelect: (Long) -> Unit,
     onMediaSelect: (String) -> Unit,
     onBack: () -> Unit,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(scopePlatformId, scopePlatformName) {
+        viewModel.setScopePlatform(scopePlatformId, scopePlatformName)
+    }
     val focusRequester = remember { FocusRequester() }
     val listState = rememberLazyListState()
 
@@ -102,11 +112,6 @@ fun SearchScreen(
         }
     }
 
-    LaunchedEffect(uiState.showKeyboard) {
-        if (uiState.showKeyboard) {
-            focusRequester.requestFocus()
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -118,37 +123,53 @@ fun SearchScreen(
             onQueryChange = { viewModel.updateQuery(it) },
             isSearching = uiState.isSearching,
             mediaSearchable = uiState.mediaSearchable,
-            focusRequester = focusRequester
+            focusRequester = focusRequester,
+            thisPlatformOnly = uiState.searchThisPlatformOnly,
+            availability = uiState.availability,
+            scopePlatformName = uiState.scopePlatformName,
+            canSearchServer = uiState.canSearchServer,
+            onTogglePlatformScope = { viewModel.togglePlatformScope() },
+            onCycleAvailability = { viewModel.cycleAvailability() }
         )
 
-        when {
-            uiState.isSearching -> LoadingState()
-            uiState.query.length < MIN_QUERY_LENGTH -> {
-                EmptyState(
-                    message = pluralStringResource(
-                        R.plurals.library_search_min_query_hint,
-                        MIN_QUERY_LENGTH,
-                        MIN_QUERY_LENGTH
-                    )
-                )
-            }
-            !uiState.hasResults -> EmptyState(
-                message = stringResource(R.string.library_search_no_results, uiState.query)
+        Row(modifier = Modifier.weight(1f)) {
+            ConsoleKeyboard(
+                focusedRow = uiState.kbRow,
+                focusedCol = uiState.kbCol,
+                active = uiState.focusedIndex < 0,
+                onKeyTap = { row, col -> viewModel.tapKey(row, col) },
+                modifier = Modifier.width(390.dp)
             )
-            else -> {
-                SearchResults(
-                    state = uiState,
-                    listState = listState,
-                    onSelect = { index ->
-                        viewModel.openAt(index, onGameSelect, onMediaSelect)
+            Column(modifier = Modifier.weight(1f)) {
+                when {
+                    uiState.isSearching -> LoadingState()
+                    uiState.query.length < MIN_QUERY_LENGTH -> {
+                        EmptyState(
+                            message = pluralStringResource(
+                                R.plurals.library_search_min_query_hint,
+                                MIN_QUERY_LENGTH,
+                                MIN_QUERY_LENGTH
+                            )
+                        )
                     }
-                )
+                    !uiState.hasResults -> EmptyState(
+                        message = stringResource(R.string.library_search_no_results, uiState.query)
+                    )
+                    else -> {
+                        SearchResults(
+                            state = uiState,
+                            listState = listState,
+                            onSelect = { index ->
+                                viewModel.openAt(index, onGameSelect, onMediaSelect)
+                            }
+                        )
+                    }
+                }
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
-
         SearchFooter(
+            showScopeToggle = uiState.canSearchServer,
             resultCount = uiState.resultCount,
             showGroupJump = uiState.hasBothKinds,
             onHintClick = { button ->
@@ -156,6 +177,10 @@ fun SearchScreen(
                     InputButton.A -> { inputHandler.onConfirm() }
                     InputButton.B -> { inputHandler.onBack() }
                     InputButton.LB_RB -> { viewModel.toggleGroup() }
+                    InputButton.X -> { viewModel.keyboardBackspace() }
+                    InputButton.Y -> { viewModel.keyboardSpace() }
+                    InputButton.LT -> { viewModel.togglePlatformScope() }
+                    InputButton.RT -> { viewModel.cycleAvailability() }
                     else -> Unit
                 }
             }
@@ -169,7 +194,14 @@ private fun SearchHeader(
     onQueryChange: (String) -> Unit,
     isSearching: Boolean,
     mediaSearchable: Boolean,
-    focusRequester: FocusRequester
+    focusRequester: FocusRequester,
+    thisPlatformOnly: Boolean = true,
+    availability: com.nendo.argosy.data.preferences.HomeLibraryFilter =
+        com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY,
+    scopePlatformName: String? = null,
+    canSearchServer: Boolean = false,
+    onTogglePlatformScope: () -> Unit = {},
+    onCycleAvailability: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -232,7 +264,70 @@ private fun SearchHeader(
                 )
             }
         }
+
+        if (canSearchServer) {
+            Spacer(modifier = Modifier.width(Dimens.spacingMd))
+            ScopeChip(
+                text = if (thisPlatformOnly && scopePlatformName != null) {
+                    scopePlatformName
+                } else if (thisPlatformOnly) {
+                    stringResource(R.string.search_scope_platform)
+                } else {
+                    stringResource(R.string.search_scope_server)
+                },
+                emphasized = !thisPlatformOnly,
+                onClick = onTogglePlatformScope
+            )
+            Spacer(modifier = Modifier.width(Dimens.spacingSm))
+            ScopeChip(
+                text = stringResource(
+                    when (availability) {
+                        com.nendo.argosy.data.preferences.HomeLibraryFilter.ALL ->
+                            R.string.home_library_only_off
+                        com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE ->
+                            R.string.home_library_downloadable
+                        com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY ->
+                            R.string.home_library_only_on
+                    }
+                ),
+                emphasized = availability !=
+                    com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY,
+                onClick = onCycleAvailability
+            )
+        }
     }
+}
+
+/** One search setting, rendered like Home's filter chip so the pair reads as one family. */
+@Composable
+private fun ScopeChip(
+    text: String,
+    emphasized: Boolean,
+    onClick: () -> Unit
+) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.labelLarge,
+        color = if (emphasized) {
+            MaterialTheme.colorScheme.onPrimary
+        } else {
+            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+        },
+        maxLines = 1,
+        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+        modifier = Modifier
+            .widthIn(max = 180.dp)
+            .background(
+                if (emphasized) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                },
+                RoundedCornerShape(Dimens.radiusLg)
+            )
+            .clickableNoFocus(onClick = onClick)
+            .padding(horizontal = Dimens.spacingMd, vertical = Dimens.spacingXs)
+    )
 }
 
 /**
@@ -500,14 +595,23 @@ private fun LoadingState() {
 private fun SearchFooter(
     resultCount: Int,
     showGroupJump: Boolean,
+    showScopeToggle: Boolean = false,
     onHintClick: ((InputButton) -> Unit)? = null
 ) {
     val groupJumpHint = stringResource(R.string.library_search_hint_group_jump)
     val selectHint = stringResource(R.string.library_search_hint_select)
     val backHint = stringResource(R.string.library_search_hint_back)
-    val hints = remember(showGroupJump, groupJumpHint, selectHint, backHint) {
+    val scopeHint = stringResource(R.string.search_footer_scope)
+    val filterHint = stringResource(R.string.home_footer_library_only)
+    val deleteHint = stringResource(R.string.search_kb_delete)
+    val spaceHint = stringResource(R.string.search_kb_space)
+    val hints = remember(showGroupJump, showScopeToggle, groupJumpHint, selectHint, backHint, scopeHint, filterHint, deleteHint, spaceHint) {
         buildList {
             if (showGroupJump) add(InputButton.LB_RB to groupJumpHint)
+            add(InputButton.X to deleteHint)
+            add(InputButton.Y to spaceHint)
+            if (showScopeToggle) add(InputButton.LT to scopeHint)
+            if (showScopeToggle) add(InputButton.RT to filterHint)
             add(InputButton.A to selectHint)
             add(InputButton.B to backHint)
         }

@@ -49,7 +49,13 @@ sealed class Screen(val route: String) {
     data object MediaDetail : Screen("media_item/{itemId}") {
         fun createRoute(itemId: String) = "media_item/$itemId"
     }
-    data object Search : Screen("search")
+    data object Search : Screen("search?platformId={platformId}") {
+        fun createRoute(platformId: Long? = null): String {
+            val params = mutableListOf<String>()
+            if (platformId != null) params.add("platformId=$platformId")
+            return if (params.isEmpty()) "search" else "search?" + params.joinToString("&")
+        }
+    }
     data object ManagePins : Screen("manage_pins")
     data object Social : Screen("social")
     data object SocialEventDetail : Screen("social/event/{eventId}") {
