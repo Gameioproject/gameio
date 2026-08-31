@@ -1,6 +1,9 @@
 package com.nendo.argosy.data.sync.strategy
 
 interface SaveSyncStrategy {
+    /** Whether this strategy can produce a real plan; false skips reconcile entirely. */
+    val plansRemotely: Boolean get() = true
+
     suspend fun planReconcile(localInventory: List<LocalSaveState>): ReconcilePlan
 
     suspend fun completeSession(sessionId: Long, operationsCompleted: Int, operationsFailed: Int): CompleteOutcome {

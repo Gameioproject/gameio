@@ -104,9 +104,7 @@ class SyncCoordinator @Inject constructor(
         canonicalizeStaleEmulatorIds()
         val queueResult = processQueue()
 
-        val state = romMRepository.get().connectionState.value
-        val caps = (state as? ConnectionState.Connected)?.capabilities
-        if (caps?.supportsSyncNegotiate != true) {
+        if (!strategySelector.current().plansRemotely) {
             return@withContext ReconcileSummary(queueResult, planConflicts = 0, planApplied = 0)
         }
 

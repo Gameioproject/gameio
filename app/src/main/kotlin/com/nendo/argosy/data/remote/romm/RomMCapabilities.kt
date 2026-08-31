@@ -60,7 +60,8 @@ data class RomMCapabilities(
                 supportsPlaySessionIngest = syncEngine,
                 supportsDeviceSyncMode = deviceSync && !catalogOnly,
                 supportsLibretroThumbnails = (libretroEnabled ?: syncEngine) && !catalogOnly,
-                trustsServerHash = compareVersions(version, HASH_TRUST_MIN_VERSION) >= 0 && !catalogOnly,
+                trustsServerHash = catalogOnly ||
+                    compareVersions(version, HASH_TRUST_MIN_VERSION) >= 0,
                 supportsDeviceAuth = compareVersions(version, DEVICE_AUTH_MIN_VERSION) >= 0,
                 supportsScreenshotUpload =
                     compareVersions(version, SCREENSHOT_UPLOAD_MIN_VERSION) >= 0 && !catalogOnly,
