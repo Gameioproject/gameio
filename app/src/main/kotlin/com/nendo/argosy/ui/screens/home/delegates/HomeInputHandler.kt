@@ -85,6 +85,7 @@ interface HomeInputActions {
     fun navigateToLibrary(platformId: Long?, sourceFilter: String?)
     fun navigateToSearch()
     fun surpriseMe()
+    fun jumpSection(direction: Int)
     fun toggleFavorite(gameId: Long)
     fun unfavoriteMedia(itemId: String)
     fun setNavigationContext(gameIds: List<Long>)
@@ -336,6 +337,10 @@ class HomeInputHandler(
             isCustomGrid(state) -> confirmCustomGridCell()
             else -> {
                 when (val item = state.focusedItem) {
+                    is HomeRowItem.PlatformTile -> {
+                        actions.navigateToLibrary(item.platform.id, null)
+                        return InputResult.handled(SoundType.SELECT)
+                    }
                     is HomeRowItem.Game -> {
                         val game = item.game
                         val indicator = state.downloadIndicatorFor(game.id)
@@ -581,6 +586,10 @@ class HomeInputHandler(
             actions.turnCustomGridPage(-1)
             return InputResult.handled(SoundType.SECTION_CHANGE)
         }
+        if (state.explorerMode && !isGrid(state)) {
+            actions.jumpSection(-1)
+            return InputResult.handled(SoundType.SECTION_CHANGE)
+        }
         actions.previousRow()
         return InputResult.handled(SoundType.SECTION_CHANGE)
     }
@@ -595,6 +604,10 @@ class HomeInputHandler(
         }
         if (isCustomGrid(state)) {
             actions.turnCustomGridPage(1)
+            return InputResult.handled(SoundType.SECTION_CHANGE)
+        }
+        if (state.explorerMode && !isGrid(state)) {
+            actions.jumpSection(1)
             return InputResult.handled(SoundType.SECTION_CHANGE)
         }
         actions.nextRow()

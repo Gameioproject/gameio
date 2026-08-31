@@ -75,11 +75,15 @@ private const val RECENT_GAMES_CANDIDATE_POOL = 40
 private const val NEW_GAME_THRESHOLD_HOURS = 24L
 private const val RECENT_PLAYED_THRESHOLD_HOURS = 4L
 
+private const val SHELF_PREVIEW_COUNT = 10
+
 data class LibraryState(
     val platforms: List<HomePlatformUi> = emptyList(),
     val platformItems: List<HomeRowItem> = emptyList(),
     val shelves: List<HomeShelfUi> = emptyList(),
     val shelfItems: List<HomeRowItem> = emptyList(),
+    val shelfPreviews: Map<Int, List<HomeGameUi>> = emptyMap(),
+    val explorerMode: Boolean = false,
     val recentGames: List<HomeGameUi> = emptyList(),
     val favoriteGames: List<HomeGameUi> = emptyList(),
     val recommendedGames: List<HomeGameUi> = emptyList(),
@@ -158,10 +162,12 @@ class HomeLibraryDelegate @Inject constructor(
         }
         scope.launch {
             connectionManager.connectionState.collect { state ->
-                if (state is com.nendo.argosy.data.remote.romm.ConnectionState.Connected &&
-                    _state.value.shelves.isEmpty()
-                ) {
-                    loadShelves()
+                if (state is com.nendo.argosy.data.remote.romm.ConnectionState.Connected) {
+                    val catalog = connectionManager.getCapabilities().catalogOnly
+                    if (_state.value.explorerMode != catalog) {
+                        _state.update { it.copy(explorerMode = catalog) }
+                    }
+                    if (_state.value.shelves.isEmpty()) loadShelves()
                 }
             }
         }
@@ -442,6 +448,14 @@ class HomeLibraryDelegate @Inject constructor(
         _state.update { state ->
             state.copy(shelves = defs.map { HomeShelfUi(key = it.key, title = it.title) })
         }
+        defs.forEachIndexed { index, shelf ->
+            if (_state.value.shelfPreviews[index]?.isNotEmpty() == true) return@forEachIndexed
+            val ids = shelfRepository.gamesFor(shelf, through = SHELF_PREVIEW_COUNT)
+            if (ids.isEmpty()) return@forEachIndexed
+            val byId = gameRepository.getByIds(ids).associateBy { it.id }
+            val preview = ids.mapNotNull { byId[it] }.map { it.toUi() }
+            _state.update { it.copy(shelfPreviews = it.shelfPreviews + (index to preview)) }
+        }
     }
 
     suspend fun loadGamesForPlatformInternal(platformId: Long, platformIndex: Int) {
@@ -528,6 +542,7 @@ class HomeLibraryDelegate @Inject constructor(
     suspend fun refreshCurrentRow(currentRow: HomeRow, focusedGameId: Long?): RefreshResult {
         if (_state.value.shelves.isEmpty()) loadShelves()
         return when (currentRow) {
+            HomeRow.PlatformStrip -> RefreshResult(emptyList())
             is HomeRow.Shelf -> {
                 loadGamesForShelfInternal(currentRow.index)
                 RefreshResult(_state.value.shelfItems.mapNotNull { (it as? HomeRowItem.Game)?.game?.id })
@@ -655,7 +670,8 @@ class HomeLibraryDelegate @Inject constructor(
                         is HomeRowItem.Game -> if (item.game.id == gameId) {
                             HomeRowItem.Game(item.game.copy(achievementCount = total, earnedAchievementCount = earned))
                         } else item
-                        is HomeRowItem.Media, is HomeRowItem.ViewAll -> item
+                        is HomeRowItem.Media, is HomeRowItem.ViewAll,
+                        is HomeRowItem.PlatformTile -> item
                     }
                 }
             )

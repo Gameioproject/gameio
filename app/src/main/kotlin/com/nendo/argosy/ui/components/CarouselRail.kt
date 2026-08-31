@@ -40,6 +40,18 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.ui.platform.LocalLayoutDirection
 import com.nendo.argosy.ui.theme.generated.ComponentDefaults
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import coil.compose.AsyncImage
 import com.nendo.argosy.ui.util.clickableNoFocus
 import com.nendo.argosy.ui.util.touchOnly
 
@@ -109,6 +121,17 @@ sealed class CarouselItem {
     data class ViewAll(
         override val key: String,
         val remainingCount: Int = 0
+    ) : CarouselItem()
+
+    /**
+     * One platform on the explorer home's strip: a logo standing for a whole library view.
+     * It shares the rail so focus, scrolling and taps behave like every other card.
+     */
+    data class PlatformTile(
+        override val key: String,
+        val name: String,
+        val shortName: String,
+        val logoPath: String?
     ) : CarouselItem()
 }
 
@@ -409,6 +432,19 @@ fun CarouselRail(
                             .then(tapModifier)
                     )
                 }
+                is CarouselItem.PlatformTile -> {
+                    PlatformTileCard(
+                        item = item,
+                        isFocused = isFocused,
+                        onClick = { onItemTap(index) },
+                        focusScale = metrics.focusScale,
+                        scalePivotY = metrics.scalePivotY,
+                        modifier = placementModifier
+                            .then(tapModifier)
+                            .padding(top = NEW_BADGE_TOP_OVERFLOW)
+                            .size(metrics.cardWidth, metrics.cardHeight)
+                    )
+                }
                 is CarouselItem.ViewAll -> {
                     val viewAllAlpha by animateFloatAsState(
                         targetValue = overrides.viewAllAlpha,
@@ -533,4 +569,77 @@ private fun CarouselGameCard(
         alphaOverride = alphaOverride,
         modifier = modifier
     )
+}
+
+
+/**
+ * The card for one platform on the explorer strip: logo centered over a quiet surface, the
+ * platform's name beneath it. Focus grows it the way the rail grows any card, so the strip
+ * reads as one more shelf rather than a foreign control.
+ */
+@Composable
+private fun PlatformTileCard(
+    item: CarouselItem.PlatformTile,
+    isFocused: Boolean,
+    onClick: () -> Unit,
+    focusScale: Float,
+    scalePivotY: Float,
+    modifier: Modifier = Modifier
+) {
+    val scale by animateFloatAsState(
+        targetValue = if (isFocused) focusScale else 1f,
+        animationSpec = Motion.focusSpring,
+        label = "platformTileScale"
+    )
+    val borderAlpha by animateFloatAsState(
+        targetValue = if (isFocused) 1f else 0f,
+        animationSpec = Motion.focusSpring,
+        label = "platformTileBorder"
+    )
+    Box(
+        modifier = modifier
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+                transformOrigin = TransformOrigin(0.5f, scalePivotY)
+            }
+            .clip(RoundedCornerShape(Dimens.radiusLg))
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f))
+            .border(
+                width = 3.dp,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = borderAlpha),
+                shape = RoundedCornerShape(Dimens.radiusLg)
+            )
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(Dimens.spacingSm)
+        ) {
+            if (item.logoPath != null) {
+                AsyncImage(
+                    model = item.logoPath,
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(Dimens.iconXl * 2)
+                )
+            } else {
+                Text(
+                    text = item.shortName.uppercase(),
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Text(
+                text = item.name,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = Dimens.spacingSm)
+            )
+        }
+    }
 }
