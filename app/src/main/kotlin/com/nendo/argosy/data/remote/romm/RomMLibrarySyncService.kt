@@ -1065,6 +1065,78 @@ class RomMLibrarySyncService @Inject constructor(
         written
     }
 
+    /**
+     * Fetch one page of an arbitrary roms query, store every row through [syncRom], and return the
+     * page's games as local ids in the server's order. Shelves, Surprise Me and the recommendation
+     * pool all ride this; the caller supplies whatever filter params the query needs.
+     */
+    suspend fun fetchRomsByParams(
+        params: Map<String, String>,
+        limit: Int,
+        offset: Int
+    ): List<Long> = withContext(NonCancellable + Dispatchers.IO) {
+        val api = apiClient.api ?: return@withContext emptyList()
+        if (!connectionManager.getCapabilities().catalogOnly) return@withContext emptyList()
+        val query = params.toMutableMap()
+        query["limit"] = limit.toString()
+        query["offset"] = offset.toString()
+        query.putIfAbsent("order_by", "name")
+        query.putIfAbsent("order_dir", "asc")
+        query["with_char_index"] = "false"
+        query["with_filter_values"] = "false"
+        val response = try {
+            api.getRoms(query)
+        } catch (e: Exception) {
+            Logger.warn(TAG, "fetchRomsByParams: request failed: ${e.message}")
+            return@withContext emptyList()
+        }
+        if (!response.isSuccessful) {
+            Logger.warn(TAG, "fetchRomsByParams: server returned ${response.code()}")
+            return@withContext emptyList()
+        }
+        val roms = response.body()?.items.orEmpty()
+        if (roms.isEmpty()) return@withContext emptyList()
+        val scope = SyncScope(
+            ownerUserId = overlayWriter.activeOwnerId(),
+            visibility = visibilityService.fetch(api),
+            serverRomIds = null
+        )
+        val ids = mutableListOf<Long>()
+        roms.forEach { rom ->
+            try {
+                val (_, entity) = syncRom(rom, scope, syncFiles = false)
+                ids.add(entity.id)
+            } catch (e: Exception) {
+                Logger.warn(TAG, "fetchRomsByParams: failed to store ${rom.name}: ${e.message}")
+            }
+        }
+        ids
+    }
+
+    /** One random well-rated catalog game, stored locally; its local id, or null. */
+    suspend fun fetchRandomRom(): Long? = withContext(NonCancellable + Dispatchers.IO) {
+        val api = apiClient.api ?: return@withContext null
+        if (!connectionManager.getCapabilities().catalogOnly) return@withContext null
+        val response = try {
+            api.getRandomRom()
+        } catch (e: Exception) {
+            Logger.warn(TAG, "fetchRandomRom: request failed: ${e.message}")
+            return@withContext null
+        }
+        val rom = response.body() ?: return@withContext null
+        val scope = SyncScope(
+            ownerUserId = overlayWriter.activeOwnerId(),
+            visibility = visibilityService.fetch(api),
+            serverRomIds = null
+        )
+        try {
+            syncRom(rom, scope, syncFiles = false).second.id
+        } catch (e: Exception) {
+            Logger.warn(TAG, "fetchRandomRom: failed to store ${rom.name}: ${e.message}")
+            null
+        }
+    }
+
     /** The server's A-Z index for a platform, used to offer every letter before paging that far. */
     suspend fun fetchCatalogSections(platformId: Long): List<RomMNameSection> =
         withContext(Dispatchers.IO) {

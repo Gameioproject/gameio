@@ -69,6 +69,7 @@ suspend fun GameEntity.toHomeGameUi(
         packageName = packageName,
         needsInstall = needsAndroidInstall,
         youtubeVideoId = youtubeVideoId,
+        fileSizeBytes = fileSizeBytes,
         // The catalog is served whole, so "added recently" only means "paged in recently"
         // and would mark almost every game. No badge.
         isNew = false,

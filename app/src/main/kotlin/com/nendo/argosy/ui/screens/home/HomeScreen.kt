@@ -111,6 +111,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.nendo.argosy.R
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Shuffle
 import com.nendo.argosy.data.preferences.HomeLibraryFilter
 import com.nendo.argosy.ui.input.LocalInputDispatcher
 import com.nendo.argosy.ui.navigation.Screen
@@ -262,6 +263,7 @@ fun HomeScreen(
                 }
                 is HomeEvent.NavigateToCollections -> onNavigateToCollections()
                 is HomeEvent.NavigateToSearch -> onNavigateToSearch(event.platformId, null)
+                is HomeEvent.OpenGameDetail -> onGameSelect(event.gameId)
                 is HomeEvent.PlayMedia -> onPlayMedia(event.itemId, event.startOver)
                 is HomeEvent.NavigateToMediaDetail -> onMediaSelect(event.itemId)
             }
@@ -728,6 +730,7 @@ fun HomeScreen(
                     onSelectRow = viewModel::selectRow,
                     onToggleInstalledOnly = viewModel::toggleInstalledOnly,
                     onNavigateToSearch = onNavigateToSearch,
+                    onSurpriseMe = viewModel::surpriseMe,
                     isStacked = isPortrait,
                     headerOffset = videoModeHeaderOffset,
                     showSections = !isCustomGrid,
@@ -827,7 +830,16 @@ fun HomeScreen(
                                 isRommConfigured = uiState.isRommConfigured,
                                 currentRow = uiState.currentRow,
                                 isPinnedLoading = pinId != null && pinId in uiState.pinnedGamesLoading,
-                                onSync = { viewModel.syncFromRomm() }
+                                onSync = { viewModel.syncFromRomm() },
+                                narrowedByFilter = uiState.libraryFilter !=
+                                    com.nendo.argosy.data.preferences.HomeLibraryFilter.ALL &&
+                                    (uiState.currentRow is HomeRow.Platform ||
+                                        uiState.currentRow is HomeRow.Shelf),
+                                onShowAllGames = {
+                                    viewModel.setLibraryFilter(
+                                        com.nendo.argosy.data.preferences.HomeLibraryFilter.ALL
+                                    )
+                                }
                             )
                         }
                         isAutoGrid -> {
@@ -1150,6 +1162,14 @@ fun HomeScreen(
                 achievementCount = uiState.focusedGame?.achievementCount ?: 0,
                 earnedAchievementCount = uiState.focusedGame?.earnedAchievementCount ?: 0,
                 showMetadata = !uiState.isVideoPreviewActive,
+                description = uiState.focusedGame
+                    ?.takeIf { uiState.currentRow is HomeRow.Platform || uiState.currentRow is HomeRow.Shelf }
+                    ?.description,
+                fileSizeBytes = uiState.focusedGame
+                    ?.takeIf { uiState.currentRow is HomeRow.Platform || uiState.currentRow is HomeRow.Shelf }
+                    ?.fileSizeBytes,
+                genre = uiState.focusedGame?.genre,
+                releaseYear = uiState.focusedGame?.releaseYear,
                 textColorOverride = if (videoTextColor != Color.Unspecified) videoTextColor else null,
                 placement = if (
                     !isPortrait &&
@@ -1484,6 +1504,7 @@ private fun HomeHeader(
     onSelectRow: (HomeRow) -> Unit,
     onToggleInstalledOnly: () -> Unit,
     onNavigateToSearch: (platformId: Long?, platformName: String?) -> Unit,
+    onSurpriseMe: () -> Unit,
     isStacked: Boolean,
     headerOffset: androidx.compose.ui.unit.Dp = 0.dp,
     showSections: Boolean = true,
@@ -1500,6 +1521,9 @@ private fun HomeHeader(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            if (uiState.shelves.isNotEmpty()) {
+                HomeSurpriseButton(onClick = onSurpriseMe)
+            }
             HomeSearchButton(
                 onClick = {
                     val p = uiState.currentPlatform
@@ -1525,7 +1549,10 @@ private fun HomeHeader(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                HomeSearchButton(
+                if (uiState.shelves.isNotEmpty()) {
+                HomeSurpriseButton(onClick = onSurpriseMe)
+            }
+            HomeSearchButton(
                 onClick = {
                     val p = uiState.currentPlatform
                     onNavigateToSearch(p?.id, p?.name)
@@ -1580,6 +1607,25 @@ private fun HomeHeader(
  * glance says which list the rows are showing.
  */
 /** Opens search from Home. The catalog is far larger than any row, so this is the way into it. */
+/** One well-rated game from anywhere in the catalog, full page, Download one press away. */
+@Composable
+private fun HomeSurpriseButton(onClick: () -> Unit) {
+    Icon(
+        imageVector = Icons.Default.Shuffle,
+        contentDescription = stringResource(R.string.home_surprise_label),
+        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+        modifier = Modifier
+            .padding(end = Dimens.spacingSm)
+            .background(
+                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                RoundedCornerShape(Dimens.radiusLg)
+            )
+            .clickableNoFocus(onClick = onClick)
+            .padding(Dimens.spacingXs)
+            .size(Dimens.iconSm)
+    )
+}
+
 @Composable
 private fun HomeSearchButton(onClick: () -> Unit) {
     Icon(
@@ -1737,6 +1783,10 @@ private fun GameInfo(
     achievementCount: Int,
     earnedAchievementCount: Int,
     showMetadata: Boolean = true,
+    description: String? = null,
+    fileSizeBytes: Long? = null,
+    genre: String? = null,
+    releaseYear: Int? = null,
     textColorOverride: Color? = null,
     placement: GameInfoPlacement = GameInfoPlacement.SPLIT,
     modifier: Modifier = Modifier
@@ -1772,6 +1822,43 @@ private fun GameInfo(
                         style = MaterialTheme.typography.bodyMedium,
                         color = subtitleColor,
                         modifier = Modifier.graphicsLayer { alpha = metadataAlpha }
+                    )
+                }
+                val facts = buildList {
+                    genre?.split(",")?.firstOrNull()?.trim()?.takeIf { it.isNotEmpty() }?.let { add(it) }
+                    releaseYear?.let { add(it.toString()) }
+                    fileSizeBytes?.takeIf { it > 0 }?.let {
+                        val mb = it / 1048576.0
+                        add(
+                            if (mb >= 1024) {
+                                String.format(java.util.Locale.US, "%.1f GB", mb / 1024.0)
+                            } else {
+                                String.format(java.util.Locale.US, "%.1f MB", mb)
+                            }
+                        )
+                    }
+                }
+                if (facts.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(Dimens.spacingXs))
+                    Text(
+                        text = facts.joinToString("  ·  "),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = subtitleColor,
+                        modifier = Modifier.graphicsLayer { alpha = metadataAlpha }
+                    )
+                }
+                if (!description.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(Dimens.spacingSm))
+                    Text(
+                        text = description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = subtitleColor,
+                        textAlign = TextAlign.Center,
+                        maxLines = 3,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .graphicsLayer { alpha = metadataAlpha }
+                            .fillMaxWidth(0.85f)
                     )
                 }
             }
@@ -1977,8 +2064,38 @@ private fun EmptyState(
     isRommConfigured: Boolean,
     currentRow: HomeRow,
     isPinnedLoading: Boolean,
-    onSync: () -> Unit
+    onSync: () -> Unit,
+    narrowedByFilter: Boolean = false,
+    onShowAllGames: () -> Unit = {}
 ) {
+    if (narrowedByFilter) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(Dimens.spacingSm),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Dimens.spacingXxl)
+        ) {
+            Text(
+                text = stringResource(R.string.home_empty_filtered),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = stringResource(R.string.home_empty_filtered_cta),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.primary,
+                        RoundedCornerShape(Dimens.radiusLg)
+                    )
+                    .clickableNoFocus(onClick = onShowAllGames)
+                    .padding(horizontal = Dimens.spacingMd, vertical = Dimens.spacingXs)
+            )
+        }
+        return
+    }
     val isPinnedRow = currentRow is HomeRow.PinnedRegular || currentRow is HomeRow.PinnedVirtual
     val collectionName = when (currentRow) {
         is HomeRow.PinnedRegular -> currentRow.name

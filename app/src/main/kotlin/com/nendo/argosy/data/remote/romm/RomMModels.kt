@@ -565,3 +565,12 @@ data class RomMNameSection(
     @Json(name = "offset") val offset: Int,
     @Json(name = "count") val count: Int
 )
+
+
+/** One curated Home shelf: a title plus parameters into the generic roms query. */
+@JsonClass(generateAdapter = true)
+data class RomMShelf(
+    @Json(name = "key") val key: String,
+    @Json(name = "title") val title: String,
+    @Json(name = "params") val params: Map<String, Any?> = emptyMap()
+)

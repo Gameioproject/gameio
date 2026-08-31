@@ -21,7 +21,8 @@ class GenerateRecommendationsUseCase @Inject constructor(
     private val gameDao: GameDao,
     private val preferencesRepository: UserPreferencesRepository,
     private val platformRepository: PlatformRepository,
-    private val syncPreferencesRepository: com.nendo.argosy.data.preferences.SyncPreferencesRepository
+    private val syncPreferencesRepository: com.nendo.argosy.data.preferences.SyncPreferencesRepository,
+    private val shelfRepository: dagger.Lazy<com.nendo.argosy.data.catalog.ShelfRepository>
 ) {
     suspend operator fun invoke(forceRegenerate: Boolean = false): List<Long> {
         val prefs = preferencesRepository.preferences.first()
@@ -40,6 +41,13 @@ class GenerateRecommendationsUseCase @Inject constructor(
         if (playedGames.isEmpty()) return emptyList()
 
         val genreWeights = calculateGenreWeights(playedGames)
+
+        if (shelfRepository.get().isCatalogOnly()) {
+            genreWeights.entries
+                .sortedByDescending { it.value }
+                .take(2)
+                .forEach { (genre, _) -> shelfRepository.get().seedGenre(genre) }
+        }
         val platformWeights = calculatePlatformWeights(playedGames)
         val playTimeBoost = calculatePlayTimeBoost(playedGames)
 
