@@ -71,6 +71,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.zIndex
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -88,6 +89,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nendo.argosy.R
+import com.nendo.argosy.data.catalog.SearchScope
 import com.nendo.argosy.ui.theme.Dimens
 import com.nendo.argosy.ui.theme.LocalArgosyTheme
 import com.nendo.argosy.ui.theme.Motion
@@ -159,6 +161,14 @@ fun LibraryScreen(
     val gridState = rememberLazyGridState(initialFirstVisibleItemIndex = initialGridIndex)
     val platformGridState = rememberLazyGridState()
     var isProgrammaticScroll by remember { mutableStateOf(false) }
+
+    // Paging follows the grid, not the sync: as rows come into view the pager pulls the next page
+    // from the server. snapshotFlow only emits on change, so a still grid costs nothing.
+    LaunchedEffect(gridState) {
+        snapshotFlow { gridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0 }
+            .distinctUntilChanged()
+            .collect { lastVisible -> viewModel.onVisibleIndexChanged(lastVisible) }
+    }
 
     LaunchedEffect(initialPlatformId) {
         if (initialPlatformId != null) {
@@ -518,7 +528,17 @@ fun LibraryScreen(
                     viewModel.moveFilterOptionFocus(index - uiState.filterOptionIndex)
                     viewModel.confirmFilterSelection()
                 },
-                onSearchQueryChange = { viewModel.updateSearchQuery(it) }
+                onSearchQueryChange = { viewModel.updateSearchQuery(it) },
+                onCycleSearchScope = { viewModel.cycleSearchScope() }
+            )
+        }
+
+        if (uiState.showSearchKeyboard) {
+            com.nendo.argosy.ui.components.ConsoleKeyboardOverlay(
+                query = uiState.activeFilters.searchQuery,
+                onQueryChange = { viewModel.updateSearchQuery(it) },
+                onDismiss = { viewModel.closeSearchKeyboard() },
+                placeholder = stringResource(R.string.library_filter_search_placeholder)
             )
         }
 
@@ -1279,7 +1299,8 @@ private fun FilterMenuOverlay(
     onDismiss: () -> Unit,
     onCategorySelect: (FilterCategory) -> Unit,
     onOptionSelect: (Int) -> Unit,
-    onSearchQueryChange: (String) -> Unit
+    onSearchQueryChange: (String) -> Unit,
+    onCycleSearchScope: () -> Unit = {}
 ) {
     val listState = rememberLazyListState()
     val filterContext = LocalContext.current
@@ -1439,6 +1460,35 @@ private fun FilterMenuOverlay(
                             }
                         }
                     )
+
+                    if (uiState.canSearchServer) {
+                        val scope = uiState.searchScope
+                        val scopeLabel = when (scope) {
+                            SearchScope.LOCAL -> stringResource(R.string.search_scope_local)
+                            SearchScope.PLATFORM ->
+                                stringResource(R.string.search_scope_platform)
+                            SearchScope.SERVER -> stringResource(R.string.search_scope_server)
+                        }
+                        val scopeContainer = when (scope) {
+                            SearchScope.LOCAL -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                            SearchScope.PLATFORM -> MaterialTheme.colorScheme.primary.copy(alpha = 0.55f)
+                            SearchScope.SERVER -> MaterialTheme.colorScheme.primary
+                        }
+                        Text(
+                            text = scopeLabel,
+                            style = MaterialTheme.typography.labelSmall,
+                            maxLines = 1,
+                            color = if (scope == SearchScope.LOCAL) {
+                                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                            } else {
+                                MaterialTheme.colorScheme.onPrimary
+                            },
+                            modifier = Modifier
+                                .background(scopeContainer, RoundedCornerShape(Dimens.radiusLg))
+                                .clickableNoFocus(onClick = onCycleSearchScope)
+                                .padding(horizontal = Dimens.spacingSm, vertical = Dimens.spacingXs)
+                        )
+                    }
                 }
 
                 if (options.isNotEmpty()) {
