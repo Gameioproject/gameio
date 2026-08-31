@@ -110,6 +110,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Size
 import com.nendo.argosy.R
+import androidx.compose.material.icons.filled.Search
+import com.nendo.argosy.data.preferences.HomeLibraryFilter
 import com.nendo.argosy.ui.input.LocalInputDispatcher
 import com.nendo.argosy.ui.navigation.Screen
 import com.nendo.argosy.domain.model.RequiredAction
@@ -169,6 +171,7 @@ fun HomeScreen(
     onGameSelect: (Long) -> Unit,
     onNavigateToLibrary: (platformId: Long?, sourceFilter: String?) -> Unit = { _, _ -> },
     onNavigateToCollections: () -> Unit = {},
+    onNavigateToSearch: (platformId: Long?, platformName: String?) -> Unit = { _, _ -> },
     onNavigateToDefault: () -> Unit,
     onDrawerToggle: () -> Unit,
     onChangelogAction: (RequiredAction) -> Unit = {},
@@ -258,6 +261,7 @@ fun HomeScreen(
                     onNavigateToLibrary(event.platformId, event.sourceFilter)
                 }
                 is HomeEvent.NavigateToCollections -> onNavigateToCollections()
+                is HomeEvent.NavigateToSearch -> onNavigateToSearch(event.platformId, null)
                 is HomeEvent.PlayMedia -> onPlayMedia(event.itemId, event.startOver)
                 is HomeEvent.NavigateToMediaDetail -> onMediaSelect(event.itemId)
             }
@@ -723,6 +727,7 @@ fun HomeScreen(
                     onNextRow = viewModel::nextRow,
                     onSelectRow = viewModel::selectRow,
                     onToggleInstalledOnly = viewModel::toggleInstalledOnly,
+                    onNavigateToSearch = onNavigateToSearch,
                     isStacked = isPortrait,
                     headerOffset = videoModeHeaderOffset,
                     showSections = !isCustomGrid,
@@ -1043,11 +1048,13 @@ fun HomeScreen(
                                     stringResource(R.string.home_footer_game_favorite)
                                 },
                                 InputButton.X to stringResource(R.string.home_footer_game_details),
+                                InputButton.LT to stringResource(R.string.home_footer_search),
                                 InputButton.RT to stringResource(R.string.home_footer_library_only)
                             ),
                             variant = FooterVariant.SUBTLE,
                             onHintClick = { button ->
                                 when (button) {
+                                    InputButton.LT -> viewModel.navigateToSearch()
                                     InputButton.RT -> viewModel.toggleInstalledOnly()
                                     InputButton.A -> {
                                         when {
@@ -1286,6 +1293,14 @@ fun HomeScreen(
             )
         }
 
+        if (uiState.customGrid.pickerSearchActive && uiState.showTilePicker) {
+            com.nendo.argosy.ui.components.ConsoleKeyboardOverlay(
+                query = uiState.tilePickerQuery,
+                onQueryChange = viewModel::setTilePickerQuery,
+                onDismiss = { viewModel.toggleTilePickerSearch() }
+            )
+        }
+
         val mediaTileSetup = uiState.mediaTileSetup
         if (mediaTileSetup != null && uiState.showMediaTileSetup) {
             com.nendo.argosy.ui.components.MediaTileSetupModal(
@@ -1468,6 +1483,7 @@ private fun HomeHeader(
     onNextRow: () -> Unit,
     onSelectRow: (HomeRow) -> Unit,
     onToggleInstalledOnly: () -> Unit,
+    onNavigateToSearch: (platformId: Long?, platformName: String?) -> Unit,
     isStacked: Boolean,
     headerOffset: androidx.compose.ui.unit.Dp = 0.dp,
     showSections: Boolean = true,
@@ -1484,7 +1500,13 @@ private fun HomeHeader(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            LibraryOnlyToggle(enabled = uiState.installedOnly, onToggle = onToggleInstalledOnly)
+            HomeSearchButton(
+                onClick = {
+                    val p = uiState.currentPlatform
+                    onNavigateToSearch(p?.id, p?.name)
+                }
+            )
+            LibraryOnlyToggle(filter = uiState.libraryFilter, onToggle = onToggleInstalledOnly)
             SystemStatusBar()
         }
         return
@@ -1503,7 +1525,13 @@ private fun HomeHeader(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                LibraryOnlyToggle(enabled = uiState.installedOnly, onToggle = onToggleInstalledOnly)
+                HomeSearchButton(
+                onClick = {
+                    val p = uiState.currentPlatform
+                    onNavigateToSearch(p?.id, p?.name)
+                }
+            )
+                LibraryOnlyToggle(filter = uiState.libraryFilter, onToggle = onToggleInstalledOnly)
                 SystemStatusBar()
             }
             PlatformBreadcrumb(
@@ -1535,7 +1563,13 @@ private fun HomeHeader(
             modifier = Modifier.weight(1f)
         )
 
-        LibraryOnlyToggle(enabled = uiState.installedOnly, onToggle = onToggleInstalledOnly)
+        HomeSearchButton(
+                onClick = {
+                    val p = uiState.currentPlatform
+                    onNavigateToSearch(p?.id, p?.name)
+                }
+            )
+        LibraryOnlyToggle(filter = uiState.libraryFilter, onToggle = onToggleInstalledOnly)
         SystemStatusBar()
     }
 }
@@ -1545,18 +1579,43 @@ private fun HomeHeader(
  * every Home layout so the choice is always one tap (or RT) away, and it reads its own state so a
  * glance says which list the rows are showing.
  */
+/** Opens search from Home. The catalog is far larger than any row, so this is the way into it. */
+@Composable
+private fun HomeSearchButton(onClick: () -> Unit) {
+    Icon(
+        imageVector = Icons.Default.Search,
+        contentDescription = stringResource(R.string.home_search_label),
+        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+        modifier = Modifier
+            .padding(end = Dimens.spacingMd)
+            .background(
+                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+                RoundedCornerShape(Dimens.radiusLg)
+            )
+            .clickableNoFocus(onClick = onClick)
+            .padding(Dimens.spacingXs)
+            .size(Dimens.iconSm)
+    )
+}
+
 @Composable
 private fun LibraryOnlyToggle(
-    enabled: Boolean,
+    filter: HomeLibraryFilter,
     onToggle: () -> Unit
 ) {
     val label = stringResource(
-        if (enabled) R.string.home_library_only_on else R.string.home_library_only_off
+        when (filter) {
+            HomeLibraryFilter.ALL -> R.string.home_library_only_off
+            HomeLibraryFilter.DOWNLOADABLE -> R.string.home_library_downloadable
+            HomeLibraryFilter.LIBRARY -> R.string.home_library_only_on
+        }
     )
-    val container = if (enabled) {
-        MaterialTheme.colorScheme.primary
-    } else {
-        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+    // Both narrowed states read as "on", so the chip stays legible at a glance.
+    val enabled = filter != HomeLibraryFilter.ALL
+    val container = when (filter) {
+        HomeLibraryFilter.ALL -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+        HomeLibraryFilter.DOWNLOADABLE -> MaterialTheme.colorScheme.primary.copy(alpha = 0.55f)
+        HomeLibraryFilter.LIBRARY -> MaterialTheme.colorScheme.primary
     }
     val content = if (enabled) {
         MaterialTheme.colorScheme.onPrimary

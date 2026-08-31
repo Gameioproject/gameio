@@ -277,6 +277,8 @@ data class HomeUiState(
     val videoWallpaperDelayMs: Long = 3000L,
     /** Library only: rows list what is on this device instead of the whole catalog. */
     val installedOnly: Boolean = false,
+    val libraryFilter: com.nendo.argosy.data.preferences.HomeLibraryFilter =
+        com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY,
     val compactCovers: Boolean = false
 ) {
     /**
@@ -700,6 +702,8 @@ sealed class HomeEvent {
         val platformId: Long? = null,
         val sourceFilter: String? = null
     ) : HomeEvent()
+
+    data class NavigateToSearch(val platformId: Long? = null) : HomeEvent()
 
     /**
      * Starts playback of one media item. [startOver] discards the stored position rather than

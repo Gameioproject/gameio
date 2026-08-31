@@ -83,6 +83,7 @@ interface HomeInputActions {
     fun queueDownload(gameId: Long)
     fun queueSteamDownload(gameId: Long)
     fun navigateToLibrary(platformId: Long?, sourceFilter: String?)
+    fun navigateToSearch()
     fun toggleFavorite(gameId: Long)
     fun unfavoriteMedia(itemId: String)
     fun setNavigationContext(gameIds: List<Long>)
@@ -406,9 +407,6 @@ class HomeInputHandler(
         if (actions.scrollToFirst()) {
             return InputResult.HANDLED
         }
-        if (actions.navigateToContinuePlaying()) {
-            return InputResult.handled(SoundType.SECTION_CHANGE)
-        }
         if (!isDefaultView) {
             onNavigateToDefault()
             return InputResult.HANDLED
@@ -533,9 +531,17 @@ class HomeInputHandler(
     }
 
     override fun onPrevTrigger(): InputResult {
-        if (!actions.uiState.value.showTilePicker) return InputResult.UNHANDLED
-        actions.jumpTilePickerLetter(false)
-        return InputResult.handled(SoundType.SECTION_CHANGE)
+        val state = actions.uiState.value
+        if (state.showTilePicker) {
+            actions.jumpTilePickerLetter(false)
+            return InputResult.handled(SoundType.SECTION_CHANGE)
+        }
+        if (state.showAddToCollectionModal || state.showGameMenu) return InputResult.HANDLED
+        if (state.customGrid.mediaSetup != null || state.customGrid.engagedTileId != null) {
+            return InputResult.HANDLED
+        }
+        actions.navigateToSearch()
+        return InputResult.handled(SoundType.OPEN_MODAL)
     }
 
     override fun onNextTrigger(): InputResult {

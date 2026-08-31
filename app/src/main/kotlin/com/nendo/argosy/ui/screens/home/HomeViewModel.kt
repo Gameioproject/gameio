@@ -50,6 +50,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -147,7 +150,7 @@ class HomeViewModel @Inject constructor(
     private val achievementRefetchThresholdMs = 5 * 60 * 1000L
     private var currentBorderStyle: BoxArtBorderStyle = BoxArtBorderStyle.SOLID
     private var lastShowsEveryGame: Boolean? = null
-    private var lastInstalledOnly: Boolean? = null
+    private var lastInstalledOnly: com.nendo.argosy.data.preferences.HomeLibraryFilter? = null
 
     init {
         modalResetSignal.signal.onEach {
@@ -444,16 +447,17 @@ class HomeViewModel @Inject constructor(
                         customGridConfig = prefs.homeLayout.customGrid,
                         layoutKind = prefs.homeLayout.selected,
                         installedOnly = prefs.installedOnlyHome,
+                        libraryFilter = prefs.homeLibraryFilter,
                         compactCovers = prefs.homeCompactCovers
                     )
                 }
-                if (lastInstalledOnly != null && lastInstalledOnly != prefs.installedOnlyHome) {
+                if (lastInstalledOnly != null && lastInstalledOnly != prefs.homeLibraryFilter) {
                     libraryDelegate.loadPlatforms()
                     refreshCurrentRowInternal()
                     libraryDelegate.loadRecentGames()
                     libraryDelegate.loadFavorites()
                 }
-                lastInstalledOnly = prefs.installedOnlyHome
+                lastInstalledOnly = prefs.homeLibraryFilter
                 customGrid.applyConfig(
                     autoFit = prefs.homeLayout.customGrid.autoFit,
                     storedPages = prefs.homeLayout.customGrid.pageCount
@@ -1391,8 +1395,10 @@ class HomeViewModel @Inject constructor(
     override fun syncFromRomm() = syncDelegate.syncFromRomm(viewModelScope) { refreshRecentGames() }
 
     override fun toggleInstalledOnly() {
-        val next = !_uiState.value.installedOnly
-        viewModelScope.launch { preferencesRepository.setInstalledOnlyHome(next) }
+        viewModelScope.launch {
+            val current = preferencesRepository.userPreferences.first().homeLibraryFilter
+            preferencesRepository.setHomeLibraryFilter(current.next())
+        }
     }
     fun dismissChangelog() = syncDelegate.dismissChangelog(viewModelScope)
     fun handleChangelogAction(action: RequiredAction): RequiredAction = syncDelegate.handleChangelogAction(viewModelScope, action)
@@ -1460,6 +1466,12 @@ class HomeViewModel @Inject constructor(
     override fun navigateToLibrary(platformId: Long?, sourceFilter: String?) {
         viewModelScope.launch {
             _events.emit(HomeEvent.NavigateToLibrary(platformId, sourceFilter))
+        }
+    }
+
+    override fun navigateToSearch() {
+        viewModelScope.launch {
+            _events.emit(HomeEvent.NavigateToSearch(_uiState.value.currentPlatform?.id))
         }
     }
 

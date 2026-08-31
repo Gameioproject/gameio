@@ -128,11 +128,11 @@ private fun OutlineGridViewAllCard(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(Dimens.radiusLg)
+            modifier = Modifier.padding(Dimens.spacingSm)
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(Dimens.spacingXs),
-                modifier = Modifier.padding(bottom = Dimens.radiusLg)
+                modifier = Modifier.padding(bottom = Dimens.spacingSm)
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingXs)) {
                     GridBox()
@@ -145,9 +145,10 @@ private fun OutlineGridViewAllCard(
             }
             Text(
                 text = stringResource(R.string.ui_view_all_outline_label),
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelMedium,
                 color = onSurfaceColor.copy(alpha = VIEW_ALL_OUTLINE_MUTED_ALPHA),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                maxLines = 1
             )
         }
     }
