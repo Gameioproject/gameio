@@ -76,6 +76,14 @@ interface RomMApi {
         @QueryMap params: Map<String, String>
     ): Response<List<RomMNameSection>>
 
+    @GET("api/shelves")
+    suspend fun getShelves(): Response<List<RomMShelf>>
+
+    @GET("api/roms/random")
+    suspend fun getRandomRom(
+        @Query("min_rating") minRating: Float = 75f
+    ): Response<RomMRom>
+
     @GET("api/roms/identifiers")
     suspend fun getRomIdentifiers(): Response<List<Long>>
 

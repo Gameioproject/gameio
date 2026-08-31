@@ -342,6 +342,9 @@
     <string name="home_library_downloadable">Available</string>
     <string name="home_search_label">Search</string>
     <string name="home_footer_search">Search</string>
+    <string name="home_surprise_label">Surprise me</string>
+    <string name="home_empty_filtered">Nothing here under this filter</string>
+    <string name="home_empty_filtered_cta">Show all games</string>
     <string name="search_footer_scope">Search scope</string>
     <string name="search_kb_space">Space</string>
     <string name="search_kb_delete">Delete</string>

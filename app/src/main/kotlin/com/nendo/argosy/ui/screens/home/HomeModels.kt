@@ -76,6 +76,7 @@ data class HomeGameUi(
     val packageName: String? = null,
     val needsInstall: Boolean = false,
     val youtubeVideoId: String? = null,
+    val fileSizeBytes: Long? = null,
     val isNew: Boolean = false,
     val isHidden: Boolean = false,
     val sortTitle: String = "",
@@ -150,6 +151,11 @@ sealed class HomeRowItem {
     ) : HomeRowItem()
 }
 
+data class HomeShelfUi(
+    val key: String,
+    val title: String
+)
+
 data class HomePlatformUi(
     val id: Long,
     val slug: String,
@@ -187,6 +193,7 @@ sealed class HomeRow(
     data object Favorites :
         HomeRow(HomeSectionKind.FAVORITES, R.string.home_breadcrumb_favorites)
     data class Platform(val index: Int) : HomeRow(HomeSectionKind.PLATFORM)
+    data class Shelf(val index: Int) : HomeRow(HomeSectionKind.SHELF)
     data object Continue :
         HomeRow(HomeSectionKind.CONTINUE, R.string.home_breadcrumb_continue)
     data object Recommendations :
@@ -206,6 +213,8 @@ sealed class HomeRow(
 
 data class HomeUiState(
     val platforms: List<HomePlatformUi> = emptyList(),
+    val shelves: List<HomeShelfUi> = emptyList(),
+    val shelfItems: List<HomeRowItem> = emptyList(),
     val platformItems: List<HomeRowItem> = emptyList(),
     val focusedGameIndex: Int = 0,
     val recentGames: List<HomeGameUi> = emptyList(),
@@ -288,7 +297,12 @@ data class HomeUiState(
      */
     val availableRows: List<HomeRow>
         get() = buildList {
-            HomeSectionKind.LEADING.forEach { kind -> fixedRow(kind)?.let { add(it) } }
+            HomeSectionKind.LEADING.forEach { kind ->
+                if (kind == HomeSectionKind.FAVORITES) {
+                    addAll(shelves.indices.map { HomeRow.Shelf(it) })
+                }
+                fixedRow(kind)?.let { add(it) }
+            }
             HomeSectionKind.REPEATING.forEach { kind -> addAll(repeatingRows(kind)) }
             HomeSectionKind.TRAILING.forEach { kind -> fixedRow(kind)?.let { add(it) } }
         }
@@ -379,6 +393,9 @@ data class HomeUiState(
     val currentPlatform: HomePlatformUi?
         get() = (currentRow as? HomeRow.Platform)?.let { platforms.getOrNull(it.index) }
 
+    val currentShelf: HomeShelfUi?
+        get() = (currentRow as? HomeRow.Shelf)?.let { shelves.getOrNull(it.index) }
+
     val currentMediaLibrary: com.nendo.argosy.ui.screens.media.MediaLibraryUi?
         get() = (currentRow as? HomeRow.MediaLibrary)?.let { mediaLibraries.getOrNull(it.index) }
 
@@ -400,6 +417,7 @@ data class HomeUiState(
                     HomeRowItem.ViewAll(sourceFilter = "FAVORITES")
             }
             is HomeRow.Platform -> platformItems
+            is HomeRow.Shelf -> shelfItems
             HomeRow.Continue -> when {
                 recentGames.isEmpty() -> emptyList()
                 layoutKind == com.nendo.argosy.domain.model.HomeLayoutKind.CAROUSEL ->
@@ -532,6 +550,7 @@ data class HomeUiState(
                 else                       -> p.shortName
             }
         } ?: "?"
+        is HomeRow.Shelf -> shelves.getOrNull(row.index)?.title?.take(9) ?: "?"
         is HomeRow.MediaLibrary -> mediaLibraries.getOrNull(row.index)?.name?.take(6) ?: "?"
         is HomeRow.PinnedRegular -> row.name.take(6)
         is HomeRow.PinnedVirtual -> row.name.take(6)
@@ -704,6 +723,8 @@ sealed class HomeEvent {
     ) : HomeEvent()
 
     data class NavigateToSearch(val platformId: Long? = null) : HomeEvent()
+
+    data class OpenGameDetail(val gameId: Long) : HomeEvent()
 
     /**
      * Starts playback of one media item. [startOver] discards the stored position rather than

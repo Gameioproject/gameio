@@ -35,6 +35,7 @@ package com.nendo.argosy.domain.model
  */
 enum class HomeSectionKind {
     CONTINUE,
+    SHELF,
     RECOMMENDATIONS,
     FAVORITES,
     ANDROID,

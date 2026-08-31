@@ -35,6 +35,7 @@ import com.nendo.argosy.ui.screens.home.HomeGameUi
 import com.nendo.argosy.ui.screens.home.HomePlatformUi
 import com.nendo.argosy.ui.screens.home.HomeRow
 import com.nendo.argosy.ui.screens.home.HomeRowItem
+import com.nendo.argosy.ui.screens.home.HomeShelfUi
 import com.nendo.argosy.ui.screens.home.toHomePlatformUi
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -77,6 +78,8 @@ private const val RECENT_PLAYED_THRESHOLD_HOURS = 4L
 data class LibraryState(
     val platforms: List<HomePlatformUi> = emptyList(),
     val platformItems: List<HomeRowItem> = emptyList(),
+    val shelves: List<HomeShelfUi> = emptyList(),
+    val shelfItems: List<HomeRowItem> = emptyList(),
     val recentGames: List<HomeGameUi> = emptyList(),
     val favoriteGames: List<HomeGameUi> = emptyList(),
     val recommendedGames: List<HomeGameUi> = emptyList(),
@@ -111,8 +114,11 @@ class HomeLibraryDelegate @Inject constructor(
     private val collectionRepository: com.nendo.argosy.data.repository.CollectionRepository,
     private val appsRepository: com.nendo.argosy.data.repository.AppsRepository,
     private val catalogPager: com.nendo.argosy.data.catalog.CatalogPager,
+    private val shelfRepository: com.nendo.argosy.data.catalog.ShelfRepository,
     private val connectionManager: com.nendo.argosy.data.remote.romm.RomMConnectionManager
 ) {
+    private var shelfDefinitions: List<com.nendo.argosy.data.remote.romm.RomMShelf> = emptyList()
+
     private val _state = MutableStateFlow(LibraryState())
     val state: StateFlow<LibraryState> = _state.asStateFlow()
 
@@ -150,6 +156,15 @@ class HomeLibraryDelegate @Inject constructor(
             val startRow = ensureInitialLoad(scope)
             onStartRowResolved(startRow)
         }
+        scope.launch {
+            connectionManager.connectionState.collect { state ->
+                if (state is com.nendo.argosy.data.remote.romm.ConnectionState.Connected &&
+                    _state.value.shelves.isEmpty()
+                ) {
+                    loadShelves()
+                }
+            }
+        }
     }
 
     private suspend fun runInitialLoad(): HomeRow {
@@ -157,6 +172,7 @@ class HomeLibraryDelegate @Inject constructor(
         val prefs = preferencesRepository.userPreferences.first()
         val installedOnly = prefs.installedOnlyHome
 
+        loadShelves()
         val allPlatforms = platformRepository.getPlatformsWithGames()
         val platforms = allPlatforms.filter { it.id != LocalPlatformIds.STEAM && it.id != LocalPlatformIds.ANDROID }
         cachedPlatformDisplayNames = allPlatforms.associate { it.id to it.getDisplayName() }
@@ -409,6 +425,25 @@ class HomeLibraryDelegate @Inject constructor(
         }
     }
 
+    /** Load a shelf row: server-ordered ids from the repository, entities from the store. */
+    suspend fun loadGamesForShelfInternal(index: Int) {
+        val shelf = shelfDefinitions.getOrNull(index) ?: return
+        val ids = shelfRepository.gamesFor(shelf)
+        val byId = gameRepository.getByIds(ids).associateBy { it.id }
+        val items: List<HomeRowItem> =
+            ids.mapNotNull { byId[it] }.map { HomeRowItem.Game(it.toUi()) }
+        _state.update { it.copy(shelfItems = items) }
+    }
+
+    /** The curated shelves, fetched once; empty on a classic server. */
+    suspend fun loadShelves() {
+        val defs = shelfRepository.definitions()
+        shelfDefinitions = defs
+        _state.update { state ->
+            state.copy(shelves = defs.map { HomeShelfUi(key = it.key, title = it.title) })
+        }
+    }
+
     suspend fun loadGamesForPlatformInternal(platformId: Long, platformIndex: Int) {
         val prefs = preferencesRepository.userPreferences.first()
         val uncapped = showsEveryGame(prefs)
@@ -491,7 +526,12 @@ class HomeLibraryDelegate @Inject constructor(
     }
 
     suspend fun refreshCurrentRow(currentRow: HomeRow, focusedGameId: Long?): RefreshResult {
+        if (_state.value.shelves.isEmpty()) loadShelves()
         return when (currentRow) {
+            is HomeRow.Shelf -> {
+                loadGamesForShelfInternal(currentRow.index)
+                RefreshResult(_state.value.shelfItems.mapNotNull { (it as? HomeRowItem.Game)?.game?.id })
+            }
             HomeRow.Favorites -> {
                 var games = gameRepository.getFavorites()
                 val installedOnly = preferencesRepository.userPreferences.first().installedOnlyHome

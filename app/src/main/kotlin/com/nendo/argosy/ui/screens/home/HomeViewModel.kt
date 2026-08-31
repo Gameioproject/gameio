@@ -101,6 +101,7 @@ class HomeViewModel @Inject constructor(
     private val prepareCollectionQueueUseCase:
         com.nendo.argosy.domain.usecase.collection.PrepareCollectionQueueUseCase,
     private val homeTilePromptQueue: com.nendo.argosy.data.repository.HomeTilePromptQueue,
+    private val shelfRepository: com.nendo.argosy.data.catalog.ShelfRepository,
     private val syncPreferencesRepository: com.nendo.argosy.data.preferences.SyncPreferencesRepository
 ) : ViewModel(), HomeInputActions {
 
@@ -188,6 +189,8 @@ class HomeViewModel @Inject constructor(
                     it.copy(
                         platforms = lib.platforms,
                         platformItems = lib.platformItems.applyRowGradients(gradients),
+                        shelves = lib.shelves,
+                        shelfItems = lib.shelfItems.applyRowGradients(gradients),
                         recentGames = lib.recentGames.applyGradients(gradients),
                         favoriteGames = lib.favoriteGames.applyGradients(gradients),
                         recommendedGames = lib.recommendedGames.applyGradients(gradients),
@@ -331,6 +334,8 @@ class HomeViewModel @Inject constructor(
             it.copy(
                 platforms = lib.platforms,
                 platformItems = lib.platformItems.applyRowGradients(gradients),
+                        shelves = lib.shelves,
+                        shelfItems = lib.shelfItems.applyRowGradients(gradients),
                 recentGames = lib.recentGames.applyGradients(gradients),
                 favoriteGames = lib.favoriteGames.applyGradients(gradients),
                 recommendedGames = lib.recommendedGames.applyGradients(gradients),
@@ -660,6 +665,7 @@ class HomeViewModel @Inject constructor(
                     libraryDelegate.loadGamesForPlatformInternal(platform.id, row.index)
                 }
             }
+            is HomeRow.Shelf -> libraryDelegate.loadGamesForShelfInternal(row.index)
             HomeRow.Continue -> libraryDelegate.loadRecentGames()
             HomeRow.Favorites -> libraryDelegate.loadFavorites()
             HomeRow.Recommendations -> libraryDelegate.loadRecommendations()
@@ -1467,6 +1473,17 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _events.emit(HomeEvent.NavigateToLibrary(platformId, sourceFilter))
         }
+    }
+
+    override fun surpriseMe() {
+        viewModelScope.launch {
+            val gameId = shelfRepository.randomLocalId() ?: return@launch
+            _events.emit(HomeEvent.OpenGameDetail(gameId))
+        }
+    }
+
+    fun setLibraryFilter(filter: com.nendo.argosy.data.preferences.HomeLibraryFilter) {
+        viewModelScope.launch { preferencesRepository.setHomeLibraryFilter(filter) }
     }
 
     override fun navigateToSearch() {

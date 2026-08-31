@@ -84,6 +84,7 @@ interface HomeInputActions {
     fun queueSteamDownload(gameId: Long)
     fun navigateToLibrary(platformId: Long?, sourceFilter: String?)
     fun navigateToSearch()
+    fun surpriseMe()
     fun toggleFavorite(gameId: Long)
     fun unfavoriteMedia(itemId: String)
     fun setNavigationContext(gameIds: List<Long>)
@@ -528,6 +529,15 @@ class HomeInputHandler(
         val game = state.focusedGame ?: return InputResult.UNHANDLED
         actions.toggleFavorite(game.id)
         return InputResult.HANDLED
+    }
+
+    override fun onRightStickClick(): InputResult {
+        val state = actions.uiState.value
+        if (state.showTilePicker || state.showGameMenu || state.showAddToCollectionModal) {
+            return InputResult.UNHANDLED
+        }
+        actions.surpriseMe()
+        return InputResult.handled(SoundType.OPEN_MODAL)
     }
 
     override fun onPrevTrigger(): InputResult {
