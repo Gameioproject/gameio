@@ -39,7 +39,8 @@ class RomMApiClient @Inject constructor(
         orderDir: String = "asc",
         limit: Int = 100,
         offset: Int = 0,
-        includeFiles: Boolean = false
+        includeFiles: Boolean = false,
+        ownedOnly: Boolean = false
     ): Map<String, String> {
         return buildMap {
             platformId?.let { put("platform_ids", it.toString()) }
@@ -52,6 +53,9 @@ class RomMApiClient @Inject constructor(
             put("with_filter_values", "false")
             if (includeFiles) {
                 put("with_files", "true")
+            }
+            if (ownedOnly) {
+                put("owned", "true")
             }
         }
     }

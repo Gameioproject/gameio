@@ -132,7 +132,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
         ORDER BY sortTitle ASC
@@ -143,7 +143,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE platformId = :platformId
         AND NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
@@ -155,7 +155,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE source = :source
         AND NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
@@ -167,7 +167,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
         AND (source = 'LOCAL_ONLY' OR source = 'ROMM_SYNCED' OR source = 'STEAM' OR source = 'ANDROID_APP')
@@ -180,7 +180,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE isFavorite = 1
         AND NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
@@ -192,7 +192,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         ORDER BY sortTitle ASC
     """)
@@ -202,7 +202,7 @@ interface GameDao {
         SELECT g.id, g.platformId, g.platformSlug, g.title, g.sortTitle, g.localPath, g.source, g.coverPath, g.isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = g.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                g.isMultiDisc, g.rommId, g.steamAppId, g.packageName, g.steamLauncher, g.playCount, g.playTimeMinutes,
-               g.lastPlayed, g.genre, g.gameModes, g.rating, g.userRating, g.userDifficulty, g.releaseYear, g.addedAt
+               g.lastPlayed, g.genre, g.gameModes, g.rating, g.userRating, g.userDifficulty, g.releaseYear, g.addedAt, g.fileSizeBytes
         FROM games g
         INNER JOIN platforms p ON g.platformId = p.id
         WHERE p.syncEnabled = 1
@@ -255,7 +255,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE platformId = :platformId
         ORDER BY sortTitle ASC
@@ -266,7 +266,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE isFavorite = 1
         ORDER BY (source = 'ROMM_REMOTE') ASC, sortTitle ASC
@@ -277,7 +277,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
         ORDER BY sortTitle ASC
@@ -288,7 +288,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE platformId = :platformId
         AND EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
@@ -300,7 +300,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE platformId = :platformId AND isFavorite = 1
         AND NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
@@ -312,7 +312,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE platformId = :platformId
         AND NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
@@ -773,7 +773,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
         AND id != :excludeGameId
@@ -792,7 +792,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
         AND id != :excludeGameId
@@ -811,7 +811,7 @@ interface GameDao {
         SELECT id, platformId, platformSlug, title, sortTitle, localPath, source, coverPath, isFavorite,
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher, playCount, playTimeMinutes,
-               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt
+               lastPlayed, genre, gameModes, rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
         AND id != :excludeGameId
@@ -1038,7 +1038,7 @@ interface GameDao {
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher,
                playCount, playTimeMinutes, lastPlayed, genre, gameModes,
-               rating, userRating, userDifficulty, releaseYear, addedAt
+               rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE coverPath LIKE '/%'
         AND NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
@@ -1051,7 +1051,7 @@ interface GameDao {
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher,
                playCount, playTimeMinutes, lastPlayed, genre, gameModes,
-               rating, userRating, userDifficulty, releaseYear, addedAt
+               rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE coverPath LIKE '/%' AND lastPlayed IS NOT NULL AND localPath IS NOT NULL
         AND NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
@@ -1065,7 +1065,7 @@ interface GameDao {
                EXISTS(SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId)) AS isHidden,
                isMultiDisc, rommId, steamAppId, packageName, steamLauncher,
                playCount, playTimeMinutes, lastPlayed, genre, gameModes,
-               rating, userRating, userDifficulty, releaseYear, addedAt
+               rating, userRating, userDifficulty, releaseYear, addedAt, fileSizeBytes
         FROM games
         WHERE coverPath LIKE '/%' AND lastPlayed IS NOT NULL
               AND localPath IS NOT NULL AND platformSlug IN (:platformSlugs)

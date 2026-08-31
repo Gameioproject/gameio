@@ -207,7 +207,8 @@ data class GameListItem(
     val userRating: Int,
     val userDifficulty: Int,
     val releaseYear: Int?,
-    val addedAt: Instant
+    val addedAt: Instant,
+    val fileSizeBytes: Long?
 ) {
     val isExternallyManaged: Boolean
         get() = steamLauncher != null && steamLauncher != GameEntity.LAUNCHER_UNSPECIFIED

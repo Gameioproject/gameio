@@ -556,3 +556,12 @@ object RomMUtils {
         }
     }
 }
+
+
+/** One initial in a platform's A-Z index: where it starts in name order, and how many it holds. */
+@JsonClass(generateAdapter = true)
+data class RomMNameSection(
+    @Json(name = "label") val label: String,
+    @Json(name = "offset") val offset: Int,
+    @Json(name = "count") val count: Int
+)
