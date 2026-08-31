@@ -14,11 +14,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import com.nendo.argosy.ui.util.clickableNoFocus
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -190,7 +185,6 @@ fun HomeScreen(
     val gridState = rememberLazyGridState()
     val isAutoGrid = uiState.layoutKind == HomeLayoutKind.AUTO_GRID
     val isCustomGrid = uiState.layoutKind == HomeLayoutKind.CUSTOM_GRID
-    val isExplorer = uiState.explorerMode && !isAutoGrid && !isCustomGrid
     val scope = rememberCoroutineScope()
     var isProgrammaticScroll by remember { mutableStateOf(false) }
     var skipNextProgrammaticScroll by remember { mutableStateOf(false) }
@@ -699,8 +693,7 @@ fun HomeScreen(
             val infoHeight = if (uiState.isMediaRow) 0.dp else reservedGameInfoHeight()
             val fullCardSize = rememberCarouselCardSize(
                 availableHeight = maxHeight - headerBlockHeight - infoHeight -
-                    Dimens.footerHeight - Dimens.spacingLg - Dimens.spacingXl -
-                    (if (isExplorer) EXPLORER_PEEK_RESERVED else 0.dp),
+                    Dimens.footerHeight - Dimens.spacingLg - Dimens.spacingXl,
                 config = uiState.carouselConfig
             )
             // Compact covers trade cover size for more of the row on screen at once.
@@ -740,7 +733,7 @@ fun HomeScreen(
                     onSurpriseMe = viewModel::surpriseMe,
                     isStacked = isPortrait,
                     headerOffset = videoModeHeaderOffset,
-                    showSections = !isCustomGrid && !isExplorer,
+                    showSections = !isCustomGrid,
                     compact = isAutoGrid && !uiState.autoGridConfig.showTitles
                 )
             }
@@ -752,31 +745,6 @@ fun HomeScreen(
                     .offset(x = videoModeRailOffsetX, y = videoModeFooterOffset)
                     .padding(bottom = Dimens.spacingLg)
             ) {
-                if (isExplorer) {
-                    ExplorerRowChip(
-                        title = explorerRowTitle(
-                            uiState,
-                            explorerNeighborRow(uiState, -1)
-                        ),
-                        pointsUp = true,
-                        onClick = viewModel::previousRow,
-                        modifier = Modifier.padding(
-                            start = Dimens.spacingXl,
-                            bottom = Dimens.spacingXs
-                        )
-                    )
-                    Text(
-                        text = explorerRowTitle(uiState, uiState.currentRow) ?: "",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 1,
-                        modifier = Modifier.padding(
-                            start = Dimens.spacingXl,
-                            bottom = Dimens.spacingXs
-                        )
-                    )
-                }
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -936,20 +904,6 @@ fun HomeScreen(
                             )
                         }
                     }
-                }
-
-                if (isExplorer) {
-                    val nextRow = explorerNeighborRow(uiState, 1)
-                    ExplorerNextPeek(
-                        title = explorerRowTitle(uiState, nextRow),
-                        covers = explorerPeekCovers(uiState, nextRow),
-                        onClick = viewModel::nextRow,
-                        modifier = Modifier.padding(
-                            start = Dimens.spacingXl,
-                            top = Dimens.spacingXs,
-                            bottom = Dimens.spacingXs
-                        )
-                    )
                 }
 
                 val focusedGame = uiState.focusedGame
@@ -1132,7 +1086,6 @@ fun HomeScreen(
                     FooterSpacer()
                 } else {
                     val viewAll = uiState.focusedItem as? HomeRowItem.ViewAll
-                    val platformTile = uiState.focusedItem as? HomeRowItem.PlatformTile
                     FooterHints(
                         hints = listOf(
                             (if (isAutoGrid) InputButton.DPAD else InputButton.DPAD_HORIZONTAL)
@@ -1144,19 +1097,12 @@ fun HomeScreen(
                                 InputButton.DPAD_VERTICAL to
                                     stringResource(R.string.home_footer_viewall_platform)
                             },
-                            InputButton.A to stringResource(
-                                if (platformTile != null) R.string.home_strip_open_platform
-                                else R.string.home_footer_viewall_library
-                            )
+                            InputButton.A to stringResource(R.string.home_footer_viewall_library)
                         ),
                         variant = FooterVariant.SUBTLE,
                         onHintClick = { button ->
                             if (button == InputButton.A) {
-                                if (platformTile != null) {
-                                    onNavigateToLibrary(platformTile.platform.id, null)
-                                } else {
-                                    onNavigateToLibrary(viewAll?.platformId, viewAll?.sourceFilter)
-                                }
+                                onNavigateToLibrary(viewAll?.platformId, viewAll?.sourceFilter)
                             }
                         }
                     )
@@ -1902,12 +1848,9 @@ private fun GameInfo(
                     )
                 }
                 if (!description.isNullOrBlank()) {
-                    val cleanDescription = remember(description) {
-                        description.replace(Regex("\\s+"), " ").trim().removeSurrounding("\"")
-                    }
                     Spacer(modifier = Modifier.height(Dimens.spacingSm))
                     Text(
-                        text = cleanDescription,
+                        text = description,
                         style = MaterialTheme.typography.bodyMedium,
                         color = subtitleColor,
                         textAlign = TextAlign.Center,
@@ -2095,12 +2038,6 @@ private fun rememberHomeCarouselItems(
             is HomeRowItem.Media -> CarouselItem.Media(
                 key = "$rowKey-${item.media.itemId}",
                 media = item.media
-            )
-            is HomeRowItem.PlatformTile -> CarouselItem.PlatformTile(
-                key = "$rowKey-platform-${item.platform.id}",
-                name = item.platform.displayName,
-                shortName = item.platform.shortName,
-                logoPath = item.platform.logoPath
             )
         }
     }
@@ -2425,139 +2362,5 @@ private fun MenuOption(
             style = MaterialTheme.typography.bodyMedium,
             color = contentColor
         )
-    }
-}
-
-
-private val EXPLORER_PEEK_RESERVED = 132.dp
-
-/** The row a vertical step lands on, or null at the surface's edge. */
-private fun explorerNeighborRow(uiState: HomeUiState, direction: Int): HomeRow? {
-    val rows = uiState.availableRows
-    val idx = rows.indexOf(uiState.currentRow)
-    if (idx < 0) return null
-    return rows.getOrNull(idx + direction)
-}
-
-/** The full name of a row for the stacked home, resolving fixed labels from resources. */
-@Composable
-private fun explorerRowTitle(uiState: HomeUiState, row: HomeRow?): String? {
-    if (row == null) return null
-    uiState.fullTitleFor(row)?.let { return it }
-    return row.shortLabelRes?.let { stringResource(it) }
-}
-
-/**
- * A handful of cover paths standing for a row that is not focused, so the stacked home can show
- * what a neighbouring shelf holds before it is ever visited. Rows whose contents only exist once
- * focused answer with nothing, and the peek shows the title alone.
- */
-private fun explorerPeekCovers(uiState: HomeUiState, row: HomeRow?): List<String?> = when (row) {
-    null -> emptyList()
-    HomeRow.Continue -> uiState.recentGames.map { it.coverPath }
-    HomeRow.PlatformStrip -> uiState.platforms.map { it.logoPath }
-    is HomeRow.Shelf -> uiState.shelfPreviews[row.index].orEmpty().map { it.coverPath }
-    HomeRow.Recommendations -> uiState.recommendedGames.map { it.coverPath }
-    HomeRow.Favorites -> uiState.favoriteGames.map { it.coverPath }
-    HomeRow.Android -> uiState.androidGames.map { it.coverPath }
-    HomeRow.Steam -> uiState.steamGames.map { it.coverPath }
-    is HomeRow.PinnedRegular -> uiState.pinnedGames[row.pinId].orEmpty().map { it.coverPath }
-    is HomeRow.PinnedVirtual -> uiState.pinnedGames[row.pinId].orEmpty().map { it.coverPath }
-    else -> emptyList()
-}.take(9)
-
-/** The name of the row a vertical press away, pointing at it. */
-@Composable
-private fun ExplorerRowChip(
-    title: String?,
-    pointsUp: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    if (title == null) return
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(Dimens.spacingXs),
-        modifier = modifier
-            .clip(RoundedCornerShape(Dimens.radiusLg))
-            .clickable(onClick = onClick)
-            .padding(horizontal = Dimens.spacingSm, vertical = Dimens.spacingXs)
-    ) {
-        Icon(
-            imageVector = if (pointsUp) Icons.Default.KeyboardArrowUp
-            else Icons.Default.KeyboardArrowDown,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(Dimens.iconSm)
-        )
-        Text(
-            text = title,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 1
-        )
-    }
-}
-
-/**
- * The strip under the focused rail: the next row's name and a sliver of its covers, dimmed. It
- * exists so the page reads as a stack being scrolled rather than rows swapping in place -- the
- * skim a one-row surface never offered.
- */
-@Composable
-private fun ExplorerNextPeek(
-    title: String?,
-    covers: List<String?>,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    if (title == null) return
-    Column(
-        verticalArrangement = Arrangement.spacedBy(Dimens.spacingXs),
-        modifier = modifier
-            .clip(RoundedCornerShape(Dimens.radiusLg))
-            .clickable(onClick = onClick)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(Dimens.spacingXs)
-        ) {
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowDown,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(Dimens.iconSm)
-            )
-            Text(
-                text = title,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 1
-            )
-        }
-        if (covers.isNotEmpty()) {
-            Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingXs)) {
-                covers.forEach { path ->
-                    Box(
-                        modifier = Modifier
-                            .size(width = 44.dp, height = 60.dp)
-                            .clip(RoundedCornerShape(Dimens.radiusSm))
-                            .background(
-                                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-                            )
-                    ) {
-                        if (path != null) {
-                            coil.compose.AsyncImage(
-                                model = path,
-                                contentDescription = null,
-                                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
-                                alpha = 0.75f,
-                                modifier = Modifier.fillMaxSize()
-                            )
-                        }
-                    }
-                }
-            }
-        }
     }
 }
