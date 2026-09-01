@@ -23,20 +23,17 @@ interface RomMApi {
     @GET("api/heartbeat")
     suspend fun heartbeat(): Response<RomMHeartbeatResponse>
 
-    @POST("api/client-tokens/exchange")
-    suspend fun exchangePairingCode(
-        @Body body: RomMPairingExchangeRequest
-    ): Response<RomMPairingExchangeResponse>
-
-    @POST("api/auth/device/init")
-    suspend fun deviceAuthInit(
-        @Body body: RomMDeviceAuthInitRequest
-    ): Response<RomMDeviceAuthInitResponse>
-
-    @POST("api/auth/device/token")
-    suspend fun deviceAuthToken(
-        @Body body: RomMDeviceAuthTokenRequest
-    ): Response<RomMDeviceAuthTokenResponse>
+    /**
+     * Trades a username and password for a long-lived client token.
+     *
+     * The credentials ride along as HTTP Basic on this one call and are never stored; the
+     * token it returns is what every later request authenticates with.
+     */
+    @POST("api/client-tokens")
+    suspend fun createClientToken(
+        @Header("Authorization") basicAuth: String,
+        @Body body: RomMClientTokenRequest
+    ): Response<RomMClientTokenResponse>
 
     @GET("api/users/me")
     suspend fun getCurrentUser(): Response<RomMUser>

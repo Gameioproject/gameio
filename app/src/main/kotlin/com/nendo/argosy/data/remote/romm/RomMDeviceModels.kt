@@ -47,36 +47,19 @@ data class RomMDeviceIdRequest(
 )
 
 @JsonClass(generateAdapter = true)
-data class RomMDeviceAuthInitRequest(
-    @Json(name = "client_device_identifier") val clientDeviceIdentifier: String,
+data class RomMClientTokenRequest(
     @Json(name = "name") val name: String,
-    @Json(name = "client") val client: String = "argosy-launcher",
-    @Json(name = "platform") val platform: String? = "Android",
-    @Json(name = "client_version") val clientVersion: String? = null,
-    @Json(name = "requested_scopes") val requestedScopes: List<String>
+    @Json(name = "scopes") val scopes: List<String>,
+    @Json(name = "expires_in") val expiresIn: String? = null
 )
 
 @JsonClass(generateAdapter = true)
-data class RomMDeviceAuthInitResponse(
-    @Json(name = "device_code") val deviceCode: String,
-    @Json(name = "user_code") val userCode: String,
-    @Json(name = "verification_path") val verificationPath: String,
-    @Json(name = "verification_path_complete") val verificationPathComplete: String,
-    @Json(name = "expires_in") val expiresIn: Int,
-    @Json(name = "interval") val interval: Int
-)
-
-@JsonClass(generateAdapter = true)
-data class RomMDeviceAuthTokenRequest(
-    @Json(name = "device_code") val deviceCode: String
-)
-
-@JsonClass(generateAdapter = true)
-data class RomMDeviceAuthTokenResponse(
-    @Json(name = "access_token") val accessToken: String,
-    @Json(name = "device_id") val deviceId: String,
+data class RomMClientTokenResponse(
+    @Json(name = "id") val id: Long,
+    @Json(name = "name") val name: String? = null,
     @Json(name = "scopes") val scopes: List<String> = emptyList(),
-    @Json(name = "expires_at") val expiresAt: String? = null
+    @Json(name = "device_id") val deviceId: String? = null,
+    @Json(name = "raw_token") val rawToken: String
 )
 
 @JsonClass(generateAdapter = true)
