@@ -287,7 +287,7 @@
     <string name="ui_save_channel_notice_restored_state">Restored %1$s</string>
     <!-- Brief message when the chosen state is no longer in the cache. -->
     <string name="ui_save_channel_notice_state_not_cached">State not found in cache</string>
-    <!-- Brief message when Argosy has no state location for the emulator the game runs on. -->
+    <!-- Brief message when Gameio has no state location for the emulator the game runs on. -->
     <string name="ui_save_channel_notice_state_no_config">No state configuration for this emulator</string>
     <!-- Names the state that was erased, when it is the automatic one. Lower case. -->
     <string name="ui_save_channel_notice_delete_target_auto">auto state</string>
@@ -327,7 +327,7 @@
     <string name="ui_save_channel_notice_restored_synced">Save restored and synced</string>
     <!-- Brief message when the typed slot name was blank. -->
     <string name="ui_save_channel_notice_slot_name_empty">Slot name cannot be empty</string>
-    <!-- Brief message when the typed slot name is one Argosy keeps for itself. %1$s is what was
+    <!-- Brief message when the typed slot name is one Gameio keeps for itself. %1$s is what was
          typed. -->
     <string name="ui_save_channel_notice_slot_name_reserved">\'%1$s\' is a reserved name</string>
     <!-- Brief message when making a new slot and the name is already taken. %1$s is what was
@@ -424,13 +424,13 @@
     <string name="ui_changelog_action_relogin_romm">Re-login to RomM</string>
     <!-- One of those things. Verb phrase: fetch the whole library again. -->
     <string name="ui_changelog_action_resync_library">Resync Library</string>
-    <!-- One of those things. Verb phrase: empty Argosy's cached files. -->
+    <!-- One of those things. Verb phrase: empty Gameio's cached files. -->
     <string name="ui_changelog_action_clear_cache">Clear Cache</string>
-    <!-- One of those things. Verb phrase: tell Argosy where Steam games are installed. -->
+    <!-- One of those things. Verb phrase: tell Gameio where Steam games are installed. -->
     <string name="ui_changelog_action_set_steam_path">Set Steam Install Path</string>
 
     <!-- Heading of the prompt shown when a save changed on both this device and the server while
-         Argosy was syncing in the background. -->
+         Gameio was syncing in the background. -->
     <string name="ui_background_conflict_title">Save Sync Conflict</string>
     <!-- Shown beside the game's name when the save belongs to no named slot. -->
     <string name="ui_background_conflict_default_slot">Default Save</string>
@@ -572,9 +572,9 @@
     <!-- Icon description on the tick beside a collection the game is already in. -->
     <string name="ui_add_to_collection_member">In collection</string>
 
-    <!-- Row of the prompt asking where a Steam game should come from. Verb phrase: Argosy
+    <!-- Row of the prompt asking where a Steam game should come from. Verb phrase: Gameio
          fetches it. -->
-    <string name="ui_steam_location_download">Download via Argosy</string>
+    <string name="ui_steam_location_download">Download via Gameio</string>
     <!-- Row of that prompt for a launcher that already has the game. Verb phrase: records the
          game as present without fetching anything. -->
     <string name="ui_steam_location_mark_installed">Mark as Installed</string>
@@ -838,7 +838,7 @@
 
     <!-- Platform filter header (ui/components/PlatformFilterHeader.kt) -->
 
-    <!-- Sort order for the platform list: the order Argosy ships. Noun. -->
+    <!-- Sort order for the platform list: the order Gameio ships. Noun. -->
     <string name="ui_platform_filter_sort_default">Default</string>
     <!-- Sort order for the platform list: by name, forwards. Adapt the letters to your
          alphabet. -->
@@ -901,7 +901,7 @@
 
     <!-- Storage meter, preference rows, home layout rows (ui/components) -->
 
-    <!-- Legend entry for everything on the volume that is not Argosy's. -->
+    <!-- Legend entry for everything on the volume that is not Gameio's. -->
     <string name="ui_volume_meter_other">Other apps &amp; files</string>
     <!-- Space left on a storage volume. %1$s is a formatted size such as "12.4 GB". Adjective
          describing that space. -->
@@ -916,7 +916,7 @@
          setting; keep the brackets. -->
     <string name="ui_toggle_preference_custom_marker">(Custom)</string>
     <!-- Icon description on the cross beside a settings row. Verb phrase: puts the row back to
-         the value Argosy ships. -->
+         the value Gameio ships. -->
     <string name="ui_action_preference_reset_to_default">Reset to default</string>
     <!-- Value shown on the hue slider when no colour has been picked. Noun. -->
     <string name="ui_hue_slider_default">Default</string>
@@ -924,7 +924,7 @@
     <string name="ui_image_cache_migrating">Moving images...</string>
     <!-- Button on the image cache row. Verb: picks another folder. -->
     <string name="ui_image_cache_change">Change</string>
-    <!-- Button on the image cache row. Verb: puts the folder back to Argosy's own. -->
+    <!-- Button on the image cache row. Verb: puts the folder back to Gameio's own. -->
     <string name="ui_image_cache_reset">Reset</string>
 
     <!-- Second line under the 3D box art switch when no game in the library has spine art. -->
@@ -1030,11 +1030,11 @@
     <string name="ui_quick_settings_hint_close">Close</string>
     <!-- Row of that panel: how hard the device is allowed to work. Noun. -->
     <string name="ui_quick_settings_performance">Performance</string>
-    <!-- Shown in place of that row's value when Argosy cannot reach the device's settings. -->
+    <!-- Shown in place of that row's value when Gameio cannot reach the device's settings. -->
     <string name="ui_quick_settings_performance_disabled">Permission required</string>
     <!-- Row of that panel: how the cooling fan runs. Noun. -->
     <string name="ui_quick_settings_fan">Fan</string>
-    <!-- Shown in place of that row's value when Argosy cannot reach the device's settings. -->
+    <!-- Shown in place of that row's value when Gameio cannot reach the device's settings. -->
     <string name="ui_quick_settings_fan_disabled">Permission required</string>
     <!-- Fan setting: as quiet as the device allows. Adjective. -->
     <string name="ui_quick_settings_fan_quiet">Quiet</string>
@@ -1067,7 +1067,7 @@
     <!-- Row of that panel, on a device with two screens. Verb phrase: puts each screen in the
          other's role. -->
     <string name="ui_quick_settings_swap_displays">Swap Displays</string>
-    <!-- Row of that panel. "QuayPass" is the name of an Argosy feature; leave it
+    <!-- Row of that panel. "QuayPass" is the name of an Gameio feature; leave it
          untranslated. -->
     <string name="ui_quick_settings_quaypass">QuayPass</string>
     <!-- Label beside the system volume slider. Noun. -->
@@ -1099,7 +1099,7 @@
     <string name="ui_drawer_friend_hosting">Hosting %1$s</string>
     <!-- Second line under a friend in a game on their own. %1$s is the game's title. -->
     <string name="ui_drawer_friend_playing">Playing %1$s</string>
-    <!-- Second line under a friend in a game Argosy cannot name. -->
+    <!-- Second line under a friend in a game Gameio cannot name. -->
     <string name="ui_drawer_friend_in_game">In Game</string>
     <!-- Icon description on the star beside a friend marked as a favourite. Noun. -->
     <string name="ui_drawer_friend_favorite">Favorite</string>
@@ -1161,7 +1161,7 @@
     <!-- Body under that heading. %1$s is the game's name. -->
     <string name="ui_sync_overlay_hardcore_message">The server version of \"%1$s\" no longer meets the requirements for hardcore mode.</string>
     <!-- Note under that body. -->
-    <string name="ui_sync_overlay_hardcore_note">This can happen if the save was modified outside of Argosy.</string>
+    <string name="ui_sync_overlay_hardcore_note">This can happen if the save was modified outside of Gameio.</string>
     <!-- Choice keeping hardcore standing. Verb phrase. -->
     <string name="ui_sync_overlay_hardcore_keep">Keep Hardcore</string>
     <!-- Second line under that choice. -->
@@ -1274,7 +1274,7 @@
     <string name="ui_file_browser_permission_title">Storage access required</string>
     <!-- Body under that heading. "All files access" is the name Android gives the permission;
          match the wording your Android translation uses. -->
-    <string name="ui_file_browser_permission_message">Argosy needs All files access to browse folders, download games, and sync saves. Grant it, then return here.</string>
+    <string name="ui_file_browser_permission_message">Gameio needs All files access to browse folders, download games, and sync saves. Grant it, then return here.</string>
     <!-- Button under that body. Verb phrase: opens the system permission screen. -->
     <string name="ui_file_browser_permission_button">Grant Access</string>
     <!-- Footer hint while that heading is shown. Verb phrase: opens the system permission
@@ -1315,7 +1315,7 @@
     <!-- Shown under that field when Android refused to make the folder. -->
     <string name="ui_file_browser_new_folder_error_failed">Failed to create folder</string>
 
-    <!-- App shell and startup (ui/ArgosyApp.kt, ui/ArgosyViewModel.kt) -->
+    <!-- App shell and startup (ui/GameioApp.kt, ui/GameioViewModel.kt) -->
 
     <!-- Splash status while the launcher is starting. -->
     <string name="ui_startup_status_initializing">Initializing...</string>
@@ -1383,7 +1383,7 @@
     <!-- Brief message while a finished download is being unpacked. Verb describing it. -->
     <string name="ui_download_notice_extracting">Extracting</string>
     <!-- Brief message while an unpacked game is being put in its final folder. "ROM Storage" is
-         the folder Argosy keeps games in. -->
+         the folder Gameio keeps games in. -->
     <string name="ui_download_notice_moving">Moving to ROM Storage</string>
     <!-- Brief message when a download is held. Adjective describing it. -->
     <string name="ui_download_notice_paused">Paused</string>
@@ -1560,7 +1560,7 @@
     <!-- Icon description on the button that opens the game detail overflow menu. -->
     <string name="gamedetail_action_buttons_more_options">More options</string>
 
-    <!-- Stylized wordmark on the app splash screen (ui/ArgosyApp.kt, AppSplashScreen). Brand
+    <!-- Stylized wordmark on the app splash screen (ui/GameioApp.kt, AppSplashScreen). Brand
          name, never translated. -->
     <string name="argosyapp_splash_title" translatable="false">ARGOSY</string>
 

@@ -40,7 +40,7 @@
 
     <string name="sync_blocked_access_denied_title">存档文件夹访问被阻止</string>
     <string name="sync_blocked_access_denied_detail">你的设备阻止了对%1$s存档数据的访问。这可能是由于厂商限制（三星、小米等）或安全策略所致。</string>
-    <string name="sync_blocked_access_denied_switch_detail">你的设备阻止了对%1$s存档数据的访问。请在%2$s中配置一个外部存档路径（位于Android/data之外），然后在Argosy中设置相同的路径。</string>
+    <string name="sync_blocked_access_denied_switch_detail">你的设备阻止了对%1$s存档数据的访问。请在%2$s中配置一个外部存档路径（位于Android/data之外），然后在Gameio中设置相同的路径。</string>
     <string name="sync_blocked_access_denied_emulator_fallback">模拟器</string>
     <string name="sync_blocked_access_denied_configure_fallback">该模拟器</string>
 

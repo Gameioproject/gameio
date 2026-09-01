@@ -40,7 +40,7 @@
 
     <string name="sync_blocked_access_denied_title">存檔資料夾存取遭封鎖</string>
     <string name="sync_blocked_access_denied_detail">您的裝置封鎖了對%1$s存檔資料的存取，這可能是製造商限制（如Samsung、Xiaomi等）或安全性原則所致。</string>
-    <string name="sync_blocked_access_denied_switch_detail">您的裝置封鎖了對%1$s存檔資料的存取，請在%2$s中設定外部存檔路徑（位於Android/data之外），再於Argosy中設定相同路徑。</string>
+    <string name="sync_blocked_access_denied_switch_detail">您的裝置封鎖了對%1$s存檔資料的存取，請在%2$s中設定外部存檔路徑（位於Android/data之外），再於Gameio中設定相同路徑。</string>
     <string name="sync_blocked_access_denied_emulator_fallback">模擬器</string>
     <string name="sync_blocked_access_denied_configure_fallback">該模擬器</string>
 

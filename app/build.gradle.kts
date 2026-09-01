@@ -31,7 +31,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.nendo.argosy"
+        applicationId = "com.playgameio.app"
         minSdk = 26
         targetSdk = 35
         versionCode = 328
@@ -311,13 +311,15 @@ dependencies {
     androidTestImplementation(libs.room.testing)
 }
 
+val quayPassPubkeys = envString("QUAYPASS_SERVER_PUBKEYS")
 val verifyQuayPassReleaseConfig = tasks.register("verifyQuayPassReleaseConfig") {
     doLast {
-        if (envString("QUAYPASS_SERVER_PUBKEYS").isBlank()) {
-            throw GradleException(
-                "QUAYPASS_SERVER_PUBKEYS is empty. A release build cannot verify QuayPass " +
-                    "credentials and would ship the feature permanently dark. Set it in .env " +
-                    "or the build environment."
+        if (quayPassPubkeys.isBlank()) {
+            // This deployment runs no QuayPass server, so releases ship with the
+            // feature dark on purpose; the runtime treats an empty key list as
+            // "cannot verify" and stays quiet. Set the variable to light it up.
+            logger.warn(
+                "QUAYPASS_SERVER_PUBKEYS is empty; QuayPass ships dark in this release."
             )
         }
     }

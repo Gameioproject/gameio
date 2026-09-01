@@ -241,7 +241,7 @@
     <string name="settings_shell_accounts_add_title">添加账户？</string>
     <string name="settings_shell_accounts_switch_title">切换到%1$s？</string>
     <string name="settings_shell_accounts_fallback_name">账户</string>
-    <string name="settings_shell_accounts_exit_message">请先完全退出任何在Argosy之外启动的游戏。Argosy无法看到这些会话，仍在运行的游戏可能会覆盖此次移动涉及的存档。存档会在移除任何内容之前完成归档和校验。</string>
+    <string name="settings_shell_accounts_exit_message">请先完全退出任何在Gameio之外启动的游戏。Gameio无法看到这些会话，仍在运行的游戏可能会覆盖此次移动涉及的存档。存档会在移除任何内容之前完成归档和校验。</string>
     <string name="settings_shell_accounts_add_confirm">已关闭游戏，继续</string>
     <string name="settings_shell_accounts_switch_confirm">已关闭游戏，切换</string>
 

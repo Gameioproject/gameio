@@ -438,7 +438,7 @@
     <string name="ingame_settings_touch_genesis6_subtitle">Show six face buttons for Genesis / Mega Drive</string>
 
     <!-- Heading of the group at the foot of the picture tab. Noun phrase: the small readout
-         Argosy draws over the running game. -->
+         Gameio draws over the running game. -->
     <string name="ingame_settings_hud_header">Status Bar</string>
     <!-- Row in that group. Verb phrase: draws the readout at all. -->
     <string name="ingame_settings_hud_enabled_title">Show status bar</string>

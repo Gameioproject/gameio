@@ -282,7 +282,7 @@
     <string name="ui_add_to_collection_create">नया कलेक्शन बनाएं</string>
     <string name="ui_add_to_collection_member">कलेक्शन में मौजूद</string>
 
-    <string name="ui_steam_location_download">Argosy के ज़रिए डाउनलोड करें</string>
+    <string name="ui_steam_location_download">Gameio के ज़रिए डाउनलोड करें</string>
     <string name="ui_steam_location_mark_installed">इंस्टॉल्ड के रूप में चिह्नित करें</string>
     <string name="ui_steam_location_managed_by">%1$s द्वारा प्रबंधित</string>
 
@@ -571,7 +571,7 @@
     <string name="ui_sync_overlay_blocked_skip">अभी के लिए छोड़ें</string>
     <string name="ui_sync_overlay_hardcore_title">हार्डकोर सेव कॉन्फ्लिक्ट</string>
     <string name="ui_sync_overlay_hardcore_message">\"%1$s\" का सर्वर वर्शन अब हार्डकोर मोड की शर्तें पूरी नहीं करता।</string>
-    <string name="ui_sync_overlay_hardcore_note">ऐसा तब हो सकता है जब सेव को Argosy के बाहर बदला गया हो।</string>
+    <string name="ui_sync_overlay_hardcore_note">ऐसा तब हो सकता है जब सेव को Gameio के बाहर बदला गया हो।</string>
     <string name="ui_sync_overlay_hardcore_keep">हार्डकोर बनाए रखें</string>
     <string name="ui_sync_overlay_hardcore_keep_subtitle">लोकल सेव सर्वर पर अपलोड करें</string>
     <string name="ui_sync_overlay_hardcore_downgrade">कैज़ुअल में डाउनग्रेड करें</string>
@@ -626,7 +626,7 @@
     <string name="ui_file_browser_title_file">फ़ाइल चुनें</string>
     <string name="ui_file_browser_title_file_or_folder">फ़ाइल या फ़ोल्डर चुनें</string>
     <string name="ui_file_browser_permission_title">स्टोरेज एक्सेस आवश्यक</string>
-    <string name="ui_file_browser_permission_message">फ़ोल्डर ब्राउज़ करने, गेम डाउनलोड करने और सेव सिंक करने के लिए Argosy को All files access चाहिए। इसे अनुमति दें, फिर यहां वापस आएं।</string>
+    <string name="ui_file_browser_permission_message">फ़ोल्डर ब्राउज़ करने, गेम डाउनलोड करने और सेव सिंक करने के लिए Gameio को All files access चाहिए। इसे अनुमति दें, फिर यहां वापस आएं।</string>
     <string name="ui_file_browser_permission_button">एक्सेस दें</string>
     <string name="ui_file_browser_permission_footer_grant">एक्सेस दें</string>
     <string name="ui_file_browser_permission_footer_back">वापस</string>
@@ -647,7 +647,7 @@
     <string name="ui_file_browser_new_folder_error_exists">फ़ोल्डर पहले से मौजूद है</string>
     <string name="ui_file_browser_new_folder_error_failed">फ़ोल्डर बनाने में विफल</string>
 
-    <!-- App shell and startup (ui/ArgosyApp.kt, ui/ArgosyViewModel.kt) -->
+    <!-- App shell and startup (ui/GameioApp.kt, ui/GameioViewModel.kt) -->
 
     <string name="ui_startup_status_initializing">शुरू हो रहा है...</string>
     <string name="ui_startup_status_loading_library">लाइब्रेरी लोड हो रही है...</string>

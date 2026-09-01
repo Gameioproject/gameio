@@ -2,7 +2,7 @@
 <resources>
     <string name="notif_generic_error_title">Fehler</string>
 
-    <string name="notif_storage_private_path_error">GameNative kann Argosys private Ordner nicht lesen. Wählen Sie einen öffentlichen Speicherort.</string>
+    <string name="notif_storage_private_path_error">GameNative kann Gameios private Ordner nicht lesen. Wählen Sie einen öffentlichen Speicherort.</string>
 
     <string name="notif_storage_migrate_persistent_title">Spiele werden verschoben</string>
     <string name="notif_storage_migrate_persistent_subtitle_initial">0 / %1$d</string>

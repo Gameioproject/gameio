@@ -180,7 +180,7 @@
     <string name="social_netplayjoin_join">加入</string>
     <string name="social_netplayjoin_rom_not_found">你没有这个ROM</string>
     <string name="social_netplayjoin_rom_version_mismatch">ROM版本不同</string>
-    <string name="social_netplayjoin_core_version_mismatch">请更新Argosy以匹配版本</string>
+    <string name="social_netplayjoin_core_version_mismatch">请更新Gameio以匹配版本</string>
     <string name="social_netplayjoin_core_not_supported">核心不受支持</string>
     <string name="social_netplayjoin_session_busy">会话繁忙</string>
 

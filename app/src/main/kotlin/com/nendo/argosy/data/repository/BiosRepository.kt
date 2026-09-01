@@ -802,7 +802,7 @@ class BiosRepository @Inject constructor(
             .putLong(timestamp)
             .array()
 
-        val username = "Argosy".toByteArray(Charsets.UTF_8)
+        val username = "Gameio".toByteArray(Charsets.UTF_8)
         val usernameBytes = ByteArray(32)
         System.arraycopy(username, 0, usernameBytes, 0, minOf(username.size, 31))
 

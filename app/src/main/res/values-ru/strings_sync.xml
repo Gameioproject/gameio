@@ -40,7 +40,7 @@
 
     <string name="sync_blocked_access_denied_title">Доступ к папке сохранений заблокирован</string>
     <string name="sync_blocked_access_denied_detail">Ваше устройство блокирует доступ к данным сохранений %1$s. Это может быть связано с ограничениями производителя (Samsung, Xiaomi и др.) или политиками безопасности.</string>
-    <string name="sync_blocked_access_denied_switch_detail">Ваше устройство блокирует доступ к данным сохранений %1$s. Настройте внешний путь сохранения в %2$s (вне Android/data), затем укажите тот же путь в Argosy.</string>
+    <string name="sync_blocked_access_denied_switch_detail">Ваше устройство блокирует доступ к данным сохранений %1$s. Настройте внешний путь сохранения в %2$s (вне Android/data), затем укажите тот же путь в Gameio.</string>
     <string name="sync_blocked_access_denied_emulator_fallback">эмулятора</string>
     <string name="sync_blocked_access_denied_configure_fallback">эмуляторе</string>
 

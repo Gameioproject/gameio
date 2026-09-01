@@ -248,7 +248,7 @@
     <string name="settings_shell_accounts_add_title">要新增帳號嗎？</string>
     <string name="settings_shell_accounts_switch_title">要切換到%1$s嗎？</string>
     <string name="settings_shell_accounts_fallback_name">帳號</string>
-    <string name="settings_shell_accounts_exit_message">請先完全結束任何在Argosy之外啟動的遊戲。Argosy無法偵測到那些工作階段，仍在執行的遊戲可能會覆寫這次移動的存檔。存檔會先封存並驗證，才會移除任何內容。</string>
+    <string name="settings_shell_accounts_exit_message">請先完全結束任何在Gameio之外啟動的遊戲。Gameio無法偵測到那些工作階段，仍在執行的遊戲可能會覆寫這次移動的存檔。存檔會先封存並驗證，才會移除任何內容。</string>
     <string name="settings_shell_accounts_add_confirm">遊戲已關閉，繼續</string>
     <string name="settings_shell_accounts_switch_confirm">遊戲已關閉，切換</string>
 

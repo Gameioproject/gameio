@@ -252,7 +252,7 @@
     <string name="settings_shell_accounts_add_title">Ajouter un compte ?</string>
     <string name="settings_shell_accounts_switch_title">Passer à %1$s ?</string>
     <string name="settings_shell_accounts_fallback_name">compte</string>
-    <string name="settings_shell_accounts_exit_message">Fermez complètement tout jeu lancé en dehors d\'Argosy avant de continuer. Argosy ne peut pas voir ces sessions, et un jeu encore en cours peut écraser les sauvegardes que ce déplacement affecte. Les sauvegardes sont archivées et vérifiées avant toute suppression.</string>
+    <string name="settings_shell_accounts_exit_message">Fermez complètement tout jeu lancé en dehors d\'Gameio avant de continuer. Gameio ne peut pas voir ces sessions, et un jeu encore en cours peut écraser les sauvegardes que ce déplacement affecte. Les sauvegardes sont archivées et vérifiées avant toute suppression.</string>
     <string name="settings_shell_accounts_add_confirm">Jeux fermés, continuer</string>
     <string name="settings_shell_accounts_switch_confirm">Jeux fermés, changer</string>
 

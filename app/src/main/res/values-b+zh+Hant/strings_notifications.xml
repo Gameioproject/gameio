@@ -2,7 +2,7 @@
 <resources>
     <string name="notif_generic_error_title">錯誤</string>
 
-    <string name="notif_storage_private_path_error">GameNative無法讀取Argosy的私有資料夾，請選擇公開位置。</string>
+    <string name="notif_storage_private_path_error">GameNative無法讀取Gameio的私有資料夾，請選擇公開位置。</string>
 
     <string name="notif_storage_migrate_persistent_title">正在移動遊戲</string>
     <string name="notif_storage_migrate_persistent_subtitle_initial">0/%1$d</string>

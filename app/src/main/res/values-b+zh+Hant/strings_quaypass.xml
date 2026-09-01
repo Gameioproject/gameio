@@ -4,7 +4,7 @@
 
     <string name="quaypass_checkin_state_running">正在偵測附近的旅人...</string>
     <string name="quaypass_checkin_state_disabled">QuayPass已關閉</string>
-    <string name="quaypass_checkin_state_not_linked">請連結您的Argosy帳號以開始打卡</string>
+    <string name="quaypass_checkin_state_not_linked">請連結您的Gameio帳號以開始打卡</string>
     <string name="quaypass_checkin_state_awaiting_registration">正在向伺服器註冊...</string>
     <string name="quaypass_checkin_state_awaiting_credential">請連線以完成通行證設定</string>
     <string name="quaypass_checkin_state_key_expired">請重新連線以更新您的通行證</string>
@@ -20,7 +20,7 @@
     <string name="quaypass_checkin_footer_scroll">捲動</string>
 
     <string name="quaypass_checkin_empty_title">尚無旅人</string>
-    <string name="quaypass_checkin_empty_message">隨身攜帶Argosy，靠近其他玩家時即可自動相遇。</string>
+    <string name="quaypass_checkin_empty_message">隨身攜帶Gameio，靠近其他玩家時即可自動相遇。</string>
 
     <string name="quaypass_checkin_card_name_fallback">@%1$s</string>
     <string name="quaypass_checkin_card_username_subtitle">@%1$s</string>

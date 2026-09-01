@@ -251,8 +251,8 @@
     <string name="settings_saves_save_sync_locked_subtitle">Требуется сервер RomM</string>
 
     <string name="settings_saves_secure_saves_title">Защищённые сохранения</string>
-    <string name="settings_saves_secure_saves_subtitle_on">Argosy управляет файлами сохранений и следит за ними</string>
-    <string name="settings_saves_secure_saves_subtitle_off">Argosy пытается синхронизировать сохранения, управляемые вне лаунчера</string>
+    <string name="settings_saves_secure_saves_subtitle_on">Gameio управляет файлами сохранений и следит за ними</string>
+    <string name="settings_saves_secure_saves_subtitle_off">Gameio пытается синхронизировать сохранения, управляемые вне лаунчера</string>
     <string name="settings_saves_secure_saves_locked_value">Недоступно</string>
     <string name="settings_saves_secure_saves_locked_subtitle">Требуется сервер RomM</string>
 
@@ -428,7 +428,7 @@
 
     <!-- ===== Permissions section ===== -->
 
-    <string name="settings_permissions_intro">Argosy требует определённых разрешений для полноценной работы. Нажмите на каждое разрешение, чтобы предоставить доступ.</string>
+    <string name="settings_permissions_intro">Gameio требует определённых разрешений для полноценной работы. Нажмите на каждое разрешение, чтобы предоставить доступ.</string>
     <string name="settings_permissions_storage_title">Доступ к хранилищу</string>
     <string name="settings_permissions_storage_description">Требуется для скачивания игр, синхронизации файлов сохранений и доступа к файлам ROM на устройстве.</string>
     <string name="settings_permissions_usage_stats_title">Доступ к статистике использования</string>
@@ -477,8 +477,8 @@
     <string name="settings_about_import_subtitle">Применить настройки из файла резервной копии</string>
 
     <string name="settings_about_systemize_title">Остановить сбои на тяжёлых эмуляторах</string>
-    <string name="settings_about_systemize_subtitle">Argosy может быть принудительно закрыт, когда требовательный эмулятор занимает большую часть RAM. На устройстве с root-доступом это записывает скрипт, делающий Argosy системным приложением, чтобы его больше не завершали.</string>
-    <string name="settings_about_restart_title">Перезапустить Argosy</string>
+    <string name="settings_about_systemize_subtitle">Gameio может быть принудительно закрыт, когда требовательный эмулятор занимает большую часть RAM. На устройстве с root-доступом это записывает скрипт, делающий Gameio системным приложением, чтобы его больше не завершали.</string>
+    <string name="settings_about_restart_title">Перезапустить Gameio</string>
     <string name="settings_about_restart_subtitle">Закрыть и снова открыть лаунчер</string>
 
     <string name="settings_about_file_logging_title">Логирование в файл</string>
@@ -1054,7 +1054,7 @@
     <string name="settings_steam_reset_library_subtitle">Удалить все синхронизированные игры Steam</string>
 
     <string name="settings_steam_gn_required_title">Требуется GameNative</string>
-    <string name="settings_steam_gn_required_message">Игры Steam скачиваются Argosy и запускаются через GameNative. Установите GameNative и включите внешнее хранилище в его настройках, прежде чем продолжить.</string>
+    <string name="settings_steam_gn_required_message">Игры Steam скачиваются Gameio и запускаются через GameNative. Установите GameNative и включите внешнее хранилище в его настройках, прежде чем продолжить.</string>
     <string name="settings_steam_gn_required_action">Установить GameNative</string>
 
     <string name="settings_steam_login_title">Войти в Steam</string>
@@ -1256,7 +1256,7 @@
     <string name="settings_accounts_switch_message">Сохранения архивируются и проверяются перед удалением. Не закрывайте этот экран.</string>
 
     <string name="settings_accounts_pairing_title">Отсканируйте, чтобы добавить аккаунт</string>
-    <string name="settings_accounts_pairing_message">Войдите в RomM на телефоне под пользователем, которого хотите добавить, отсканируйте этот код и подтвердите устройство. После подтверждения Argosy войдёт под этим пользователем.</string>
+    <string name="settings_accounts_pairing_message">Войдите в RomM на телефоне под пользователем, которого хотите добавить, отсканируйте этот код и подтвердите устройство. После подтверждения Gameio войдёт под этим пользователем.</string>
     <string name="settings_accounts_pairing_retry">Повторить</string>
     <string name="settings_accounts_pairing_cancel">Отмена</string>
 
@@ -1524,7 +1524,7 @@
     <string name="settings_platform_legacy_mode_title">Устаревший режим</string>
     <string name="settings_platform_legacy_mode_subtitle">Использовать URI file:// для Drastic</string>
     <string name="settings_platform_launch_args_title">Параметры запуска</string>
-    <string name="settings_platform_launch_args_subtitle">Настроить, как Argosy запускает этот эмулятор</string>
+    <string name="settings_platform_launch_args_subtitle">Настроить, как Gameio запускает этот эмулятор</string>
     <string name="settings_platform_builtin_video_title">Встроенные A/V и производительность</string>
     <string name="settings_platform_builtin_video_subtitle">Переопределения экрана, производительности и сохранения</string>
     <string name="settings_platform_builtin_controls_title">Встроенное управление</string>
@@ -1762,7 +1762,7 @@
     <string name="settings_launch_args_hint_reset_field">Сбросить поле</string>
     <string name="settings_launch_args_hint_reset_all">Сбросить всё</string>
     <string name="settings_launch_args_hint_back">Назад</string>
-    <string name="settings_launch_args_intro">Переопределяет, как Argosy запускает этот эмулятор для этой платформы. Флаги режима возобновления фиксированы независимо от переопределений.</string>
+    <string name="settings_launch_args_intro">Переопределяет, как Gameio запускает этот эмулятор для этой платформы. Флаги режима возобновления фиксированы независимо от переопределений.</string>
     <string name="settings_launch_args_data_uri_label">Data URI</string>
     <string name="settings_launch_args_data_uri_subtitle">Задаёт Intent.data (`-d` в shell). Используется эмуляторами ACTION_VIEW, читающими ROM из data URI намерения.</string>
     <string name="settings_launch_args_extras_label">Extras</string>
@@ -1963,7 +1963,7 @@
     <!-- ===== App picker modal (Settings > components > AppPickerModal) ===== -->
 
     <string name="settings_app_picker_title">Выбор приложения - %1$s</string>
-    <string name="settings_app_picker_intro">У Argosy нет известного эмулятора для этой платформы. Выберите любое приложение для запуска игр; позже вы сможете настроить, как Argosy его вызывает, через параметры запуска.</string>
+    <string name="settings_app_picker_intro">У Gameio нет известного эмулятора для этой платформы. Выберите любое приложение для запуска игр; позже вы сможете настроить, как Gameio его вызывает, через параметры запуска.</string>
     <string name="settings_app_picker_empty">Приложения для запуска не найдены.</string>
 
     <!-- ===== Controller order modal (Settings > components > ControllerOrderModal) ===== -->
@@ -2050,7 +2050,7 @@
     <!-- ===== Save path modal (Settings > components > SavePathModal) ===== -->
 
     <string name="settings_save_path_modal_title">%1$s - %2$s</string>
-    <string name="settings_save_path_modal_intro">Свои пути помогают исправить обнаружение сохранений, когда Argosy не может их найти для синхронизации. Это не меняет, где ваш эмулятор хранит сохранения.</string>
+    <string name="settings_save_path_modal_intro">Свои пути помогают исправить обнаружение сохранений, когда Gameio не может их найти для синхронизации. Это не меняет, где ваш эмулятор хранит сохранения.</string>
     <string name="settings_save_path_modal_save_path_label">Путь сохранения</string>
     <string name="settings_save_path_modal_note_missing">Этой папки сейчас нет на устройстве. Сохранения не будут найдены, пока она не появится.</string>
     <string name="settings_save_path_modal_note_moved">Перемещено туда, где реально находятся сохранения %1$s, внутри выбранной вами папки.</string>
@@ -2109,7 +2109,7 @@
     <string name="settings_accounts_delegate_blocker_media_download">Фильм или эпизод ещё скачивается. Дождитесь завершения или отмените загрузку.</string>
     <string name="settings_accounts_delegate_blocker_library_sync">Выполняется синхронизация библиотеки. Дождитесь завершения и повторите попытку.</string>
     <string name="settings_accounts_delegate_blocker_netplay_session">Открыта сессия Netplay. Выйдите из неё и повторите попытку.</string>
-    <string name="settings_accounts_delegate_blocker_exit_confirmation">Подтвердите, что все игры, запущенные вне Argosy, полностью закрыты.</string>
+    <string name="settings_accounts_delegate_blocker_exit_confirmation">Подтвердите, что все игры, запущенные вне Gameio, полностью закрыты.</string>
     <string name="settings_accounts_delegate_blocker_unknown_account">Этого аккаунта больше нет на устройстве.</string>
 
     <!-- ===== Steam settings delegate ===== -->
@@ -2154,7 +2154,7 @@
     <string name="settings_systemize_dialog_detected_device">Обнаружено устройство: %1$s</string>
     <string name="settings_systemize_dialog_next_steps_heading">Дальнейшие шаги</string>
     <string name="settings_systemize_dialog_step_format">%1$d. %2$s</string>
-    <string name="settings_systemize_dialog_success_footnote">Требуется устройство с root-доступом. Изменение обратимо: удалите модуль Magisk с именем \"Argosy Systemize\" и перезагрузитесь. Если формулировка в вашем меню отличается, файл скрипта всё равно корректен - просто укажите на него в опции запуска от root.</string>
+    <string name="settings_systemize_dialog_success_footnote">Требуется устройство с root-доступом. Изменение обратимо: удалите модуль Magisk с именем \"Gameio Systemize\" и перезагрузитесь. Если формулировка в вашем меню отличается, файл скрипта всё равно корректен - просто укажите на него в опции запуска от root.</string>
     <string name="settings_systemize_dialog_error_title">Не удалось сохранить скрипт</string>
     <string name="settings_systemize_dialog_error_hint">Возможно, отсутствует доступ к хранилищу. Предоставьте полный доступ к файлам в настройках и повторите попытку.</string>
 

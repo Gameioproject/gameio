@@ -282,7 +282,7 @@
     <string name="ui_add_to_collection_create">Neue Sammlung erstellen</string>
     <string name="ui_add_to_collection_member">In Sammlung</string>
 
-    <string name="ui_steam_location_download">Über Argosy herunterladen</string>
+    <string name="ui_steam_location_download">Über Gameio herunterladen</string>
     <string name="ui_steam_location_mark_installed">Als installiert markieren</string>
     <string name="ui_steam_location_managed_by">Verwaltet von %1$s</string>
 
@@ -571,7 +571,7 @@
     <string name="ui_sync_overlay_blocked_skip">Vorerst überspringen</string>
     <string name="ui_sync_overlay_hardcore_title">Hardcore-Spielstandkonflikt</string>
     <string name="ui_sync_overlay_hardcore_message">Die Serverversion von \"%1$s\" erfüllt nicht mehr die Anforderungen für den Hardcore-Modus.</string>
-    <string name="ui_sync_overlay_hardcore_note">Dies kann passieren, wenn der Spielstand außerhalb von Argosy verändert wurde.</string>
+    <string name="ui_sync_overlay_hardcore_note">Dies kann passieren, wenn der Spielstand außerhalb von Gameio verändert wurde.</string>
     <string name="ui_sync_overlay_hardcore_keep">Hardcore behalten</string>
     <string name="ui_sync_overlay_hardcore_keep_subtitle">Lokalen Spielstand zum Server hochladen</string>
     <string name="ui_sync_overlay_hardcore_downgrade">Auf Casual herabstufen</string>
@@ -626,7 +626,7 @@
     <string name="ui_file_browser_title_file">Datei auswählen</string>
     <string name="ui_file_browser_title_file_or_folder">Datei oder Ordner auswählen</string>
     <string name="ui_file_browser_permission_title">Speicherzugriff erforderlich</string>
-    <string name="ui_file_browser_permission_message">Argosy benötigt Zugriff auf alle Dateien, um Ordner zu durchsuchen, Spiele herunterzuladen und Spielstände zu synchronisieren. Erteilen Sie die Berechtigung und kehren Sie dann hierher zurück.</string>
+    <string name="ui_file_browser_permission_message">Gameio benötigt Zugriff auf alle Dateien, um Ordner zu durchsuchen, Spiele herunterzuladen und Spielstände zu synchronisieren. Erteilen Sie die Berechtigung und kehren Sie dann hierher zurück.</string>
     <string name="ui_file_browser_permission_button">Zugriff erteilen</string>
     <string name="ui_file_browser_permission_footer_grant">Zugriff erteilen</string>
     <string name="ui_file_browser_permission_footer_back">Zurück</string>
@@ -647,7 +647,7 @@
     <string name="ui_file_browser_new_folder_error_exists">Dieser Ordner existiert bereits</string>
     <string name="ui_file_browser_new_folder_error_failed">Ordner konnte nicht erstellt werden</string>
 
-    <!-- App shell and startup (ui/ArgosyApp.kt, ui/ArgosyViewModel.kt) -->
+    <!-- App shell and startup (ui/GameioApp.kt, ui/GameioViewModel.kt) -->
 
     <string name="ui_startup_status_initializing">Wird initialisiert...</string>
     <string name="ui_startup_status_loading_library">Bibliothek wird geladen...</string>

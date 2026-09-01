@@ -237,8 +237,8 @@
     <string name="settings_saves_save_sync_locked_subtitle">需要RomM服务器</string>
 
     <string name="settings_saves_secure_saves_title">安全存档</string>
-    <string name="settings_saves_secure_saves_subtitle_on">Argosy管理并强制执行存档文件</string>
-    <string name="settings_saves_secure_saves_subtitle_off">Argosy会尝试同步启动器之外管理的存档</string>
+    <string name="settings_saves_secure_saves_subtitle_on">Gameio管理并强制执行存档文件</string>
+    <string name="settings_saves_secure_saves_subtitle_off">Gameio会尝试同步启动器之外管理的存档</string>
     <string name="settings_saves_secure_saves_locked_value">不可用</string>
     <string name="settings_saves_secure_saves_locked_subtitle">需要RomM服务器</string>
 
@@ -396,7 +396,7 @@
 
     <!-- ===== Permissions section ===== -->
 
-    <string name="settings_permissions_intro">Argosy需要一些权限才能提供完整功能。点按每项权限即可授予访问权限。</string>
+    <string name="settings_permissions_intro">Gameio需要一些权限才能提供完整功能。点按每项权限即可授予访问权限。</string>
     <string name="settings_permissions_storage_title">存储访问权限</string>
     <string name="settings_permissions_storage_description">下载游戏、同步存档文件以及访问设备上的ROM文件都需要此权限。</string>
     <string name="settings_permissions_usage_stats_title">使用情况访问权限</string>
@@ -445,8 +445,8 @@
     <string name="settings_about_import_subtitle">从备份文件应用设置</string>
 
     <string name="settings_about_systemize_title">防止高负载模拟器崩溃</string>
-    <string name="settings_about_systemize_subtitle">当高负载模拟器占用大部分内存时，Argosy可能会被强制关闭。在已root的设备上，此功能会写入一个脚本，使Argosy成为系统应用，从而不再被系统杀死。</string>
-    <string name="settings_about_restart_title">重启Argosy</string>
+    <string name="settings_about_systemize_subtitle">当高负载模拟器占用大部分内存时，Gameio可能会被强制关闭。在已root的设备上，此功能会写入一个脚本，使Gameio成为系统应用，从而不再被系统杀死。</string>
+    <string name="settings_about_restart_title">重启Gameio</string>
     <string name="settings_about_restart_subtitle">关闭并重新打开启动器</string>
 
     <string name="settings_about_file_logging_title">文件日志</string>
@@ -950,7 +950,7 @@
     <string name="settings_steam_reset_library_subtitle">移除所有已同步的Steam游戏</string>
 
     <string name="settings_steam_gn_required_title">需要GameNative</string>
-    <string name="settings_steam_gn_required_message">Steam游戏由Argosy下载，并通过GameNative启动。请先安装GameNative并在其设置中启用外部存储，然后再继续。</string>
+    <string name="settings_steam_gn_required_message">Steam游戏由Gameio下载，并通过GameNative启动。请先安装GameNative并在其设置中启用外部存储，然后再继续。</string>
     <string name="settings_steam_gn_required_action">安装GameNative</string>
 
     <string name="settings_steam_login_title">登录Steam</string>
@@ -1152,7 +1152,7 @@
     <string name="settings_accounts_switch_message">存档会在移除任何内容之前完成归档与校验。请保持此屏幕打开。</string>
 
     <string name="settings_accounts_pairing_title">扫码以添加账户</string>
-    <string name="settings_accounts_pairing_message">在手机上以要添加的用户身份登录RomM，扫描此代码，然后批准此设备。批准后Argosy会以该用户身份登录。</string>
+    <string name="settings_accounts_pairing_message">在手机上以要添加的用户身份登录RomM，扫描此代码，然后批准此设备。批准后Gameio会以该用户身份登录。</string>
     <string name="settings_accounts_pairing_retry">重试</string>
     <string name="settings_accounts_pairing_cancel">取消</string>
 
@@ -1409,7 +1409,7 @@
     <string name="settings_platform_legacy_mode_title">旧版模式</string>
     <string name="settings_platform_legacy_mode_subtitle">为Drastic使用file://格式的URI</string>
     <string name="settings_platform_launch_args_title">启动参数</string>
-    <string name="settings_platform_launch_args_subtitle">自定义Argosy启动此模拟器的方式</string>
+    <string name="settings_platform_launch_args_subtitle">自定义Gameio启动此模拟器的方式</string>
     <string name="settings_platform_builtin_video_title">内置音视频与性能</string>
     <string name="settings_platform_builtin_video_subtitle">显示、性能与存档的覆盖设置</string>
     <string name="settings_platform_builtin_controls_title">内置控制</string>
@@ -1633,7 +1633,7 @@
     <string name="settings_launch_args_hint_reset_field">重置此项</string>
     <string name="settings_launch_args_hint_reset_all">全部重置</string>
     <string name="settings_launch_args_hint_back">返回</string>
-    <string name="settings_launch_args_intro">覆盖Argosy在此平台上启动该模拟器的方式。无论如何覆盖，恢复模式的标志始终固定不变。</string>
+    <string name="settings_launch_args_intro">覆盖Gameio在此平台上启动该模拟器的方式。无论如何覆盖，恢复模式的标志始终固定不变。</string>
     <string name="settings_launch_args_data_uri_label">Data URI</string>
     <string name="settings_launch_args_data_uri_subtitle">设置Intent.data（在shell中为`-d`）。供从intent的data URI读取ROM的ACTION_VIEW模拟器使用。</string>
     <string name="settings_launch_args_extras_label">Extras</string>
@@ -1826,7 +1826,7 @@
     <!-- ===== App picker modal ===== -->
 
     <string name="settings_app_picker_title">选择应用 - %1$s</string>
-    <string name="settings_app_picker_intro">Argosy未检测到此平台已安装的已知模拟器。请选择任意应用用于启动游戏；之后你可以通过"启动参数"调整Argosy调用它的方式。</string>
+    <string name="settings_app_picker_intro">Gameio未检测到此平台已安装的已知模拟器。请选择任意应用用于启动游戏；之后你可以通过"启动参数"调整Gameio调用它的方式。</string>
     <string name="settings_app_picker_empty">未找到可启动的应用。</string>
 
     <!-- ===== Controller order modal ===== -->
@@ -1907,7 +1907,7 @@
     <!-- ===== Save path modal ===== -->
 
     <string name="settings_save_path_modal_title">%1$s - %2$s</string>
-    <string name="settings_save_path_modal_intro">当Argosy找不到要同步的存档时，自定义路径有助于修复存档检测问题。这不会改变你的模拟器存储存档的位置。</string>
+    <string name="settings_save_path_modal_intro">当Gameio找不到要同步的存档时，自定义路径有助于修复存档检测问题。这不会改变你的模拟器存储存档的位置。</string>
     <string name="settings_save_path_modal_save_path_label">存档路径</string>
     <string name="settings_save_path_modal_note_missing">此文件夹当前不在设备上。在它出现之前，无法找到存档。</string>
     <string name="settings_save_path_modal_note_moved">已移动到%1$s存档实际所在的位置，位于你所选文件夹之下。</string>
@@ -1966,7 +1966,7 @@
     <string name="settings_accounts_delegate_blocker_media_download">有影片或剧集仍在下载。请等待完成或取消下载。</string>
     <string name="settings_accounts_delegate_blocker_library_sync">库同步正在进行。请等待其完成后再试。</string>
     <string name="settings_accounts_delegate_blocker_netplay_session">联机对战会话处于打开状态。请退出后再试。</string>
-    <string name="settings_accounts_delegate_blocker_exit_confirmation">请确认所有在Argosy之外启动的游戏均已完全关闭。</string>
+    <string name="settings_accounts_delegate_blocker_exit_confirmation">请确认所有在Gameio之外启动的游戏均已完全关闭。</string>
     <string name="settings_accounts_delegate_blocker_unknown_account">该账户已不在此设备上。</string>
 
     <!-- ===== Steam settings delegate ===== -->
@@ -2011,7 +2011,7 @@
     <string name="settings_systemize_dialog_detected_device">检测到的设备：%1$s</string>
     <string name="settings_systemize_dialog_next_steps_heading">后续步骤</string>
     <string name="settings_systemize_dialog_step_format">%1$d. %2$s</string>
-    <string name="settings_systemize_dialog_success_footnote">需要已root的设备。此更改可撤销：移除名为"Argosy Systemize"的Magisk模块并重启即可。如果你的菜单措辞不同，脚本文件依然正确 - 只需将以root权限运行的选项指向它即可。</string>
+    <string name="settings_systemize_dialog_success_footnote">需要已root的设备。此更改可撤销：移除名为"Gameio Systemize"的Magisk模块并重启即可。如果你的菜单措辞不同，脚本文件依然正确 - 只需将以root权限运行的选项指向它即可。</string>
     <string name="settings_systemize_dialog_error_title">无法保存脚本</string>
     <string name="settings_systemize_dialog_error_hint">可能缺少存储访问权限。请在设置中授予所有文件访问权限后重试。</string>
 

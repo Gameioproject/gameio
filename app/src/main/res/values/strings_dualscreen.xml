@@ -267,7 +267,7 @@
     <!-- Heading on the media panel when no media server is signed in. Noun phrase describing what
          is missing. -->
     <string name="dual_media_signed_out_title">No media account</string>
-    <!-- Body under that heading. Instruction addressed to the user. "Settings" names Argosy's own
+    <!-- Body under that heading. Instruction addressed to the user. "Settings" names Gameio's own
          settings screen. -->
     <string name="dual_media_signed_out_message">Sign in to a media server from Settings to watch here.</string>
     <!-- Heading on the media panel while the first rails are being fetched. Adjective phrase
@@ -519,7 +519,7 @@
         <item quantity="one">%d game</item>
         <item quantity="other">%d games</item>
     </plurals>
-    <!-- Second line under an installed app in the tile picker, when Argosy recognises the app as
+    <!-- Second line under an installed app in the tile picker, when Gameio recognises the app as
          an emulator. Noun, singular. -->
     <string name="dual_tile_picker_app_emulator">Emulator</string>
     <!-- Second line under an installed app in the tile picker, for anything else. Noun, singular,
@@ -640,7 +640,7 @@
     <string name="dual_detail_option_save_path_custom">Custom</string>
     <!-- Value beside the save path row when the game uses the inherited one. -->
     <string name="dual_detail_option_save_path_default">Default</string>
-    <!-- Value beside the memory card row when Argosy picks the card itself. Adjective, short for
+    <!-- Value beside the memory card row when Gameio picks the card itself. Adjective, short for
          "automatic". -->
     <string name="dual_detail_option_memory_card_auto">Auto</string>
     <!-- Value beside the variant row when the game runs as originally released. -->
@@ -714,7 +714,7 @@
     <!-- Row of the options tab. Verb phrase: fetches this game's metadata from the server
          again. -->
     <string name="dual_detail_option_refresh_metadata">Refresh Metadata</string>
-    <!-- Row of the options tab. Verb phrase: removes the game from Argosy's library entirely. -->
+    <!-- Row of the options tab. Verb phrase: removes the game from Gameio's library entirely. -->
     <string name="dual_detail_option_delete">Delete from Library</string>
     <!-- Row of the options tab, for a game already hidden. Verb phrase: puts it back in the
          visible list. -->
@@ -747,9 +747,9 @@
     <!-- Heading of the modal asking where a Steam game should be installed. Noun phrase, drawn in
          caps in English. "Steam" is Valve's storefront; leave it untranslated. -->
     <string name="dual_detail_steam_install_heading">INSTALL LOCATION</string>
-    <!-- Row in that modal. Verb phrase: Argosy fetches the game itself. -->
-    <string name="dual_detail_steam_install_argosy">Download via Argosy</string>
-    <!-- Row in that modal. Verb phrase: the game is already installed by another app and Argosy
+    <!-- Row in that modal. Verb phrase: Gameio fetches the game itself. -->
+    <string name="dual_detail_steam_install_argosy">Download via Gameio</string>
+    <!-- Row in that modal. Verb phrase: the game is already installed by another app and Gameio
          should only record that. -->
     <string name="dual_detail_steam_install_external">Mark as Installed</string>
     <!-- Second line under that row, naming the app that holds the game. %1$s is that app's name;
@@ -798,7 +798,7 @@
     <!-- Heading of the modal picking the emulated memory card the game saves onto. Noun phrase,
          drawn in caps in English. -->
     <string name="dual_detail_memory_card_heading">MEMORY CARD</string>
-    <!-- Row in that modal. Verb phrase: Argosy picks the card itself. -->
+    <!-- Row in that modal. Verb phrase: Gameio picks the card itself. -->
     <string name="dual_detail_memory_card_auto">Auto Detect</string>
 
     <!-- Heading of the modal picking between different releases of the same game. Verb phrase,

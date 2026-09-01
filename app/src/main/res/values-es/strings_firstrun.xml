@@ -3,9 +3,9 @@
     <string name="firstrun_welcome_intro">¡Bienvenido! Vamos a configurar tu dispositivo.</string>
     <string name="firstrun_welcome_button_start">Comenzar</string>
 
-    <string name="firstrun_romm_url_title">Inicio de sesión en Rom Manager</string>
+    <string name="firstrun_romm_url_title">Conecta con tu servidor</string>
     <string name="firstrun_romm_url_field_label">URL del servidor</string>
-    <string name="firstrun_romm_url_hint">Escribe la dirección de tu servidor RomM y detectaremos cómo iniciar sesión.</string>
+    <string name="firstrun_romm_url_hint">Escribe la dirección del servidor Gameio que te dieron.</string>
     <string name="firstrun_romm_url_button_continue">Continuar</string>
     <string name="firstrun_romm_url_button_checking">Comprobando...</string>
     <string name="firstrun_romm_url_button_back">Atrás</string>
@@ -48,7 +48,7 @@
     <string name="firstrun_romm_success_error_library_fetch">Error al obtener la biblioteca: %1$s</string>
 
     <string name="firstrun_permissions_title">Permisos</string>
-    <string name="firstrun_permissions_intro">Argosy los necesita para administrar tu biblioteca y tus emuladores.</string>
+    <string name="firstrun_permissions_intro">Gameio los necesita para administrar tu biblioteca y tus emuladores.</string>
     <string name="firstrun_permissions_storage_title">Administrar almacenamiento (obligatorio)</string>
     <string name="firstrun_permissions_storage_description">Necesario para explorar carpetas, descargar juegos y sincronizar partidas guardadas.</string>
     <string name="firstrun_permissions_notifications_title">Notificaciones</string>

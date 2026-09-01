@@ -46,7 +46,7 @@
 
     <string name="sync_blocked_access_denied_title">सेव फ़ोल्डर एक्सेस अवरुद्ध</string>
     <string name="sync_blocked_access_denied_detail">आपका डिवाइस %1$s के सेव डेटा तक पहुंच रोक रहा है। यह निर्माता की पाबंदियों (Samsung, Xiaomi, आदि) या सुरक्षा नीतियों की वजह से हो सकता है।</string>
-    <string name="sync_blocked_access_denied_switch_detail">आपका डिवाइस %1$s के सेव डेटा तक पहुंच रोक रहा है। %2$s में एक बाहरी सेव पाथ सेट करें (Android/data के बाहर), फिर वही पाथ Argosy में सेट करें।</string>
+    <string name="sync_blocked_access_denied_switch_detail">आपका डिवाइस %1$s के सेव डेटा तक पहुंच रोक रहा है। %2$s में एक बाहरी सेव पाथ सेट करें (Android/data के बाहर), फिर वही पाथ Gameio में सेट करें।</string>
     <string name="sync_blocked_access_denied_emulator_fallback">एमुलेटर</string>
     <string name="sync_blocked_access_denied_configure_fallback">एमुलेटर</string>
 

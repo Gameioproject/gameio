@@ -243,7 +243,7 @@
     <string name="settings_shell_accounts_add_title">एक अकाउंट जोड़ें?</string>
     <string name="settings_shell_accounts_switch_title">%1$s पर स्विच करें?</string>
     <string name="settings_shell_accounts_fallback_name">अकाउंट</string>
-    <string name="settings_shell_accounts_exit_message">पहले Argosy के बाहर लॉन्च किया गया कोई भी गेम पूरी तरह बंद करें। Argosy उन सेशन को नहीं देख सकता, और चल रहा गेम उन सेव के ऊपर लिख सकता है जिन्हें यह स्थानांतरित करता है। कुछ भी हटाए जाने से पहले सेव आर्काइव और सत्यापित किए जाते हैं।</string>
+    <string name="settings_shell_accounts_exit_message">पहले Gameio के बाहर लॉन्च किया गया कोई भी गेम पूरी तरह बंद करें। Gameio उन सेशन को नहीं देख सकता, और चल रहा गेम उन सेव के ऊपर लिख सकता है जिन्हें यह स्थानांतरित करता है। कुछ भी हटाए जाने से पहले सेव आर्काइव और सत्यापित किए जाते हैं।</string>
     <string name="settings_shell_accounts_add_confirm">गेम बंद हैं, जारी रखें</string>
     <string name="settings_shell_accounts_switch_confirm">गेम बंद हैं, स्विच करें</string>
 

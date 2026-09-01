@@ -13,7 +13,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val DOWNLOAD_STALL_TIMEOUT_SECONDS = 300
-private const val CLIENT_NAME = "Argosy"
+private const val CLIENT_NAME = "Gameio"
 
 /**
  * Builds a Jellyfin client bound to one base URL, one device identity and one token.
@@ -99,6 +99,6 @@ class JellyfinApiFactory @Inject constructor(
          * outright. Manufacturer-supplied model names routinely contain both.
          */
         private fun sanitize(value: String): String =
-            value.filter { it.code in 32..126 && it != '"' && it != ',' }.trim().ifBlank { "Argosy" }
+            value.filter { it.code in 32..126 && it != '"' && it != ',' }.trim().ifBlank { "Gameio" }
     }
 }

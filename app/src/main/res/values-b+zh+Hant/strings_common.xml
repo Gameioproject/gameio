@@ -272,7 +272,7 @@
     <string name="ui_add_to_collection_create">建立新合輯</string>
     <string name="ui_add_to_collection_member">已加入合輯</string>
 
-    <string name="ui_steam_location_download">透過Argosy下載</string>
+    <string name="ui_steam_location_download">透過Gameio下載</string>
     <string name="ui_steam_location_mark_installed">標記為已安裝</string>
     <string name="ui_steam_location_managed_by">由%1$s管理</string>
 
@@ -559,7 +559,7 @@
     <string name="ui_sync_overlay_blocked_skip">暫時略過</string>
     <string name="ui_sync_overlay_hardcore_title">硬核存檔衝突</string>
     <string name="ui_sync_overlay_hardcore_message">伺服器上「%1$s」的版本已不符合硬核模式的要求。</string>
-    <string name="ui_sync_overlay_hardcore_note">這可能是因為存檔曾在Argosy之外被修改過。</string>
+    <string name="ui_sync_overlay_hardcore_note">這可能是因為存檔曾在Gameio之外被修改過。</string>
     <string name="ui_sync_overlay_hardcore_keep">保留硬核模式</string>
     <string name="ui_sync_overlay_hardcore_keep_subtitle">將本機存檔上傳至伺服器</string>
     <string name="ui_sync_overlay_hardcore_downgrade">降級為一般模式</string>
@@ -614,7 +614,7 @@
     <string name="ui_file_browser_title_file">選擇檔案</string>
     <string name="ui_file_browser_title_file_or_folder">選擇檔案或資料夾</string>
     <string name="ui_file_browser_permission_title">需要儲存空間存取權</string>
-    <string name="ui_file_browser_permission_message">Argosy需要「所有檔案存取權」才能瀏覽資料夾、下載遊戲及同步存檔。請授予權限後返回此處。</string>
+    <string name="ui_file_browser_permission_message">Gameio需要「所有檔案存取權」才能瀏覽資料夾、下載遊戲及同步存檔。請授予權限後返回此處。</string>
     <string name="ui_file_browser_permission_button">授予權限</string>
     <string name="ui_file_browser_permission_footer_grant">授予權限</string>
     <string name="ui_file_browser_permission_footer_back">返回</string>
@@ -635,7 +635,7 @@
     <string name="ui_file_browser_new_folder_error_exists">資料夾已存在</string>
     <string name="ui_file_browser_new_folder_error_failed">無法建立資料夾</string>
 
-    <!-- App shell and startup (ui/ArgosyApp.kt, ui/ArgosyViewModel.kt) -->
+    <!-- App shell and startup (ui/GameioApp.kt, ui/GameioViewModel.kt) -->
 
     <string name="ui_startup_status_initializing">初始化中...</string>
     <string name="ui_startup_status_loading_library">正在載入遊戲庫...</string>

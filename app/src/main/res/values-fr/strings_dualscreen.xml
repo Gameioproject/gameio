@@ -368,7 +368,7 @@
     <string name="dual_detail_file_picker_choose_title">Choisir les fichiers</string>
 
     <string name="dual_detail_steam_install_heading">EMPLACEMENT D\'INSTALLATION</string>
-    <string name="dual_detail_steam_install_argosy">Télécharger via Argosy</string>
+    <string name="dual_detail_steam_install_argosy">Télécharger via Gameio</string>
     <string name="dual_detail_steam_install_external">Marquer comme installé</string>
     <string name="dual_detail_steam_install_managed_by">Géré par %1$s</string>
 

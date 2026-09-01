@@ -21,7 +21,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "argosy-launcher"
+rootProject.name = "gameio"
 include(":app")
 include(":sigil")
 project(":sigil").projectDir = file("sigil/bindings/android")

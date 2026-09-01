@@ -10,7 +10,7 @@
     <!-- ============================ QuayPass check-in screen ============================ -->
 
     <!-- Heading at the top of the Check-In screen. Noun phrase naming the feature: passively
-         meeting other Argosy users nearby. Not a verb. -->
+         meeting other Gameio users nearby. Not a verb. -->
     <string name="quaypass_checkin_header_title">Check-In</string>
 
     <!-- Status line under the heading while the radio is actively looking for nearby users.
@@ -18,9 +18,9 @@
     <string name="quaypass_checkin_state_running">Listening for nearby travelers...</string>
     <!-- Status line shown when the user has turned Check-In off. Statement. -->
     <string name="quaypass_checkin_state_disabled">QuayPass is off</string>
-    <!-- Status line shown when the device has no Argosy account linked yet. Imperative sentence
+    <!-- Status line shown when the device has no Gameio account linked yet. Imperative sentence
          telling the user what to do. -->
-    <string name="quaypass_checkin_state_not_linked">Link your Argosy account to check in</string>
+    <string name="quaypass_checkin_state_not_linked">Link your Gameio account to check in</string>
     <!-- Status line shown while this device registers itself with the server for the first time.
          Verb in the continuous form. -->
     <string name="quaypass_checkin_state_awaiting_registration">Registering with the server...</string>
@@ -60,7 +60,7 @@
     <!-- Heading shown when this device has not passed any other travelers yet. Statement. -->
     <string name="quaypass_checkin_empty_title">No travelers yet</string>
     <!-- Body under that heading, explaining what will make the list start filling in. -->
-    <string name="quaypass_checkin_empty_message">Take Argosy with you. You\'ll meet other players passively when you\'re nearby.</string>
+    <string name="quaypass_checkin_empty_message">Take Gameio with you. You\'ll meet other players passively when you\'re nearby.</string>
 
     <!-- Name shown for a traveler card when the account has no display name set. %1$s is the
          account's handle; the "@" marks it as a handle rather than a full name. -->

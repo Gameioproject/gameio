@@ -14,9 +14,9 @@
     <!-- Storage settings: global ROM folder migration, per-platform migration, and
          per-platform purge (StorageSettingsDelegate). -->
 
-    <!-- Error when the user tries to point ROM storage at one of Argosy's own private
+    <!-- Error when the user tries to point ROM storage at one of Gameio's own private
          app folders. Statement of fact, not a command. -->
-    <string name="notif_storage_private_path_error">GameNative cannot read Argosy\'s private folders. Pick a public location.</string>
+    <string name="notif_storage_private_path_error">GameNative cannot read Gameio\'s private folders. Pick a public location.</string>
 
     <!-- Persistent notification title while all downloaded games are being moved to a
          new global storage folder. Present participle. -->

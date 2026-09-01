@@ -250,7 +250,7 @@
     <string name="settings_shell_accounts_add_title">Konto hinzufügen?</string>
     <string name="settings_shell_accounts_switch_title">Zu %1$s wechseln?</string>
     <string name="settings_shell_accounts_fallback_name">Konto</string>
-    <string name="settings_shell_accounts_exit_message">Beenden Sie zuerst jedes Spiel, das Sie außerhalb von Argosy gestartet haben. Argosy kann diese Sitzungen nicht sehen, und ein noch laufendes Spiel kann die Spielstände überschreiben, die hier verschoben werden. Spielstände werden archiviert und geprüft, bevor etwas entfernt wird.</string>
+    <string name="settings_shell_accounts_exit_message">Beenden Sie zuerst jedes Spiel, das Sie außerhalb von Gameio gestartet haben. Gameio kann diese Sitzungen nicht sehen, und ein noch laufendes Spiel kann die Spielstände überschreiben, die hier verschoben werden. Spielstände werden archiviert und geprüft, bevor etwas entfernt wird.</string>
     <string name="settings_shell_accounts_add_confirm">Spiele geschlossen, weiter</string>
     <string name="settings_shell_accounts_switch_confirm">Spiele geschlossen, wechseln</string>
 

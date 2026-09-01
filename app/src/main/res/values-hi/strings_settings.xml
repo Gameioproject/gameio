@@ -242,8 +242,8 @@
     <string name="settings_saves_save_sync_locked_subtitle">RomM सर्वर आवश्यक है</string>
 
     <string name="settings_saves_secure_saves_title">सिक्योर सेव</string>
-    <string name="settings_saves_secure_saves_subtitle_on">Argosy सेव फ़ाइलों को मैनेज और लागू करता है</string>
-    <string name="settings_saves_secure_saves_subtitle_off">Argosy लॉन्चर के बाहर मैनेज किए गए सेव सिंक करने की कोशिश करता है</string>
+    <string name="settings_saves_secure_saves_subtitle_on">Gameio सेव फ़ाइलों को मैनेज और लागू करता है</string>
+    <string name="settings_saves_secure_saves_subtitle_off">Gameio लॉन्चर के बाहर मैनेज किए गए सेव सिंक करने की कोशिश करता है</string>
     <string name="settings_saves_secure_saves_locked_value">अनुपलब्ध</string>
     <string name="settings_saves_secure_saves_locked_subtitle">RomM सर्वर आवश्यक है</string>
 
@@ -407,7 +407,7 @@
 
     <!-- ===== Permissions section ===== -->
 
-    <string name="settings_permissions_intro">पूरी कार्यक्षमता के लिए Argosy को कुछ अनुमतियाँ चाहिए। एक्सेस देने के लिए हर अनुमति पर टैप करें।</string>
+    <string name="settings_permissions_intro">पूरी कार्यक्षमता के लिए Gameio को कुछ अनुमतियाँ चाहिए। एक्सेस देने के लिए हर अनुमति पर टैप करें।</string>
     <string name="settings_permissions_storage_title">स्टोरेज एक्सेस</string>
     <string name="settings_permissions_storage_description">गेम डाउनलोड करने, सेव फ़ाइलें सिंक करने और डिवाइस पर ROM फ़ाइलों तक पहुँचने के लिए आवश्यक।</string>
     <string name="settings_permissions_usage_stats_title">यूसेज स्टैट्स एक्सेस</string>
@@ -456,8 +456,8 @@
     <string name="settings_about_import_subtitle">बैकअप फ़ाइल से सेटिंग्स लागू करें</string>
 
     <string name="settings_about_systemize_title">भारी एमुलेटर पर क्रैश रोकें</string>
-    <string name="settings_about_systemize_subtitle">जब कोई भारी एमुलेटर ज़्यादातर RAM का उपयोग करता है तो Argosy फ़ोर्स-क्लोज़ हो सकता है। रूटेड डिवाइस पर, यह एक स्क्रिप्ट लिखता है जो Argosy को सिस्टम ऐप बना देता है ताकि इसे अब बंद न किया जाए।</string>
-    <string name="settings_about_restart_title">Argosy रीस्टार्ट करें</string>
+    <string name="settings_about_systemize_subtitle">जब कोई भारी एमुलेटर ज़्यादातर RAM का उपयोग करता है तो Gameio फ़ोर्स-क्लोज़ हो सकता है। रूटेड डिवाइस पर, यह एक स्क्रिप्ट लिखता है जो Gameio को सिस्टम ऐप बना देता है ताकि इसे अब बंद न किया जाए।</string>
+    <string name="settings_about_restart_title">Gameio रीस्टार्ट करें</string>
     <string name="settings_about_restart_subtitle">लॉन्चर बंद करके फिर से खोलें</string>
 
     <string name="settings_about_file_logging_title">फ़ाइल लॉगिंग</string>
@@ -983,7 +983,7 @@
     <string name="settings_steam_reset_library_subtitle">सभी सिंक किए गए Steam गेम हटाएँ</string>
 
     <string name="settings_steam_gn_required_title">GameNative आवश्यक है</string>
-    <string name="settings_steam_gn_required_message">Steam गेम Argosy द्वारा डाउनलोड होते हैं और GameNative के ज़रिए लॉन्च होते हैं। आगे बढ़ने से पहले GameNative इंस्टॉल करें और उसकी सेटिंग्स में एक्सटर्नल स्टोरेज चालू करें।</string>
+    <string name="settings_steam_gn_required_message">Steam गेम Gameio द्वारा डाउनलोड होते हैं और GameNative के ज़रिए लॉन्च होते हैं। आगे बढ़ने से पहले GameNative इंस्टॉल करें और उसकी सेटिंग्स में एक्सटर्नल स्टोरेज चालू करें।</string>
     <string name="settings_steam_gn_required_action">GameNative इंस्टॉल करें</string>
 
     <string name="settings_steam_login_title">Steam में लॉग इन करें</string>
@@ -1185,7 +1185,7 @@
     <string name="settings_accounts_switch_message">कुछ भी हटाए जाने से पहले सेव आर्काइव और सत्यापित किए जाते हैं। यह स्क्रीन खुली रहने दें।</string>
 
     <string name="settings_accounts_pairing_title">अकाउंट जोड़ने के लिए स्कैन करें</string>
-    <string name="settings_accounts_pairing_message">अपने फ़ोन पर जिस यूज़र को जोड़ना है उसके तौर पर RomM में साइन इन करें, यह कोड स्कैन करें, फिर इस डिवाइस को मंज़ूर करें। मंज़ूरी मिलते ही Argosy उनके तौर पर साइन इन हो जाता है।</string>
+    <string name="settings_accounts_pairing_message">अपने फ़ोन पर जिस यूज़र को जोड़ना है उसके तौर पर RomM में साइन इन करें, यह कोड स्कैन करें, फिर इस डिवाइस को मंज़ूर करें। मंज़ूरी मिलते ही Gameio उनके तौर पर साइन इन हो जाता है।</string>
     <string name="settings_accounts_pairing_retry">फिर कोशिश करें</string>
     <string name="settings_accounts_pairing_cancel">रद्द करें</string>
 
@@ -1445,7 +1445,7 @@
     <string name="settings_platform_legacy_mode_title">लेगेसी मोड</string>
     <string name="settings_platform_legacy_mode_subtitle">Drastic के लिए file:// URI उपयोग करें</string>
     <string name="settings_platform_launch_args_title">लॉन्च आर्ग्स</string>
-    <string name="settings_platform_launch_args_subtitle">Argosy इस एमुलेटर को कैसे लॉन्च करता है, यह कस्टमाइज़ करें</string>
+    <string name="settings_platform_launch_args_subtitle">Gameio इस एमुलेटर को कैसे लॉन्च करता है, यह कस्टमाइज़ करें</string>
     <string name="settings_platform_builtin_video_title">बिल्ट-इन A/V और परफ़ॉर्मेंस</string>
     <string name="settings_platform_builtin_video_subtitle">डिस्प्ले, परफ़ॉर्मेंस और सेविंग ओवरराइड</string>
     <string name="settings_platform_builtin_controls_title">बिल्ट-इन कंट्रोल्स</string>
@@ -1673,7 +1673,7 @@
     <string name="settings_launch_args_hint_reset_field">फ़ील्ड रीसेट करें</string>
     <string name="settings_launch_args_hint_reset_all">सभी रीसेट करें</string>
     <string name="settings_launch_args_hint_back">वापस</string>
-    <string name="settings_launch_args_intro">इस प्लेटफ़ॉर्म पर Argosy इस एमुलेटर को कैसे लॉन्च करता है, यह ओवरराइड करें। Resume-mode फ़्लैग ओवरराइड के बावजूद तय ही रहते हैं।</string>
+    <string name="settings_launch_args_intro">इस प्लेटफ़ॉर्म पर Gameio इस एमुलेटर को कैसे लॉन्च करता है, यह ओवरराइड करें। Resume-mode फ़्लैग ओवरराइड के बावजूद तय ही रहते हैं।</string>
     <string name="settings_launch_args_data_uri_label">Data URI</string>
     <string name="settings_launch_args_data_uri_subtitle">Intent.data सेट करता है (शेल में `-d`)। ACTION_VIEW एमुलेटर द्वारा उपयोग होता है जो इंटेंट के data URI से ROM पढ़ते हैं।</string>
     <string name="settings_launch_args_extras_label">Extras</string>
@@ -1870,7 +1870,7 @@
     <!-- ===== App picker modal (Settings > components > AppPickerModal) ===== -->
 
     <string name="settings_app_picker_title">ऐप चुनें - %1$s</string>
-    <string name="settings_app_picker_intro">इस प्लेटफ़ॉर्म के लिए Argosy को कोई ज्ञात एमुलेटर इंस्टॉल्ड नहीं मिला। गेम लॉन्च करने के लिए कोई भी ऐप चुनें; बाद में Launch Args से इसे कस्टमाइज़ कर सकते हैं।</string>
+    <string name="settings_app_picker_intro">इस प्लेटफ़ॉर्म के लिए Gameio को कोई ज्ञात एमुलेटर इंस्टॉल्ड नहीं मिला। गेम लॉन्च करने के लिए कोई भी ऐप चुनें; बाद में Launch Args से इसे कस्टमाइज़ कर सकते हैं।</string>
     <string name="settings_app_picker_empty">लॉन्च करने योग्य कोई ऐप नहीं मिला।</string>
 
     <!-- ===== Controller order modal (Settings > components > ControllerOrderModal) ===== -->
@@ -1954,7 +1954,7 @@
     <!-- ===== Save path modal (Settings > components > SavePathModal) ===== -->
 
     <string name="settings_save_path_modal_title">%1$s - %2$s</string>
-    <string name="settings_save_path_modal_intro">जब Argosy सिंक करने के लिए सेव नहीं ढूँढ पाता तो कस्टम पाथ सेव पहचान ठीक करने में मदद करते हैं। इससे आपका एमुलेटर सेव कहाँ स्टोर करता है, यह नहीं बदलता।</string>
+    <string name="settings_save_path_modal_intro">जब Gameio सिंक करने के लिए सेव नहीं ढूँढ पाता तो कस्टम पाथ सेव पहचान ठीक करने में मदद करते हैं। इससे आपका एमुलेटर सेव कहाँ स्टोर करता है, यह नहीं बदलता।</string>
     <string name="settings_save_path_modal_save_path_label">सेव पाथ</string>
     <string name="settings_save_path_modal_note_missing">यह फ़ोल्डर अभी डिवाइस पर नहीं है। जब तक यह नहीं होगा, सेव नहीं मिलेंगे।</string>
     <string name="settings_save_path_modal_note_moved">%1$s वाकई जहाँ सेव रखता है वहाँ ले जाया गया, आपके चुने गए फ़ोल्डर के नीचे।</string>
@@ -2013,7 +2013,7 @@
     <string name="settings_accounts_delegate_blocker_media_download">एक फ़िल्म या एपिसोड अभी भी डाउनलोड हो रहा है। इसे पूरा होने दें या रद्द करें।</string>
     <string name="settings_accounts_delegate_blocker_library_sync">एक लाइब्रेरी सिंक चल रही है। इसे पूरा होने दें, फिर फिर से कोशिश करें।</string>
     <string name="settings_accounts_delegate_blocker_netplay_session">एक नेटप्ले सेशन खुला है। इसे छोड़ें, फिर फिर से कोशिश करें।</string>
-    <string name="settings_accounts_delegate_blocker_exit_confirmation">पुष्टि करें कि Argosy के बाहर लॉन्च किया गया कोई भी गेम पूरी तरह बंद है।</string>
+    <string name="settings_accounts_delegate_blocker_exit_confirmation">पुष्टि करें कि Gameio के बाहर लॉन्च किया गया कोई भी गेम पूरी तरह बंद है।</string>
     <string name="settings_accounts_delegate_blocker_unknown_account">वह अकाउंट अब इस डिवाइस पर नहीं है।</string>
 
     <!-- ===== Steam settings delegate (Settings > delegates > SteamSettingsDelegate) ===== -->
@@ -2058,7 +2058,7 @@
     <string name="settings_systemize_dialog_detected_device">पहचाना गया डिवाइस: %1$s</string>
     <string name="settings_systemize_dialog_next_steps_heading">अगले कदम</string>
     <string name="settings_systemize_dialog_step_format">%1$d. %2$s</string>
-    <string name="settings_systemize_dialog_success_footnote">रूटेड डिवाइस चाहिए। यह बदलाव पूर्ववत किया जा सकता है: \"Argosy Systemize\" नाम का Magisk मॉड्यूल हटाएँ और रीबूट करें। अगर आपके मेनू में शब्द अलग हैं, तो भी स्क्रिप्ट फ़ाइल सही है - बस अपने run-as-root विकल्प को उसी पर सेट करें।</string>
+    <string name="settings_systemize_dialog_success_footnote">रूटेड डिवाइस चाहिए। यह बदलाव पूर्ववत किया जा सकता है: \"Gameio Systemize\" नाम का Magisk मॉड्यूल हटाएँ और रीबूट करें। अगर आपके मेनू में शब्द अलग हैं, तो भी स्क्रिप्ट फ़ाइल सही है - बस अपने run-as-root विकल्प को उसी पर सेट करें।</string>
     <string name="settings_systemize_dialog_error_title">स्क्रिप्ट सेव नहीं हो सकी</string>
     <string name="settings_systemize_dialog_error_hint">स्टोरेज एक्सेस गुम हो सकता है। सेटअप में सभी फ़ाइलों तक एक्सेस दें और फिर से कोशिश करें।</string>
 

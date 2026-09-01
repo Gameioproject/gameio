@@ -292,7 +292,7 @@
     <string name="ui_add_to_collection_create">Crear nueva colección</string>
     <string name="ui_add_to_collection_member">En la colección</string>
 
-    <string name="ui_steam_location_download">Descargar mediante Argosy</string>
+    <string name="ui_steam_location_download">Descargar mediante Gameio</string>
     <string name="ui_steam_location_mark_installed">Marcar como instalado</string>
     <string name="ui_steam_location_managed_by">Administrado por %1$s</string>
 
@@ -583,7 +583,7 @@
     <string name="ui_sync_overlay_blocked_skip">Omitir por ahora</string>
     <string name="ui_sync_overlay_hardcore_title">Conflicto de guardado en modo hardcore</string>
     <string name="ui_sync_overlay_hardcore_message">La versión del servidor de \"%1$s\" ya no cumple los requisitos del modo hardcore.</string>
-    <string name="ui_sync_overlay_hardcore_note">Esto puede ocurrir si la partida guardada se modificó fuera de Argosy.</string>
+    <string name="ui_sync_overlay_hardcore_note">Esto puede ocurrir si la partida guardada se modificó fuera de Gameio.</string>
     <string name="ui_sync_overlay_hardcore_keep">Mantener hardcore</string>
     <string name="ui_sync_overlay_hardcore_keep_subtitle">Subir la partida guardada local al servidor</string>
     <string name="ui_sync_overlay_hardcore_downgrade">Cambiar a casual</string>
@@ -638,7 +638,7 @@
     <string name="ui_file_browser_title_file">Seleccionar archivo</string>
     <string name="ui_file_browser_title_file_or_folder">Seleccionar archivo o carpeta</string>
     <string name="ui_file_browser_permission_title">Se requiere acceso al almacenamiento</string>
-    <string name="ui_file_browser_permission_message">Argosy necesita el permiso Acceso a todos los archivos para explorar carpetas, descargar juegos y sincronizar partidas guardadas. Concédelo y vuelve aquí.</string>
+    <string name="ui_file_browser_permission_message">Gameio necesita el permiso Acceso a todos los archivos para explorar carpetas, descargar juegos y sincronizar partidas guardadas. Concédelo y vuelve aquí.</string>
     <string name="ui_file_browser_permission_button">Conceder acceso</string>
     <string name="ui_file_browser_permission_footer_grant">Conceder acceso</string>
     <string name="ui_file_browser_permission_footer_back">Atrás</string>
@@ -659,7 +659,7 @@
     <string name="ui_file_browser_new_folder_error_exists">Esa carpeta ya existe</string>
     <string name="ui_file_browser_new_folder_error_failed">No se pudo crear la carpeta</string>
 
-    <!-- App shell and startup (ui/ArgosyApp.kt, ui/ArgosyViewModel.kt) -->
+    <!-- App shell and startup (ui/GameioApp.kt, ui/GameioViewModel.kt) -->
 
     <string name="ui_startup_status_initializing">Iniciando...</string>
     <string name="ui_startup_status_loading_library">Cargando biblioteca...</string>

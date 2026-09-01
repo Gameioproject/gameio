@@ -362,7 +362,7 @@
     <string name="dual_detail_file_picker_choose_title">फ़ाइलें चुनें</string>
 
     <string name="dual_detail_steam_install_heading">इंस्टॉल लोकेशन</string>
-    <string name="dual_detail_steam_install_argosy">Argosy के ज़रिए डाउनलोड करें</string>
+    <string name="dual_detail_steam_install_argosy">Gameio के ज़रिए डाउनलोड करें</string>
     <string name="dual_detail_steam_install_external">इंस्टॉल्ड के रूप में चिह्नित करें</string>
     <string name="dual_detail_steam_install_managed_by">%1$s द्वारा प्रबंधित</string>
 

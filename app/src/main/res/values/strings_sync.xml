@@ -12,7 +12,7 @@
          outcome, the step's bad outcome. All are statements about the step, never
          commands to the user. -->
 
-    <!-- Step in progress: Argosy is looking for a save file on the server. Present
+    <!-- Step in progress: Gameio is looking for a save file on the server. Present
          participle, "we are checking". -->
     <string name="sync_prelaunch_checking_save">Checking save file...</string>
     <!-- Outcome of that step: a save exists on the server. Past participle describing
@@ -85,27 +85,27 @@
     <!-- Save sync overlay, blocked. Each blocked reason has a short heading and a
          longer explanation underneath it. -->
 
-    <!-- Heading: Argosy has not been granted the Android permission it needs to read
+    <!-- Heading: Gameio has not been granted the Android permission it needs to read
          the emulator's save folder. Noun phrase describing what is missing. -->
     <string name="sync_blocked_permission_title">File access permission required</string>
     <!-- Explanation under that heading. %1$s is the emulator's name. "All files access"
          is the exact wording of the Android system setting; use whatever wording that
          setting has in your language so the user can find it. -->
     <string name="sync_blocked_permission_detail">Grant \"All files access\" permission to sync saves for %1$s.</string>
-    <!-- Stands in for the emulator's name in the explanation above when Argosy does not
+    <!-- Stands in for the emulator's name in the explanation above when Gameio does not
          know which emulator it is. -->
     <string name="sync_blocked_permission_emulator_fallback">this emulator</string>
 
-    <!-- Heading: the folder the emulator keeps its saves in is not where Argosy looked.
+    <!-- Heading: the folder the emulator keeps its saves in is not where Gameio looked.
          Adjective phrase describing the folder. -->
     <string name="sync_blocked_path_not_found_title">Save folder not found</string>
     <!-- Explanation under that heading. %1$s is the emulator's name. -->
     <string name="sync_blocked_path_not_found_detail">The save folder for %1$s was not found. The emulator may use a non-standard save location.</string>
-    <!-- Stands in for the emulator's name in the explanation above when Argosy does not
+    <!-- Stands in for the emulator's name in the explanation above when Gameio does not
          know which emulator it is. -->
     <string name="sync_blocked_path_not_found_emulator_fallback">this emulator</string>
 
-    <!-- Heading: the device itself refuses to let Argosy read the save folder, even
+    <!-- Heading: the device itself refuses to let Gameio read the save folder, even
          with permission granted. Past participle describing the access. -->
     <string name="sync_blocked_access_denied_title">Save folder access blocked</string>
     <!-- Explanation under that heading, for every platform except Switch. %1$s is the
@@ -113,10 +113,10 @@
          are. -->
     <string name="sync_blocked_access_denied_detail">Your device is blocking access to %1$s save data. This may be due to manufacturer restrictions (Samsung, Xiaomi, etc.) or security policies.</string>
     <!-- Explanation under that heading, for Switch emulators, which can be pointed at a
-         save folder Argosy is allowed to read. %1$s and %2$s are both the emulator's
+         save folder Gameio is allowed to read. %1$s and %2$s are both the emulator's
          name. "Android/data" is a literal folder path; leave it untranslated.
-         "Argosy" is this app's name. -->
-    <string name="sync_blocked_access_denied_switch_detail">Your device is blocking access to %1$s save data. Configure an external save path in %2$s (outside Android/data), then set the same path in Argosy.</string>
+         "Gameio" is this app's name. -->
+    <string name="sync_blocked_access_denied_switch_detail">Your device is blocking access to %1$s save data. Configure an external save path in %2$s (outside Android/data), then set the same path in Gameio.</string>
     <!-- Stands in for the emulator's name in the two explanations above, where the
          sentence is about whose save data is blocked. -->
     <string name="sync_blocked_access_denied_emulator_fallback">emulator</string>
@@ -128,7 +128,7 @@
          background. -->
 
     <!-- Name of the Android notification channel, shown in the system's notification
-         settings for Argosy. Noun phrase naming a kind of notification. -->
+         settings for Gameio. Noun phrase naming a kind of notification. -->
     <string name="sync_service_channel_name">Save Sync</string>
     <!-- Description of that channel, shown under its name in system settings. -->
     <string name="sync_service_channel_description">Shows save sync progress in background</string>
@@ -152,7 +152,7 @@
     <!-- Android system notification shown while downloads run in the background. -->
 
     <!-- Name of the Android notification channel, shown in the system's notification
-         settings for Argosy. Noun phrase naming a kind of notification. -->
+         settings for Gameio. Noun phrase naming a kind of notification. -->
     <string name="sync_download_channel_name">Download Progress</string>
     <!-- Description of that channel, shown under its name in system settings. -->
     <string name="sync_download_channel_description">Shows download progress in background</string>
@@ -165,7 +165,7 @@
          game's title. Present participle. -->
     <string name="sync_download_service_extracting">Extracting: %1$s</string>
     <!-- Notification line while an unpacked game is being moved to where ROMs are kept.
-         %1$s is the game's title. "ROM storage" is the folder Argosy keeps game files
+         %1$s is the game's title. "ROM storage" is the folder Gameio keeps game files
          in. -->
     <string name="sync_download_service_moving">Moving to ROM storage: %1$s</string>
     <!-- Notification line while a game is being fetched from the game server. %1$s is
@@ -187,7 +187,7 @@
     <!-- Android system notification shown while a game is being played. -->
 
     <!-- Name of the Android notification channel, shown in the system's notification
-         settings for Argosy. Noun phrase: one stretch of play. -->
+         settings for Gameio. Noun phrase: one stretch of play. -->
     <string name="sync_session_channel_name">Game Session</string>
     <!-- Description of that channel, shown under its name in system settings. -->
     <string name="sync_session_channel_description">Monitors save files during gameplay</string>
@@ -197,7 +197,7 @@
     <!-- Title of the notification once the game has written a save, with the game's
          title underneath it. Past participle describing the save. -->
     <string name="sync_session_notification_save_detected">Save detected</string>
-    <!-- Stands in for the game's title in that notification when Argosy was not told
+    <!-- Stands in for the game's title in that notification when Gameio was not told
          which game it is. Noun, singular. -->
     <string name="sync_session_game_fallback">Game</string>
 
@@ -219,7 +219,7 @@
     <!-- Second line of that notice. %1$s is the game's title, %2$s is the reason the
          server or the device gave. -->
     <string name="sync_session_save_upload_failed_subtitle">%1$s: %2$s</string>
-    <!-- Stands in for the game's title on that second line when Argosy cannot name the
+    <!-- Stands in for the game's title on that second line when Gameio cannot name the
          game. Noun, singular: the save file itself. -->
     <string name="sync_session_save_upload_failed_name_fallback">Save</string>
 
@@ -230,7 +230,7 @@
         <item quantity="one">%1$d save needs your attention</item>
         <item quantity="other">%1$d saves need your attention</item>
     </plurals>
-    <!-- Second line of that notice. "Save Sync" names Argosy's own screen for resolving
+    <!-- Second line of that notice. "Save Sync" names Gameio's own screen for resolving
          these; use the same wording you gave that screen. -->
     <string name="sync_conflict_pending_subtitle">Open Save Sync to resolve. Local saves are unchanged.</string>
 
@@ -239,7 +239,7 @@
     <!-- Notice when a download is asked for with no media server connected. Verb phrase
          addressed to the user. -->
     <string name="sync_media_signin_title">Sign in to download</string>
-    <!-- Second line of that notice. "Settings" names Argosy's own settings screen. -->
+    <!-- Second line of that notice. "Settings" names Gameio's own settings screen. -->
     <string name="sync_media_signin_subtitle">Connect a media server from Settings</string>
 
     <!-- Counts titles inside the notices below. Used where a sentence needs the number
@@ -284,7 +284,7 @@
          asked for anything. Present participle, "we are getting ready". -->
     <string name="sync_media_step_preparing">Preparing</string>
     <!-- Step name shown while the server starts converting the title to the smaller
-         size that was asked for. Verb phrase describing what Argosy is doing. -->
+         size that was asked for. Verb phrase describing what Gameio is doing. -->
     <string name="sync_media_step_awaiting_transcode">Waiting for the server to start the transcode</string>
 
     <!-- Notice when the smaller size could not be produced, so the full-size file is
@@ -324,13 +324,13 @@
     <!-- Notice when the stored Steam sign-in is no longer accepted, raised while
          signing in. Past participle describing the session. -->
     <string name="sync_steam_auth_expired_title">Steam session expired</string>
-    <!-- Second line of that notice. "Settings &gt; Steam" is the path through Argosy's
+    <!-- Second line of that notice. "Settings &gt; Steam" is the path through Gameio's
          own settings screens. -->
     <string name="sync_steam_auth_expired_subtitle">Sign in again from Settings &gt; Steam</string>
     <!-- Notice when the stored Steam sign-in is no longer accepted, raised while trying
          to download. Past participle describing the session. -->
     <string name="sync_steam_download_signed_out_title">Steam session expired</string>
-    <!-- Second line of that notice. "Settings &gt; Steam" is the path through Argosy's
+    <!-- Second line of that notice. "Settings &gt; Steam" is the path through Gameio's
          own settings screens. -->
     <string name="sync_steam_download_signed_out_subtitle">Sign in from Settings &gt; Steam to download</string>
     <!-- Notice when a Steam download cannot start because the folder it would go in is
@@ -361,7 +361,7 @@
 
     <!-- Emulator core selection. -->
 
-    <!-- Notice when the core the user picked would not start and Argosy fell back to
+    <!-- Notice when the core the user picked would not start and Gameio fell back to
          the default one. %1$s is the core that failed, %2$s the one used instead. Both
          are core names from the libretro project; leave them as they are. -->
     <string name="sync_launch_core_fallback">Failed to load %1$s, using %2$s instead</string>
