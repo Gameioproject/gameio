@@ -99,7 +99,7 @@ internal class LightSectionsInput(
 
     private fun handleAccountsLeftRight(direction: Int): InputResult {
         val state = viewModel.uiState.value
-        if (state.accounts.pairing.active || state.accounts.switchInProgress) {
+        if (state.accounts.signIn.active || state.accounts.switchInProgress) {
             return InputResult.HANDLED
         }
         return if (viewModel.moveAccountRowAction(direction)) {
@@ -133,15 +133,7 @@ internal class LightSectionsInput(
     }
 
     private fun handleRomMLeftRight(direction: Int): InputResult {
-        val state = viewModel.uiState.value
-        if (state.server.rommConfiguring) {
-            if (!state.server.rommDevicePairing && state.focusedIndex == 1) {
-                val methods = com.nendo.argosy.ui.screens.settings.RomMAuthMethod.entries
-                val next = methods[(methods.indexOf(state.server.rommAuthMethod) + direction).mod(methods.size)]
-                viewModel.setRommAuthMethod(next)
-                return InputResult.HANDLED
-            }
-        }
+        // The sign-in form is text fields and buttons; left/right belongs to the text cursor.
         return InputResult.UNHANDLED
     }
 

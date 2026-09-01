@@ -280,8 +280,10 @@ class SettingsViewModel @Inject constructor(
     fun confirmAccountRemoval(policy: com.nendo.argosy.data.sync.UnflushedQueuePolicy) =
         accountsDelegate.confirmRemoval(viewModelScope, policy)
     fun startAddAccount() = accountsDelegate.requestAddAccount()
-    fun retryAddAccountPairing() = accountsDelegate.startPairing(viewModelScope)
-    fun cancelAddAccount() = accountsDelegate.cancelPairing()
+    fun submitAddAccount() = accountsDelegate.submitSignIn(viewModelScope)
+    fun setAddAccountUsername(username: String) = accountsDelegate.setSignInUsername(username)
+    fun setAddAccountPassword(password: String) = accountsDelegate.setSignInPassword(password)
+    fun cancelAddAccount() = accountsDelegate.cancelSignIn()
     fun confirmAccountExitPrompt() = accountsDelegate.confirmExitPrompt(viewModelScope)
     fun cancelAccountExitPrompt() = accountsDelegate.cancelExitPrompt()
     fun retryInterruptedAccountSwitch() = accountsDelegate.retryInterruptedSwitch(viewModelScope)
@@ -1702,11 +1704,8 @@ class SettingsViewModel @Inject constructor(
 
     fun setRommConfigUrl(url: String) = serverDelegate.setRommConfigUrl(url)
     fun commitRommUrl() = serverDelegate.commitRommUrl(viewModelScope)
-    fun setRommConfigPairingCode(code: String) = serverDelegate.setRommConfigPairingCode(code)
-    fun setRommAuthMethod(method: RomMAuthMethod) = serverDelegate.setRommAuthMethod(method)
-    fun showRommScanner() = serverDelegate.showScanner()
-    fun dismissRommScanner() = serverDelegate.dismissScanner()
-    fun handleRommScanResult(origin: String, code: String) = serverDelegate.handleScanResult(origin, code, viewModelScope) { loadSettings() }
+    fun setRommConfigUsername(username: String) = serverDelegate.setRommConfigUsername(username)
+    fun setRommConfigPassword(password: String) = serverDelegate.setRommConfigPassword(password)
     fun clearRommFocusField() = serverDelegate.clearRommFocusField()
 
     fun requestRommSignOut() =

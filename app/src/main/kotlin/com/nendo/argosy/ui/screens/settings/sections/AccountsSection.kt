@@ -32,10 +32,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.nendo.argosy.R
 import com.nendo.argosy.ui.components.ActionPreference
 import com.nendo.argosy.ui.components.FocusedScroll
-import com.nendo.argosy.ui.components.QrCodeWithOverlay
 import com.nendo.argosy.ui.primitives.ActionButton
 import com.nendo.argosy.ui.screens.settings.AccountRowAction
 import com.nendo.argosy.ui.screens.settings.AccountUi
@@ -104,7 +111,7 @@ internal fun accountsMaxFocusIndex(state: AccountsState): Int =
 fun AccountsSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
     val accounts = uiState.accounts
 
-    if (accounts.pairing.active) {
+    if (accounts.signIn.active) {
         AccountPairingPane(uiState, viewModel)
         return
     }
@@ -389,7 +396,12 @@ private fun AccountSwitchProgressPane(state: AccountsState) {
 
 @Composable
 private fun AccountPairingPane(uiState: SettingsUiState, viewModel: SettingsViewModel) {
-    val pairing = uiState.accounts.pairing
+    val signIn = uiState.accounts.signIn
+    val inputShape = RoundedCornerShape(Dimens.radiusMd)
+    val passwordFocusRequester = remember { FocusRequester() }
+    val canSubmit = !signIn.connecting &&
+        signIn.username.isNotBlank() && signIn.password.isNotBlank()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -409,7 +421,7 @@ private fun AccountPairingPane(uiState: SettingsUiState, viewModel: SettingsView
             textAlign = TextAlign.Center
         )
 
-        if (pairing.connecting) {
+        if (signIn.connecting) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -418,29 +430,38 @@ private fun AccountPairingPane(uiState: SettingsUiState, viewModel: SettingsView
             ) {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
-        }
-
-        pairing.verificationUrl?.let { url ->
-            QrCodeWithOverlay(data = url)
-        }
-
-        pairing.userCode?.let { code ->
-            Text(
-                text = code,
-                style = MaterialTheme.typography.titleLarge.copy(fontFamily = FontFamily.Monospace),
-                color = MaterialTheme.colorScheme.onSurface
+        } else {
+            OutlinedTextField(
+                value = signIn.username,
+                onValueChange = { viewModel.setAddAccountUsername(it) },
+                label = { Text(stringResource(R.string.settings_romm_config_username_label)) },
+                singleLine = true,
+                shape = inputShape,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(onNext = { passwordFocusRequester.requestFocus() }),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = signIn.password,
+                onValueChange = { viewModel.setAddAccountPassword(it) },
+                label = { Text(stringResource(R.string.settings_romm_config_password_label)) },
+                singleLine = true,
+                shape = inputShape,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Go
+                ),
+                keyboardActions = KeyboardActions(
+                    onGo = { if (canSubmit) viewModel.submitAddAccount() }
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(passwordFocusRequester)
             )
         }
 
-        pairing.verificationUrl?.let { url ->
-            Text(
-                text = url,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        pairing.error?.let { message ->
+        signIn.error?.let { message ->
             Text(
                 text = message,
                 style = MaterialTheme.typography.bodySmall,
@@ -452,20 +473,17 @@ private fun AccountPairingPane(uiState: SettingsUiState, viewModel: SettingsView
         Spacer(modifier = Modifier.height(Dimens.spacingSm))
 
         ActionButton(
-            label = if (pairing.error != null) {
-                stringResource(R.string.settings_accounts_pairing_retry)
-            } else {
-                stringResource(R.string.settings_accounts_pairing_cancel)
-            },
-            onClick = {
-                if (pairing.error != null) {
-                    viewModel.retryAddAccountPairing()
-                } else {
-                    viewModel.cancelAddAccount()
-                }
-            },
+            label = stringResource(R.string.settings_accounts_sign_in_confirm),
+            onClick = { if (canSubmit) viewModel.submitAddAccount() },
             focused = true,
-            primary = pairing.error != null
+            primary = true
+        )
+
+        ActionButton(
+            label = stringResource(R.string.settings_accounts_pairing_cancel),
+            onClick = { viewModel.cancelAddAccount() },
+            focused = false,
+            primary = false
         )
     }
 }

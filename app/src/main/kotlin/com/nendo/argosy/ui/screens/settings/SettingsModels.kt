@@ -125,13 +125,6 @@ enum class ConnectionStatus {
     NOT_CONFIGURED
 }
 
-enum class RomMAuthMethod {
-    DEVICE,
-    PAIRING_CODE
-}
-
-internal const val ROMM_AUTH_METHOD_PICKER_KEY = "rommAuthMethod"
-
 internal const val SYNC_REGION_MODE_PICKER_KEY = "syncRegionMode"
 
 /**
@@ -862,17 +855,12 @@ data class ServerState(
     val rommVersion: String? = null,
     val lastRommSync: java.time.Instant? = null,
     val rommConfiguring: Boolean = false,
-    val rommAuthMethod: RomMAuthMethod = RomMAuthMethod.PAIRING_CODE,
     val rommConfigUrl: String = "",
-    val rommConfigPairingCode: String = "",
-    val rommShowScanner: Boolean = false,
-    val rommHasCamera: Boolean = false,
+    val rommConfigUsername: String = "",
+    val rommConfigPassword: String = "",
     val rommConnecting: Boolean = false,
     val rommConfigError: String? = null,
     val rommFocusField: Int? = null,
-    val rommDevicePairing: Boolean = false,
-    val rommDeviceUserCode: String? = null,
-    val rommDeviceVerificationUrl: String? = null,
     val rommSigningOut: Boolean = false,
     val showRommSignOutConfirm: Boolean = false,
     val rommSignOutPendingUploads: Int = 0,
@@ -899,11 +887,12 @@ data class AccountUi(
  */
 enum class AccountRowAction { SWITCH, REMOVE }
 
-data class AccountPairingState(
+/** The add-an-account form: the same credentials the server owner issued. */
+data class AccountSignInState(
     val active: Boolean = false,
     val connecting: Boolean = false,
-    val userCode: String? = null,
-    val verificationUrl: String? = null,
+    val username: String = "",
+    val password: String = "",
     val error: String? = null
 )
 
@@ -911,7 +900,7 @@ data class AccountsState(
     val accounts: List<AccountUi> = emptyList(),
     val isLoading: Boolean = true,
     val rowActionIndex: Int = 0,
-    val pairing: AccountPairingState = AccountPairingState(),
+    val signIn: AccountSignInState = AccountSignInState(),
     val notice: String? = null,
     val exitPromptAccountId: Long? = null,
     val exitPromptIsForAdd: Boolean = false,

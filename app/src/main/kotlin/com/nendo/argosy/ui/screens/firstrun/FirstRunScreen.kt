@@ -67,10 +67,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.nendo.argosy.ui.components.QrCodeWithOverlay
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -83,6 +84,21 @@ import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.TextField
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.layout.BoxWithConstraints
 import com.nendo.argosy.R
 import com.nendo.argosy.data.local.entity.PlatformEntity
 import com.nendo.argosy.ui.components.PermissionCard
@@ -140,21 +156,6 @@ fun FirstRunScreen(
     val chooseFolder = { viewModel.openFolderPicker() }
     val chooseImageCacheFolder = { viewModel.openImageCachePicker() }
 
-    val openVerificationUrl = {
-        val url = viewModel.uiState.value.rommDeviceVerificationUrl
-        if (url != null) {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-            try {
-                context.startActivity(intent)
-                viewModel.setBrowserMissing(false)
-            } catch (_: ActivityNotFoundException) {
-                viewModel.setBrowserMissing(true)
-            }
-        }
-    }
-
     var showFileBrowser by remember { mutableStateOf(false) }
     var showImageCacheBrowser by remember { mutableStateOf(false) }
 
@@ -167,8 +168,7 @@ fun FirstRunScreen(
             onRequestOverlay = requestOverlay,
             onRequestUsageStats = requestUsageStats,
             onChooseFolder = chooseFolder,
-            onChooseImageCacheFolder = chooseImageCacheFolder,
-            onOpenVerificationUrl = openVerificationUrl
+            onChooseImageCacheFolder = chooseImageCacheFolder
         )
     }
 
@@ -221,41 +221,21 @@ fun FirstRunScreen(
                     isFocused = true,
                     onGetStarted = { viewModel.nextStep() }
                 )
-                FirstRunStep.ROMM_LOGIN -> if (uiState.rommShowScanner) {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        com.nendo.argosy.ui.components.QrScannerWithPermission(
-                            onResult = { result ->
-                                viewModel.handleScanResult(result.origin, result.code)
-                            },
-                            onDismiss = { viewModel.dismissScanner() }
-                        )
-                    }
-                } else RommLoginStep(
+                FirstRunStep.ROMM_LOGIN -> RommLoginStep(
                     url = uiState.rommUrl,
                     urlCommitted = uiState.rommUrlCommitted,
-                    pairingCode = uiState.rommPairingCode,
-                    devicePairing = uiState.rommDevicePairing,
-                    deviceUserCode = uiState.rommDeviceUserCode,
-                    deviceVerificationUrl = uiState.rommDeviceVerificationUrl,
-                    supportsDeviceAuth = uiState.rommSupportsDeviceAuth,
-                    browserMissing = uiState.rommBrowserMissing,
-                    hasCamera = uiState.rommHasCamera,
+                    username = uiState.rommUsername,
+                    password = uiState.rommPassword,
                     isConnecting = uiState.isConnecting,
                     error = firstRunErrorText(uiState.connectionError),
                     focusedIndex = uiState.focusedIndex,
                     rommFocusField = uiState.rommFocusField,
-                    onUrlChange = viewModel::setRommUrl,
-                    onPairingCodeChange = viewModel::setRommPairingCode,
-                    onClearPairingCode = { viewModel.clearRommPairingCode() },
-                    onCodeComplete = { viewModel.setFocusedIndex(1) },
+                    onUrlChange = { viewModel.setRommUrl(it) },
+                    onUsernameChange = { viewModel.setRommUsername(it) },
+                    onPasswordChange = { viewModel.setRommPassword(it) },
                     onCommitUrl = { viewModel.commitUrl() },
                     onEditUrl = { viewModel.editUrl() },
                     onConnect = { viewModel.connectToRomm() },
-                    onScan = { viewModel.showScanner() },
-                    onCancelPairing = { viewModel.cancelDevicePairing() },
-                    onOpenVerificationUrl = openVerificationUrl,
-                    onUseManualCode = { viewModel.useManualPairingCode() },
-                    onUseDevicePairing = { viewModel.useDevicePairing() },
                     onBack = { viewModel.previousStep() },
                     onClearFocusField = { viewModel.clearRommFocusField() }
                 )
@@ -389,26 +369,38 @@ private fun StepColumn(
 
 @Composable
 private fun WelcomeStep(isFocused: Boolean, onGetStarted: () -> Unit) {
-    StepColumn {
-        Spacer(modifier = Modifier.height(Dimens.spacingXl))
-        Text(
-            text = "ARGOSY",
-            style = MaterialTheme.typography.displayMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Spacer(modifier = Modifier.height(Dimens.spacingLg))
-        Text(
-            text = stringResource(R.string.firstrun_welcome_intro),
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Spacer(modifier = Modifier.height(Dimens.spacingXxl))
-        FocusableButton(
-            text = stringResource(R.string.firstrun_welcome_button_start),
-            isFocused = isFocused,
-            onClick = onGetStarted
-        )
+    GioBackdrop {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(Dimens.spacingXl)
+        ) {
+            GameioMark(modifier = Modifier.size(72.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Gameio",
+                color = GioInk,
+                fontSize = 44.sp,
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = (-1.4).sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.firstrun_welcome_intro),
+                color = GioDim,
+                fontSize = 15.sp,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            GioPrimaryButton(
+                text = stringResource(R.string.firstrun_welcome_button_start),
+                isFocused = isFocused,
+                onClick = onGetStarted
+            )
+        }
     }
 }
 
@@ -416,362 +408,394 @@ private fun WelcomeStep(isFocused: Boolean, onGetStarted: () -> Unit) {
 private fun RommLoginStep(
     url: String,
     urlCommitted: Boolean,
-    pairingCode: String,
-    devicePairing: Boolean,
-    deviceUserCode: String?,
-    deviceVerificationUrl: String?,
-    supportsDeviceAuth: Boolean,
-    browserMissing: Boolean,
-    hasCamera: Boolean,
+    username: String,
+    password: String,
     isConnecting: Boolean,
     error: String?,
     focusedIndex: Int,
     rommFocusField: Int?,
     onUrlChange: (String) -> Unit,
-    onPairingCodeChange: (String) -> Unit,
-    onClearPairingCode: () -> Unit,
-    onCodeComplete: () -> Unit,
+    onUsernameChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
     onCommitUrl: () -> Unit,
     onEditUrl: () -> Unit,
     onConnect: () -> Unit,
-    onScan: () -> Unit,
-    onCancelPairing: () -> Unit,
-    onOpenVerificationUrl: () -> Unit,
-    onUseManualCode: () -> Unit,
-    onUseDevicePairing: () -> Unit,
     onBack: () -> Unit,
     onClearFocusField: () -> Unit
 ) {
-    if (devicePairing) {
-        DevicePairingStep(
-            userCode = deviceUserCode,
-            verificationUrl = deviceVerificationUrl,
-            browserMissing = browserMissing,
-            error = error,
-            focusedIndex = focusedIndex,
-            onOpenVerificationUrl = onOpenVerificationUrl,
-            onUseManualCode = onUseManualCode,
-            onCancel = onCancelPairing
-        )
-        return
-    }
-
-    val inputShape = RoundedCornerShape(Dimens.radiusMd)
     val urlFocusRequester = remember { FocusRequester() }
-    val pairingCodeFocusRequester = remember { FocusRequester() }
+    val usernameFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
     val focusManager: FocusManager = LocalFocusManager.current
     val keyboard: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current
 
-    val normalizedCode = pairingCode.replace("-", "").replace(" ", "")
-    val codeComplete = normalizedCode.length == 8
     var wasUrlFocused by remember { mutableStateOf(false) }
+    val canConnect = url.isNotBlank() && username.isNotBlank() && password.isNotBlank()
 
     LaunchedEffect(rommFocusField) {
         when (rommFocusField) {
             0 -> urlFocusRequester.requestFocus()
-            2 -> pairingCodeFocusRequester.requestFocus()
+            1 -> usernameFocusRequester.requestFocus()
+            2 -> passwordFocusRequester.requestFocus()
         }
         if (rommFocusField != null) {
             onClearFocusField()
         }
     }
-
-    if (!urlCommitted) {
-        LaunchedEffect(focusedIndex) {
-            if (focusedIndex != 0) {
-                keyboard?.hide()
-                focusManager.clearFocus()
-            }
-        }
-        StepColumn {
-            StepHeader(title = stringResource(R.string.firstrun_romm_url_title))
-            Spacer(modifier = Modifier.height(Dimens.spacingLg))
-
-            OutlinedTextField(
-                value = url,
-                onValueChange = onUrlChange,
-                label = { Text(stringResource(R.string.firstrun_romm_url_field_label)) },
-                placeholder = { Text("https://romm.example.com") },
-                singleLine = true,
-                shape = inputShape,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
-                keyboardActions = KeyboardActions(
-                    onGo = {
-                        if (!isConnecting && url.isNotBlank()) {
-                            keyboard?.hide()
-                            focusManager.clearFocus()
-                            onCommitUrl()
-                        }
-                    }
-                ),
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .focusRequester(urlFocusRequester)
-                    .onFocusChanged { fs ->
-                        if (wasUrlFocused && !fs.isFocused && url.isNotBlank()) {
-                            onCommitUrl()
-                        }
-                        wasUrlFocused = fs.isFocused
-                    }
-                    .then(
-                        if (focusedIndex == 0)
-                            Modifier
-                                .border(2.dp, MaterialTheme.colorScheme.primary, inputShape)
-                                .background(LocalArgosyTheme.current.focusAccent.copy(alpha = 0.15f), inputShape)
-                        else Modifier
-                    )
-            )
-            Spacer(modifier = Modifier.height(Dimens.spacingMd))
-
-            Text(
-                text = stringResource(R.string.firstrun_romm_url_hint),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(0.8f)
-            )
-
-            if (error != null) {
-                Spacer(modifier = Modifier.height(Dimens.spacingMd))
-                Text(
-                    text = error,
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth(0.8f)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(Dimens.spacingLg))
-
-            Row {
-                FocusableButton(
-                    text = if (isConnecting) {
-                        stringResource(R.string.firstrun_romm_url_button_checking)
-                    } else {
-                        stringResource(R.string.firstrun_romm_url_button_continue)
-                    },
-                    isFocused = focusedIndex == 1,
-                    enabled = !isConnecting && url.isNotBlank(),
-                    onClick = onCommitUrl
-                )
-                Spacer(modifier = Modifier.width(Dimens.spacingMd))
-                FocusableOutlinedButton(
-                    text = stringResource(R.string.firstrun_romm_url_button_back),
-                    isFocused = focusedIndex == 2,
-                    enabled = !isConnecting,
-                    onClick = onBack
-                )
-            }
-        }
-        return
-    }
-
-    LaunchedEffect(codeComplete) {
-        if (codeComplete) {
+    LaunchedEffect(focusedIndex, urlCommitted) {
+        val onAField = if (urlCommitted) focusedIndex <= 2 else focusedIndex == 0
+        if (!onAField) {
             keyboard?.hide()
             focusManager.clearFocus()
-            onCodeComplete()
         }
     }
 
-    StepColumn {
-        StepHeader(title = stringResource(R.string.firstrun_pairing_code_title))
-        Spacer(modifier = Modifier.height(Dimens.spacingSm))
+    GioBackdrop {
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val twoPane = maxWidth > maxHeight
 
-        Text(
-            text = url,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(0.8f)
-        )
-        Spacer(modifier = Modifier.height(Dimens.spacingMd))
-
-        Text(
-            text = stringResource(R.string.firstrun_pairing_code_hint),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(0.8f)
-        )
-        Spacer(modifier = Modifier.height(Dimens.spacingSm))
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSm)
-        ) {
-            com.nendo.argosy.ui.screens.settings.components.PairingCodeInput(
-                code = pairingCode,
-                onCodeChange = onPairingCodeChange,
-                isFocused = focusedIndex == 0,
-                focusRequester = pairingCodeFocusRequester
-            )
-            if (pairingCode.isNotEmpty()) {
-                IconButton(
-                    onClick = onClearPairingCode,
-                    modifier = Modifier.size(32.dp)
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Clear,
-                        contentDescription = stringResource(R.string.firstrun_pairing_code_clear_description),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+            val brand: @Composable () -> Unit = {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    GameioMark(modifier = Modifier.size(if (twoPane) 66.dp else 52.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "Gameio",
+                        color = GioInk,
+                        fontSize = if (twoPane) 40.sp else 32.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        letterSpacing = (-1.2).sp
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = if (urlCommitted) {
+                            stringResource(R.string.firstrun_romm_sign_in_hint)
+                        } else {
+                            stringResource(R.string.firstrun_romm_url_hint)
+                        },
+                        color = GioDim,
+                        fontSize = 13.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.widthIn(max = 340.dp)
                     )
                 }
             }
+
+            val form: @Composable () -> Unit = {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    if (!urlCommitted) {
+                        GioTextField(
+                            value = url,
+                            onValueChange = onUrlChange,
+                            label = stringResource(R.string.firstrun_romm_url_field_label),
+                            placeholder = "https://playgameio.com",
+                            gamepadFocused = focusedIndex == 0,
+                            focusRequester = urlFocusRequester,
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+                            keyboardActions = KeyboardActions(
+                                onGo = {
+                                    if (!isConnecting && url.isNotBlank()) {
+                                        keyboard?.hide()
+                                        focusManager.clearFocus()
+                                        onCommitUrl()
+                                    }
+                                }
+                            ),
+                            onFocusChanged = { focused ->
+                                if (wasUrlFocused && !focused && url.isNotBlank()) onCommitUrl()
+                                wasUrlFocused = focused
+                            }
+                        )
+                        GioError(error)
+                        Spacer(modifier = Modifier.height(22.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMd)) {
+                            GioPrimaryButton(
+                                text = if (isConnecting) {
+                                    stringResource(R.string.firstrun_romm_url_button_checking)
+                                } else {
+                                    stringResource(R.string.firstrun_romm_url_button_continue)
+                                },
+                                isFocused = focusedIndex == 1,
+                                enabled = !isConnecting && url.isNotBlank(),
+                                onClick = onCommitUrl
+                            )
+                            GioGhostButton(
+                                text = stringResource(R.string.firstrun_romm_url_button_back),
+                                isFocused = focusedIndex == 2,
+                                onClick = onBack
+                            )
+                        }
+                    } else {
+                        GioTextField(
+                            value = username,
+                            onValueChange = onUsernameChange,
+                            label = stringResource(R.string.settings_romm_config_username_label),
+                            gamepadFocused = focusedIndex == 1,
+                            focusRequester = usernameFocusRequester,
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                            keyboardActions = KeyboardActions(
+                                onNext = { passwordFocusRequester.requestFocus() }
+                            )
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        GioTextField(
+                            value = password,
+                            onValueChange = onPasswordChange,
+                            label = stringResource(R.string.settings_romm_config_password_label),
+                            gamepadFocused = focusedIndex == 2,
+                            focusRequester = passwordFocusRequester,
+                            isPassword = true,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Password,
+                                imeAction = ImeAction.Go
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onGo = {
+                                    if (!isConnecting && canConnect) {
+                                        keyboard?.hide()
+                                        focusManager.clearFocus()
+                                        onConnect()
+                                    }
+                                }
+                            )
+                        )
+                        GioError(error)
+                        Spacer(modifier = Modifier.height(22.dp))
+                        Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMd)) {
+                            GioPrimaryButton(
+                                text = if (isConnecting) {
+                                    stringResource(R.string.firstrun_romm_sign_in_connecting)
+                                } else {
+                                    stringResource(R.string.firstrun_romm_sign_in_button)
+                                },
+                                isFocused = focusedIndex == 3,
+                                enabled = !isConnecting && canConnect,
+                                onClick = onConnect
+                            )
+                            GioGhostButton(
+                                text = stringResource(R.string.firstrun_romm_sign_in_change_server),
+                                isFocused = focusedIndex == 4,
+                                enabled = !isConnecting,
+                                onClick = onEditUrl
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(14.dp))
+                        Text(
+                            text = url.removePrefix("https://").removePrefix("http://").trimEnd('/'),
+                            color = GioFaint,
+                            fontSize = 12.sp
+                        )
+                    }
+                }
+            }
+
+            if (twoPane) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = Dimens.spacingXl, vertical = Dimens.spacingMd)
+                ) {
+                    Box(modifier = Modifier.weight(0.9f), contentAlignment = Alignment.Center) { brand() }
+                    Spacer(modifier = Modifier.width(Dimens.spacingXl))
+                    Box(modifier = Modifier.weight(1.1f), contentAlignment = Alignment.Center) { form() }
+                }
+            } else {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = Dimens.spacingXl, vertical = Dimens.spacingMd)
+                ) {
+                    brand()
+                    Spacer(modifier = Modifier.height(24.dp))
+                    form()
+                }
+            }
         }
+    }
+}
 
-        if (error != null) {
-            Spacer(modifier = Modifier.height(Dimens.spacingMd))
-            Text(
-                text = error,
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(0.8f)
+
+// ---- The sign-in is the first thing anyone sees, so it carries the brand's dark
+// ground and mark rather than the theme surface the rest of first-run uses.
+
+private val GioGround = Color(0xFF0B0E13)
+private val GioFieldBg = Color(0xFF12171F)
+private val GioLine = Color(0xFF242C38)
+private val GioInk = Color(0xFFF3F6F9)
+private val GioDim = Color(0xFF98A2B0)
+private val GioFaint = Color(0xFF5D6775)
+private val GioCoral = Color(0xFFFF6B4A)
+private val GioViolet = Color(0xFF6C4DF6)
+private val GioErrorRed = Color(0xFFFF6161)
+
+/** The launcher mark: shelf spines edge-on, one game drawn out and turned to face you. */
+@Composable
+private fun GameioMark(modifier: Modifier = Modifier, tint: Color = GioInk) {
+    Canvas(modifier = modifier) {
+        val u = size.minDimension / 108f
+        fun bar(x: Float, y: Float, w: Float, h: Float, r: Float) {
+            drawRoundRect(
+                color = tint,
+                topLeft = Offset(x * u, y * u),
+                size = Size(w * u, h * u),
+                cornerRadius = CornerRadius(r * u, r * u)
             )
         }
-
-        Spacer(modifier = Modifier.height(Dimens.spacingLg))
-
-        Row {
-            FocusableButton(
-                text = if (isConnecting) {
-                    stringResource(R.string.firstrun_pairing_code_button_connecting)
-                } else {
-                    stringResource(R.string.firstrun_pairing_code_button_connect)
-                },
-                isFocused = focusedIndex == 1,
-                enabled = !isConnecting && codeComplete,
-                onClick = onConnect
-            )
-            Spacer(modifier = Modifier.width(Dimens.spacingMd))
-            FocusableOutlinedButton(
-                text = stringResource(R.string.firstrun_pairing_code_button_edit_url),
-                isFocused = focusedIndex == 2,
-                enabled = !isConnecting,
-                onClick = onEditUrl
-            )
-        }
-
-        var nextIndex = 3
-        if (hasCamera) {
-            Spacer(modifier = Modifier.height(Dimens.spacingSm))
-            FocusableOutlinedButton(
-                text = stringResource(R.string.firstrun_pairing_code_button_scan),
-                isFocused = focusedIndex == nextIndex,
-                enabled = !isConnecting,
-                onClick = onScan
-            )
-            nextIndex++
-        }
-
-        if (supportsDeviceAuth) {
-            Spacer(modifier = Modifier.height(Dimens.spacingSm))
-            FocusableOutlinedButton(
-                text = stringResource(R.string.firstrun_pairing_code_button_device_pairing),
-                isFocused = focusedIndex == nextIndex,
-                enabled = !isConnecting,
-                onClick = onUseDevicePairing
-            )
+        listOf(18f, 29f, 40f, 60f, 71f, 82f).forEach { x -> bar(x, 52f, 8f, 34f, 2f) }
+        rotate(degrees = -9f, pivot = Offset(54f * u, 32.5f * u)) {
+            bar(43f, 16f, 22f, 33f, 3f)
         }
     }
 }
 
 @Composable
-private fun DevicePairingStep(
-    userCode: String?,
-    verificationUrl: String?,
-    browserMissing: Boolean,
-    error: String?,
-    focusedIndex: Int,
-    onOpenVerificationUrl: () -> Unit,
-    onUseManualCode: () -> Unit,
-    onCancel: () -> Unit
+private fun GioBackdrop(content: @Composable () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .drawBehind {
+                drawRect(GioGround)
+                // a warm glow up top and a cool one low in the corner, like the website
+                drawCircle(
+                    brush = Brush.radialGradient(
+                        colors = listOf(GioCoral.copy(alpha = 0.16f), Color.Transparent),
+                        center = Offset(size.width * 0.5f, -size.height * 0.15f),
+                        radius = size.width * 0.5f
+                    ),
+                    radius = size.width * 0.5f,
+                    center = Offset(size.width * 0.5f, -size.height * 0.15f)
+                )
+                drawCircle(
+                    brush = Brush.radialGradient(
+                        colors = listOf(GioViolet.copy(alpha = 0.10f), Color.Transparent),
+                        center = Offset(size.width * 0.08f, size.height * 1.05f),
+                        radius = size.width * 0.45f
+                    ),
+                    radius = size.width * 0.45f,
+                    center = Offset(size.width * 0.08f, size.height * 1.05f)
+                )
+            }
+    ) { content() }
+}
+
+@Composable
+private fun GioTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    gamepadFocused: Boolean,
+    focusRequester: FocusRequester,
+    placeholder: String? = null,
+    isPassword: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    onFocusChanged: ((Boolean) -> Unit)? = null
 ) {
-    StepColumn {
-        StepHeader(title = stringResource(R.string.firstrun_device_pairing_title))
-        Spacer(modifier = Modifier.height(Dimens.spacingMd))
+    val shape = RoundedCornerShape(12.dp)
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(label) },
+        placeholder = placeholder?.let { { Text(it, color = GioFaint) } },
+        singleLine = true,
+        shape = shape,
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = GioInk,
+            unfocusedTextColor = GioInk,
+            focusedContainerColor = GioFieldBg,
+            unfocusedContainerColor = GioFieldBg,
+            focusedBorderColor = GioCoral,
+            unfocusedBorderColor = GioLine,
+            focusedLabelColor = GioCoral,
+            unfocusedLabelColor = GioFaint,
+            cursorColor = GioCoral
+        ),
+        modifier = Modifier
+            .widthIn(max = 520.dp)
+            .fillMaxWidth(0.92f)
+            .focusRequester(focusRequester)
+            .then(
+                if (onFocusChanged != null) {
+                    Modifier.onFocusChanged { onFocusChanged(it.isFocused) }
+                } else Modifier
+            )
+            .then(
+                // the gamepad cursor, distinct from IME focus
+                if (gamepadFocused) Modifier.border(2.dp, GioCoral, shape) else Modifier
+            )
+    )
+}
 
+@Composable
+private fun GioError(message: String?) {
+    if (message == null) return
+    Spacer(modifier = Modifier.height(14.dp))
+    Text(
+        text = message,
+        color = GioErrorRed,
+        fontSize = 13.sp,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.widthIn(max = 460.dp)
+    )
+}
+
+@Composable
+private fun GioPrimaryButton(
+    text: String,
+    isFocused: Boolean,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    val shape = RoundedCornerShape(12.dp)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .clip(shape)
+            .background(if (enabled) GioCoral else GioCoral.copy(alpha = 0.25f))
+            .then(if (isFocused) Modifier.border(2.dp, GioInk, shape) else Modifier)
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(horizontal = 30.dp, vertical = 14.dp)
+    ) {
         Text(
-            text = stringResource(R.string.firstrun_device_pairing_hint),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(0.8f)
+            text = text,
+            color = if (enabled) GioGround else GioGround.copy(alpha = 0.55f),
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.sp,
+            maxLines = 1
         )
-        Spacer(modifier = Modifier.height(Dimens.spacingLg))
+    }
+}
 
-        verificationUrl?.let { url ->
-            QrCodeWithOverlay(data = url, size = 180.dp)
-            Spacer(modifier = Modifier.height(Dimens.spacingMd))
-        }
-
-        userCode?.let { code ->
-            Text(
-                text = code,
-                style = MaterialTheme.typography.headlineSmall.copy(fontFamily = FontFamily.Monospace)
-            )
-        }
-
-        verificationUrl?.let { url ->
-            Spacer(modifier = Modifier.height(Dimens.spacingSm))
-            Text(
-                text = url,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(0.8f)
-            )
-        }
-
-        if (error != null) {
-            Spacer(modifier = Modifier.height(Dimens.spacingMd))
-            Text(
-                text = error,
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(0.8f)
-            )
-        }
-
-        if (browserMissing) {
-            Spacer(modifier = Modifier.height(Dimens.spacingMd))
-            Text(
-                text = stringResource(R.string.firstrun_device_pairing_no_browser),
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(0.8f)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(Dimens.spacingLg))
-
-        Row {
-            FocusableButton(
-                text = stringResource(R.string.firstrun_device_pairing_button_sign_in),
-                isFocused = focusedIndex == 0,
-                enabled = verificationUrl != null,
-                onClick = onOpenVerificationUrl
-            )
-            Spacer(modifier = Modifier.width(Dimens.spacingMd))
-            FocusableOutlinedButton(
-                text = stringResource(R.string.firstrun_device_pairing_button_manual_code),
-                isFocused = focusedIndex == 1,
-                enabled = true,
-                onClick = onUseManualCode
-            )
-        }
-
-        Spacer(modifier = Modifier.height(Dimens.spacingSm))
-
-        FocusableOutlinedButton(
-            text = stringResource(R.string.firstrun_device_pairing_button_back),
-            isFocused = focusedIndex == 2,
-            enabled = true,
-            onClick = onCancel
+@Composable
+private fun GioGhostButton(
+    text: String,
+    isFocused: Boolean,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    val shape = RoundedCornerShape(12.dp)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .clip(shape)
+            .border(if (isFocused) 2.dp else 1.dp, if (isFocused) GioCoral else GioLine, shape)
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(horizontal = 26.dp, vertical = 14.dp)
+    ) {
+        Text(
+            text = text,
+            color = if (isFocused) GioInk else GioDim,
+            fontWeight = FontWeight.Medium,
+            fontSize = 15.sp,
+            maxLines = 1
         )
     }
 }

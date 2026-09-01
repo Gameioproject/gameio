@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
+import android.util.Base64
 import com.nendo.argosy.BuildConfig
 import com.nendo.argosy.data.preferences.UserPreferencesRepository
 import com.nendo.argosy.data.repository.BiosRepository
@@ -42,7 +43,7 @@ private const val DOWNLOAD_STALL_TIMEOUT_SECONDS = 300
 
 private val RECONNECT_BACKOFF_MS = listOf(5_000L, 10_000L, 20_000L, 40_000L, 60_000L)
 
-private val DEVICE_AUTH_SCOPES = listOf(
+private val CLIENT_TOKEN_SCOPES = listOf(
     "me.read", "me.write",
     "platforms.read", "platforms.write",
     "roms.read", "roms.write",
@@ -63,19 +64,15 @@ sealed class ConnectionState {
     data class Failed(val reason: String) : ConnectionState()
 }
 
-sealed class DeviceAuthPoll {
-    data object Pending : DeviceAuthPoll()
-    data object SlowDown : DeviceAuthPoll()
-    data object Denied : DeviceAuthPoll()
-    data object Expired : DeviceAuthPoll()
-    data class Approved(val token: String) : DeviceAuthPoll()
-    data class AddedAccount(val accountId: Long) : DeviceAuthPoll()
-    /**
-     * [retryable] false means no later poll can succeed either - the approval record was already
-     * consumed server-side, or the flow was never started. Retryable failures are transient
-     * transport or gateway noise and the caller is expected to keep polling.
-     */
-    data class Failed(val message: String, val retryable: Boolean = true) : DeviceAuthPoll()
+/** What a username-and-password sign-in produced. */
+sealed class SignInResult {
+    /** Signed in and this connection is now the live one. */
+    data class Connected(val token: String) : SignInResult()
+
+    /** Credentials were good, but the account was stored alongside the live one, not activated. */
+    data class AddedAccount(val accountId: Long) : SignInResult()
+
+    data class Failed(val message: String) : SignInResult()
 }
 
 @Singleton
@@ -94,8 +91,6 @@ class RomMConnectionManager @Inject constructor(
     private var baseUrl: String = ""
     private var accessToken: String? = null
     private var cachedDeviceId: String? = null
-    private var deviceAuthApi: RomMApi? = null
-    private var deviceAuthBaseUrl: String? = null
     private val detailAdapter by lazy { Moshi.Builder().build().adapter(RomMDetailResponse::class.java) }
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -343,39 +338,33 @@ class RomMConnectionManager @Inject constructor(
         }
     }
 
-    suspend fun exchangePairingCode(url: String, code: String): RomMResult<String> {
-        val urlsToTry = buildUrlsToTry(url)
-        var lastError: String? = null
-
-        for (candidateUrl in urlsToTry) {
-            val normalizedUrl = candidateUrl.trimEnd('/') + "/"
-            try {
-                val tempApi = createApi(normalizedUrl, null)
-                val response = tempApi.exchangePairingCode(RomMPairingExchangeRequest(code))
-                if (response.isSuccessful) {
-                    val token = response.body()?.rawToken
-                        ?: return RomMResult.Error("No token received")
-                    return connectWithToken(normalizedUrl, token)
-                } else {
-                    lastError = when (response.code()) {
-                        404 -> "Invalid or expired pairing code"
-                        429 -> "Too many attempts, try again later"
-                        else -> "Exchange failed (${response.code()})"
-                    }
-                }
-            } catch (e: Exception) {
-                lastError = e.message ?: "Connection failed"
-            }
+    /**
+     * Signs in with a username and password.
+     *
+     * The credentials are sent once, as HTTP Basic, to mint a long-lived client token; only that
+     * token is kept. [activate] false stores the account without making it the live one, which is
+     * how a second account gets added from Settings.
+     */
+    suspend fun connectWithPassword(
+        url: String,
+        username: String,
+        password: String,
+        activate: Boolean = true
+    ): SignInResult {
+        if (username.isBlank() || password.isBlank()) {
+            return SignInResult.Failed("Enter your username and password")
         }
 
-        return RomMResult.Error(lastError ?: "Pairing failed")
-    }
+        val basic = "Basic " + Base64.encodeToString(
+            "$username:$password".toByteArray(Charsets.UTF_8), Base64.NO_WRAP
+        )
+        val request = RomMClientTokenRequest(
+            name = deviceDisplayName(),
+            scopes = CLIENT_TOKEN_SCOPES
+        )
 
-    suspend fun beginDeviceAuth(url: String): RomMResult<RomMDeviceAuthInitResponse> {
-        val urlsToTry = buildUrlsToTry(url)
         var lastError: String? = null
-
-        for (candidateUrl in urlsToTry) {
+        for (candidateUrl in buildUrlsToTry(url)) {
             val normalizedUrl = candidateUrl.trimEnd('/') + "/"
             try {
                 val tempApi = createApi(normalizedUrl, null)
@@ -384,145 +373,85 @@ class RomMConnectionManager @Inject constructor(
                     lastError = "Server returned ${hb.code()}"
                     continue
                 }
-                val version = hb.body()?.version ?: "unknown"
-                if (!RomMCapabilities.from(version).supportsDeviceAuth) {
-                    return RomMResult.Error(
-                        "Device pairing requires RomM ${RomMCapabilities.DEVICE_AUTH_MIN_VERSION}+ (server is $version)"
+
+                var response = tempApi.createClientToken(basic, request)
+
+                // A non-admin account holds a narrower scope set than the full list above,
+                // and the server rejects the whole request naming the ones it refused. Drop
+                // exactly those and ask again, so a restricted account still signs in.
+                if (response.code() == 403) {
+                    val refused = refusedScopes(parseDetail(response.errorBody()?.string()))
+                    if (refused.isNotEmpty()) {
+                        val allowed = CLIENT_TOKEN_SCOPES - refused
+                        Logger.info(TAG, "connectWithPassword: server refused $refused, retrying with ${allowed.size} scopes")
+                        response = tempApi.createClientToken(basic, request.copy(scopes = allowed))
+                    }
+                }
+
+                if (!response.isSuccessful) {
+                    // A reachable server that rejects the credentials is an answer, not a reason
+                    // to keep trying other addresses for the same host.
+                    return SignInResult.Failed(
+                        when (response.code()) {
+                            401 -> "Wrong username or password"
+                            403 -> "That account is disabled"
+                            400 -> parseDetail(response.errorBody()?.string())
+                                ?: "Too many sign-ins on this account. Remove one in the web app."
+                            else -> "Sign-in failed (${response.code()})"
+                        }
                     )
                 }
 
-                val request = RomMDeviceAuthInitRequest(
-                    clientDeviceIdentifier = clientDeviceIdentifier(),
-                    name = deviceDisplayName(),
-                    clientVersion = BuildConfig.VERSION_NAME,
-                    requestedScopes = DEVICE_AUTH_SCOPES,
-                )
-                val initResponse = tempApi.deviceAuthInit(request)
-                if (initResponse.isSuccessful) {
-                    val body = initResponse.body() ?: return RomMResult.Error("Empty pairing response")
-                    deviceAuthApi = tempApi
-                    deviceAuthBaseUrl = normalizedUrl
-                    Logger.info(TAG, "beginDeviceAuth: init ok at $normalizedUrl, userCode=${body.userCode}")
-                    return RomMResult.Success(
-                        body.copy(
-                            verificationPath = absolutizeUrl(body.verificationPath, normalizedUrl),
-                            verificationPathComplete = absolutizeUrl(body.verificationPathComplete, normalizedUrl)
-                        )
-                    )
-                } else {
-                    lastError = when (initResponse.code()) {
-                        429 -> "Too many attempts, try again later"
-                        else -> "Pairing init failed (${initResponse.code()})"
+                val token = response.body()?.rawToken
+                    ?: return SignInResult.Failed("Server returned no token")
+
+                return if (activate) {
+                    when (val result = connectWithToken(normalizedUrl, token)) {
+                        is RomMResult.Success -> SignInResult.Connected(token)
+                        is RomMResult.Error -> SignInResult.Failed(result.message)
                     }
+                } else {
+                    val accountId = registerAdditionalAccount(normalizedUrl, token)
+                        ?: return SignInResult.Failed("Could not read the account on that server")
+                    SignInResult.AddedAccount(accountId)
                 }
             } catch (e: Exception) {
                 lastError = e.message ?: "Connection failed"
-                Logger.info(TAG, "beginDeviceAuth: exception at $normalizedUrl: ${e.message}")
             }
         }
 
-        return RomMResult.Error(lastError ?: "Pairing failed")
+        return SignInResult.Failed(lastError ?: "Could not reach that server")
     }
 
-    /**
-     * [activateOnSuccess] false pairs an ADDITIONAL account: the row is stored but the device
-     * stays signed in as whoever it was. Activating on pair would skip the switch teardown and
-     * leave the new account playing on the previous one's saves.
-     */
-    suspend fun pollDeviceAuthOnce(
-        deviceCode: String,
-        activateOnSuccess: Boolean = true
-    ): DeviceAuthPoll {
-        val authApi = deviceAuthApi
-            ?: return DeviceAuthPoll.Failed("Pairing not started", retryable = false)
-        val base = deviceAuthBaseUrl
-            ?: return DeviceAuthPoll.Failed("Pairing not started", retryable = false)
-        return try {
-            val response = authApi.deviceAuthToken(RomMDeviceAuthTokenRequest(deviceCode))
-            if (response.isSuccessful) {
-                val body = response.body()
-                    ?: return DeviceAuthPoll.Failed("Empty token response", retryable = false)
-                try {
-                    if (activateOnSuccess) {
-                        finalizeDeviceAuth(base, body)
-                        DeviceAuthPoll.Approved(body.accessToken)
-                    } else {
-                        val accountId = registerAdditionalAccount(base, body)
-                            ?: return DeviceAuthPoll.Failed(
-                                "Could not identify the paired user",
-                                retryable = false
-                            )
-                        DeviceAuthPoll.AddedAccount(accountId)
-                    }
-                } catch (e: Exception) {
-                    Logger.info(TAG, "pollDeviceAuthOnce: approval landed but sign-in failed: ${e.message}")
-                    DeviceAuthPoll.Failed(
-                        e.message ?: "Approved, but signing in failed",
-                        retryable = false
-                    )
-                }
-            } else {
-                when (parseDetail(response.errorBody()?.string())) {
-                    "authorization_pending" -> DeviceAuthPoll.Pending
-                    "slow_down" -> DeviceAuthPoll.SlowDown
-                    "access_denied" -> DeviceAuthPoll.Denied
-                    "expired_token" -> DeviceAuthPoll.Expired
-                    else -> DeviceAuthPoll.Failed("Pairing failed (${response.code()})")
-                }
-            }
-        } catch (e: Exception) {
-            DeviceAuthPoll.Failed(e.message ?: "Connection failed")
-        }
-    }
-
-    fun cancelDeviceAuth() {
-        deviceAuthApi = null
-        deviceAuthBaseUrl = null
-    }
-
-    private suspend fun registerAdditionalAccount(
-        base: String,
-        body: RomMDeviceAuthTokenResponse
-    ): Long? {
-        val newApi = createApi(base, body.accessToken)
+    private suspend fun registerAdditionalAccount(base: String, token: String): Long? {
+        val newApi = createApi(base, token)
         val user = fetchCurrentUser(newApi) ?: return null
         val accountId = rommAccountRepository.get().registerAdditional(
             rommUserId = user.id,
             username = user.username,
             baseUrl = base,
-            token = body.accessToken,
-            deviceId = body.deviceId,
+            token = token,
+            deviceId = null,
             deviceClientVersion = BuildConfig.VERSION_NAME
         )
-        deviceAuthApi = null
-        deviceAuthBaseUrl = null
         Logger.info(TAG, "registerAdditionalAccount: stored account $accountId for user ${user.id} without activating")
         return accountId
     }
 
-    private suspend fun finalizeDeviceAuth(base: String, body: RomMDeviceAuthTokenResponse) {
-        val newApi = createApi(base, body.accessToken)
-        val heartbeat = try { newApi.heartbeat() } catch (_: Exception) { null }
-        val version = heartbeat?.body()?.version ?: "unknown"
-        val capabilities = RomMCapabilities.from(version, heartbeat?.body()?.libretroApiEnabled, heartbeat?.body()?.steamGridDbEnabled, heartbeat?.body()?.catalogOnly == true)
 
-        persistRommCredentials(base, body.accessToken, fetchCurrentUser(newApi))
-        userPreferencesRepository.setRommDeviceId(body.deviceId, BuildConfig.VERSION_NAME)
-        rommAccountRepository.get().recordDeviceRegistration(body.deviceId, BuildConfig.VERSION_NAME)
-
-        baseUrl = base
-        accessToken = body.accessToken
-        api = newApi
-        cachedDeviceId = body.deviceId
-        saveSyncRepository.get().setApi(newApi)
-        biosRepository.setApi(newApi)
-        saveSyncRepository.get().setCapabilities(capabilities)
-        saveSyncRepository.get().setDeviceId(body.deviceId)
-        _connectionState.value = ConnectionState.Connected(version, capabilities)
-
-        deviceAuthApi = null
-        deviceAuthBaseUrl = null
-        Logger.info(TAG, "finalizeDeviceAuth: connected, deviceId=${body.deviceId}, version=$version")
+    /**
+     * Scope names out of "Requested scopes exceed your permissions: a, b, c". An empty result
+     * means the 403 was about something else and the request should not be retried.
+     */
+    private fun refusedScopes(detail: String?): Set<String> {
+        val marker = "exceed your permissions:"
+        val at = detail?.indexOf(marker) ?: -1
+        if (at < 0) return emptySet()
+        return detail!!.substring(at + marker.length)
+            .split(",")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .toSet()
     }
 
     private fun parseDetail(body: String?): String? {

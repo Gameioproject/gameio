@@ -66,3 +66,7 @@ wiki/
 
 # RomM version testbed local env
 testbed/romm/.env
+
+# Release signing. The keystore and its passwords never enter the repo.
+release.keystore
+keystore.properties

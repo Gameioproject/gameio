@@ -3,17 +3,14 @@ package com.nendo.argosy.ui.screens.settings.delegates
 import android.content.Context
 import android.util.Log
 import com.nendo.argosy.R
-import com.nendo.argosy.data.remote.romm.DeviceAuthOutcome
 import com.nendo.argosy.data.sync.AccountRemovalResult
+import com.nendo.argosy.data.remote.romm.SignInResult
 import com.nendo.argosy.data.remote.romm.RomMCapabilities
 import com.nendo.argosy.data.remote.romm.RomMRepository
 import com.nendo.argosy.data.remote.romm.RomMResult
-import com.nendo.argosy.data.remote.romm.pollDeviceAuthUntilResolved
 import com.nendo.argosy.ui.screens.settings.ConnectionStatus
-import com.nendo.argosy.ui.screens.settings.RomMAuthMethod
 import com.nendo.argosy.ui.screens.settings.ServerState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,7 +30,6 @@ class ServerSettingsDelegate @Inject constructor(
     private val _state = MutableStateFlow(ServerState())
     val state: StateFlow<ServerState> = _state.asStateFlow()
 
-    private var devicePollJob: Job? = null
 
     fun updateState(newState: ServerState) {
         _state.value = newState
@@ -63,44 +59,28 @@ class ServerSettingsDelegate @Inject constructor(
         }
     }
 
-    fun startRommConfig(hasCamera: Boolean, onFocusReset: () -> Unit) {
+    fun startRommConfig(onFocusReset: () -> Unit) {
         _state.update {
             it.copy(
                 rommConfiguring = true,
-                rommAuthMethod = defaultAuthMethod(),
                 rommConfigUrl = it.rommUrl,
-                rommConfigPairingCode = "",
-                rommHasCamera = hasCamera,
-                rommConfigError = null,
-                rommDevicePairing = false,
-                rommDeviceUserCode = null,
-                rommDeviceVerificationUrl = null
+                rommConfigUsername = "",
+                rommConfigPassword = "",
+                rommConfigError = null
             )
         }
         onFocusReset()
     }
 
-    private fun defaultAuthMethod(): RomMAuthMethod =
-        if (romMRepository.isConnected() && !romMRepository.isVersionAtLeast(RomMCapabilities.DEVICE_AUTH_MIN_VERSION)) {
-            RomMAuthMethod.PAIRING_CODE
-        } else {
-            RomMAuthMethod.DEVICE
-        }
-
     fun cancelRommConfig(onFocusReset: () -> Unit) {
-        devicePollJob?.cancel()
-        devicePollJob = null
-        romMRepository.cancelDeviceAuth()
         _state.update {
             it.copy(
                 rommConfiguring = false,
                 rommConfigUrl = "",
-                rommConfigPairingCode = "",
+                rommConfigUsername = "",
+                rommConfigPassword = "",
                 rommConfigError = null,
-                rommConnecting = false,
-                rommDevicePairing = false,
-                rommDeviceUserCode = null,
-                rommDeviceVerificationUrl = null
+                rommConnecting = false
             )
         }
         onFocusReset()
@@ -110,43 +90,12 @@ class ServerSettingsDelegate @Inject constructor(
         _state.update { it.copy(rommConfigUrl = url) }
     }
 
-    fun setRommConfigPairingCode(code: String) {
-        _state.update { it.copy(rommConfigPairingCode = code) }
+    fun setRommConfigUsername(username: String) {
+        _state.update { it.copy(rommConfigUsername = username) }
     }
 
-    fun setRommAuthMethod(method: RomMAuthMethod) {
-        devicePollJob?.cancel()
-        devicePollJob = null
-        romMRepository.cancelDeviceAuth()
-        _state.update {
-            it.copy(
-                rommAuthMethod = method,
-                rommConfigError = null,
-                rommDevicePairing = false,
-                rommDeviceUserCode = null,
-                rommDeviceVerificationUrl = null
-            )
-        }
-    }
-
-    fun showScanner() {
-        _state.update { it.copy(rommShowScanner = true) }
-    }
-
-    fun dismissScanner() {
-        _state.update { it.copy(rommShowScanner = false) }
-    }
-
-    fun handleScanResult(origin: String, code: String, scope: CoroutineScope, onSuccess: suspend () -> Unit) {
-        _state.update {
-            it.copy(
-                rommShowScanner = false,
-                rommConfigUrl = origin,
-                rommConfigPairingCode = code,
-                rommAuthMethod = RomMAuthMethod.PAIRING_CODE
-            )
-        }
-        connectToRomm(scope, onSuccess)
+    fun setRommConfigPassword(password: String) {
+        _state.update { it.copy(rommConfigPassword = password) }
     }
 
     fun clearRommFocusField() {
@@ -223,143 +172,53 @@ class ServerSettingsDelegate @Inject constructor(
         scope.launch {
             _state.update { it.copy(rommConnecting = true, rommConfigError = null) }
             when (val result = romMRepository.probeServerVersion(state.rommConfigUrl)) {
-                is RomMResult.Success -> {
-                    val method = if (RomMCapabilities.from(result.data).supportsDeviceAuth) {
-                        RomMAuthMethod.DEVICE
-                    } else {
-                        RomMAuthMethod.PAIRING_CODE
-                    }
-                    _state.update {
-                        it.copy(rommConnecting = false, rommAuthMethod = method, rommConfigError = null)
-                    }
-                }
-                is RomMResult.Error -> {
+                is RomMResult.Success ->
+                    _state.update { it.copy(rommConnecting = false, rommConfigError = null) }
+                is RomMResult.Error ->
                     _state.update { it.copy(rommConnecting = false, rommConfigError = result.message) }
-                }
             }
         }
     }
 
     fun connectToRomm(scope: CoroutineScope, onSuccess: suspend () -> Unit) {
         val state = _state.value
+        if (state.rommConnecting) return
         if (state.rommConfigUrl.isBlank()) return
-
-        if (state.rommAuthMethod == RomMAuthMethod.DEVICE) {
-            startDevicePairing(scope, onSuccess)
+        if (state.rommConfigUsername.isBlank() || state.rommConfigPassword.isBlank()) {
+            _state.update {
+                it.copy(rommConfigError = context.getString(R.string.settings_romm_config_credentials_required))
+            }
             return
         }
 
         scope.launch {
             _state.update { it.copy(rommConnecting = true, rommConfigError = null) }
-            connectWithPairingCode(state, onSuccess)
-        }
-    }
-
-    private fun startDevicePairing(scope: CoroutineScope, onSuccess: suspend () -> Unit) {
-        devicePollJob?.cancel()
-        devicePollJob = scope.launch {
-            _state.update { it.copy(rommConnecting = true, rommConfigError = null) }
-            when (val init = romMRepository.beginDeviceAuth(_state.value.rommConfigUrl)) {
-                is RomMResult.Success -> {
-                    val data = init.data
+            val result = romMRepository.connectWithPassword(
+                url = state.rommConfigUrl,
+                username = state.rommConfigUsername,
+                password = state.rommConfigPassword
+            )
+            when (result) {
+                is SignInResult.Connected -> {
                     _state.update {
                         it.copy(
                             rommConnecting = false,
-                            rommDevicePairing = true,
-                            rommDeviceUserCode = data.userCode,
-                            rommDeviceVerificationUrl = data.verificationPathComplete,
-                            rommConfigError = null
+                            rommConfiguring = false,
+                            connectionStatus = ConnectionStatus.ONLINE,
+                            rommUrl = state.rommConfigUrl,
+                            rommUsername = state.rommConfigUsername,
+                            // The password only ever existed to mint the token.
+                            rommConfigUsername = "",
+                            rommConfigPassword = ""
                         )
                     }
-                    pollForToken(data.deviceCode, data.interval, data.expiresIn, onSuccess)
+                    onSuccess()
                 }
-                is RomMResult.Error -> {
-                    _state.update { it.copy(rommConnecting = false, rommConfigError = init.message) }
-                }
+                is SignInResult.AddedAccount ->
+                    _state.update { it.copy(rommConnecting = false, rommConfiguring = false) }
+                is SignInResult.Failed ->
+                    _state.update { it.copy(rommConnecting = false, rommConfigError = result.message) }
             }
         }
     }
-
-    private suspend fun pollForToken(
-        deviceCode: String,
-        interval: Int,
-        expiresIn: Int,
-        onSuccess: suspend () -> Unit
-    ) {
-        val outcome = pollDeviceAuthUntilResolved(interval, expiresIn) {
-            romMRepository.pollDeviceAuthOnce(deviceCode)
-        }
-        if (!currentCoroutineContext().isActive) return
-        when (outcome) {
-            is DeviceAuthOutcome.Approved -> {
-                _state.update {
-                    it.copy(
-                        rommDevicePairing = false,
-                        rommDeviceUserCode = null,
-                        rommDeviceVerificationUrl = null,
-                        rommConfiguring = false,
-                        connectionStatus = ConnectionStatus.ONLINE,
-                        rommUrl = it.rommConfigUrl,
-                        rommUsername = "",
-                        rommConfigError = null
-                    )
-                }
-                onSuccess()
-            }
-            DeviceAuthOutcome.Denied ->
-                failPairing(context.getString(R.string.settings_server_delegate_pairing_denied))
-            DeviceAuthOutcome.Expired ->
-                failPairing(context.getString(R.string.settings_server_delegate_pairing_expired))
-            is DeviceAuthOutcome.AddedAccount ->
-                failPairing(context.getString(R.string.settings_server_delegate_pairing_unexpected_result))
-            is DeviceAuthOutcome.Failed -> failPairing(outcome.message)
-        }
-    }
-
-    private fun failPairing(message: String) {
-        romMRepository.cancelDeviceAuth()
-        _state.update {
-            it.copy(
-                rommDevicePairing = false,
-                rommDeviceUserCode = null,
-                rommDeviceVerificationUrl = null,
-                rommConnecting = false,
-                rommConfigError = message
-            )
-        }
-    }
-
-    private suspend fun connectWithPairingCode(state: ServerState, onSuccess: suspend () -> Unit) {
-        val code = state.rommConfigPairingCode.replace("-", "").replace(" ", "")
-        if (code.length != 8) {
-            _state.update {
-                it.copy(
-                    rommConnecting = false,
-                    rommConfigError = context.getString(R.string.settings_server_delegate_pairing_code_incomplete)
-                )
-            }
-            return
-        }
-
-        when (val result = romMRepository.exchangePairingCode(state.rommConfigUrl, code)) {
-            is RomMResult.Success -> {
-                _state.update {
-                    it.copy(
-                        rommConnecting = false,
-                        rommConfiguring = false,
-                        connectionStatus = ConnectionStatus.ONLINE,
-                        rommUrl = state.rommConfigUrl,
-                        rommUsername = ""
-                    )
-                }
-                onSuccess()
-            }
-            is RomMResult.Error -> {
-                _state.update {
-                    it.copy(rommConnecting = false, rommConfigError = result.message)
-                }
-            }
-        }
-    }
-
 }

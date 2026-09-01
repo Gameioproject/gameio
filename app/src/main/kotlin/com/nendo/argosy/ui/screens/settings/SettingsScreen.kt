@@ -1639,7 +1639,7 @@ private fun SettingsFooter(
                 add(InputButton.DPAD_HORIZONTAL to foldersScanHint)
             }
         }
-        if (uiState.currentSection == SettingsSection.ACCOUNTS && !uiState.accounts.pairing.active) {
+        if (uiState.currentSection == SettingsSection.ACCOUNTS && !uiState.accounts.signIn.active) {
             val focusedAccount = com.nendo.argosy.ui.screens.settings.sections
                 .accountsItemAtFocusIndex(uiState.focusedIndex, uiState.accounts)
             if (focusedAccount is com.nendo.argosy.ui.screens.settings.sections.AccountsItem.Account &&

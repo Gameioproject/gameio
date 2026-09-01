@@ -52,16 +52,12 @@ class RomMRepository @Inject constructor(
     suspend fun connectWithToken(url: String, token: String): RomMResult<String> =
         connectionManager.connectWithToken(url, token)
 
-    suspend fun exchangePairingCode(url: String, code: String): RomMResult<String> =
-        connectionManager.exchangePairingCode(url, code)
-
-    suspend fun beginDeviceAuth(url: String): RomMResult<RomMDeviceAuthInitResponse> =
-        connectionManager.beginDeviceAuth(url)
-
-    suspend fun pollDeviceAuthOnce(deviceCode: String, activateOnSuccess: Boolean = true): DeviceAuthPoll =
-        connectionManager.pollDeviceAuthOnce(deviceCode, activateOnSuccess)
-
-    fun cancelDeviceAuth() = connectionManager.cancelDeviceAuth()
+    suspend fun connectWithPassword(
+        url: String,
+        username: String,
+        password: String,
+        activate: Boolean = true
+    ): SignInResult = connectionManager.connectWithPassword(url, username, password, activate)
 
     fun disconnect() = connectionManager.disconnect()
 

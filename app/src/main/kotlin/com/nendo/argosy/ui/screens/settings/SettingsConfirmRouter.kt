@@ -129,30 +129,11 @@ import com.nendo.argosy.ui.screens.settings.sections.libraryItemAtFocusIndex
 import com.nendo.argosy.ui.screens.settings.sections.LibraryItem
 import com.nendo.argosy.ui.screens.settings.sections.LibraryLayoutState
 
-private fun rommConfigMaxIndex(server: ServerState): Int {
-    if (server.rommDevicePairing) return 0
-    return when (server.rommAuthMethod) {
-        RomMAuthMethod.DEVICE -> 3
-        RomMAuthMethod.PAIRING_CODE -> if (server.rommHasCamera) 5 else 4
-    }
-}
+// url, username, password, sign in, cancel
+private const val ROMM_CONFIG_SIGN_IN_INDEX = 3
+private const val ROMM_CONFIG_CANCEL_INDEX = 4
 
-private data class RommConfigIndices(
-    val connectIndex: Int,
-    val scanIndex: Int?,
-    val cancelIndex: Int
-)
-
-private fun rommConfigIndices(server: ServerState): RommConfigIndices = when (server.rommAuthMethod) {
-    RomMAuthMethod.DEVICE -> RommConfigIndices(2, null, 3)
-    RomMAuthMethod.PAIRING_CODE ->
-        if (server.rommHasCamera) RommConfigIndices(3, 4, 5) else RommConfigIndices(3, null, 4)
-}
-
-private fun nextRommAuthMethod(current: RomMAuthMethod): RomMAuthMethod = when (current) {
-    RomMAuthMethod.DEVICE -> RomMAuthMethod.PAIRING_CODE
-    RomMAuthMethod.PAIRING_CODE -> RomMAuthMethod.DEVICE
-}
+private fun rommConfigMaxIndex(server: ServerState): Int = ROMM_CONFIG_CANCEL_INDEX
 
 internal fun routeConfirm(vm: SettingsViewModel): InputResult {
     val state = vm._uiState.value
@@ -292,14 +273,14 @@ internal fun routeConfirm(vm: SettingsViewModel): InputResult {
 }
 
 /**
- * Accounts owns its confirm routing rather than reusing the server section's, whose pairing
- * branch gates the whole section on `rommDevicePairing` and cancels the single stored connection.
+ * Accounts owns its confirm routing rather than reusing the server section's, whose sign-in
+ * branch cancels the single stored connection rather than adding one alongside it.
  */
 private fun routeAccountsConfirm(vm: SettingsViewModel, state: SettingsUiState): InputResult {
     val accounts = state.accounts
-    if (accounts.pairing.active) {
-        if (accounts.pairing.error != null) {
-            vm.retryAddAccountPairing()
+    if (accounts.signIn.active) {
+        if (accounts.signIn.error != null) {
+            vm.submitAddAccount()
         } else {
             vm.cancelAddAccount()
         }
@@ -331,19 +312,10 @@ private fun routeAccountsConfirm(vm: SettingsViewModel, state: SettingsUiState):
 private fun routeRomMConfirm(vm: SettingsViewModel, state: SettingsUiState): InputResult {
     val isOnline = state.server.connectionStatus == ConnectionStatus.ONLINE
     if (state.server.rommConfiguring) {
-        if (state.server.rommDevicePairing) {
-            vm.cancelRommConfig()
-            return InputResult.HANDLED
-        }
-        val indices = rommConfigIndices(state.server)
         when (state.focusedIndex) {
-            1 -> {
-                vm.requestEnumPicker(ROMM_AUTH_METHOD_PICKER_KEY)
-                return InputResult.handled(SoundType.OPEN_MODAL)
-            }
-            indices.connectIndex -> vm.connectToRomm()
-            indices.scanIndex -> vm.showRommScanner()
-            indices.cancelIndex -> vm.cancelRommConfig()
+            ROMM_CONFIG_SIGN_IN_INDEX -> vm.connectToRomm()
+            ROMM_CONFIG_CANCEL_INDEX -> vm.cancelRommConfig()
+            // A text row hands focus to the field itself so the on-screen keyboard opens.
             else -> vm._uiState.update { it.copy(server = it.server.copy(rommFocusField = state.focusedIndex)) }
         }
         return InputResult.HANDLED
@@ -1118,7 +1090,7 @@ private fun routeDismissTopOverlay(vm: SettingsViewModel): Boolean {
         state.builtinControls.showControllerOrderModal -> { vm.hideControllerOrderModal(); true }
         state.builtinControls.showInputMappingModal -> { vm.hideInputMappingModal(); true }
         state.builtinControls.showHotkeysModal -> { vm.hideHotkeysModal(); true }
-        state.accounts.pairing.active -> { vm.cancelAddAccount(); true }
+        state.accounts.signIn.active -> { vm.cancelAddAccount(); true }
         state.accounts.switchInProgress -> true
         state.server.rommConfiguring -> { vm.cancelRommConfig(); true }
         state.jellyfin.configuring -> { vm.cancelJellyfinConfig(); true }
@@ -1192,7 +1164,7 @@ private fun computeMaxFocusIndex(
     isConnected: Boolean
 ): Int = when (state.currentSection) {
     SettingsSection.MAIN -> mainSettingsMaxFocusIndex()
-    SettingsSection.ACCOUNTS -> if (state.accounts.pairing.active || state.accounts.switchInProgress) {
+    SettingsSection.ACCOUNTS -> if (state.accounts.signIn.active || state.accounts.switchInProgress) {
         0
     } else {
         accountsMaxFocusIndex(state.accounts)

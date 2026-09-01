@@ -2,10 +2,9 @@ package com.nendo.argosy.ui.screens.settings.delegates
 
 import android.content.Context
 import com.nendo.argosy.R
-import com.nendo.argosy.data.remote.romm.DeviceAuthOutcome
+import com.nendo.argosy.data.remote.romm.SignInResult
 import com.nendo.argosy.data.remote.romm.RomMResult
 import com.nendo.argosy.data.remote.romm.RomMRepository
-import com.nendo.argosy.data.remote.romm.pollDeviceAuthUntilResolved
 import com.nendo.argosy.data.repository.GameRepository
 import com.nendo.argosy.data.repository.RomMAccountRepository
 import com.nendo.argosy.data.sync.AccountRemovalResult
@@ -16,7 +15,7 @@ import com.nendo.argosy.data.sync.AccountSwitchProgress
 import com.nendo.argosy.data.sync.AccountPendingWork
 import com.nendo.argosy.data.sync.AccountRemovalService
 import com.nendo.argosy.data.sync.UnflushedQueuePolicy
-import com.nendo.argosy.ui.screens.settings.AccountPairingState
+import com.nendo.argosy.ui.screens.settings.AccountSignInState
 import com.nendo.argosy.ui.screens.settings.AccountUi
 import com.nendo.argosy.ui.screens.settings.AccountsState
 import kotlinx.coroutines.CoroutineScope
@@ -52,7 +51,7 @@ class AccountsSettingsDelegate @Inject constructor(
     private val _state = MutableStateFlow(AccountsState())
     val state: StateFlow<AccountsState> = _state.asStateFlow()
 
-    private var pairingJob: Job? = null
+    private var signInJob: Job? = null
 
     fun start(scope: CoroutineScope) {
         accountRepository.observeAccounts()
@@ -172,7 +171,7 @@ class AccountsSettingsDelegate @Inject constructor(
                 _state.update { it.copy(switchBlocker = blockerMessage(blocker)) }
                 return@launch
             }
-            startPairing(scope)
+            startSignIn()
         }
     }
 
@@ -327,110 +326,103 @@ class AccountsSettingsDelegate @Inject constructor(
         }
     }
 
-    fun startPairing(scope: CoroutineScope) {
-        pairingJob?.cancel()
-        romMRepository.cancelDeviceAuth()
-        pairingJob = scope.launch {
+    /** Opens the add-an-account form. */
+    fun startSignIn() {
+        signInJob?.cancel()
+        signInJob = null
+        _state.update { it.copy(signIn = AccountSignInState(active = true), notice = null) }
+    }
+
+    fun setSignInUsername(username: String) {
+        _state.update { it.copy(signIn = it.signIn.copy(username = username, error = null)) }
+    }
+
+    fun setSignInPassword(password: String) {
+        _state.update { it.copy(signIn = it.signIn.copy(password = password, error = null)) }
+    }
+
+    fun submitSignIn(scope: CoroutineScope) {
+        val form = _state.value.signIn
+        if (form.connecting) return
+
+        signInJob?.cancel()
+        signInJob = scope.launch {
             val baseUrl = accountRepository.activeAccount()?.baseUrl
             if (baseUrl.isNullOrBlank()) {
-                _state.update {
-                    it.copy(
-                        pairing = AccountPairingState(
-                            active = true,
-                            error = context.getString(R.string.settings_accounts_delegate_pairing_error_no_server)
-                        )
-                    )
-                }
+                failSignIn(context.getString(R.string.settings_accounts_delegate_pairing_error_no_server))
                 return@launch
             }
-            _state.update {
-                it.copy(
-                    pairing = AccountPairingState(active = true, connecting = true),
-                    notice = null
-                )
+            if (form.username.isBlank() || form.password.isBlank()) {
+                failSignIn(context.getString(R.string.settings_romm_config_credentials_required))
+                return@launch
             }
-            when (val init = romMRepository.beginDeviceAuth(baseUrl)) {
-                is RomMResult.Success -> {
-                    val data = init.data
+
+            _state.update { it.copy(signIn = it.signIn.copy(connecting = true, error = null)) }
+
+            // The first account on the device becomes the live one; any later one is stored
+            // alongside so the session in progress is not yanked out from under the user.
+            val activate = accountRepository.accountCount() == 0
+            val result = romMRepository.connectWithPassword(
+                url = baseUrl,
+                username = form.username,
+                password = form.password,
+                activate = activate
+            )
+            if (!currentCoroutineContext().isActive) return@launch
+
+            when (result) {
+                is SignInResult.AddedAccount -> {
+                    val added = accountRepository.accounts().firstOrNull { it.id == result.accountId }
                     _state.update {
                         it.copy(
-                            pairing = AccountPairingState(
-                                active = true,
-                                connecting = false,
-                                userCode = data.userCode,
-                                verificationUrl = data.verificationPathComplete
+                            signIn = AccountSignInState(),
+                            rowActionIndex = 0,
+                            notice = context.getString(
+                                R.string.settings_accounts_delegate_notice_added,
+                                added?.username?.ifBlank { null }
+                                    ?: context.getString(R.string.settings_accounts_delegate_fallback_account_label)
                             )
                         )
                     }
-                    pollForApproval(data.deviceCode, data.interval, data.expiresIn)
                 }
-                is RomMResult.Error -> failPairing(init.message)
+                is SignInResult.Connected -> {
+                    val added = accountRepository.activeAccount()
+                    _state.update {
+                        it.copy(
+                            signIn = AccountSignInState(),
+                            rowActionIndex = 0,
+                            notice = added?.let { row ->
+                                context.getString(
+                                    R.string.settings_accounts_delegate_notice_signed_in,
+                                    row.username.ifBlank {
+                                        context.getString(
+                                            R.string.settings_accounts_delegate_fallback_username,
+                                            row.rommUserId
+                                        )
+                                    }
+                                )
+                            } ?: context.getString(R.string.settings_accounts_delegate_notice_account_added)
+                        )
+                    }
+                }
+                is SignInResult.Failed -> failSignIn(result.message)
             }
         }
     }
 
     /**
-     * Stops the poll loop as well as clearing the screen. Leaving it running means a pairing the
-     * user backed out of can still land and move the device onto another account.
+     * Clears the form as well as stopping the request. A sign-in the user backed out of must not
+     * be able to land afterwards and move the device onto another account.
      */
-    fun cancelPairing() {
-        pairingJob?.cancel()
-        pairingJob = null
-        romMRepository.cancelDeviceAuth()
-        _state.update { it.copy(pairing = AccountPairingState()) }
+    fun cancelSignIn() {
+        signInJob?.cancel()
+        signInJob = null
+        _state.update { it.copy(signIn = AccountSignInState()) }
     }
 
-    private suspend fun pollForApproval(deviceCode: String, interval: Int, expiresIn: Int) {
-        val outcome = pollDeviceAuthUntilResolved(interval, expiresIn) {
-            val hasExisting = accountRepository.accountCount() > 0
-            romMRepository.pollDeviceAuthOnce(deviceCode, activateOnSuccess = !hasExisting)
-        }
-        if (!currentCoroutineContext().isActive) return
-        when (outcome) {
-            is DeviceAuthOutcome.AddedAccount -> {
-                val added = accountRepository.accounts().firstOrNull { it.id == outcome.accountId }
-                _state.update {
-                    it.copy(
-                        pairing = AccountPairingState(),
-                        rowActionIndex = 0,
-                        notice = context.getString(
-                            R.string.settings_accounts_delegate_notice_added,
-                            added?.username?.ifBlank { null }
-                                ?: context.getString(R.string.settings_accounts_delegate_fallback_account_label)
-                        )
-                    )
-                }
-            }
-            is DeviceAuthOutcome.Approved -> {
-                val added = accountRepository.activeAccount()
-                _state.update {
-                    it.copy(
-                        pairing = AccountPairingState(),
-                        rowActionIndex = 0,
-                        notice = added?.let { row ->
-                            context.getString(
-                                R.string.settings_accounts_delegate_notice_signed_in,
-                                row.username.ifBlank {
-                                    context.getString(
-                                        R.string.settings_accounts_delegate_fallback_username,
-                                        row.rommUserId
-                                    )
-                                }
-                            )
-                        } ?: context.getString(R.string.settings_accounts_delegate_notice_account_added)
-                    )
-                }
-            }
-            DeviceAuthOutcome.Denied -> failPairing(context.getString(R.string.settings_accounts_delegate_pairing_denied))
-            DeviceAuthOutcome.Expired -> failPairing(context.getString(R.string.settings_accounts_delegate_pairing_expired))
-            is DeviceAuthOutcome.Failed -> failPairing(outcome.message)
-        }
-    }
-
-    private fun failPairing(message: String) {
-        romMRepository.cancelDeviceAuth()
+    private fun failSignIn(message: String) {
         _state.update {
-            it.copy(pairing = AccountPairingState(active = true, error = message))
+            it.copy(signIn = it.signIn.copy(active = true, connecting = false, error = message))
         }
     }
 
