@@ -314,7 +314,7 @@
     <!-- %1$s is the account's username, or the fallback below if unknown. -->
     <string name="settings_shell_accounts_switch_title">Switch to %1$s?</string>
     <string name="settings_shell_accounts_fallback_name">account</string>
-    <string name="settings_shell_accounts_exit_message">Fully exit any game you launched outside Argosy first. Argosy cannot see those sessions, and a game still running can write over the saves this moves. Saves are archived and verified before anything is removed.</string>
+    <string name="settings_shell_accounts_exit_message">Fully exit any game you launched outside Gameio first. Gameio cannot see those sessions, and a game still running can write over the saves this moves. Saves are archived and verified before anything is removed.</string>
     <string name="settings_shell_accounts_add_confirm">Games Closed, Continue</string>
     <string name="settings_shell_accounts_switch_confirm">Games Closed, Switch</string>
 

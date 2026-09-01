@@ -184,7 +184,7 @@
     <string name="social_netplayjoin_join">Beitreten</string>
     <string name="social_netplayjoin_rom_not_found">Sie besitzen diese ROM nicht</string>
     <string name="social_netplayjoin_rom_version_mismatch">Andere ROM-Version</string>
-    <string name="social_netplayjoin_core_version_mismatch">Aktualisieren Sie Argosy zur Übereinstimmung</string>
+    <string name="social_netplayjoin_core_version_mismatch">Aktualisieren Sie Gameio zur Übereinstimmung</string>
     <string name="social_netplayjoin_core_not_supported">Core nicht unterstützt</string>
     <string name="social_netplayjoin_session_busy">Sitzung ausgelastet</string>
 

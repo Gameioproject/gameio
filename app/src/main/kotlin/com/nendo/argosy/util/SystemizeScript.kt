@@ -21,7 +21,7 @@ object SystemizeScript {
     fun write(context: Context): SystemizeWriteResult {
         return try {
             val target = File(targetPath())
-            context.resources.openRawResource(R.raw.systemize_argosy).use { input ->
+            context.resources.openRawResource(R.raw.systemize_gameio).use { input ->
                 target.outputStream().use { output -> input.copyTo(output) }
             }
             SystemizeWriteResult.Success(target.absolutePath, vendorSteps())

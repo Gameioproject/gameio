@@ -1,13 +1,12 @@
-# Argosy Launcher (catalog edition)
+# Gameio
 
-This fork pairs Argosy with a metadata-only RomM server ([romm-lite](https://github.com/naifqarni/romm-lite)):
+Gameio is a controller-first game launcher for Android handhelds. It pairs with a metadata-only
+catalog server ([gameio-server](https://github.com/naifqarni/gameio-server)):
 the server keeps a catalog of games and per-game download links on hosts such as the Internet
-Archive, and never stores ROM files itself. Argosy browses the whole catalog for the systems you
+Archive, and never stores ROM files itself. Gameio browses the whole catalog for the systems you
 follow, downloads what you pick straight from the game's host, and keeps play sessions on your
 account. See [What is different in this fork](#what-is-different-in-this-fork).
 
-[![Build](https://github.com/nendotools/argosy-launcher/actions/workflows/build.yml/badge.svg)](https://github.com/nendotools/argosy-launcher/actions/workflows/build.yml)
-[![Latest Release](https://img.shields.io/github/v/release/nendotools/argosy-launcher)](https://github.com/nendotools/argosy-launcher/releases/latest)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Android](https://img.shields.io/badge/Android-8.0+-green.svg)](https://developer.android.com/about/versions/oreo)
 
@@ -25,13 +24,13 @@ Sync your entire game library from your self-hosted [RomM](https://github.com/ro
 First-class integration with [RomM](https://github.com/rommapp/romm). Sync your entire library with rich metadata from IGDB—cover art, descriptions, genres, franchises, player counts, and more. Your collection, your server, your handheld.
 
 ### Automatic Downloads
-Download ROMs and BIOS files directly from your RomM server. Games are automatically sorted by platform. Queue multiple downloads and let Argosy handle the rest.
+Download ROMs and BIOS files directly from your RomM server. Games are automatically sorted by platform. Queue multiple downloads and let Gameio handle the rest.
 
 ### Save Sync
 Continue playing across devices. Bidirectional save sync with your RomM server keeps your progress in sync automatically. Conflict detection ensures you never lose data.
 
 ### RetroAchievements
-View your earned achievements and track your progress. Argosy displays achievement data synced from your RomM server, showing what you've unlocked and what's left to earn.
+View your earned achievements and track your progress. Gameio displays achievement data synced from your RomM server, showing what you've unlocked and what's left to earn.
 
 ### Collections
 Organize your library your way. Create custom collections, or use smart collections like "Top Unplayed", "Recently Added", and "Most Played". Pin your favorites to the home screen for quick access.
@@ -57,13 +56,13 @@ Fine-tune the visual experience:
 ## Smart Emulator Management
 
 ### Auto-Detection
-Argosy automatically detects installed emulators and assigns them to the appropriate platforms. No manual configuration required for most setups.
+Gameio automatically detects installed emulators and assigns them to the appropriate platforms. No manual configuration required for most setups.
 
 ### RetroArch Core Selection
-When using RetroArch, select specific cores per platform. Argosy manages core selection so you launch with the right emulator every time.
+When using RetroArch, select specific cores per platform. Gameio manages core selection so you launch with the right emulator every time.
 
 ### Multi-Disc Games
-PlayStation and other multi-disc games are handled automatically. When you launch a multi-disc game, Argosy presents a disc picker so you can choose where to start.
+PlayStation and other multi-disc games are handled automatically. When you launch a multi-disc game, Gameio presents a disc picker so you can choose where to start.
 
 ### Supported Emulators
 RetroArch, PPSSPP, DuckStation, AetherSX2, Dolphin, DraStic, melonDS, Mupen64Plus FZ, Pizza Boy, Lime3DS, Azahar, Flycast, Redream, and more. Missing your emulator? [Open an issue](https://github.com/nendotools/argosy-launcher/issues).
@@ -73,7 +72,7 @@ RetroArch, PPSSPP, DuckStation, AetherSX2, Dolphin, DraStic, melonDS, Mupen64Plu
 Press **L3** (left stick click) anywhere to open the Quick Menu—a fast overlay for discovering games:
 
 - **Search**: Find games across your entire library with fuzzy search
-- **Random**: Can't decide what to play? Let Argosy pick for you
+- **Random**: Can't decide what to play? Let Gameio pick for you
 - **Most Played**: Jump back into your favorites
 - **Top Unplayed**: Highly-rated games you haven't touched yet
 - **Recent**: Continue where you left off
@@ -101,7 +100,7 @@ On supported devices (Odin, AYN, Retroid), Quick Settings also includes **Perfor
 | **Image Caching** | Cache all cover art locally for fast, offline browsing |
 | **Steam Games** | Index and launch Steam games installed via GameHub or GameNative |
 | **App Launcher** | Quick access to emulators and other apps |
-| **In-App Updates** | Update Argosy directly from the app |
+| **In-App Updates** | Update Gameio directly from the app |
 | **First-Run Wizard** | Guided setup for new users |
 | **Favorites** | Mark games for quick access |
 | **Hide Games** | Remove games from view without deleting them |
@@ -109,7 +108,7 @@ On supported devices (Odin, AYN, Retroid), Quick Settings also includes **Perfor
 ## What is different in this fork
 
 ### First run: choose the systems to follow
-Nothing has to be on the device before Argosy is useful. After signing in to the server, the setup
+Nothing has to be on the device before Gameio is useful. After signing in to the server, the setup
 wizard always asks which systems to follow. Only those platforms are synced and shown on Home; the
 choice can be changed later under Settings > Library > Platforms (the per-platform sync switch).
 
@@ -135,21 +134,21 @@ Save and state sync works: the server stores them per catalog game (the classic
 `/api/saves` protocol is served from the asset store), so saves roam across devices.
 Play sessions are recorded and shared across devices and the web client.
 
-RetroAchievements also work in-game: Argosy talks to retroachievements.org directly
+RetroAchievements also work in-game: Gameio talks to retroachievements.org directly
 with the credentials entered under Settings, and game hashing happens on the device,
 so unlocks and hardcore mode do not involve the server at all. What the catalog server
 does not provide is the ROM-based server-side RetroAchievements lookup, so RA metadata
 panels that depend on a server-supplied RA id stay empty.
 
 Because the server holds no ROM files, screenshot upload, music streaming and cover
-search are switched off when Argosy detects a catalog-only server (the heartbeat
+search are switched off when Gameio detects a catalog-only server (the heartbeat
 reports `CATALOG_ONLY`).
 
 ## Getting Started
 
 1. **Download** the latest APK from [GitHub Releases](https://github.com/nendotools/argosy-launcher/releases/latest)
 2. **Install** the APK on your device
-3. **Run** Argosy and follow the setup wizard
+3. **Run** Gameio and follow the setup wizard
 4. **Connect** to your RomM server (or skip for local-only use)
 5. **Sync** your library and start playing
 
@@ -165,7 +164,7 @@ Updates are handled in-app after initial install.
 
 ### Target Devices
 
-Argosy is designed for retro gaming handhelds:
+Gameio is designed for retro gaming handhelds:
 - Anbernic (RG35XX, RG556, RG406, etc.)
 - Retroid Pocket (RP2+, RP3, RP4, RP5)
 - Odin / Odin 2
@@ -219,7 +218,7 @@ Subscribe to beta releases for early access to new features. Beta versions may b
 
 ## Contributing
 
-Argosy is open source! Contributions, bug reports, and feature requests are welcome.
+Gameio is open source! Contributions, bug reports, and feature requests are welcome.
 
 - [Report a bug](https://github.com/nendotools/argosy-launcher/issues/new)
 - [Request a feature](https://github.com/nendotools/argosy-launcher/issues/new)

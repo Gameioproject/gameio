@@ -192,7 +192,7 @@
     <string name="social_netplayjoin_join">Присоединиться</string>
     <string name="social_netplayjoin_rom_not_found">У вас нет этого ROM</string>
     <string name="social_netplayjoin_rom_version_mismatch">Другая версия ROM</string>
-    <string name="social_netplayjoin_core_version_mismatch">Обновите Argosy для совместимости</string>
+    <string name="social_netplayjoin_core_version_mismatch">Обновите Gameio для совместимости</string>
     <string name="social_netplayjoin_core_not_supported">Ядро не поддерживается</string>
     <string name="social_netplayjoin_session_busy">Сессия занята</string>
 

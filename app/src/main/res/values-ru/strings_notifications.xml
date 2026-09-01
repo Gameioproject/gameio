@@ -2,7 +2,7 @@
 <resources>
     <string name="notif_generic_error_title">Ошибка</string>
 
-    <string name="notif_storage_private_path_error">GameNative не может читать личные папки Argosy. Выберите публичное расположение.</string>
+    <string name="notif_storage_private_path_error">GameNative не может читать личные папки Gameio. Выберите публичное расположение.</string>
 
     <string name="notif_storage_migrate_persistent_title">Перемещение игр</string>
     <string name="notif_storage_migrate_persistent_subtitle_initial">0 / %1$d</string>

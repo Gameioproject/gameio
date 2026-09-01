@@ -252,8 +252,8 @@
     <string name="settings_saves_save_sync_locked_subtitle">Erfordert einen RomM-Server</string>
 
     <string name="settings_saves_secure_saves_title">Sichere Spielstände</string>
-    <string name="settings_saves_secure_saves_subtitle_on">Argosy verwaltet und erzwingt Spielstanddateien</string>
-    <string name="settings_saves_secure_saves_subtitle_off">Argosy versucht, außerhalb des Launchers verwaltete Spielstände zu synchronisieren</string>
+    <string name="settings_saves_secure_saves_subtitle_on">Gameio verwaltet und erzwingt Spielstanddateien</string>
+    <string name="settings_saves_secure_saves_subtitle_off">Gameio versucht, außerhalb des Launchers verwaltete Spielstände zu synchronisieren</string>
     <string name="settings_saves_secure_saves_locked_value">Nicht verfügbar</string>
     <string name="settings_saves_secure_saves_locked_subtitle">Erfordert einen RomM-Server</string>
 
@@ -417,7 +417,7 @@
 
     <!-- ===== Permissions section ===== -->
 
-    <string name="settings_permissions_intro">Argosy benötigt bestimmte Berechtigungen für den vollen Funktionsumfang. Tippen Sie auf eine Berechtigung, um sie zu erteilen.</string>
+    <string name="settings_permissions_intro">Gameio benötigt bestimmte Berechtigungen für den vollen Funktionsumfang. Tippen Sie auf eine Berechtigung, um sie zu erteilen.</string>
     <string name="settings_permissions_storage_title">Speicherzugriff</string>
     <string name="settings_permissions_storage_description">Erforderlich zum Herunterladen von Spielen, Synchronisieren von Spielstanddateien und Zugriff auf ROM-Dateien auf Ihrem Gerät.</string>
     <string name="settings_permissions_usage_stats_title">Nutzungsdatenzugriff</string>
@@ -466,8 +466,8 @@
     <string name="settings_about_import_subtitle">Einstellungen aus einer Sicherungsdatei anwenden</string>
 
     <string name="settings_about_systemize_title">Abstürze bei anspruchsvollen Emulatoren verhindern</string>
-    <string name="settings_about_systemize_subtitle">Argosy kann erzwungen beendet werden, wenn ein anspruchsvoller Emulator den Großteil des RAM belegt. Auf einem gerooteten Gerät schreibt dies ein Skript, das Argosy zu einer System-App macht, damit sie nicht mehr beendet wird.</string>
-    <string name="settings_about_restart_title">Argosy neu starten</string>
+    <string name="settings_about_systemize_subtitle">Gameio kann erzwungen beendet werden, wenn ein anspruchsvoller Emulator den Großteil des RAM belegt. Auf einem gerooteten Gerät schreibt dies ein Skript, das Gameio zu einer System-App macht, damit sie nicht mehr beendet wird.</string>
+    <string name="settings_about_restart_title">Gameio neu starten</string>
     <string name="settings_about_restart_subtitle">Launcher schließen und neu öffnen</string>
 
     <string name="settings_about_file_logging_title">Datei-Protokollierung</string>
@@ -993,7 +993,7 @@
     <string name="settings_steam_reset_library_subtitle">Alle synchronisierten Steam-Spiele entfernen</string>
 
     <string name="settings_steam_gn_required_title">GameNative erforderlich</string>
-    <string name="settings_steam_gn_required_message">Steam-Spiele werden von Argosy heruntergeladen und über GameNative gestartet. Installieren Sie GameNative und aktivieren Sie den externen Speicher in dessen Einstellungen, bevor Sie fortfahren.</string>
+    <string name="settings_steam_gn_required_message">Steam-Spiele werden von Gameio heruntergeladen und über GameNative gestartet. Installieren Sie GameNative und aktivieren Sie den externen Speicher in dessen Einstellungen, bevor Sie fortfahren.</string>
     <string name="settings_steam_gn_required_action">GameNative installieren</string>
 
     <string name="settings_steam_login_title">Bei Steam anmelden</string>
@@ -1195,7 +1195,7 @@
     <string name="settings_accounts_switch_message">Spielstände werden archiviert und geprüft, bevor etwas entfernt wird. Lassen Sie diesen Bildschirm geöffnet.</string>
 
     <string name="settings_accounts_pairing_title">Zum Hinzufügen eines Kontos scannen</string>
-    <string name="settings_accounts_pairing_message">Melden Sie sich auf Ihrem Telefon als der hinzuzufügende Nutzer bei RomM an, scannen Sie diesen Code und bestätigen Sie dieses Gerät. Argosy meldet sich nach Bestätigung als dieser Nutzer an.</string>
+    <string name="settings_accounts_pairing_message">Melden Sie sich auf Ihrem Telefon als der hinzuzufügende Nutzer bei RomM an, scannen Sie diesen Code und bestätigen Sie dieses Gerät. Gameio meldet sich nach Bestätigung als dieser Nutzer an.</string>
     <string name="settings_accounts_pairing_retry">Erneut versuchen</string>
     <string name="settings_accounts_pairing_cancel">Abbrechen</string>
 
@@ -1455,7 +1455,7 @@
     <string name="settings_platform_legacy_mode_title">Legacy-Modus</string>
     <string name="settings_platform_legacy_mode_subtitle">file://-URI für Drastic verwenden</string>
     <string name="settings_platform_launch_args_title">Startparameter</string>
-    <string name="settings_platform_launch_args_subtitle">Anpassen, wie Argosy diesen Emulator startet</string>
+    <string name="settings_platform_launch_args_subtitle">Anpassen, wie Gameio diesen Emulator startet</string>
     <string name="settings_platform_builtin_video_title">Integrierte A/V &amp; Leistung</string>
     <string name="settings_platform_builtin_video_subtitle">Overrides für Anzeige, Leistung und Speichern</string>
     <string name="settings_platform_builtin_controls_title">Integrierte Steuerung</string>
@@ -1683,7 +1683,7 @@
     <string name="settings_launch_args_hint_reset_field">Feld zurücksetzen</string>
     <string name="settings_launch_args_hint_reset_all">Alle zurücksetzen</string>
     <string name="settings_launch_args_hint_back">Zurück</string>
-    <string name="settings_launch_args_intro">Überschreiben Sie, wie Argosy diesen Emulator auf dieser Plattform startet. Resume-Modus-Flags sind unabhängig von Overrides fest.</string>
+    <string name="settings_launch_args_intro">Überschreiben Sie, wie Gameio diesen Emulator auf dieser Plattform startet. Resume-Modus-Flags sind unabhängig von Overrides fest.</string>
     <string name="settings_launch_args_data_uri_label">Data-URI</string>
     <string name="settings_launch_args_data_uri_subtitle">Setzt Intent.data (`-d` in der Shell). Wird von ACTION_VIEW-Emulatoren verwendet, die die ROM aus der Data-URI des Intents lesen.</string>
     <string name="settings_launch_args_extras_label">Extras</string>
@@ -1880,7 +1880,7 @@
     <!-- ===== App picker modal (Settings > components > AppPickerModal) ===== -->
 
     <string name="settings_app_picker_title">App auswählen - %1$s</string>
-    <string name="settings_app_picker_intro">Für diese Plattform ist kein bekannter Emulator installiert. Wählen Sie eine beliebige App zum Starten von Spielen; wie Argosy sie aufruft, können Sie danach über Startparameter anpassen.</string>
+    <string name="settings_app_picker_intro">Für diese Plattform ist kein bekannter Emulator installiert. Wählen Sie eine beliebige App zum Starten von Spielen; wie Gameio sie aufruft, können Sie danach über Startparameter anpassen.</string>
     <string name="settings_app_picker_empty">Keine startfähigen Apps gefunden.</string>
 
     <!-- ===== Controller order modal (Settings > components > ControllerOrderModal) ===== -->
@@ -1964,7 +1964,7 @@
     <!-- ===== Save path modal (Settings > components > SavePathModal) ===== -->
 
     <string name="settings_save_path_modal_title">%1$s - %2$s</string>
-    <string name="settings_save_path_modal_intro">Eigene Pfade helfen bei der Spielstanderkennung, wenn Argosy keine Spielstände zum Synchronisieren findet. Dies ändert nicht, wo Ihr Emulator Spielstände speichert.</string>
+    <string name="settings_save_path_modal_intro">Eigene Pfade helfen bei der Spielstanderkennung, wenn Gameio keine Spielstände zum Synchronisieren findet. Dies ändert nicht, wo Ihr Emulator Spielstände speichert.</string>
     <string name="settings_save_path_modal_save_path_label">Spielstand-Pfad</string>
     <string name="settings_save_path_modal_note_missing">Dieser Ordner ist gerade nicht auf dem Gerät. Spielstände werden erst gefunden, wenn er es ist.</string>
     <string name="settings_save_path_modal_note_moved">Verschoben dorthin, wo %1$s Spielstände tatsächlich ablegt, unterhalb des gewählten Ordners.</string>
@@ -2023,7 +2023,7 @@
     <string name="settings_accounts_delegate_blocker_media_download">Ein Film oder eine Folge wird noch heruntergeladen. Lassen Sie es abschließen oder brechen Sie es ab.</string>
     <string name="settings_accounts_delegate_blocker_library_sync">Ein Bibliotheks-Sync läuft. Lassen Sie ihn abschließen und versuchen Sie es erneut.</string>
     <string name="settings_accounts_delegate_blocker_netplay_session">Eine Netplay-Sitzung ist geöffnet. Verlassen Sie sie und versuchen Sie es erneut.</string>
-    <string name="settings_accounts_delegate_blocker_exit_confirmation">Bestätigen Sie, dass jedes außerhalb von Argosy gestartete Spiel vollständig beendet ist.</string>
+    <string name="settings_accounts_delegate_blocker_exit_confirmation">Bestätigen Sie, dass jedes außerhalb von Gameio gestartete Spiel vollständig beendet ist.</string>
     <string name="settings_accounts_delegate_blocker_unknown_account">Dieses Konto ist nicht mehr auf diesem Gerät.</string>
 
     <!-- ===== Steam settings delegate (Settings > delegates > SteamSettingsDelegate) ===== -->
@@ -2068,7 +2068,7 @@
     <string name="settings_systemize_dialog_detected_device">Erkanntes Gerät: %1$s</string>
     <string name="settings_systemize_dialog_next_steps_heading">Nächste Schritte</string>
     <string name="settings_systemize_dialog_step_format">%1$d. %2$s</string>
-    <string name="settings_systemize_dialog_success_footnote">Erfordert ein gerootetes Gerät. Die Änderung ist umkehrbar: Entfernen Sie das Magisk-Modul \"Argosy Systemize\" und starten Sie neu. Falls Ihr Menütext abweicht, ist die Skriptdatei trotzdem korrekt - richten Sie Ihre Root-Ausführungsoption einfach darauf aus.</string>
+    <string name="settings_systemize_dialog_success_footnote">Erfordert ein gerootetes Gerät. Die Änderung ist umkehrbar: Entfernen Sie das Magisk-Modul \"Gameio Systemize\" und starten Sie neu. Falls Ihr Menütext abweicht, ist die Skriptdatei trotzdem korrekt - richten Sie Ihre Root-Ausführungsoption einfach darauf aus.</string>
     <string name="settings_systemize_dialog_error_title">Skript konnte nicht gespeichert werden</string>
     <string name="settings_systemize_dialog_error_hint">Möglicherweise fehlt der Speicherzugriff. Erteilen Sie in der Einrichtung Zugriff auf alle Dateien und versuchen Sie es erneut.</string>
 

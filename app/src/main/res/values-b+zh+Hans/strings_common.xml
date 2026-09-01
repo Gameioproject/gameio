@@ -268,7 +268,7 @@
     <string name="ui_add_to_collection_create">创建新合集</string>
     <string name="ui_add_to_collection_member">已在合集中</string>
 
-    <string name="ui_steam_location_download">通过Argosy下载</string>
+    <string name="ui_steam_location_download">通过Gameio下载</string>
     <string name="ui_steam_location_mark_installed">标记为已安装</string>
     <string name="ui_steam_location_managed_by">由%1$s管理</string>
 
@@ -545,7 +545,7 @@
     <string name="ui_sync_overlay_blocked_skip">暂时跳过</string>
     <string name="ui_sync_overlay_hardcore_title">硬核存档冲突</string>
     <string name="ui_sync_overlay_hardcore_message">“%1$s”的服务器版本不再满足硬核模式的要求。</string>
-    <string name="ui_sync_overlay_hardcore_note">如果存档在Argosy之外被修改过，可能会出现这种情况。</string>
+    <string name="ui_sync_overlay_hardcore_note">如果存档在Gameio之外被修改过，可能会出现这种情况。</string>
     <string name="ui_sync_overlay_hardcore_keep">保留硬核</string>
     <string name="ui_sync_overlay_hardcore_keep_subtitle">将本地存档上传到服务器</string>
     <string name="ui_sync_overlay_hardcore_downgrade">降级为休闲</string>
@@ -596,7 +596,7 @@
     <string name="ui_file_browser_title_file">选择文件</string>
     <string name="ui_file_browser_title_file_or_folder">选择文件或文件夹</string>
     <string name="ui_file_browser_permission_title">需要存储访问权限</string>
-    <string name="ui_file_browser_permission_message">Argosy需要“所有文件访问权限”才能浏览文件夹、下载游戏和同步存档。请授权后返回此处。</string>
+    <string name="ui_file_browser_permission_message">Gameio需要“所有文件访问权限”才能浏览文件夹、下载游戏和同步存档。请授权后返回此处。</string>
     <string name="ui_file_browser_permission_button">授予访问权限</string>
     <string name="ui_file_browser_permission_footer_grant">授予访问权限</string>
     <string name="ui_file_browser_permission_footer_back">返回</string>

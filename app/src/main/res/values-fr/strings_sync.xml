@@ -40,7 +40,7 @@
 
     <string name="sync_blocked_access_denied_title">Accès au dossier de sauvegarde bloqué</string>
     <string name="sync_blocked_access_denied_detail">Votre appareil bloque l\'accès aux données de sauvegarde de %1$s. Cela peut être dû à des restrictions du fabricant (Samsung, Xiaomi, etc.) ou à des politiques de sécurité.</string>
-    <string name="sync_blocked_access_denied_switch_detail">Votre appareil bloque l\'accès aux données de sauvegarde de %1$s. Configurez un chemin de sauvegarde externe dans %2$s (en dehors d\'Android/data), puis définissez le même chemin dans Argosy.</string>
+    <string name="sync_blocked_access_denied_switch_detail">Votre appareil bloque l\'accès aux données de sauvegarde de %1$s. Configurez un chemin de sauvegarde externe dans %2$s (en dehors d\'Android/data), puis définissez le même chemin dans Gameio.</string>
     <string name="sync_blocked_access_denied_emulator_fallback">émulateur</string>
     <string name="sync_blocked_access_denied_configure_fallback">l\'émulateur</string>
 

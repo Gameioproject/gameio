@@ -40,7 +40,7 @@
 
     <string name="sync_blocked_access_denied_title">Acceso a la carpeta de guardado bloqueado</string>
     <string name="sync_blocked_access_denied_detail">Tu dispositivo está bloqueando el acceso a los datos de guardado de %1$s. Esto puede deberse a restricciones del fabricante (Samsung, Xiaomi, etc.) o a políticas de seguridad.</string>
-    <string name="sync_blocked_access_denied_switch_detail">Tu dispositivo está bloqueando el acceso a los datos de guardado de %1$s. Configura una ruta de guardado externa en %2$s (fuera de Android/data) y luego establece la misma ruta en Argosy.</string>
+    <string name="sync_blocked_access_denied_switch_detail">Tu dispositivo está bloqueando el acceso a los datos de guardado de %1$s. Configura una ruta de guardado externa en %2$s (fuera de Android/data) y luego establece la misma ruta en Gameio.</string>
     <string name="sync_blocked_access_denied_emulator_fallback">emulador</string>
     <string name="sync_blocked_access_denied_configure_fallback">el emulador</string>
 

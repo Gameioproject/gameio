@@ -40,7 +40,7 @@
          the page describing that game. -->
     <string name="savesync_footer_open_game">Open game</string>
     <!-- Footer hint. Verb phrase: asks the server for saves this device has not seen yet. "RomM"
-         is the name of the server software Argosy talks to; leave it untranslated. -->
+         is the name of the server software Gameio talks to; leave it untranslated. -->
     <string name="savesync_footer_scan_server">Scan RomM</string>
     <!-- Footer hint. Verb: leaves this screen. -->
     <string name="savesync_footer_back">Back</string>
@@ -48,7 +48,7 @@
     <!-- Label over the name of the handheld the user is holding, on the card describing it. Noun
          phrase naming which device the card is about. -->
     <string name="savesync_device_this_label">This device</string>
-    <!-- Stands in for the device name when no server is connected, so Argosy does not yet know
+    <!-- Stands in for the device name when no server is connected, so Gameio does not yet know
          what this device is registered as. Adjective phrase describing the state, not a command
          to connect. "RomM" is the server software's name; leave it untranslated. -->
     <string name="savesync_device_not_connected">Not connected to RomM</string>
@@ -86,7 +86,7 @@
         <item quantity="other">+%d more</item>
     </plurals>
 
-    <!-- Warning shown when Argosy cannot read some of the folders emulators keep their save files
+    <!-- Warning shown when Gameio cannot read some of the folders emulators keep their save files
          in, so those saves cannot be synced. %d is how many folders. "Save location" is a folder
          on disk; "save" is a noun. -->
     <plurals name="savesync_access_notice_title">
@@ -102,7 +102,7 @@
     <!-- Heading shown in place of the list when no server is connected. Verb phrase addressed to
          the user. "Saves" is a plural noun, the thing being synced. -->
     <string name="savesync_empty_title_disconnected">Connect to RomM to sync saves</string>
-    <!-- Body under that heading. Verb phrase addressed to the user. "Settings" names Argosy's own
+    <!-- Body under that heading. Verb phrase addressed to the user. "Settings" names Gameio's own
          settings screen. -->
     <string name="savesync_empty_message_disconnected">Open Settings to add your RomM server</string>
 

@@ -303,7 +303,7 @@
     <string name="ui_add_to_collection_create">Créer une nouvelle collection</string>
     <string name="ui_add_to_collection_member">Dans la collection</string>
 
-    <string name="ui_steam_location_download">Télécharger via Argosy</string>
+    <string name="ui_steam_location_download">Télécharger via Gameio</string>
     <string name="ui_steam_location_mark_installed">Marquer comme installé</string>
     <string name="ui_steam_location_managed_by">Géré par %1$s</string>
 
@@ -594,7 +594,7 @@
     <string name="ui_sync_overlay_blocked_skip">Ignorer pour l\'instant</string>
     <string name="ui_sync_overlay_hardcore_title">Conflit de sauvegarde Hardcore</string>
     <string name="ui_sync_overlay_hardcore_message">La version serveur de \"%1$s\" ne remplit plus les conditions du mode hardcore.</string>
-    <string name="ui_sync_overlay_hardcore_note">Cela peut arriver si la sauvegarde a été modifiée en dehors d\'Argosy.</string>
+    <string name="ui_sync_overlay_hardcore_note">Cela peut arriver si la sauvegarde a été modifiée en dehors d\'Gameio.</string>
     <string name="ui_sync_overlay_hardcore_keep">Conserver le mode hardcore</string>
     <string name="ui_sync_overlay_hardcore_keep_subtitle">Envoyer la sauvegarde locale vers le serveur</string>
     <string name="ui_sync_overlay_hardcore_downgrade">Repasser en mode casual</string>
@@ -649,7 +649,7 @@
     <string name="ui_file_browser_title_file">Sélectionner un fichier</string>
     <string name="ui_file_browser_title_file_or_folder">Sélectionner un fichier ou un dossier</string>
     <string name="ui_file_browser_permission_title">Accès au stockage requis</string>
-    <string name="ui_file_browser_permission_message">Argosy a besoin de l\'accès à tous les fichiers pour parcourir les dossiers, télécharger les jeux et synchroniser les sauvegardes. Autorisez-le, puis revenez ici.</string>
+    <string name="ui_file_browser_permission_message">Gameio a besoin de l\'accès à tous les fichiers pour parcourir les dossiers, télécharger les jeux et synchroniser les sauvegardes. Autorisez-le, puis revenez ici.</string>
     <string name="ui_file_browser_permission_button">Autoriser l\'accès</string>
     <string name="ui_file_browser_permission_footer_grant">Autoriser l\'accès</string>
     <string name="ui_file_browser_permission_footer_back">Retour</string>
@@ -670,7 +670,7 @@
     <string name="ui_file_browser_new_folder_error_exists">Ce dossier existe déjà</string>
     <string name="ui_file_browser_new_folder_error_failed">Échec de la création du dossier</string>
 
-    <!-- App shell and startup (ui/ArgosyApp.kt, ui/ArgosyViewModel.kt) -->
+    <!-- App shell and startup (ui/GameioApp.kt, ui/GameioViewModel.kt) -->
 
     <string name="ui_startup_status_initializing">Initialisation...</string>
     <string name="ui_startup_status_loading_library">Chargement de la bibliothèque...</string>

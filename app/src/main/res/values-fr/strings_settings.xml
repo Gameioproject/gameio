@@ -247,8 +247,8 @@
     <string name="settings_saves_save_sync_locked_subtitle">Nécessite un serveur RomM</string>
 
     <string name="settings_saves_secure_saves_title">Sauvegardes sécurisées</string>
-    <string name="settings_saves_secure_saves_subtitle_on">Argosy gère et applique les fichiers de sauvegarde</string>
-    <string name="settings_saves_secure_saves_subtitle_off">Argosy tente de synchroniser les sauvegardes gérées hors du lanceur</string>
+    <string name="settings_saves_secure_saves_subtitle_on">Gameio gère et applique les fichiers de sauvegarde</string>
+    <string name="settings_saves_secure_saves_subtitle_off">Gameio tente de synchroniser les sauvegardes gérées hors du lanceur</string>
     <string name="settings_saves_secure_saves_locked_value">Indisponible</string>
     <string name="settings_saves_secure_saves_locked_subtitle">Nécessite un serveur RomM</string>
 
@@ -418,7 +418,7 @@
 
     <!-- ===== Section Autorisations ===== -->
 
-    <string name="settings_permissions_intro">Argosy nécessite certaines autorisations pour fonctionner pleinement. Appuyez sur chaque autorisation pour l\'accorder.</string>
+    <string name="settings_permissions_intro">Gameio nécessite certaines autorisations pour fonctionner pleinement. Appuyez sur chaque autorisation pour l\'accorder.</string>
     <string name="settings_permissions_storage_title">Accès au stockage</string>
     <string name="settings_permissions_storage_description">Nécessaire pour télécharger les jeux, synchroniser les fichiers de sauvegarde et accéder aux fichiers ROM sur votre appareil.</string>
     <string name="settings_permissions_usage_stats_title">Accès aux statistiques d\'utilisation</string>
@@ -467,8 +467,8 @@
     <string name="settings_about_import_subtitle">Appliquer les paramètres depuis un fichier de sauvegarde</string>
 
     <string name="settings_about_systemize_title">Empêcher les plantages sur émulateurs lourds</string>
-    <string name="settings_about_systemize_subtitle">Argosy peut être fermé de force quand un émulateur exigeant utilise la majorité de la RAM. Sur un appareil rooté, ceci écrit un script qui fait d\'Argosy une application système pour qu\'elle ne soit plus fermée.</string>
-    <string name="settings_about_restart_title">Redémarrer Argosy</string>
+    <string name="settings_about_systemize_subtitle">Gameio peut être fermé de force quand un émulateur exigeant utilise la majorité de la RAM. Sur un appareil rooté, ceci écrit un script qui fait d\'Gameio une application système pour qu\'elle ne soit plus fermée.</string>
+    <string name="settings_about_restart_title">Redémarrer Gameio</string>
     <string name="settings_about_restart_subtitle">Fermer et rouvrir le lanceur</string>
 
     <string name="settings_about_file_logging_title">Journalisation dans un fichier</string>
@@ -1020,7 +1020,7 @@
     <string name="settings_steam_reset_library_subtitle">Retirer tous les jeux Steam synchronisés</string>
 
     <string name="settings_steam_gn_required_title">GameNative requis</string>
-    <string name="settings_steam_gn_required_message">Les jeux Steam sont téléchargés par Argosy et lancés via GameNative. Installez GameNative et activez le stockage externe dans ses paramètres avant de continuer.</string>
+    <string name="settings_steam_gn_required_message">Les jeux Steam sont téléchargés par Gameio et lancés via GameNative. Installez GameNative et activez le stockage externe dans ses paramètres avant de continuer.</string>
     <string name="settings_steam_gn_required_action">Installer GameNative</string>
 
     <string name="settings_steam_login_title">Se connecter à Steam</string>
@@ -1222,7 +1222,7 @@
     <string name="settings_accounts_switch_message">Les sauvegardes sont archivées et vérifiées avant toute suppression. Laissez cet écran ouvert.</string>
 
     <string name="settings_accounts_pairing_title">Scannez pour ajouter un compte</string>
-    <string name="settings_accounts_pairing_message">Connectez-vous à RomM sur votre téléphone en tant qu\'utilisateur que vous voulez ajouter, scannez ce code, puis approuvez cet appareil. Argosy se connecte comme cet utilisateur une fois approuvé.</string>
+    <string name="settings_accounts_pairing_message">Connectez-vous à RomM sur votre téléphone en tant qu\'utilisateur que vous voulez ajouter, scannez ce code, puis approuvez cet appareil. Gameio se connecte comme cet utilisateur une fois approuvé.</string>
     <string name="settings_accounts_pairing_retry">Réessayer</string>
     <string name="settings_accounts_pairing_cancel">Annuler</string>
 
@@ -1486,7 +1486,7 @@
     <string name="settings_platform_legacy_mode_title">Mode hérité</string>
     <string name="settings_platform_legacy_mode_subtitle">Utiliser l\'URI file:// pour Drastic</string>
     <string name="settings_platform_launch_args_title">Arguments de lancement</string>
-    <string name="settings_platform_launch_args_subtitle">Personnaliser la façon dont Argosy lance cet émulateur</string>
+    <string name="settings_platform_launch_args_subtitle">Personnaliser la façon dont Gameio lance cet émulateur</string>
     <string name="settings_platform_builtin_video_title">A/V &amp; performances intégrées</string>
     <string name="settings_platform_builtin_video_subtitle">Remplacements d\'affichage, de performances et de sauvegarde</string>
     <string name="settings_platform_builtin_controls_title">Contrôles intégrés</string>
@@ -1719,7 +1719,7 @@
     <string name="settings_launch_args_hint_reset_field">Réinitialiser le champ</string>
     <string name="settings_launch_args_hint_reset_all">Tout réinitialiser</string>
     <string name="settings_launch_args_hint_back">Retour</string>
-    <string name="settings_launch_args_intro">Remplacer la façon dont Argosy lance cet émulateur sur cette plateforme. Les indicateurs du mode reprise sont fixes quels que soient les remplacements.</string>
+    <string name="settings_launch_args_intro">Remplacer la façon dont Gameio lance cet émulateur sur cette plateforme. Les indicateurs du mode reprise sont fixes quels que soient les remplacements.</string>
     <string name="settings_launch_args_data_uri_label">URI de données</string>
     <string name="settings_launch_args_data_uri_subtitle">Définit Intent.data (`-d` en shell). Utilisé par les émulateurs ACTION_VIEW qui lisent la ROM depuis l\'URI de données de l\'intent.</string>
     <string name="settings_launch_args_extras_label">Extras</string>
@@ -1918,7 +1918,7 @@
     <!-- ===== Fenetre de selection d'application ===== -->
 
     <string name="settings_app_picker_title">Sélectionner une application - %1$s</string>
-    <string name="settings_app_picker_intro">Argosy n\'a aucun émulateur connu installé pour cette plateforme. Choisissez une application pour lancer les jeux ; vous pourrez ensuite ajuster la façon dont Argosy l\'appelle via les Arguments de lancement.</string>
+    <string name="settings_app_picker_intro">Gameio n\'a aucun émulateur connu installé pour cette plateforme. Choisissez une application pour lancer les jeux ; vous pourrez ensuite ajuster la façon dont Gameio l\'appelle via les Arguments de lancement.</string>
     <string name="settings_app_picker_empty">Aucune application lançable trouvée.</string>
 
     <!-- ===== Fenetre d'ordre des manettes ===== -->
@@ -2003,7 +2003,7 @@
     <!-- ===== Fenetre du chemin de sauvegarde ===== -->
 
     <string name="settings_save_path_modal_title">%1$s - %2$s</string>
-    <string name="settings_save_path_modal_intro">Les chemins personnalisés aident à corriger la détection des sauvegardes quand Argosy ne trouve pas de sauvegardes à synchroniser. Cela ne change pas où votre émulateur stocke ses sauvegardes.</string>
+    <string name="settings_save_path_modal_intro">Les chemins personnalisés aident à corriger la détection des sauvegardes quand Gameio ne trouve pas de sauvegardes à synchroniser. Cela ne change pas où votre émulateur stocke ses sauvegardes.</string>
     <string name="settings_save_path_modal_save_path_label">Chemin de sauvegarde</string>
     <string name="settings_save_path_modal_note_missing">Ce dossier n\'est pas présent sur l\'appareil pour le moment. Les sauvegardes ne seront pas trouvées tant qu\'il ne l\'est pas.</string>
     <string name="settings_save_path_modal_note_moved">Déplacé vers l\'endroit où %1$s stocke réellement ses sauvegardes, sous le dossier que vous avez choisi.</string>
@@ -2062,7 +2062,7 @@
     <string name="settings_accounts_delegate_blocker_media_download">Un film ou un épisode est encore en cours de téléchargement. Laissez-le se terminer ou annulez-le.</string>
     <string name="settings_accounts_delegate_blocker_library_sync">Une synchro de bibliothèque est en cours. Laissez-la se terminer, puis réessayez.</string>
     <string name="settings_accounts_delegate_blocker_netplay_session">Une session netplay est ouverte. Quittez-la, puis réessayez.</string>
-    <string name="settings_accounts_delegate_blocker_exit_confirmation">Confirmez que tout jeu lancé en dehors d\'Argosy est bien fermé.</string>
+    <string name="settings_accounts_delegate_blocker_exit_confirmation">Confirmez que tout jeu lancé en dehors d\'Gameio est bien fermé.</string>
     <string name="settings_accounts_delegate_blocker_unknown_account">Ce compte n\'est plus sur cet appareil.</string>
 
     <!-- ===== Delegue des parametres Steam ===== -->
@@ -2107,7 +2107,7 @@
     <string name="settings_systemize_dialog_detected_device">Appareil détecté : %1$s</string>
     <string name="settings_systemize_dialog_next_steps_heading">Étapes suivantes</string>
     <string name="settings_systemize_dialog_step_format">%1$d. %2$s</string>
-    <string name="settings_systemize_dialog_success_footnote">Nécessite un appareil rooté. Le changement est réversible : retirez le module Magisk nommé \"Argosy Systemize\" et redémarrez. Si le libellé de votre menu diffère, le fichier de script reste correct - pointez simplement votre option d\'exécution en root vers lui.</string>
+    <string name="settings_systemize_dialog_success_footnote">Nécessite un appareil rooté. Le changement est réversible : retirez le module Magisk nommé \"Gameio Systemize\" et redémarrez. Si le libellé de votre menu diffère, le fichier de script reste correct - pointez simplement votre option d\'exécution en root vers lui.</string>
     <string name="settings_systemize_dialog_error_title">Impossible d\'enregistrer le script</string>
     <string name="settings_systemize_dialog_error_hint">L\'accès au stockage est peut-être manquant. Accordez l\'accès à tous les fichiers dans la configuration et réessayez.</string>
 

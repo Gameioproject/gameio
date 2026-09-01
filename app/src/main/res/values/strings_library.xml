@@ -66,7 +66,7 @@
     <!-- Headline shown in place of the landing grid when the user has no platforms at all. -->
     <string name="library_landing_empty_title">No platforms yet</string>
     <!-- Body text under the empty landing grid. "Rom Manager" is the name of the server
-         product Argosy syncs from and stays untranslated. "Settings" names Argosy's own
+         product Gameio syncs from and stays untranslated. "Settings" names Gameio's own
          settings screen. -->
     <string name="library_landing_empty_body">Sync your library from Rom Manager in Settings</string>
 
@@ -213,7 +213,7 @@
         <item quantity="other">Downloading %d discs</item>
     </plurals>
     <!-- Toast shown when a downloaded archive could not be unpacked. "game details" names
-         Argosy's game detail screen, where the retry lives. -->
+         Gameio's game detail screen, where the retry lives. -->
     <string name="library_notice_extraction_failed">Extraction failed. Open game details to retry.</string>
     <!-- Toast shown when Android refused to install a downloaded app package. -->
     <string name="library_notice_apk_install_failed">Could not install APK</string>
@@ -288,10 +288,10 @@
     <!-- Entry in an app's action menu on a device with two screens. Verb phrase, starts the
          app on the upper screen. -->
     <string name="library_apps_menu_open_on_top">Open on Top Screen</string>
-    <!-- Entry in an app's action menu when the app is already on Argosy's home screen. Verb
+    <!-- Entry in an app's action menu when the app is already on Gameio's home screen. Verb
          phrase, takes it off. -->
     <string name="library_apps_menu_remove_from_home">Remove from Home</string>
-    <!-- Entry in an app's action menu when the app is not on Argosy's home screen. Verb
+    <!-- Entry in an app's action menu when the app is not on Gameio's home screen. Verb
          phrase, puts it there. -->
     <string name="library_apps_menu_add_to_home">Add to Home</string>
     <!-- Entry in an app's action menu when the app is already on the second screen's home.

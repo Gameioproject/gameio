@@ -298,7 +298,7 @@
     <string name="ui_add_to_collection_create">Создать новую коллекцию</string>
     <string name="ui_add_to_collection_member">В коллекции</string>
 
-    <string name="ui_steam_location_download">Скачать через Argosy</string>
+    <string name="ui_steam_location_download">Скачать через Gameio</string>
     <string name="ui_steam_location_mark_installed">Отметить как установленную</string>
     <string name="ui_steam_location_managed_by">Управляется через %1$s</string>
 
@@ -581,7 +581,7 @@
     <string name="ui_sync_overlay_blocked_skip">Пропустить сейчас</string>
     <string name="ui_sync_overlay_hardcore_title">Конфликт сохранения в режиме хардкор</string>
     <string name="ui_sync_overlay_hardcore_message">Версия \"%1$s\" на сервере больше не соответствует требованиям режима хардкор.</string>
-    <string name="ui_sync_overlay_hardcore_note">Это может произойти, если сохранение было изменено вне Argosy.</string>
+    <string name="ui_sync_overlay_hardcore_note">Это может произойти, если сохранение было изменено вне Gameio.</string>
     <string name="ui_sync_overlay_hardcore_keep">Сохранить хардкор</string>
     <string name="ui_sync_overlay_hardcore_keep_subtitle">Загрузить локальное сохранение на сервер</string>
     <string name="ui_sync_overlay_hardcore_downgrade">Перейти в казуальный режим</string>
@@ -632,7 +632,7 @@
     <string name="ui_file_browser_title_file">Выбор файла</string>
     <string name="ui_file_browser_title_file_or_folder">Выбор файла или папки</string>
     <string name="ui_file_browser_permission_title">Требуется доступ к хранилищу</string>
-    <string name="ui_file_browser_permission_message">Argosy нужен доступ ко всем файлам, чтобы просматривать папки, скачивать игры и синхронизировать сохранения. Предоставьте его и вернитесь сюда.</string>
+    <string name="ui_file_browser_permission_message">Gameio нужен доступ ко всем файлам, чтобы просматривать папки, скачивать игры и синхронизировать сохранения. Предоставьте его и вернитесь сюда.</string>
     <string name="ui_file_browser_permission_button">Предоставить доступ</string>
     <string name="ui_file_browser_permission_footer_grant">Предоставить доступ</string>
     <string name="ui_file_browser_permission_footer_back">Назад</string>

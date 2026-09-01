@@ -362,7 +362,7 @@
     <string name="dual_detail_file_picker_choose_title">Dateien auswählen</string>
 
     <string name="dual_detail_steam_install_heading">INSTALLATIONSORT</string>
-    <string name="dual_detail_steam_install_argosy">Über Argosy herunterladen</string>
+    <string name="dual_detail_steam_install_argosy">Über Gameio herunterladen</string>
     <string name="dual_detail_steam_install_external">Als installiert markieren</string>
     <string name="dual_detail_steam_install_managed_by">Verwaltet von %1$s</string>
 

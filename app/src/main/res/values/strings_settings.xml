@@ -13,14 +13,14 @@
 
     <!-- ===== Top level of the settings screen ===== -->
 
-    <!-- Group heading over the rows that change Argosy itself. Noun: the launcher app. Rendered in
+    <!-- Group heading over the rows that change Gameio itself. Noun: the launcher app. Rendered in
          caps in English; use whatever casing suits a heading in your language. -->
     <string name="settings_main_section_launcher">LAUNCHER</string>
     <!-- Group heading over the rows about running games. Noun. -->
     <string name="settings_main_section_gameplay">GAMEPLAY</string>
     <!-- Group heading over the rows about the collection of games. Noun. -->
     <string name="settings_main_section_library">LIBRARY</string>
-    <!-- Group heading over the rows for the servers and accounts Argosy talks to. Noun, plural. -->
+    <!-- Group heading over the rows for the servers and accounts Gameio talks to. Noun, plural. -->
     <string name="settings_main_section_connections">CONNECTIONS</string>
     <!-- Group heading over the rows about the device and the app itself. Noun. -->
     <string name="settings_main_section_system">SYSTEM</string>
@@ -47,7 +47,7 @@
          handhelds. -->
     <string name="settings_main_displays_subtitle">Dimmer, dual-screen, LED</string>
 
-    <!-- Row opening the settings for the emulator Argosy ships with, as opposed to separate
+    <!-- Row opening the settings for the emulator Gameio ships with, as opposed to separate
          emulator apps. Adjective phrase. -->
     <string name="settings_main_builtin_emulator_title">Built-in Emulator</string>
     <!-- Second line of that row when the built-in emulator is turned on. Adjective. -->
@@ -73,7 +73,7 @@
     <!-- Row opening the graphics driver settings. "GPU" is the graphics chip. -->
     <string name="settings_main_drivers_title">GPU Drivers</string>
 
-    <!-- Row opening the per-console settings. Noun, plural: the consoles Argosy knows about. -->
+    <!-- Row opening the per-console settings. Noun, plural: the consoles Gameio knows about. -->
     <string name="settings_main_platforms_title">Platforms</string>
     <!-- Second line of that row, counting the consoles set up. -->
     <plurals name="settings_main_platforms_subtitle">
@@ -91,7 +91,7 @@
     <!-- Second line of that row when nothing is on the device. -->
     <string name="settings_main_storage_subtitle_empty">No downloads</string>
 
-    <!-- Row opening the RomM game server settings. Proper name of the server software Argosy
+    <!-- Row opening the RomM game server settings. Proper name of the server software Gameio
          talks to, never translated. -->
     <string name="settings_main_romm_title" translatable="false">RomM</string>
     <!-- Row opening the Steam settings. Proper name of an outside service, never translated. -->
@@ -101,7 +101,7 @@
     <string name="settings_main_jellyfin_title" translatable="false">Jellyfin</string>
     <!-- Second line of the game server row when no server address has been entered. -->
     <string name="settings_main_romm_subtitle_unconfigured">Server not configured</string>
-    <!-- Second line of that row while Argosy is testing whether the server answers. -->
+    <!-- Second line of that row while Gameio is testing whether the server answers. -->
     <string name="settings_main_romm_subtitle_checking">Checking connection...</string>
     <!-- Second line of that row when the server does not answer. -->
     <string name="settings_main_romm_subtitle_offline">Server offline</string>
@@ -121,7 +121,7 @@
     <string name="settings_main_jellyfin_subtitle_signed_out">Not signed in</string>
     <!-- Row opening the friends and presence settings. Adjective used as a noun. -->
     <string name="settings_main_social_title">Social</string>
-    <!-- Second line of that row. %1$s is the name the user goes by. "Linked" means the Argosy
+    <!-- Second line of that row. %1$s is the name the user goes by. "Linked" means the Gameio
          account is joined to the social service. -->
     <string name="settings_main_social_subtitle_linked">Linked as %1$s</string>
     <!-- Second line of that row while the join is in progress. -->
@@ -129,19 +129,19 @@
     <!-- Second line of that row when no account is joined. -->
     <string name="settings_main_social_subtitle_unlinked">Not linked</string>
 
-    <!-- Row opening the list of Android permissions Argosy asks for. Noun, plural. -->
+    <!-- Row opening the list of Android permissions Gameio asks for. Noun, plural. -->
     <string name="settings_main_permissions_title">Permissions</string>
     <!-- Second line of that row when every permission has been given. Adjective phrase. -->
     <string name="settings_main_permissions_subtitle_all">All granted</string>
     <!-- Second line of that row otherwise. %1$d is how many were given, %2$d how many there
          are. -->
     <string name="settings_main_permissions_subtitle_partial">%1$d/%2$d granted</string>
-    <!-- Row that leaves Argosy for the phone or handheld's own settings app. "Android" is the
+    <!-- Row that leaves Gameio for the phone or handheld's own settings app. "Android" is the
          operating system's name; leave it untranslated. -->
     <string name="settings_main_device_title">Android Settings</string>
     <!-- Second line of that row. Noun phrase naming where it goes. -->
     <string name="settings_main_device_subtitle">System settings</string>
-    <!-- Row opening the page about this build of Argosy. Preposition used as a heading, the usual
+    <!-- Row opening the page about this build of Gameio. Preposition used as a heading, the usual
          name for such a page. -->
     <string name="settings_main_about_title">About</string>
     <!-- Second line of that row. %1$s is the version number. -->
@@ -286,7 +286,7 @@
     <!-- Value of that row: the list stops dead at its end and holding the stick will not push
          past it. Noun phrase. -->
     <string name="settings_navigation_menu_wrap_hard_stop">Hard Stop</string>
-    <!-- Value of that row: Argosy decides per list. Adjective, short for "automatic". -->
+    <!-- Value of that row: Gameio decides per list. Adjective, short for "automatic". -->
     <string name="settings_navigation_menu_wrap_auto">Auto</string>
 
     <!-- Row title. Names a two-button press: hold Select, then press the left shoulder button.
@@ -341,7 +341,7 @@
     <string name="settings_displays_display_roles_title">Display Roles</string>
     <!-- Second line of that row. "Swapped" is the name of one of the row's own values, below. -->
     <string name="settings_displays_display_roles_subtitle">Which physical display is the main vs companion screen; Swapped flips top and bottom</string>
-    <!-- Value of that row: let Argosy decide. Adjective, short for "automatic". -->
+    <!-- Value of that row: let Gameio decide. Adjective, short for "automatic". -->
     <string name="settings_displays_display_roles_auto">Auto</string>
     <!-- Value of that row: the screens keep the jobs the device gives them. Adjective. -->
     <string name="settings_displays_display_roles_standard">Standard</string>
@@ -471,12 +471,12 @@
          leave it untranslated. -->
     <string name="settings_saves_save_sync_locked_subtitle">Requires a RomM server</string>
 
-    <!-- Row title. Noun phrase naming the strict mode where Argosy owns the save files. -->
+    <!-- Row title. Noun phrase naming the strict mode where Gameio owns the save files. -->
     <string name="settings_saves_secure_saves_title">Secure Saves</string>
-    <!-- Second line of that row while strict mode is on. "Argosy" is this app's name. -->
-    <string name="settings_saves_secure_saves_subtitle_on">Argosy manages and enforces save files</string>
+    <!-- Second line of that row while strict mode is on. "Gameio" is this app's name. -->
+    <string name="settings_saves_secure_saves_subtitle_on">Gameio manages and enforces save files</string>
     <!-- Second line of that row while it is off. -->
-    <string name="settings_saves_secure_saves_subtitle_off">Argosy attempts to sync saves managed outside the launcher</string>
+    <string name="settings_saves_secure_saves_subtitle_off">Gameio attempts to sync saves managed outside the launcher</string>
     <!-- Value shown in place of the switch when no game server is connected. Adjective. -->
     <string name="settings_saves_secure_saves_locked_value">Unavailable</string>
     <!-- Second line of that row when it is unavailable. "RomM" is the server software's name. -->
@@ -502,7 +502,7 @@
     </plurals>
     <!-- Row opening the tools for clearing stored copies of saves. Noun phrase, plural. -->
     <string name="settings_saves_caches_title">Save Caches</string>
-    <!-- Second line of that row. "Detected paths" are the folders Argosy worked out for
+    <!-- Second line of that row. "Detected paths" are the folders Gameio worked out for
          itself. -->
     <string name="settings_saves_caches_subtitle">Clear cached saves and detected paths</string>
 
@@ -580,7 +580,7 @@
     <!-- How far that fetch has got. %1$d is a percentage. -->
     <string name="settings_sync_image_cache_progress_percent">%1$d%%</string>
 
-    <!-- Row title for the download group holding everything Argosy could not put in a named
+    <!-- Row title for the download group holding everything Gameio could not put in a named
          group. Noun phrase, plural. -->
     <string name="settings_sync_download_category_other">Other Folders</string>
     <!-- Second line of each download group row. %1$s is that group's name in lower case. -->
@@ -620,7 +620,7 @@
     <!-- Row title. Noun phrase: which mode a game starts in. -->
     <string name="settings_ra_play_mode_title">Play Mode Preference</string>
     <!-- Second line of that row while it cannot be changed. "Secure Saves" is the name of another
-         Argosy setting; match the wording used there. -->
+         Gameio setting; match the wording used there. -->
     <string name="settings_ra_play_mode_subtitle_locked">Requires Secure Saves</string>
     <!-- Value of that row: put the question every time a game starts. Verb. -->
     <string name="settings_ra_play_mode_ask">Ask</string>
@@ -767,7 +767,7 @@
     <string name="settings_drivers_gpu_label">GPU</string>
     <!-- Shown in place of that name when the chip could not be identified. Adjective. -->
     <string name="settings_drivers_gpu_unknown">Unknown</string>
-    <!-- Label above the driver Argosy suggests. Adjective. Rendered in caps in English. -->
+    <!-- Label above the driver Gameio suggests. Adjective. Rendered in caps in English. -->
     <string name="settings_drivers_recommended_label">RECOMMENDED</string>
     <!-- Heading over the list of driver files already on the device. Adjective. Rendered in caps
          in English. -->
@@ -783,8 +783,8 @@
 
     <!-- ===== Permissions section ===== -->
 
-    <!-- Paragraph at the top of the permissions list. "Argosy" is this app's name. -->
-    <string name="settings_permissions_intro">Argosy requires certain permissions to provide full functionality. Tap each permission to grant access.</string>
+    <!-- Paragraph at the top of the permissions list. "Gameio" is this app's name. -->
+    <string name="settings_permissions_intro">Gameio requires certain permissions to provide full functionality. Tap each permission to grant access.</string>
     <!-- Card title. Noun phrase naming the permission to read and write files. -->
     <string name="settings_permissions_storage_title">Storage Access</string>
     <!-- Body of that card. "ROM" is the usual term for a game file dumped from a cartridge or
@@ -800,7 +800,7 @@
     <string name="settings_permissions_notifications_description">Shows download progress when downloading games in the background.</string>
     <!-- Card title. Noun phrase naming the permission to change device settings. -->
     <string name="settings_permissions_write_settings_title">System Settings Access</string>
-    <!-- Body of that card. "Quick Settings panel" is Argosy's own small settings overlay. -->
+    <!-- Body of that card. "Quick Settings panel" is Gameio's own small settings overlay. -->
     <string name="settings_permissions_write_settings_description">Allows control of device performance mode and fan settings from the Quick Settings panel.</string>
     <!-- Card title. Noun phrase naming the permission to read what is on screen. -->
     <string name="settings_permissions_screen_capture_title">Screen Capture</string>
@@ -820,7 +820,7 @@
     <!-- Heading over the rows that save and restore settings. Noun. Rendered in caps in
          English. -->
     <string name="settings_about_section_backup">BACKUP</string>
-    <!-- Heading over the rows about making Argosy part of the operating system. Noun phrase.
+    <!-- Heading over the rows about making Gameio part of the operating system. Noun phrase.
          Rendered in caps in English. -->
     <string name="settings_about_section_system_app">SYSTEM APP</string>
     <!-- Heading over the logging rows, meant for fault finding. Noun. Rendered in caps in
@@ -877,14 +877,14 @@
     <!-- Second line of that row. -->
     <string name="settings_about_import_subtitle">Apply settings from a backup file</string>
 
-    <!-- Row that writes a script making Argosy part of the operating system. Verb phrase naming
+    <!-- Row that writes a script making Gameio part of the operating system. Verb phrase naming
          what it is for, not what it does. -->
     <string name="settings_about_systemize_title">Stop Crashes on Heavy Emulators</string>
     <!-- Second line of that row. "Rooted" describes a device whose owner has full system access.
          "RAM" is the device's working memory. -->
-    <string name="settings_about_systemize_subtitle">Argosy can be force-closed when a demanding emulator uses most of the RAM. On a rooted device, this writes a script that makes Argosy a system app so it is no longer killed.</string>
+    <string name="settings_about_systemize_subtitle">Gameio can be force-closed when a demanding emulator uses most of the RAM. On a rooted device, this writes a script that makes Gameio a system app so it is no longer killed.</string>
     <!-- Row that closes and reopens the app. Verb. -->
-    <string name="settings_about_restart_title">Restart Argosy</string>
+    <string name="settings_about_restart_title">Restart Gameio</string>
     <!-- Second line of that row. -->
     <string name="settings_about_restart_subtitle">Close and reopen the launcher</string>
 
@@ -909,9 +909,9 @@
     <string name="settings_about_save_debug_subtitle_off">Log save sync, cache, and channel events</string>
 
     <!-- Label above this app's version number. This app's own name, never translated. -->
-    <string name="settings_about_version_argosy_label" translatable="false">Argosy</string>
+    <string name="settings_about_version_argosy_label" translatable="false">Gameio</string>
     <!-- Label above the game server's version number. "RomM" is the server software's name and
-         "API" the interface Argosy talks to; leave both untranslated. -->
+         "API" the interface Gameio talks to; leave both untranslated. -->
     <string name="settings_about_version_romm_label" translatable="false">RomM API</string>
     <!-- That version number. %1$s is the number; the v stands for "version". -->
     <string name="settings_about_version_romm_value">v%1$s</string>
@@ -1344,7 +1344,7 @@
     <string name="settings_storage_reset_library_subtitle">Clears the database and image cache. Downloaded files stay on disk.</string>
     <!-- Second line of that row while it is running. Verb phrase. -->
     <string name="settings_storage_reset_library_busy">Resetting...</string>
-    <!-- Row that erases everything Argosy downloaded. Adjective plus noun. -->
+    <!-- Row that erases everything Gameio downloaded. Adjective plus noun. -->
     <string name="settings_storage_hard_reset_title">Hard Reset</string>
     <!-- Second line of that row. -->
     <string name="settings_storage_hard_reset_subtitle">Deletes downloaded games, the library database, and every cache. Settings and sign-ins stay.</string>
@@ -1693,11 +1693,11 @@
     <string name="settings_caches_info_cores_subtitle">Built-in emulator cores and support files</string>
     <!-- Read-only row naming picture filters the user added themselves. -->
     <string name="settings_caches_info_shaders_title">Custom Shaders</string>
-    <!-- Second line of that row, saying Argosy never deletes them. -->
+    <!-- Second line of that row, saying Gameio never deletes them. -->
     <string name="settings_caches_info_shaders_subtitle">User content - never cleared</string>
     <!-- Read-only row naming the typefaces the user added. Noun, plural. -->
     <string name="settings_caches_info_fonts_title">Fonts</string>
-    <!-- Second line of that row, saying Argosy never deletes them. -->
+    <!-- Second line of that row, saying Gameio never deletes them. -->
     <string name="settings_caches_info_fonts_subtitle">User content - never cleared</string>
     <!-- Read-only row naming the library records. Noun. -->
     <string name="settings_caches_info_database_title">Database</string>
@@ -1816,7 +1816,7 @@
     <string name="settings_steam_launcher_downloading">Downloading... %1$d%%</string>
     <!-- Second line of that row while Android's installer has it. -->
     <string name="settings_steam_launcher_waiting">Waiting for install...</string>
-    <!-- Second line of that row when Argosy can fetch it directly. "APK" is the Android package
+    <!-- Second line of that row when Gameio can fetch it directly. "APK" is the Android package
          file format. -->
     <string name="settings_steam_launcher_download">Download APK</string>
     <!-- Second line of that row when it has to come from Google's store. -->
@@ -1837,8 +1837,8 @@
 
     <!-- Heading of the panel shown before the helper app is installed. -->
     <string name="settings_steam_gn_required_title">GameNative Required</string>
-    <!-- Body of that panel. "Argosy" is this app's name. -->
-    <string name="settings_steam_gn_required_message">Steam games are downloaded by Argosy and launched through GameNative. Install GameNative and enable external storage in its settings before continuing.</string>
+    <!-- Body of that panel. "Gameio" is this app's name. -->
+    <string name="settings_steam_gn_required_message">Steam games are downloaded by Gameio and launched through GameNative. Install GameNative and enable external storage in its settings before continuing.</string>
     <!-- Button on that panel. Verb phrase. -->
     <string name="settings_steam_gn_required_action">Install GameNative</string>
 
@@ -1891,7 +1891,7 @@
     <string name="settings_social_section_privacy">PRIVACY</string>
     <!-- Heading over the rows about alerts. Noun, plural. Rendered in caps in English. -->
     <string name="settings_social_section_notifications">NOTIFICATIONS</string>
-    <!-- Heading over the rows for Argosy's nearby-player feature. Proper name, never
+    <!-- Heading over the rows for Gameio's nearby-player feature. Proper name, never
          translated. -->
     <string name="settings_social_section_quaypass" translatable="false">QUAYPASS</string>
 
@@ -1952,7 +1952,7 @@
     <!-- Second line of that row while they are not. -->
     <string name="settings_social_suppress_subtitle_off">Friend notifications always shown</string>
 
-    <!-- Row title. Proper name of Argosy's nearby-player feature, never translated. -->
+    <!-- Row title. Proper name of Gameio's nearby-player feature, never translated. -->
     <string name="settings_social_quaypass_title" translatable="false">QuayPass</string>
     <!-- Second line of that row while it is on. "Check-In" is the name of the screen where it
          happens; keep it capitalised as a name. -->
@@ -2027,7 +2027,7 @@
     <string name="settings_jellyfin_account_signed_in">Signed in</string>
     <!-- Second line of that row while the code is waiting to be approved elsewhere. -->
     <string name="settings_jellyfin_account_awaiting_approval">Waiting for approval in your Jellyfin app</string>
-    <!-- Second line of that row while Argosy is asking for a code. -->
+    <!-- Second line of that row while Gameio is asking for a code. -->
     <string name="settings_jellyfin_account_requesting_code">Asking the server for a code</string>
     <!-- Second line of that row when the server offers code sign-in. -->
     <string name="settings_jellyfin_account_quick_connect">Approve a Quick Connect code from your Jellyfin app</string>
@@ -2128,7 +2128,7 @@
     <!-- Row naming the game server. "Rom Manager" is what the server software calls itself in
          full; leave it untranslated. -->
     <string name="settings_romm_server_title">Rom Manager</string>
-    <!-- Second line of that row while Argosy is testing the connection. -->
+    <!-- Second line of that row while Gameio is testing the connection. -->
     <string name="settings_romm_server_checking">Checking connection...</string>
     <!-- Second line of that row when the server answers but has no address to show. -->
     <string name="settings_romm_server_connected">Connected</string>
@@ -2230,8 +2230,8 @@
 
     <!-- Heading beside the square code used to pair another account. Verb phrase. -->
     <string name="settings_accounts_pairing_title">Scan to add an account</string>
-    <!-- Body under that heading. "Argosy" is this app's name. -->
-    <string name="settings_accounts_pairing_message">Sign in to RomM on your phone as the user you want to add, scan this code, then approve this device. Argosy signs in as them once approved.</string>
+    <!-- Body under that heading. "Gameio" is this app's name. -->
+    <string name="settings_accounts_pairing_message">Sign in to RomM on your phone as the user you want to add, scan this code, then approve this device. Gameio signs in as them once approved.</string>
     <!-- Button that tries the pairing again after a failure. Verb phrase. -->
     <string name="settings_accounts_pairing_retry">Try Again</string>
     <!-- Button that abandons the pairing. Verb. -->
@@ -2241,7 +2241,7 @@
          "Core" is the emulation engine for one console. "LibRetro" is the framework those
          engines are written against. Both are left untranslated in the emulation community. -->
 
-    <!-- Row title. Verb phrase: use the emulator Argosy ships with. -->
+    <!-- Row title. Verb phrase: use the emulator Gameio ships with. -->
     <string name="settings_builtin_enable_title">Enable Built-in Emulator</string>
     <!-- Second line of that row. -->
     <string name="settings_builtin_enable_subtitle">Use LibRetro cores for supported platforms</string>
@@ -2591,7 +2591,7 @@
 
     <!-- Row title. Noun: where the glow takes its colour from. -->
     <string name="settings_box_art_glow_color_title">Color</string>
-    <!-- Value of that row: let Argosy decide. Adjective, short for "automatic". -->
+    <!-- Value of that row: let Gameio decide. Adjective, short for "automatic". -->
     <string name="settings_box_art_glow_color_auto">Auto</string>
     <!-- Value of that row: the theme's highlight colour. Noun. -->
     <string name="settings_box_art_glow_color_accent">Accent</string>
@@ -2644,7 +2644,7 @@
 
     <!-- ===== Platforms list ===== -->
 
-    <!-- Heading over the consoles Argosy is fetching games for. Adjective plus noun. -->
+    <!-- Heading over the consoles Gameio is fetching games for. Adjective plus noun. -->
     <string name="settings_emulators_section_active">Active Platforms</string>
     <!-- Heading over the consoles left out of syncing. Adjective plus noun. -->
     <string name="settings_emulators_section_disabled">Disabled Platforms</string>
@@ -2703,7 +2703,7 @@
     <!-- Row title. Noun: which emulation engine runs this console. Left untranslated in the
          emulation community. -->
     <string name="settings_platform_core_title">Core</string>
-    <!-- Value of that row when Argosy picks the engine. Adjective used as a noun. -->
+    <!-- Value of that row when Gameio picks the engine. Adjective used as a noun. -->
     <string name="settings_platform_core_default">Default</string>
     <!-- Small tag beside that row saying the engine supports online play. Noun. -->
     <string name="settings_platform_core_netplay_tag">Netplay</string>
@@ -2721,8 +2721,8 @@
     <!-- Row opening the editor for how the emulator is started. Noun phrase, short for
          "arguments". -->
     <string name="settings_platform_launch_args_title">Launch Args</string>
-    <!-- Second line of that row. "Argosy" is this app's name. -->
-    <string name="settings_platform_launch_args_subtitle">Customize how Argosy launches this emulator</string>
+    <!-- Second line of that row. "Gameio" is this app's name. -->
+    <string name="settings_platform_launch_args_subtitle">Customize how Gameio launches this emulator</string>
     <!-- Row opening this console's picture and sound overrides. "A/V" is audio and video. -->
     <string name="settings_platform_builtin_video_title">Built-in A/V &amp; Performance</string>
     <!-- Second line of that row. -->
@@ -2753,11 +2753,11 @@
 
     <!-- Read-only row naming the emulator's own data folder. Noun phrase. -->
     <string name="settings_platform_package_path_title">Package Path</string>
-    <!-- Value of that row when Argosy can read that folder. Adjective. -->
+    <!-- Value of that row when Gameio can read that folder. Adjective. -->
     <string name="settings_platform_package_path_accessible">Accessible</string>
     <!-- Value of that row when Android refuses. Adjective. -->
     <string name="settings_platform_package_path_blocked">Blocked</string>
-    <!-- Value of that row while Argosy is still testing. -->
+    <!-- Value of that row while Gameio is still testing. -->
     <string name="settings_platform_package_path_checking">Checking...</string>
 
     <!-- Read-only row about this console's startup files. Noun. -->
@@ -2801,7 +2801,7 @@
     <string name="settings_platform_rom_path_title">ROM Path</string>
     <!-- Row naming the folder its saves sit in. Noun phrase. -->
     <string name="settings_platform_save_path_title">Save Path</string>
-    <!-- Second line of that row when Android will not let Argosy read the emulator's folder. -->
+    <!-- Second line of that row when Android will not let Gameio read the emulator's folder. -->
     <string name="settings_platform_save_path_blocked">Access blocked -- set a custom save path</string>
     <!-- Row naming the folder its save states sit in. "State" is a snapshot of a running
          game. -->
@@ -3156,7 +3156,7 @@
     <string name="settings_input_mapping_recording_waiting">Waiting for input...</string>
 
     <!-- ===== Launch args modal (Settings > components > LaunchArgsModal) =====
-         Advanced/debug modal for overriding how Argosy launches an emulator. -->
+         Advanced/debug modal for overriding how Gameio launches an emulator. -->
 
     <!-- Modal title. %1$s is the platform name, %2$s is the emulator name. -->
     <string name="settings_launch_args_title">Launch Args - %1$s / %2$s</string>
@@ -3169,7 +3169,7 @@
     <!-- Footer hint. Dismiss the modal. -->
     <string name="settings_launch_args_hint_back">Back</string>
     <!-- Explanatory text at the top of the modal. -->
-    <string name="settings_launch_args_intro">Override how Argosy launches this emulator on this platform. Resume-mode flags are fixed regardless of overrides.</string>
+    <string name="settings_launch_args_intro">Override how Gameio launches this emulator on this platform. Resume-mode flags are fixed regardless of overrides.</string>
     <!-- Row label. Noun phrase: the Android Intent.data field used to pass the ROM path. -->
     <string name="settings_launch_args_data_uri_label">Data URI</string>
     <!-- Row subtitle explaining the Data URI row. Backtick-quoted tokens are code, keep as-is. -->
@@ -3381,7 +3381,7 @@
     <!-- Modal heading. Rendered in caps in English; use whatever casing suits a heading in your
          language. -->
     <string name="settings_emulator_picker_title">SELECT EMULATOR</string>
-    <!-- Row name for letting Argosy choose the emulator automatically. -->
+    <!-- Row name for letting Gameio choose the emulator automatically. -->
     <string name="settings_emulator_picker_auto_name">Auto</string>
     <!-- Row subtitle for the Auto row. -->
     <string name="settings_emulator_picker_auto_subtitle">Use recommended emulator</string>
@@ -3554,7 +3554,7 @@
     <!-- Modal title. %1$s is the platform name. -->
     <string name="settings_app_picker_title">Select App - %1$s</string>
     <!-- Explanatory text at the top of the modal. -->
-    <string name="settings_app_picker_intro">Argosy has no known emulator installed for this platform. Pick any app to launch games with; you can tune how Argosy calls it via Launch Args afterwards.</string>
+    <string name="settings_app_picker_intro">Gameio has no known emulator installed for this platform. Pick any app to launch games with; you can tune how Gameio calls it via Launch Args afterwards.</string>
     <!-- Shown when the device has no other app capable of being launched. -->
     <string name="settings_app_picker_empty">No launchable apps found.</string>
 
@@ -3607,7 +3607,7 @@
     <string name="settings_grip_controller_add_new_label">Add New</string>
 
     <!-- ===== Hard reset modal (Settings > components > HardResetModal) =====
-         Danger-confirm modal for wiping all local Argosy data. -->
+         Danger-confirm modal for wiping all local Gameio data. -->
 
     <!-- Modal title. Noun phrase. -->
     <string name="settings_hard_reset_title">Hard Reset</string>
@@ -3683,7 +3683,7 @@
     <string name="settings_path_config_reset_button">Reset</string>
     <!-- Button label. Verb: pick a different path. -->
     <string name="settings_path_config_change_button">Change</string>
-    <!-- Shown in place of a path when no override is set and Argosy picks it automatically. -->
+    <!-- Shown in place of a path when no override is set and Gameio picks it automatically. -->
     <string name="settings_path_config_auto_label">(auto)</string>
 
     <!-- ===== Release changelog modal (Settings > components > ReleaseChangelogModal) ===== -->
@@ -3704,13 +3704,13 @@
     <!-- Modal title. %1$s is the platform name, %2$s is the emulator name. -->
     <string name="settings_save_path_modal_title">%1$s - %2$s</string>
     <!-- Explanatory text at the top of the modal. -->
-    <string name="settings_save_path_modal_intro">Custom paths help fix save detection when Argosy can\'t find saves to sync. This doesn\'t change where your emulator stores saves.</string>
+    <string name="settings_save_path_modal_intro">Custom paths help fix save detection when Gameio can\'t find saves to sync. This doesn\'t change where your emulator stores saves.</string>
     <!-- Row title. Noun phrase: where save files for this platform/emulator pair are stored.
          Noun, not the verb "save". -->
     <string name="settings_save_path_modal_save_path_label">Save Path</string>
     <!-- Warning note when the configured save folder does not currently exist on the device. -->
     <string name="settings_save_path_modal_note_missing">This folder isn\'t on the device right now. Saves won\'t be found until it is.</string>
-    <!-- Note explaining that Argosy adjusted a picked folder to the actual save location.
+    <!-- Note explaining that Gameio adjusted a picked folder to the actual save location.
          %1$s is the platform name. -->
     <string name="settings_save_path_modal_note_moved">Moved to where %1$s saves actually live, below the folder you picked.</string>
     <!-- Note explaining the subfolder structure under a chosen save folder. %1$s is the
@@ -3815,7 +3815,7 @@
     <string name="settings_accounts_delegate_blocker_already_switching">A switch is already running. Wait for it to finish.</string>
     <!-- Switch-blocked reason: a game is currently being played. -->
     <string name="settings_accounts_delegate_blocker_active_session">A game session is still open. Close the game, then try again.</string>
-    <!-- Switch-blocked reason: an app launched outside Argosy was recently in the foreground.
+    <!-- Switch-blocked reason: an app launched outside Gameio was recently in the foreground.
          %1$s is the other app's package name, %2$d is how many seconds ago. -->
     <string name="settings_accounts_delegate_blocker_external_game">%1$s was on screen %2$ds ago. Fully exit it, then try again.</string>
     <!-- Switch-blocked reason: game file downloads are in progress. -->
@@ -3833,7 +3833,7 @@
     <string name="settings_accounts_delegate_blocker_netplay_session">A netplay session is open. Leave it, then try again.</string>
     <!-- Switch-blocked reason: the user has not yet confirmed closing an externally launched
          game. -->
-    <string name="settings_accounts_delegate_blocker_exit_confirmation">Confirm that any game launched outside Argosy is fully closed.</string>
+    <string name="settings_accounts_delegate_blocker_exit_confirmation">Confirm that any game launched outside Gameio is fully closed.</string>
     <!-- Switch-blocked reason: the target account no longer exists on this device. -->
     <string name="settings_accounts_delegate_blocker_unknown_account">That account is no longer on this device.</string>
 
@@ -3901,7 +3901,7 @@
     <string name="settings_licenses_dialog_close_button">Close</string>
 
     <!-- ===== Systemize result dialog (Settings > dialogs > SystemizeResultDialog) =====
-         Shown after writing a root script that keeps Argosy from being force-closed
+         Shown after writing a root script that keeps Gameio from being force-closed
          ("systemizing" the app). "Magisk" is the rooting framework's name, never translated. -->
 
     <!-- Button label. Dismiss the dialog. -->
@@ -3915,9 +3915,9 @@
     <!-- One numbered step in that list. %1$d is the step number, %2$s is the step text (device
          vendor content, not authored here). -->
     <string name="settings_systemize_dialog_step_format">%1$d. %2$s</string>
-    <!-- Closing note on the success screen. "Argosy Systemize" is the literal Magisk module
+    <!-- Closing note on the success screen. "Gameio Systemize" is the literal Magisk module
          name and must stay exactly as written, including the quote marks. -->
-    <string name="settings_systemize_dialog_success_footnote">Needs a rooted device. The change is reversible: remove the Magisk module named \"Argosy Systemize\" and reboot. If your menu wording differs, the script file is still correct - just point your run-as-root option at it.</string>
+    <string name="settings_systemize_dialog_success_footnote">Needs a rooted device. The change is reversible: remove the Magisk module named \"Gameio Systemize\" and reboot. If your menu wording differs, the script file is still correct - just point your run-as-root option at it.</string>
     <!-- Error title: the script file could not be written. -->
     <string name="settings_systemize_dialog_error_title">Couldn\'t Save Script</string>
     <!-- Suggested fix shown under the error detail. -->
@@ -4070,7 +4070,7 @@
     <!-- Row title. "State" here is a save state (an emulator snapshot), not a completion status.
          "Save" is an adjective describing that snapshot, not the save-sync feature. -->
     <string name="settings_libretro_def_auto_save_state_title">Save State on Exit</string>
-    <!-- Second line of that row. "Casual games" is Argosy's completion-tracking category, not a
+    <!-- Second line of that row. "Casual games" is Gameio's completion-tracking category, not a
          genre. -->
     <string name="settings_libretro_def_auto_save_state_subtitle">Applies to casual games only</string>
     <!-- Row title. Same "State" sense as Save State on Exit: an emulator save state. -->
@@ -4190,4 +4190,16 @@
     <string name="settings_main_language_name_zh_hant" translatable="false">&#32321;&#39636;&#20013;&#25991;</string>
     <string name="settings_main_language_name_ru" translatable="false">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</string>
     <string name="settings_main_language_name_hi" translatable="false">&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;</string>
+    <!-- Label on the field for the account name the server owner issued. -->
+    <string name="settings_romm_config_username_label">Username</string>
+    <!-- Label on the password field. The password is used once and not stored on the device. -->
+    <string name="settings_romm_config_password_label">Password</string>
+    <!-- Button that signs in to the server with the username and password above. -->
+    <string name="settings_romm_config_sign_in_title">Sign in</string>
+    <!-- Line under the sign-in button. -->
+    <string name="settings_romm_config_sign_in_subtitle">Connect this device to your account</string>
+    <!-- Shown when sign in is pressed with the username or password still empty. -->
+    <string name="settings_romm_config_credentials_required">Enter your username and password</string>
+    <!-- Button that submits the add-an-account form. -->
+    <string name="settings_accounts_sign_in_confirm">Sign in</string>
 </resources>

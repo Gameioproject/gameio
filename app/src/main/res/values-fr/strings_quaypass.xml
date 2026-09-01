@@ -4,7 +4,7 @@
 
     <string name="quaypass_checkin_state_running">Recherche de voyageurs à proximité...</string>
     <string name="quaypass_checkin_state_disabled">QuayPass est désactivé</string>
-    <string name="quaypass_checkin_state_not_linked">Associez votre compte Argosy pour vous enregistrer</string>
+    <string name="quaypass_checkin_state_not_linked">Associez votre compte Gameio pour vous enregistrer</string>
     <string name="quaypass_checkin_state_awaiting_registration">Enregistrement auprès du serveur...</string>
     <string name="quaypass_checkin_state_awaiting_credential">Connectez-vous pour finaliser la configuration de votre pass</string>
     <string name="quaypass_checkin_state_key_expired">Reconnectez-vous pour rafraîchir votre pass</string>
@@ -20,7 +20,7 @@
     <string name="quaypass_checkin_footer_scroll">Défiler</string>
 
     <string name="quaypass_checkin_empty_title">Aucun voyageur pour l\'instant</string>
-    <string name="quaypass_checkin_empty_message">Emportez Argosy avec vous. Vous rencontrerez d\'autres joueurs passivement lorsque vous serez à proximité.</string>
+    <string name="quaypass_checkin_empty_message">Emportez Gameio avec vous. Vous rencontrerez d\'autres joueurs passivement lorsque vous serez à proximité.</string>
 
     <string name="quaypass_checkin_card_name_fallback">\@%1$s</string>
     <string name="quaypass_checkin_card_username_subtitle">\@%1$s</string>

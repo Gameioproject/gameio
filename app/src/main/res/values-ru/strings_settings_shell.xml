@@ -254,7 +254,7 @@
     <string name="settings_shell_accounts_add_title">Добавить аккаунт?</string>
     <string name="settings_shell_accounts_switch_title">Переключиться на %1$s?</string>
     <string name="settings_shell_accounts_fallback_name">аккаунт</string>
-    <string name="settings_shell_accounts_exit_message">Сначала полностью закройте все игры, запущенные вне Argosy. Argosy не видит эти сеансы, и работающая игра может перезаписать сохранения, которые сейчас перемещаются. Сохранения архивируются и проверяются перед удалением.</string>
+    <string name="settings_shell_accounts_exit_message">Сначала полностью закройте все игры, запущенные вне Gameio. Gameio не видит эти сеансы, и работающая игра может перезаписать сохранения, которые сейчас перемещаются. Сохранения архивируются и проверяются перед удалением.</string>
     <string name="settings_shell_accounts_add_confirm">Игры закрыты, продолжить</string>
     <string name="settings_shell_accounts_switch_confirm">Игры закрыты, переключиться</string>
 

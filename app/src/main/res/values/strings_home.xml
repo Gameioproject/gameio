@@ -177,7 +177,7 @@
          the user. -->
     <string name="home_empty_message_configured">Sync your library to get started</string>
     <!-- Body under that heading when no game server has been connected. "Rom Manager" is the name
-         of the server software Argosy talks to; leave it untranslated. "Settings" names Argosy's
+         of the server software Gameio talks to; leave it untranslated. "Settings" names Gameio's
          own settings screen. -->
     <string name="home_empty_message_unconfigured">Connect to a Rom Manager server in Settings to get started</string>
     <!-- Button hint under that heading. Verb phrase: fetches the whole library from the server. -->
@@ -211,7 +211,7 @@
     <!-- Row in that menu. Verb phrase: erases the copy of the game held on this device, keeping
          the library entry. -->
     <string name="home_quick_actions_delete_download">Delete Download</string>
-    <!-- Row in that menu, for an installed Android app. Verb phrase: drops the app from Argosy's
+    <!-- Row in that menu, for an installed Android app. Verb phrase: drops the app from Gameio's
          home screen without uninstalling it. -->
     <string name="home_quick_actions_remove_from_home">Remove from Home</string>
     <!-- Row in that menu. Verb: keeps the game in the library but stops showing it. -->
@@ -226,7 +226,7 @@
     <!-- Body under that heading. -->
     <string name="home_media_empty_continue_watching_message">Anything you stop part way through shows up here.</string>
     <!-- Heading shown in place of a media library row that holds nothing. "Library" here is one of
-         the collections a media server offers, not Argosy's game library. -->
+         the collections a media server offers, not Gameio's game library. -->
     <string name="home_media_empty_library_title">Nothing in this library</string>
     <!-- Body under that heading. Verb phrase addressed to the user. -->
     <string name="home_media_empty_library_message">Refresh to fetch this library from your media server.</string>
@@ -299,7 +299,7 @@
         <item quantity="one">%d game</item>
         <item quantity="other">%d games</item>
     </plurals>
-    <!-- Second line under an installed app in the tile picker, when Argosy recognises the app as
+    <!-- Second line under an installed app in the tile picker, when Gameio recognises the app as
          an emulator. Noun, singular. -->
     <string name="home_tile_picker_app_emulator">Emulator</string>
     <!-- Second line under an installed app in the tile picker, for anything else. Noun, singular,

@@ -195,7 +195,7 @@
     <string name="social_netplayjoin_join">जॉइन करें</string>
     <string name="social_netplayjoin_rom_not_found">आपके पास यह ROM नहीं है</string>
     <string name="social_netplayjoin_rom_version_mismatch">अलग ROM वर्शन</string>
-    <string name="social_netplayjoin_core_version_mismatch">मेल खाने के लिए Argosy अपडेट करें</string>
+    <string name="social_netplayjoin_core_version_mismatch">मेल खाने के लिए Gameio अपडेट करें</string>
     <string name="social_netplayjoin_core_not_supported">कोर समर्थित नहीं है</string>
     <string name="social_netplayjoin_session_busy">सेशन व्यस्त है</string>
 

@@ -319,7 +319,7 @@
     <string name="dual_detail_file_picker_choose_title">選擇檔案</string>
 
     <string name="dual_detail_steam_install_heading">安裝位置</string>
-    <string name="dual_detail_steam_install_argosy">透過Argosy下載</string>
+    <string name="dual_detail_steam_install_argosy">透過Gameio下載</string>
     <string name="dual_detail_steam_install_external">標記為已安裝</string>
     <string name="dual_detail_steam_install_managed_by">由%1$s管理</string>
 

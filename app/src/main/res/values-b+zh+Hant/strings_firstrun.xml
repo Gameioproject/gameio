@@ -3,9 +3,9 @@
     <string name="firstrun_welcome_intro">歡迎使用！讓我們開始設定吧。</string>
     <string name="firstrun_welcome_button_start">開始設定</string>
 
-    <string name="firstrun_romm_url_title">Rom Manager登入</string>
+    <string name="firstrun_romm_url_title">連線到你的伺服器</string>
     <string name="firstrun_romm_url_field_label">伺服器網址</string>
-    <string name="firstrun_romm_url_hint">請輸入您的RomM伺服器位址，我們會自動偵測登入方式。</string>
+    <string name="firstrun_romm_url_hint">請輸入你收到的 Gameio 伺服器位址。</string>
     <string name="firstrun_romm_url_button_continue">繼續</string>
     <string name="firstrun_romm_url_button_checking">檢查中...</string>
     <string name="firstrun_romm_url_button_back">返回</string>
@@ -44,7 +44,7 @@
     <string name="firstrun_romm_success_error_library_fetch">無法取得遊戲庫：%1$s</string>
 
     <string name="firstrun_permissions_title">權限</string>
-    <string name="firstrun_permissions_intro">Argosy需要這些權限來管理您的遊戲庫與模擬器。</string>
+    <string name="firstrun_permissions_intro">Gameio需要這些權限來管理您的遊戲庫與模擬器。</string>
     <string name="firstrun_permissions_storage_title">管理儲存空間（必要）</string>
     <string name="firstrun_permissions_storage_description">瀏覽資料夾、下載遊戲及同步存檔皆需要此權限。</string>
     <string name="firstrun_permissions_notifications_title">通知</string>

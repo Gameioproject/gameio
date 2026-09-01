@@ -112,7 +112,7 @@ class JellyfinDeviceProfileBuilder @Inject constructor() {
         val maxBitrateBps = maxStreamingBitrateKbps?.let { it * KBPS_TO_BPS }
 
         return JellyfinDeviceProfile(
-            name = "Argosy",
+            name = "Gameio",
             maxStreamingBitrate = maxBitrateBps,
             maxStaticBitrate = DEFAULT_MAX_STATIC_BITRATE_BPS,
             directPlayProfiles = buildDirectPlayProfiles(videoCodecs, audioCodecs),

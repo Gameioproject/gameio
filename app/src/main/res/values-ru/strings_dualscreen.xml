@@ -338,7 +338,7 @@
     <string name="dual_detail_file_picker_choose_title">Выберите файлы</string>
 
     <string name="dual_detail_steam_install_heading">МЕСТО УСТАНОВКИ</string>
-    <string name="dual_detail_steam_install_argosy">Скачать через Argosy</string>
+    <string name="dual_detail_steam_install_argosy">Скачать через Gameio</string>
     <string name="dual_detail_steam_install_external">Отметить как установленную</string>
     <string name="dual_detail_steam_install_managed_by">Управляется через %1$s</string>
 

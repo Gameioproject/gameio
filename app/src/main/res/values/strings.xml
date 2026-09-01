@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Product name. Never translated. -->
-    <string name="app_name" translatable="false">Argosy Launcher</string>
+    <string name="app_name" translatable="false">Gameio</string>
     <!-- Names the second-screen home in the system's secondary-home picker, where it would
-         otherwise be indistinguishable from the main launcher entry. "Argosy" is the product
+         otherwise be indistinguishable from the main launcher entry. "Gameio" is the product
          name and stays as is; translate only the word describing the companion screen. -->
-    <string name="secondary_home_label">Argosy Companion</string>
+    <string name="secondary_home_label">Gameio Companion</string>
     <!-- Spoken by the screen reader for the accessibility service that pins gamepad focus. -->
     <string name="focus_accessibility_description">Keeps gamepad focus on the game display during dual-screen gameplay</string>
 </resources>

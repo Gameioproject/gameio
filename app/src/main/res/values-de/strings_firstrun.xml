@@ -3,9 +3,9 @@
     <string name="firstrun_welcome_intro">Willkommen! Lassen Sie uns alles einrichten.</string>
     <string name="firstrun_welcome_button_start">Los geht\'s</string>
 
-    <string name="firstrun_romm_url_title">Rom Manager-Anmeldung</string>
+    <string name="firstrun_romm_url_title">Mit deinem Server verbinden</string>
     <string name="firstrun_romm_url_field_label">Server-URL</string>
-    <string name="firstrun_romm_url_hint">Geben Sie die Adresse Ihres RomM-Servers ein, wir ermitteln dann die passende Anmeldemethode.</string>
+    <string name="firstrun_romm_url_hint">Gib die Adresse des Gameio-Servers ein, die du erhalten hast.</string>
     <string name="firstrun_romm_url_button_continue">Weiter</string>
     <string name="firstrun_romm_url_button_checking">Wird geprüft...</string>
     <string name="firstrun_romm_url_button_back">Zurück</string>
@@ -46,7 +46,7 @@
     <string name="firstrun_romm_success_error_library_fetch">Bibliothek konnte nicht abgerufen werden: %1$s</string>
 
     <string name="firstrun_permissions_title">Berechtigungen</string>
-    <string name="firstrun_permissions_intro">Argosy benötigt diese, um Ihre Bibliothek und Ihre Emulatoren zu verwalten.</string>
+    <string name="firstrun_permissions_intro">Gameio benötigt diese, um Ihre Bibliothek und Ihre Emulatoren zu verwalten.</string>
     <string name="firstrun_permissions_storage_title">Speicher verwalten (erforderlich)</string>
     <string name="firstrun_permissions_storage_description">Erforderlich, um Ordner zu durchsuchen, Spiele herunterzuladen und Spielstände zu synchronisieren.</string>
     <string name="firstrun_permissions_notifications_title">Benachrichtigungen</string>

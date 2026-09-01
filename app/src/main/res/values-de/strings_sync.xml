@@ -40,7 +40,7 @@
 
     <string name="sync_blocked_access_denied_title">Zugriff auf Speicherordner blockiert</string>
     <string name="sync_blocked_access_denied_detail">Ihr Gerät blockiert den Zugriff auf die Spielstanddaten von %1$s. Dies kann an Herstellerbeschränkungen (Samsung, Xiaomi usw.) oder an Sicherheitsrichtlinien liegen.</string>
-    <string name="sync_blocked_access_denied_switch_detail">Ihr Gerät blockiert den Zugriff auf die Spielstanddaten von %1$s. Legen Sie in %2$s einen externen Speicherpfad fest (außerhalb von Android/data) und stellen Sie denselben Pfad dann in Argosy ein.</string>
+    <string name="sync_blocked_access_denied_switch_detail">Ihr Gerät blockiert den Zugriff auf die Spielstanddaten von %1$s. Legen Sie in %2$s einen externen Speicherpfad fest (außerhalb von Android/data) und stellen Sie denselben Pfad dann in Gameio ein.</string>
     <string name="sync_blocked_access_denied_emulator_fallback">Emulator</string>
     <string name="sync_blocked_access_denied_configure_fallback">den Emulator</string>
 

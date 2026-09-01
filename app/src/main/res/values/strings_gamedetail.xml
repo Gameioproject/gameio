@@ -407,7 +407,7 @@
          device. -->
     <string name="gamedetail_more_options_uninstall">Uninstall</string>
     <!-- Row in the options menu for a game another launcher installed and owns. Verb phrase:
-         Argosy forgets the game without deleting it. %1$s is the other launcher's name. -->
+         Gameio forgets the game without deleting it. %1$s is the other launcher's name. -->
     <string name="gamedetail_more_options_unlink_from_launcher">Unlink from %1$s</string>
     <!-- Stands in for the other launcher's name in that row when it is not known. Noun, singular:
          the app that installed the game. -->

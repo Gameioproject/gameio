@@ -6,7 +6,7 @@
 
     <string name="quaypass_checkin_state_running">आस-पास यात्री खोजे जा रहे हैं...</string>
     <string name="quaypass_checkin_state_disabled">QuayPass बंद है</string>
-    <string name="quaypass_checkin_state_not_linked">चेक-इन करने के लिए अपना Argosy खाता लिंक करें</string>
+    <string name="quaypass_checkin_state_not_linked">चेक-इन करने के लिए अपना Gameio खाता लिंक करें</string>
     <string name="quaypass_checkin_state_awaiting_registration">सर्वर के साथ रजिस्टर हो रहा है...</string>
     <string name="quaypass_checkin_state_awaiting_credential">अपना पास पूरा सेटअप करने के लिए कनेक्ट करें</string>
     <string name="quaypass_checkin_state_key_expired">अपना पास रीफ्रेश करने के लिए फिर से कनेक्ट करें</string>
@@ -22,7 +22,7 @@
     <string name="quaypass_checkin_footer_scroll">स्क्रॉल</string>
 
     <string name="quaypass_checkin_empty_title">अभी तक कोई यात्री नहीं</string>
-    <string name="quaypass_checkin_empty_message">Argosy अपने साथ रखें। पास होने पर आप अपने आप दूसरे प्लेयर से मिलेंगे।</string>
+    <string name="quaypass_checkin_empty_message">Gameio अपने साथ रखें। पास होने पर आप अपने आप दूसरे प्लेयर से मिलेंगे।</string>
 
     <string name="quaypass_checkin_card_name_fallback">\@%1$s</string>
     <string name="quaypass_checkin_card_username_subtitle">\@%1$s</string>

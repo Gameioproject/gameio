@@ -15,7 +15,7 @@
     <string name="media_library_heading">MEDIA</string>
 
     <!-- Footer hint on the media grid. Noun: the shoulder buttons move between the media
-         server's libraries (Movies, Shows). Not Argosy's own game library. -->
+         server's libraries (Movies, Shows). Not Gameio's own game library. -->
     <string name="media_library_footer_library">Library</string>
     <!-- Footer hint on a grid tile that was stopped part way through. Verb: starts playing again
          from where it was left. -->
@@ -45,7 +45,7 @@
     <!-- Heading shown when no media server has been signed in to at all. Noun phrase describing
          what is missing. -->
     <string name="media_signed_out_title">No media account</string>
-    <!-- Body under that heading. "Settings" names Argosy's own settings screen. -->
+    <!-- Body under that heading. "Settings" names Gameio's own settings screen. -->
     <string name="media_signed_out_message">Sign in to a media server from Settings to browse movies and shows.</string>
 
     <!-- ===================== Poster tiles and badges ===================== -->

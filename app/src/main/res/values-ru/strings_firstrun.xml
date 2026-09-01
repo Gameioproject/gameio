@@ -3,9 +3,9 @@
     <string name="firstrun_welcome_intro">Добро пожаловать! Давайте всё настроим.</string>
     <string name="firstrun_welcome_button_start">Начать</string>
 
-    <string name="firstrun_romm_url_title">Вход в Rom Manager</string>
+    <string name="firstrun_romm_url_title">Подключение к серверу</string>
     <string name="firstrun_romm_url_field_label">URL сервера</string>
-    <string name="firstrun_romm_url_hint">Введите адрес вашего сервера RomM, и мы определим способ входа.</string>
+    <string name="firstrun_romm_url_hint">Введите адрес сервера Gameio, который вам выдали.</string>
     <string name="firstrun_romm_url_button_continue">Продолжить</string>
     <string name="firstrun_romm_url_button_checking">Проверка...</string>
     <string name="firstrun_romm_url_button_back">Назад</string>
@@ -50,7 +50,7 @@
     <string name="firstrun_romm_success_error_library_fetch">Не удалось загрузить библиотеку: %1$s</string>
 
     <string name="firstrun_permissions_title">Разрешения</string>
-    <string name="firstrun_permissions_intro">Argosy нужны эти разрешения для управления библиотекой и эмуляторами.</string>
+    <string name="firstrun_permissions_intro">Gameio нужны эти разрешения для управления библиотекой и эмуляторами.</string>
     <string name="firstrun_permissions_storage_title">Управление хранилищем (обязательно)</string>
     <string name="firstrun_permissions_storage_description">Необходимо для просмотра папок, загрузки игр и синхронизации сохранений.</string>
     <string name="firstrun_permissions_notifications_title">Уведомления</string>

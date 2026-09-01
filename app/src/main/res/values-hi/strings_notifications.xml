@@ -5,7 +5,7 @@
     <!-- Storage settings: global ROM folder migration, per-platform migration, and
          per-platform purge (StorageSettingsDelegate). -->
 
-    <string name="notif_storage_private_path_error">GameNative Argosy के निजी फ़ोल्डर नहीं पढ़ सकता। कोई सार्वजनिक लोकेशन चुनें।</string>
+    <string name="notif_storage_private_path_error">GameNative Gameio के निजी फ़ोल्डर नहीं पढ़ सकता। कोई सार्वजनिक लोकेशन चुनें।</string>
 
     <string name="notif_storage_migrate_persistent_title">गेम ले जाए जा रहे हैं</string>
     <string name="notif_storage_migrate_persistent_subtitle_initial">0 / %1$d</string>

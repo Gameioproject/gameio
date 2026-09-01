@@ -4,7 +4,7 @@
 
     <string name="quaypass_checkin_state_running">Поиск попутчиков поблизости...</string>
     <string name="quaypass_checkin_state_disabled">QuayPass отключён</string>
-    <string name="quaypass_checkin_state_not_linked">Привяжите аккаунт Argosy, чтобы регистрироваться</string>
+    <string name="quaypass_checkin_state_not_linked">Привяжите аккаунт Gameio, чтобы регистрироваться</string>
     <string name="quaypass_checkin_state_awaiting_registration">Регистрация на сервере...</string>
     <string name="quaypass_checkin_state_awaiting_credential">Подключитесь, чтобы завершить настройку пропуска</string>
     <string name="quaypass_checkin_state_key_expired">Переподключитесь, чтобы обновить пропуск</string>
@@ -20,7 +20,7 @@
     <string name="quaypass_checkin_footer_scroll">Прокрутка</string>
 
     <string name="quaypass_checkin_empty_title">Пока нет попутчиков</string>
-    <string name="quaypass_checkin_empty_message">Берите Argosy с собой. Вы будете пассивно встречать других игроков поблизости.</string>
+    <string name="quaypass_checkin_empty_message">Берите Gameio с собой. Вы будете пассивно встречать других игроков поблизости.</string>
 
     <string name="quaypass_checkin_card_name_fallback">\@%1$s</string>
     <string name="quaypass_checkin_card_username_subtitle">\@%1$s</string>

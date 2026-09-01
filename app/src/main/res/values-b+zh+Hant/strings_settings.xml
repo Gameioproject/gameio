@@ -218,8 +218,8 @@
     <string name="settings_saves_save_sync_locked_subtitle">需要RomM伺服器</string>
 
     <string name="settings_saves_secure_saves_title">安全存檔</string>
-    <string name="settings_saves_secure_saves_subtitle_on">Argosy會管理並強制執行存檔規則</string>
-    <string name="settings_saves_secure_saves_subtitle_off">Argosy會嘗試同步由啟動器以外管理的存檔</string>
+    <string name="settings_saves_secure_saves_subtitle_on">Gameio會管理並強制執行存檔規則</string>
+    <string name="settings_saves_secure_saves_subtitle_off">Gameio會嘗試同步由啟動器以外管理的存檔</string>
     <string name="settings_saves_secure_saves_locked_value">無法使用</string>
     <string name="settings_saves_secure_saves_locked_subtitle">需要RomM伺服器</string>
 
@@ -367,7 +367,7 @@
         <item quantity="other">%1$d個版本，最新為%2$s</item>
     </plurals>
 
-    <string name="settings_permissions_intro">Argosy需要特定權限才能提供完整功能，點選各項權限即可授予存取權。</string>
+    <string name="settings_permissions_intro">Gameio需要特定權限才能提供完整功能，點選各項權限即可授予存取權。</string>
     <string name="settings_permissions_storage_title">儲存空間存取權</string>
     <string name="settings_permissions_storage_description">下載遊戲、同步存檔，以及存取裝置上的ROM檔案都需要此權限。</string>
     <string name="settings_permissions_usage_stats_title">使用狀況存取權</string>
@@ -414,8 +414,8 @@
     <string name="settings_about_import_subtitle">從備份檔案套用設定</string>
 
     <string name="settings_about_systemize_title">防止高負載模擬器當機</string>
-    <string name="settings_about_systemize_subtitle">當高負載模擬器占用大部分記憶體時，Argosy可能會被強制關閉。在已取得root權限的裝置上，這會寫入指令碼將Argosy設為系統應用程式，使其不再被關閉。</string>
-    <string name="settings_about_restart_title">重新啟動Argosy</string>
+    <string name="settings_about_systemize_subtitle">當高負載模擬器占用大部分記憶體時，Gameio可能會被強制關閉。在已取得root權限的裝置上，這會寫入指令碼將Gameio設為系統應用程式，使其不再被關閉。</string>
+    <string name="settings_about_restart_title">重新啟動Gameio</string>
     <string name="settings_about_restart_subtitle">關閉並重新開啟啟動器</string>
 
     <string name="settings_about_file_logging_title">檔案記錄</string>
@@ -894,7 +894,7 @@
     <string name="settings_steam_reset_library_subtitle">移除所有已同步的Steam遊戲</string>
 
     <string name="settings_steam_gn_required_title">需要GameNative</string>
-    <string name="settings_steam_gn_required_message">Steam遊戲由Argosy下載，並透過GameNative啟動。請先安裝GameNative，並在其設定中啟用外部儲存空間後再繼續。</string>
+    <string name="settings_steam_gn_required_message">Steam遊戲由Gameio下載，並透過GameNative啟動。請先安裝GameNative，並在其設定中啟用外部儲存空間後再繼續。</string>
     <string name="settings_steam_gn_required_action">安裝GameNative</string>
 
     <string name="settings_steam_login_title">登入Steam</string>
@@ -1088,7 +1088,7 @@
     <string name="settings_accounts_switch_message">存檔會先封存並驗證，才會移除任何內容，請保持此畫面開啟。</string>
 
     <string name="settings_accounts_pairing_title">掃描以新增帳號</string>
-    <string name="settings_accounts_pairing_message">在手機上以要新增的使用者身分登入RomM，掃描此代碼，然後核准此裝置。核准後Argosy會以該使用者身分登入。</string>
+    <string name="settings_accounts_pairing_message">在手機上以要新增的使用者身分登入RomM，掃描此代碼，然後核准此裝置。核准後Gameio會以該使用者身分登入。</string>
     <string name="settings_accounts_pairing_retry">重試</string>
     <string name="settings_accounts_pairing_cancel">取消</string>
 
@@ -1334,7 +1334,7 @@
     <string name="settings_platform_legacy_mode_title">舊版模式</string>
     <string name="settings_platform_legacy_mode_subtitle">為Drastic使用file://網址格式</string>
     <string name="settings_platform_launch_args_title">啟動參數</string>
-    <string name="settings_platform_launch_args_subtitle">自訂Argosy啟動此模擬器的方式</string>
+    <string name="settings_platform_launch_args_subtitle">自訂Gameio啟動此模擬器的方式</string>
     <string name="settings_platform_builtin_video_title">內建影音與效能</string>
     <string name="settings_platform_builtin_video_subtitle">顯示、效能與存檔覆寫</string>
     <string name="settings_platform_builtin_controls_title">內建控制</string>
@@ -1545,7 +1545,7 @@
     <string name="settings_launch_args_hint_reset_field">重設欄位</string>
     <string name="settings_launch_args_hint_reset_all">全部重設</string>
     <string name="settings_launch_args_hint_back">返回</string>
-    <string name="settings_launch_args_intro">覆寫Argosy在此平台啟動此模擬器的方式。續玩模式的旗標不受覆寫影響，一律固定。</string>
+    <string name="settings_launch_args_intro">覆寫Gameio在此平台啟動此模擬器的方式。續玩模式的旗標不受覆寫影響，一律固定。</string>
     <string name="settings_launch_args_data_uri_label">Data URI</string>
     <string name="settings_launch_args_data_uri_subtitle">設定Intent.data（shell中的`-d`）。供從intent的data URI讀取ROM的ACTION_VIEW模擬器使用。</string>
     <string name="settings_launch_args_extras_label">Extras</string>
@@ -1714,7 +1714,7 @@
     <string name="settings_sound_picker_hint_close">關閉</string>
 
     <string name="settings_app_picker_title">選擇應用程式 - %1$s</string>
-    <string name="settings_app_picker_intro">Argosy未偵測到此平台已安裝任何已知的模擬器。請選擇要用來啟動遊戲的應用程式，之後可透過啟動參數調整Argosy呼叫它的方式。</string>
+    <string name="settings_app_picker_intro">Gameio未偵測到此平台已安裝任何已知的模擬器。請選擇要用來啟動遊戲的應用程式，之後可透過啟動參數調整Gameio呼叫它的方式。</string>
     <string name="settings_app_picker_empty">找不到可啟動的應用程式。</string>
 
     <string name="settings_controller_order_title">控制器順序</string>
@@ -1781,7 +1781,7 @@
     <string name="settings_changelog_load_more_label">載入更多</string>
 
     <string name="settings_save_path_modal_title">%1$s - %2$s</string>
-    <string name="settings_save_path_modal_intro">當Argosy找不到要同步的存檔時，自訂路徑有助於修正存檔偵測問題，但不會改變您的模擬器實際儲存存檔的位置。</string>
+    <string name="settings_save_path_modal_intro">當Gameio找不到要同步的存檔時，自訂路徑有助於修正存檔偵測問題，但不會改變您的模擬器實際儲存存檔的位置。</string>
     <string name="settings_save_path_modal_save_path_label">存檔路徑</string>
     <string name="settings_save_path_modal_note_missing">此資料夾目前不在裝置上，在它出現之前無法找到存檔。</string>
     <string name="settings_save_path_modal_note_moved">已移至%1$s實際存放存檔的位置，位於您選擇的資料夾之下。</string>
@@ -1834,7 +1834,7 @@
     <string name="settings_accounts_delegate_blocker_media_download">電影或影集仍在下載中，請等待完成或取消下載。</string>
     <string name="settings_accounts_delegate_blocker_library_sync">收藏庫同步仍在進行中，請等待完成後再試一次。</string>
     <string name="settings_accounts_delegate_blocker_netplay_session">Netplay工作階段仍開啟中，請離開後再試一次。</string>
-    <string name="settings_accounts_delegate_blocker_exit_confirmation">請確認任何在Argosy之外啟動的遊戲皆已完全關閉。</string>
+    <string name="settings_accounts_delegate_blocker_exit_confirmation">請確認任何在Gameio之外啟動的遊戲皆已完全關閉。</string>
     <string name="settings_accounts_delegate_blocker_unknown_account">該帳號已不在此裝置上。</string>
 
     <string name="settings_steam_delegate_invalid_app_id">請輸入有效的Steam App ID</string>
@@ -1865,7 +1865,7 @@
     <string name="settings_systemize_dialog_detected_device">偵測到的裝置：%1$s</string>
     <string name="settings_systemize_dialog_next_steps_heading">後續步驟</string>
     <string name="settings_systemize_dialog_step_format">%1$d. %2$s</string>
-    <string name="settings_systemize_dialog_success_footnote">需要已取得root權限的裝置。此變更可以復原：移除名為「Argosy Systemize」的Magisk模組並重新開機即可。若您的選單文字不同，指令碼檔案仍然正確，只需將您的root執行選項指向該檔案即可。</string>
+    <string name="settings_systemize_dialog_success_footnote">需要已取得root權限的裝置。此變更可以復原：移除名為「Gameio Systemize」的Magisk模組並重新開機即可。若您的選單文字不同，指令碼檔案仍然正確，只需將您的root執行選項指向該檔案即可。</string>
     <string name="settings_systemize_dialog_error_title">無法儲存指令碼</string>
     <string name="settings_systemize_dialog_error_hint">可能缺少儲存空間存取權限。請在設定中授予所有檔案存取權限後再試一次。</string>
 
