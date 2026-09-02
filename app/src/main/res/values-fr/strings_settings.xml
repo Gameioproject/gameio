@@ -2236,4 +2236,10 @@
     <string name="settings_main_language_subtitle">Changer le texte dans tout le lanceur</string>
     <string name="settings_main_language_system_default">Réglage système</string>
 
+    <string name="settings_romm_config_username_label">Nom d\'utilisateur</string>
+    <string name="settings_romm_config_password_label">Mot de passe</string>
+    <string name="settings_romm_config_sign_in_title">Se connecter</string>
+    <string name="settings_romm_config_sign_in_subtitle">Connectez cet appareil à votre compte</string>
+    <string name="settings_romm_config_credentials_required">Saisissez votre nom d\'utilisateur et votre mot de passe</string>
+    <string name="settings_accounts_sign_in_confirm">Se connecter</string>
 </resources>

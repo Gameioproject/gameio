@@ -344,8 +344,6 @@
     <string name="firstrun_complete_hint">Sync your library from Collection settings to get started.</string>
     <!-- Button that closes the wizard and opens the app. Verb phrase, imperative. -->
     <string name="firstrun_complete_button_start">Start Playing</string>
-    <!-- Heading on the first-run screen where the user signs in to the server. -->
-    <string name="firstrun_romm_sign_in_title">Sign in</string>
     <!-- Line under that heading. "Gameio" is this app. -->
     <string name="firstrun_romm_sign_in_hint">Use the username and password whoever runs the server gave you.</string>
     <!-- Button that signs in. -->

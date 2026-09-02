@@ -1973,4 +1973,10 @@
     <string name="settings_main_language_title">語言</string>
     <string name="settings_main_language_subtitle">變更啟動器中所有文字使用的語言</string>
     <string name="settings_main_language_system_default">系統預設</string>
+    <string name="settings_romm_config_username_label">使用者名稱</string>
+    <string name="settings_romm_config_password_label">密碼</string>
+    <string name="settings_romm_config_sign_in_title">登入</string>
+    <string name="settings_romm_config_sign_in_subtitle">將此裝置連結到你的帳戶</string>
+    <string name="settings_romm_config_credentials_required">請輸入使用者名稱和密碼</string>
+    <string name="settings_accounts_sign_in_confirm">登入</string>
 </resources>
