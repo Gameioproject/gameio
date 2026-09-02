@@ -110,6 +110,7 @@ import com.nendo.argosy.ui.theme.LocalLauncherTheme
 import com.nendo.argosy.ui.theme.Motion
 import com.nendo.argosy.ui.theme.gripReserveBottomInset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import kotlinx.coroutines.delay
@@ -2081,6 +2082,26 @@ fun ArgosyApp(
     }
 }
 
+/** The launcher mark: shelf spines edge-on, one game drawn out and turned to face you. */
+@Composable
+private fun SplashMark(tint: Color, modifier: Modifier = Modifier) {
+    androidx.compose.foundation.Canvas(modifier = modifier) {
+        val u = size.minDimension / 108f
+        fun bar(x: Float, y: Float, w: Float, h: Float, r: Float) {
+            drawRoundRect(
+                color = tint,
+                topLeft = androidx.compose.ui.geometry.Offset(x * u, y * u),
+                size = androidx.compose.ui.geometry.Size(w * u, h * u),
+                cornerRadius = androidx.compose.ui.geometry.CornerRadius(r * u, r * u)
+            )
+        }
+        listOf(18f, 29f, 40f, 60f, 71f, 82f).forEach { x -> bar(x, 52f, 8f, 34f, 2f) }
+        rotate(degrees = -9f, pivot = androidx.compose.ui.geometry.Offset(54f * u, 32.5f * u)) {
+            bar(43f, 16f, 22f, 33f, 3f)
+        }
+    }
+}
+
 @Composable
 private fun AppSplashScreen(@StringRes statusRes: Int?) {
     Box(
@@ -2093,11 +2114,16 @@ private fun AppSplashScreen(@StringRes statusRes: Int?) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(Dimens.spacingLg)
         ) {
+            SplashMark(
+                tint = androidx.compose.material3.MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.size(56.dp)
+            )
             androidx.compose.material3.Text(
                 text = androidx.compose.ui.res.stringResource(R.string.argosyapp_splash_title),
                 style = androidx.compose.material3.MaterialTheme.typography.headlineLarge,
                 color = androidx.compose.material3.MaterialTheme.colorScheme.onBackground,
-                letterSpacing = 8.sp
+                fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold,
+                letterSpacing = (-1).sp
             )
             androidx.compose.material3.CircularProgressIndicator(
                 modifier = Modifier.size(Dimens.iconLg),

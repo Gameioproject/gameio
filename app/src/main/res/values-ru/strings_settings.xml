@@ -2283,4 +2283,10 @@
     <string name="settings_main_language_title">Язык</string>
     <string name="settings_main_language_subtitle">Изменить язык текста во всём лаунчере</string>
     <string name="settings_main_language_system_default">Как в системе</string>
+    <string name="settings_romm_config_username_label">Имя пользователя</string>
+    <string name="settings_romm_config_password_label">Пароль</string>
+    <string name="settings_romm_config_sign_in_title">Войти</string>
+    <string name="settings_romm_config_sign_in_subtitle">Подключите это устройство к вашей учётной записи</string>
+    <string name="settings_romm_config_credentials_required">Введите имя пользователя и пароль</string>
+    <string name="settings_accounts_sign_in_confirm">Войти</string>
 </resources>

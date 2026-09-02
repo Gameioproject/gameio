@@ -243,7 +243,7 @@ class SteamAuthManager @Inject constructor(
             try {
                 Log.d(TAG, "Starting QR auth session")
                 val authDetails = AuthSessionDetails()
-                authDetails.deviceFriendlyName = "Argosy Launcher"
+                authDetails.deviceFriendlyName = "Gameio"
 
                 val session = client.authentication.beginAuthSessionViaQR(authDetails).await()
                 qrAuthSession = session

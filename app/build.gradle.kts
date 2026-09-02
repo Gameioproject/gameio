@@ -311,10 +311,10 @@ dependencies {
     androidTestImplementation(libs.room.testing)
 }
 
-val quayPassPubkeys = envString("QUAYPASS_SERVER_PUBKEYS")
 val verifyQuayPassReleaseConfig = tasks.register("verifyQuayPassReleaseConfig") {
+    val quayPassDark = envString("QUAYPASS_SERVER_PUBKEYS").isBlank()
     doLast {
-        if (quayPassPubkeys.isBlank()) {
+        if (quayPassDark) {
             // This deployment runs no QuayPass server, so releases ship with the
             // feature dark on purpose; the runtime treats an empty key list as
             // "cannot verify" and stays quiet. Set the variable to light it up.

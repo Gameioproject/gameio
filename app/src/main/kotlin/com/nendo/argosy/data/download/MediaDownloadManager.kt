@@ -1289,7 +1289,7 @@ class MediaDownloadManager @Inject constructor(
         burnInImageSubtitles: Boolean
     ): JellyfinDeviceProfile =
         JellyfinDeviceProfile(
-            name = "Argosy Download",
+            name = "Gameio Download",
             maxStreamingBitrate = quality.maxBitrateKbps?.times(KBPS_TO_BPS.toInt()),
             directPlayProfiles = emptyList(),
             transcodingProfiles = listOf(

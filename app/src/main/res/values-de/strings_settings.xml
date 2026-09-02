@@ -2195,5 +2195,11 @@
     <string name="settings_main_language_title">Sprache</string>
     <string name="settings_main_language_subtitle">Ändert den Text im gesamten Launcher</string>
     <string name="settings_main_language_system_default">Systemstandard</string>
+    <string name="settings_romm_config_username_label">Benutzername</string>
+    <string name="settings_romm_config_password_label">Passwort</string>
+    <string name="settings_romm_config_sign_in_title">Anmelden</string>
+    <string name="settings_romm_config_sign_in_subtitle">Dieses Gerät mit deinem Konto verbinden</string>
+    <string name="settings_romm_config_credentials_required">Gib deinen Benutzernamen und dein Passwort ein</string>
+    <string name="settings_accounts_sign_in_confirm">Anmelden</string>
 </resources>
 

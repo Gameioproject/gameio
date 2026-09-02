@@ -141,4 +141,9 @@
     </plurals>
     <string name="firstrun_complete_hint">Sincroniza tu biblioteca desde los ajustes de colección para empezar.</string>
     <string name="firstrun_complete_button_start">Empezar a jugar</string>
+    <string name="firstrun_romm_sign_in_hint">Usa el nombre de usuario y la contraseña que te dio quien administra el servidor.</string>
+    <string name="firstrun_romm_sign_in_button">Iniciar sesión</string>
+    <string name="firstrun_romm_sign_in_connecting">Iniciando sesión\u2026</string>
+    <string name="firstrun_romm_sign_in_change_server">Cambiar de servidor</string>
+    <string name="firstrun_romm_credentials_required">Escribe tu nombre de usuario y contraseña</string>
 </resources>

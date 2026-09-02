@@ -150,4 +150,9 @@
     </plurals>
     <string name="firstrun_complete_hint">Синхронизируйте библиотеку в настройках коллекций, чтобы начать.</string>
     <string name="firstrun_complete_button_start">Начать игру</string>
+    <string name="firstrun_romm_sign_in_hint">Используйте имя пользователя и пароль, которые вам выдал владелец сервера.</string>
+    <string name="firstrun_romm_sign_in_button">Войти</string>
+    <string name="firstrun_romm_sign_in_connecting">Вход\u2026</string>
+    <string name="firstrun_romm_sign_in_change_server">Сменить сервер</string>
+    <string name="firstrun_romm_credentials_required">Введите имя пользователя и пароль</string>
 </resources>

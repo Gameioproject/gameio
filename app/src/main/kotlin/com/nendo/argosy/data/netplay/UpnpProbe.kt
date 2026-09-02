@@ -21,7 +21,7 @@ open class UpnpProbe {
     open suspend fun requestPortMapping(
         localPort: Int,
         protocol: String = "UDP",
-        description: String = "Argosy Netplay",
+        description: String = "Gameio Netplay",
         duration: Duration = 10.minutes
     ): PortMapping? = withContext(Dispatchers.IO) {
         try {

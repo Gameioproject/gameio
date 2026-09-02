@@ -2186,4 +2186,10 @@
     <string name="settings_main_language_subtitle">पूरे लॉन्चर में टेक्स्ट बदलें</string>
     <string name="settings_main_language_system_default">सिस्टम डिफ़ॉल्ट</string>
 
+    <string name="settings_romm_config_username_label">उपयोगकर्ता नाम</string>
+    <string name="settings_romm_config_password_label">पासवर्ड</string>
+    <string name="settings_romm_config_sign_in_title">साइन इन करें</string>
+    <string name="settings_romm_config_sign_in_subtitle">इस डिवाइस को अपने खाते से जोड़ें</string>
+    <string name="settings_romm_config_credentials_required">अपना उपयोगकर्ता नाम और पासवर्ड दर्ज करें</string>
+    <string name="settings_accounts_sign_in_confirm">साइन इन करें</string>
 </resources>

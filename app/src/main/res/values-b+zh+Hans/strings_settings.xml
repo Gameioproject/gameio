@@ -2138,4 +2138,10 @@
     <string name="settings_main_language_subtitle">更改启动器中的全部文字</string>
     <string name="settings_main_language_system_default">跟随系统</string>
 
+    <string name="settings_romm_config_username_label">用户名</string>
+    <string name="settings_romm_config_password_label">密码</string>
+    <string name="settings_romm_config_sign_in_title">登录</string>
+    <string name="settings_romm_config_sign_in_subtitle">将此设备连接到你的账户</string>
+    <string name="settings_romm_config_credentials_required">请输入用户名和密码</string>
+    <string name="settings_accounts_sign_in_confirm">登录</string>
 </resources>

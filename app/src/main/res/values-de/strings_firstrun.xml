@@ -132,4 +132,9 @@
     </plurals>
     <string name="firstrun_complete_hint">Synchronisieren Sie Ihre Bibliothek über die Sammlungseinstellungen, um zu beginnen.</string>
     <string name="firstrun_complete_button_start">Los geht\'s</string>
+    <string name="firstrun_romm_sign_in_hint">Verwende den Benutzernamen und das Passwort, die dir der Serverbetreiber gegeben hat.</string>
+    <string name="firstrun_romm_sign_in_button">Anmelden</string>
+    <string name="firstrun_romm_sign_in_connecting">Anmeldung\u2026</string>
+    <string name="firstrun_romm_sign_in_change_server">Server wechseln</string>
+    <string name="firstrun_romm_credentials_required">Gib deinen Benutzernamen und dein Passwort ein</string>
 </resources>
