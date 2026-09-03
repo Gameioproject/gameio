@@ -59,6 +59,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val PLATFORM_GAMES_LIMIT = 20
+// Ten picks is a full row without turning a random draw into a second library.
+private const val SHELF_ROW_LIMIT = 10
 private const val CATALOG_PAGE_SIZE = 100
 private const val CATALOG_MAX_PREFETCH = 10000
 private const val PLATFORM_GAMES_UNCAPPED = Int.MAX_VALUE
@@ -428,12 +430,29 @@ class HomeLibraryDelegate @Inject constructor(
     /** Load a shelf row: server-ordered ids from the repository, entities from the store. */
     suspend fun loadGamesForShelfInternal(index: Int) {
         val shelf = shelfDefinitions.getOrNull(index) ?: return
+        cachedShelfRows[shelf.key]?.let { cached ->
+            _state.update { it.copy(shelfItems = cached) }
+            return
+        }
+        val prefs = preferencesRepository.userPreferences.first()
         val ids = shelfRepository.gamesFor(shelf)
         val byId = gameRepository.getByIds(ids).associateBy { it.id }
+        var games = ids.mapNotNull { byId[it] }
+        // A recommendation is only useful on a platform the user actually keeps,
+        // and it has to obey the same All/Available/Library filter as the rest of Home.
+        val visiblePlatformIds = _state.value.platforms.map { it.id }.toSet()
+        if (visiblePlatformIds.isNotEmpty()) {
+            games = games.filter { it.platformId in visiblePlatformIds }
+        }
+        games = applyLibraryFilter(games, prefs.homeLibraryFilter)
         val items: List<HomeRowItem> =
-            ids.mapNotNull { byId[it] }.map { HomeRowItem.Game(it.toUi()) }
+            games.take(SHELF_ROW_LIMIT).map { HomeRowItem.Game(it.toUi()) }
+        if (items.isNotEmpty()) cachedShelfRows[shelf.key] = items
         _state.update { it.copy(shelfItems = items) }
     }
+
+    /** Rows already resolved this session, keyed by shelf. */
+    private val cachedShelfRows = mutableMapOf<String, List<HomeRowItem>>()
 
     /** The curated shelves, fetched once; empty on a classic server. */
     suspend fun loadShelves() {
@@ -442,6 +461,7 @@ class HomeLibraryDelegate @Inject constructor(
         _state.update { state ->
             state.copy(shelves = defs.map { HomeShelfUi(key = it.key, title = it.title) })
         }
+        if (defs.isNotEmpty()) loadGamesForShelfInternal(0)
     }
 
     suspend fun loadGamesForPlatformInternal(platformId: Long, platformIndex: Int) {

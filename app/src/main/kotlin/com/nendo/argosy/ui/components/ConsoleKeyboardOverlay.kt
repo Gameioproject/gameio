@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
@@ -36,11 +37,16 @@ fun ConsoleKeyboardOverlay(
     query: String,
     onQueryChange: (String) -> Unit,
     onDismiss: () -> Unit,
-    placeholder: String = ""
+    placeholder: String = "",
+    // Embedded drops the scrim and the centering, so the caller can seat the
+    // keyboard in its own pane instead of floating it over the screen.
+    embedded: Boolean = false,
+    modifier: Modifier = Modifier
 ) {
     val dispatcher = LocalInputDispatcher.current
     val row = remember { mutableIntStateOf(0) }
     val col = remember { mutableIntStateOf(0) }
+    val caps = remember { mutableStateOf(false) }
     val queryNow = rememberUpdatedState(query)
     val changeNow = rememberUpdatedState(onQueryChange)
     val dismissNow = rememberUpdatedState(onDismiss)
@@ -48,7 +54,9 @@ fun ConsoleKeyboardOverlay(
     fun applyAt(r: Int, c: Int) {
         when (val out = ConsoleKeyboardLayout.outputAt(r, c)) {
             is ConsoleKeyboardLayout.KeyOutput.Character ->
-                changeNow.value(queryNow.value + out.value)
+                changeNow.value(
+                    queryNow.value + if (caps.value) out.value.uppercaseChar() else out.value
+                )
             ConsoleKeyboardLayout.KeyOutput.Space ->
                 if (queryNow.value.isNotEmpty() && !queryNow.value.endsWith(" ")) {
                     changeNow.value(queryNow.value + " ")
@@ -101,6 +109,16 @@ fun ConsoleKeyboardOverlay(
                 return InputResult.HANDLED
             }
 
+            override fun onPrevSection(): InputResult {
+                caps.value = !caps.value
+                return InputResult.HANDLED
+            }
+
+            override fun onNextSection(): InputResult {
+                caps.value = !caps.value
+                return InputResult.HANDLED
+            }
+
             override fun onBack(): InputResult {
                 dismissNow.value()
                 return InputResult.HANDLED
@@ -110,18 +128,11 @@ fun ConsoleKeyboardOverlay(
         onDispose { dispatcher.popModal() }
     }
 
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f))
-            .clickableNoFocus(onClick = onDismiss)
-    ) {
+    val panel: @Composable () -> Unit = {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Dimens.spacingSm),
-            modifier = Modifier
-                .width(440.dp)
+            modifier = (if (embedded) modifier else Modifier.width(440.dp))
                 .background(
                     MaterialTheme.colorScheme.surface,
                     RoundedCornerShape(Dimens.radiusLg)
@@ -143,6 +154,7 @@ fun ConsoleKeyboardOverlay(
                 focusedRow = row.intValue,
                 focusedCol = col.intValue,
                 active = true,
+                caps = caps.value,
                 onKeyTap = { r, c ->
                     row.intValue = r
                     col.intValue = c
@@ -153,9 +165,24 @@ fun ConsoleKeyboardOverlay(
                 hints = listOf(
                     InputButton.X to stringResource(R.string.search_kb_delete),
                     InputButton.Y to stringResource(R.string.search_kb_space),
+                    InputButton.LB to stringResource(R.string.search_kb_caps),
                     InputButton.B to stringResource(R.string.search_kb_done)
                 )
             )
+        }
+    }
+
+    if (embedded) {
+        panel()
+    } else {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.scrim.copy(alpha = 0.6f))
+                .clickableNoFocus(onClick = onDismiss)
+        ) {
+            panel()
         }
     }
 }

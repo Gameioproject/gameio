@@ -368,6 +368,13 @@ fun LibraryScreen(
                             )
                         }
                     }
+                    uiState.isSwitchingContent -> {
+                        LibrarySwitchSkeleton(
+                            columns = uiState.columnsCount,
+                            spacing = uiState.gridSpacingDp.dp,
+                            aspectRatio = LocalBoxArtStyle.current.aspectRatio
+                        )
+                    }
                     uiState.games.isEmpty() -> {
                         EmptyLibrary(
                             platformName = uiState.currentPlatform?.name
@@ -1875,3 +1882,44 @@ private fun LetterOverlay(
 }
 
 
+
+/**
+ * Placeholder grid shown while a switch is in flight. Deliberately not a spinner:
+ * the wait is milliseconds, and a spinner that flashes for two frames reads as a
+ * glitch, while empty card outlines read as the grid redrawing.
+ */
+@Composable
+private fun LibrarySwitchSkeleton(
+    columns: Int,
+    spacing: Dp,
+    aspectRatio: Float
+) {
+    val shape = RoundedCornerShape(8.dp)
+    val cardColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.06f)
+    val safeColumns = columns.coerceAtLeast(1)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(spacing),
+        verticalArrangement = Arrangement.spacedBy(spacing)
+    ) {
+        repeat(SKELETON_ROWS) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(spacing)
+            ) {
+                repeat(safeColumns) {
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .aspectRatio(aspectRatio)
+                            .clip(shape)
+                            .background(cardColor)
+                    )
+                }
+            }
+        }
+    }
+}
+
+private const val SKELETON_ROWS = 3

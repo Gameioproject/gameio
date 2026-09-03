@@ -143,4 +143,5 @@
     <string name="home_library_only_off">全部遊戲</string>
     <!-- Footer hint for the RT switch. -->
     <string name="home_footer_library_only">僅顯示已下載</string>
+    <string name="search_kb_caps">大寫</string>
 </resources>
