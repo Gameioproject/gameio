@@ -33,10 +33,12 @@ object ConsoleKeyboardLayout {
         "opqrstu",
         "vwxyz-'",
         "0123456",
-        "789.:&/"
+        "789.:&/",
+        "@_,!?+="
     )
     const val COLS = 7
-    const val ACTION_ROW = 6
+    // Derived, so adding a character row cannot leave the action row pointing at it.
+    val ACTION_ROW: Int get() = charRows.size
 
     enum class ActionKey { SPACE, DELETE, CLEAR }
 
@@ -76,7 +78,8 @@ fun ConsoleKeyboard(
     focusedCol: Int,
     active: Boolean,
     onKeyTap: (row: Int, col: Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    caps: Boolean = false
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(Dimens.spacingXs),
@@ -86,7 +89,7 @@ fun ConsoleKeyboard(
             Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingXs)) {
                 row.forEachIndexed { colIndex, char ->
                     KeyCap(
-                        label = char.toString(),
+                        label = (if (caps) char.uppercaseChar() else char).toString(),
                         focused = active && focusedRow == rowIndex && focusedCol == colIndex,
                         onTap = { onKeyTap(rowIndex, colIndex) },
                         modifier = Modifier.size(44.dp)

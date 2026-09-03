@@ -15,6 +15,7 @@ import com.nendo.argosy.data.repository.PlatformRepository
 import com.nendo.argosy.data.local.entity.PlatformEntity
 import com.nendo.argosy.data.preferences.UserPreferencesRepository
 import com.nendo.argosy.data.remote.romm.SignInResult
+import com.nendo.argosy.data.remote.romm.DEFAULT_SERVER_URL
 import com.nendo.argosy.data.remote.romm.RomMCapabilities
 import com.nendo.argosy.data.remote.romm.RomMRepository
 import com.nendo.argosy.data.remote.romm.RomMResult
@@ -98,6 +99,7 @@ data class FirstRunUiState(
     val hasOverlayPermission: Boolean = false,
     val hasUsageStatsPermission: Boolean = false,
     val rommFocusField: Int? = null,
+    val keyboardField: Int? = null,
     val platforms: List<PlatformEntity> = emptyList(),
     val platformsAll: List<PlatformEntity> = emptyList(),
     val platformFilterSortMode: PlatformFilterLogic.SortMode = PlatformFilterLogic.SortMode.DEFAULT,
@@ -128,7 +130,14 @@ class FirstRunViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
-        FirstRunUiState()
+        // Ships pointed at the Gameio server, so the address step is already
+        // satisfied and the username field takes focus on launch.
+        FirstRunUiState(
+            currentStep = FirstRunStep.ROMM_LOGIN,
+            rommUrl = DEFAULT_SERVER_URL,
+            rommUrlCommitted = true,
+            focusedIndex = 1
+        )
     )
     val uiState: StateFlow<FirstRunUiState> = _uiState.asStateFlow()
 
@@ -162,7 +171,7 @@ class FirstRunViewModel @Inject constructor(
         _uiState.update { state ->
             val prevStep = when (state.currentStep) {
                 FirstRunStep.WELCOME -> FirstRunStep.WELCOME
-                FirstRunStep.ROMM_LOGIN -> FirstRunStep.WELCOME
+                FirstRunStep.ROMM_LOGIN -> FirstRunStep.ROMM_LOGIN
                 FirstRunStep.ROMM_SUCCESS -> FirstRunStep.ROMM_LOGIN
                 FirstRunStep.PERMISSIONS -> FirstRunStep.ROMM_SUCCESS
                 FirstRunStep.ROM_PATH -> FirstRunStep.PERMISSIONS
@@ -173,7 +182,11 @@ class FirstRunViewModel @Inject constructor(
                 FirstRunStep.COMPLETE -> FirstRunStep.CORE_DOWNLOAD
             }
             val initialFocus = if (prevStep == FirstRunStep.IMAGE_CACHE) 1 else 0
-            state.copy(currentStep = prevStep, focusedIndex = initialFocus, rommUrlCommitted = false)
+            if (prevStep == state.currentStep) {
+                state
+            } else {
+                state.copy(currentStep = prevStep, focusedIndex = initialFocus, rommUrlCommitted = false)
+            }
         }
     }
 
@@ -496,6 +509,33 @@ class FirstRunViewModel @Inject constructor(
         _uiState.update { it.copy(rommPassword = password, connectionError = null) }
     }
 
+    fun openKeyboard(field: Int) {
+        _uiState.update { it.copy(keyboardField = field, connectionError = null) }
+    }
+
+    fun closeKeyboard() {
+        _uiState.update { it.copy(keyboardField = null) }
+    }
+
+    /** Text for the field the console keyboard is editing. */
+    fun keyboardText(): String {
+        val state = _uiState.value
+        return when (state.keyboardField) {
+            0 -> state.rommUrl
+            1 -> state.rommUsername
+            2 -> state.rommPassword
+            else -> ""
+        }
+    }
+
+    fun onKeyboardTextChange(value: String) {
+        when (_uiState.value.keyboardField) {
+            0 -> setRommUrl(value)
+            1 -> setRommUsername(value)
+            2 -> setRommPassword(value)
+        }
+    }
+
     fun connectToRomm() {
         val state = _uiState.value
         if (state.isConnecting) return
@@ -714,13 +754,13 @@ class FirstRunViewModel @Inject constructor(
             FirstRunStep.ROMM_LOGIN -> {
                 if (!state.rommUrlCommitted) {
                     when (state.focusedIndex) {
-                        0 -> setRommFocusField(0)
+                        0 -> openKeyboard(0)
                         1 -> if (!state.isConnecting && state.rommUrl.isNotBlank()) commitUrl()
                     }
                 } else {
                     when (state.focusedIndex) {
-                        // A field row hands focus to the input so the keyboard opens over it.
-                        0, 1, 2 -> setRommFocusField(state.focusedIndex)
+                        // A field row opens the console keyboard over it.
+                        0, 1, 2 -> openKeyboard(state.focusedIndex)
                         3 -> if (!state.isConnecting && canConnect(state)) connectToRomm()
                         4 -> editUrl()
                     }

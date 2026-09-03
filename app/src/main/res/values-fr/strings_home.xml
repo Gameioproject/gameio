@@ -147,4 +147,5 @@
     <string name="home_library_only_off">Tous les jeux</string>
     <!-- Footer hint for the RT switch. -->
     <string name="home_footer_library_only">Bibliothèque seule</string>
+    <string name="search_kb_caps">Maj</string>
 </resources>

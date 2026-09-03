@@ -356,4 +356,5 @@
     <string name="search_scope_server">All platforms</string>
     <!-- Footer hint for the RT switch. -->
     <string name="home_footer_library_only">Library only</string>
+    <string name="search_kb_caps">Caps</string>
 </resources>

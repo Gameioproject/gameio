@@ -249,6 +249,8 @@ data class LibraryUiState(
     val customGridLanes: Int = 0,
     val gridDensity: GridDensity = GridDensity.NORMAL,
     val isLoading: Boolean = true,
+    // A switch (platform, filter, view) is in flight; the old grid must not linger.
+    val isSwitchingContent: Boolean = false,
     val activeFilters: ActiveFilters = ActiveFilters(),
     val filterOptions: FilterOptions = FilterOptions(),
     val filterCategoryIndex: Int = 0,
@@ -399,6 +401,9 @@ data class LibraryUiState(
 }
 
 private const val TAG = "LibraryVM"
+// Long enough for the eye to register that the grid changed, short enough that a
+// switch still feels immediate.
+private const val MIN_SWITCH_VISIBLE_MS = 180L
 
 sealed class LibraryEvent {
     data class LaunchIntent(val intent: Intent, val options: android.os.Bundle? = null) : LibraryEvent()
@@ -990,7 +995,31 @@ class LibraryViewModel @Inject constructor(
         }
     }
 
+    private var switchStartedAt = 0L
+    private var switchPending = false
+
+    /**
+     * Holds the switch state long enough to be seen. Room answers from cache in
+     * under a frame, so clearing it on arrival makes the press look ignored: the
+     * old grid sits there and then the new one appears with nothing in between.
+     */
+    private fun finishContentSwitch() {
+        if (!switchPending) return
+        switchPending = false
+        val startedAt = switchStartedAt
+        viewModelScope.launch {
+            val remaining = MIN_SWITCH_VISIBLE_MS - (System.currentTimeMillis() - startedAt)
+            if (remaining > 0) kotlinx.coroutines.delay(remaining)
+            // A newer switch owns the flag now; leave its skeleton alone.
+            if (startedAt != switchStartedAt) return@launch
+            _uiState.update { it.copy(isSwitchingContent = false) }
+        }
+    }
+
     private fun loadGames() {
+        switchStartedAt = System.currentTimeMillis()
+        switchPending = true
+        _uiState.update { it.copy(isSwitchingContent = true) }
         val state = _uiState.value
         val platformIndex = state.currentPlatformIndex
         val filters = state.activeFilters
@@ -1089,6 +1118,7 @@ class LibraryViewModel @Inject constructor(
                             currentSectionLabel = currentSectionLabel
                         )
                     }
+                    finishContentSwitch()
                     extractGradientsForVisibleGames(_uiState.value.focusedIndex)
                 }
         }

@@ -38,6 +38,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val TAG = "RomMConnectionManager"
+
+// The server this build ships pointed at, so sign-in needs no address typed.
+// "Change server" on the sign-in screen still overrides it.
+const val DEFAULT_SERVER_URL = "https://playgameio.com"
 private const val MIN_DEVICE_API_VERSION = "4.7.0"
 private const val DOWNLOAD_STALL_TIMEOUT_SECONDS = 300
 

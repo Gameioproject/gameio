@@ -100,6 +100,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.BoxWithConstraints
 import com.nendo.argosy.R
+import com.nendo.argosy.data.remote.romm.DEFAULT_SERVER_URL
 import com.nendo.argosy.data.local.entity.PlatformEntity
 import com.nendo.argosy.ui.components.PermissionCard
 import com.nendo.argosy.ui.components.PlatformFilterHeader
@@ -237,7 +238,11 @@ fun FirstRunScreen(
                     onEditUrl = { viewModel.editUrl() },
                     onConnect = { viewModel.connectToRomm() },
                     onBack = { viewModel.previousStep() },
-                    onClearFocusField = { viewModel.clearRommFocusField() }
+                    onClearFocusField = { viewModel.clearRommFocusField() },
+                    keyboardField = uiState.keyboardField,
+                    keyboardText = viewModel.keyboardText(),
+                    onKeyboardTextChange = { viewModel.onKeyboardTextChange(it) },
+                    onKeyboardDismiss = { viewModel.closeKeyboard() }
                 )
                 FirstRunStep.ROMM_SUCCESS -> RommSuccessStep(
                     serverName = uiState.rommUrl,
@@ -421,7 +426,11 @@ private fun RommLoginStep(
     onEditUrl: () -> Unit,
     onConnect: () -> Unit,
     onBack: () -> Unit,
-    onClearFocusField: () -> Unit
+    onClearFocusField: () -> Unit,
+    keyboardField: Int?,
+    keyboardText: String,
+    onKeyboardTextChange: (String) -> Unit,
+    onKeyboardDismiss: () -> Unit
 ) {
     val urlFocusRequester = remember { FocusRequester() }
     val usernameFocusRequester = remember { FocusRequester() }
@@ -480,6 +489,22 @@ private fun RommLoginStep(
                 }
             }
 
+            val keyboardOpen = keyboardField != null
+            val keyboardPane: @Composable () -> Unit = {
+                com.nendo.argosy.ui.components.ConsoleKeyboardOverlay(
+                    query = keyboardText,
+                    onQueryChange = onKeyboardTextChange,
+                    onDismiss = onKeyboardDismiss,
+                    placeholder = when (keyboardField) {
+                        0 -> DEFAULT_SERVER_URL
+                        1 -> stringResource(R.string.settings_romm_config_username_label)
+                        else -> stringResource(R.string.settings_romm_config_password_label)
+                    },
+                    embedded = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
             val form: @Composable () -> Unit = {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     if (!urlCommitted) {
@@ -487,7 +512,7 @@ private fun RommLoginStep(
                             value = url,
                             onValueChange = onUrlChange,
                             label = stringResource(R.string.firstrun_romm_url_field_label),
-                            placeholder = "https://playgameio.com",
+                            placeholder = DEFAULT_SERVER_URL,
                             gamepadFocused = focusedIndex == 0,
                             focusRequester = urlFocusRequester,
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
@@ -597,9 +622,15 @@ private fun RommLoginStep(
                         .verticalScroll(rememberScrollState())
                         .padding(horizontal = Dimens.spacingXl, vertical = Dimens.spacingMd)
                 ) {
-                    Box(modifier = Modifier.weight(0.9f), contentAlignment = Alignment.Center) { brand() }
+                    Box(
+                        modifier = Modifier.weight(if (keyboardOpen) 1.15f else 0.9f),
+                        contentAlignment = Alignment.Center
+                    ) { if (keyboardOpen) keyboardPane() else brand() }
                     Spacer(modifier = Modifier.width(Dimens.spacingXl))
-                    Box(modifier = Modifier.weight(1.1f), contentAlignment = Alignment.Center) { form() }
+                    Box(
+                        modifier = Modifier.weight(if (keyboardOpen) 0.85f else 1.1f),
+                        contentAlignment = Alignment.Center
+                    ) { form() }
                 }
             } else {
                 Column(
@@ -610,7 +641,7 @@ private fun RommLoginStep(
                         .verticalScroll(rememberScrollState())
                         .padding(horizontal = Dimens.spacingXl, vertical = Dimens.spacingMd)
                 ) {
-                    brand()
+                    if (keyboardOpen) keyboardPane() else brand()
                     Spacer(modifier = Modifier.height(24.dp))
                     form()
                 }
@@ -629,7 +660,7 @@ private val GioLine = Color(0xFF242C38)
 private val GioInk = Color(0xFFF3F6F9)
 private val GioDim = Color(0xFF98A2B0)
 private val GioFaint = Color(0xFF5D6775)
-private val GioCoral = Color(0xFFFF6B4A)
+private val GioAccent = Color(0xFF2F62E8)
 private val GioViolet = Color(0xFF6C4DF6)
 private val GioErrorRed = Color(0xFFFF6161)
 
@@ -663,7 +694,7 @@ private fun GioBackdrop(content: @Composable () -> Unit) {
                 // a warm glow up top and a cool one low in the corner, like the website
                 drawCircle(
                     brush = Brush.radialGradient(
-                        colors = listOf(GioCoral.copy(alpha = 0.16f), Color.Transparent),
+                        colors = listOf(GioAccent.copy(alpha = 0.16f), Color.Transparent),
                         center = Offset(size.width * 0.5f, -size.height * 0.15f),
                         radius = size.width * 0.5f
                     ),
@@ -712,11 +743,11 @@ private fun GioTextField(
             unfocusedTextColor = GioInk,
             focusedContainerColor = GioFieldBg,
             unfocusedContainerColor = GioFieldBg,
-            focusedBorderColor = GioCoral,
+            focusedBorderColor = GioAccent,
             unfocusedBorderColor = GioLine,
-            focusedLabelColor = GioCoral,
+            focusedLabelColor = GioAccent,
             unfocusedLabelColor = GioFaint,
-            cursorColor = GioCoral
+            cursorColor = GioAccent
         ),
         modifier = Modifier
             .widthIn(max = 520.dp)
@@ -729,7 +760,7 @@ private fun GioTextField(
             )
             .then(
                 // the gamepad cursor, distinct from IME focus
-                if (gamepadFocused) Modifier.border(2.dp, GioCoral, shape) else Modifier
+                if (gamepadFocused) Modifier.border(2.dp, GioAccent, shape) else Modifier
             )
     )
 }
@@ -759,14 +790,14 @@ private fun GioPrimaryButton(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .clip(shape)
-            .background(if (enabled) GioCoral else GioCoral.copy(alpha = 0.25f))
+            .background(if (enabled) GioAccent else GioAccent.copy(alpha = 0.25f))
             .then(if (isFocused) Modifier.border(2.dp, GioInk, shape) else Modifier)
             .clickable(enabled = enabled, onClick = onClick)
             .padding(horizontal = 30.dp, vertical = 14.dp)
     ) {
         Text(
             text = text,
-            color = if (enabled) GioGround else GioGround.copy(alpha = 0.55f),
+            color = if (enabled) GioInk else GioInk.copy(alpha = 0.55f),
             fontWeight = FontWeight.Bold,
             fontSize = 15.sp,
             maxLines = 1
@@ -786,7 +817,7 @@ private fun GioGhostButton(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .clip(shape)
-            .border(if (isFocused) 2.dp else 1.dp, if (isFocused) GioCoral else GioLine, shape)
+            .border(if (isFocused) 2.dp else 1.dp, if (isFocused) GioAccent else GioLine, shape)
             .clickable(enabled = enabled, onClick = onClick)
             .padding(horizontal = 26.dp, vertical = 14.dp)
     ) {
