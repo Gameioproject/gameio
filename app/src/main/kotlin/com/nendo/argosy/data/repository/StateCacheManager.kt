@@ -39,10 +39,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import java.util.zip.GZIPOutputStream
 import java.security.MessageDigest
 import java.time.Instant
 import java.time.ZonedDateTime
@@ -51,6 +54,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val HTTP_CONFLICT = 409
+private const val GZIP_MEDIA_TYPE = "application/gzip"
 private const val HTTP_NOT_FOUND = 404
 
 data class DiscoveredState(
@@ -80,6 +84,7 @@ class StateCacheManager @Inject constructor(
     private val attributionRepository: StorageAttributionRepository,
     private val stateOwnershipTracker: com.nendo.argosy.data.sync.StateOwnershipTracker
 ) {
+    private val pendingUploadMutex = Mutex()
     companion object {
         private const val TAG = "StateCacheManager"
         private const val UNKNOWN_CORE_DIR = "unknown"
@@ -1004,6 +1009,19 @@ class StateCacheManager @Inject constructor(
         data class Error(val message: String) : StateCloudResult()
     }
 
+    /**
+     * Emulator states are mostly zeros: gzip takes a 16.8 MB N64 state to about half a megabyte,
+     * which on a home uplink is seconds instead of minutes. The server stores and hashes the
+     * decompressed bytes, so the row's hash still matches the cache file.
+     */
+    private fun gzipToTemp(source: File): File {
+        val target = File.createTempFile("state-upload", ".gz", context.cacheDir)
+        GZIPOutputStream(target.outputStream().buffered()).use { out ->
+            source.inputStream().use { it.copyTo(out) }
+        }
+        return target
+    }
+
     suspend fun uploadStateToRomM(
         state: StateCacheEntity,
         rommId: Long,
@@ -1019,6 +1037,7 @@ class StateCacheManager @Inject constructor(
             return@withContext StateCloudResult.NoStateFound
         }
 
+        var gzipFile: File? = null
         try {
             val contentHash = calculateFileHash(cacheFile)
             if (state.lastUploadedHash == contentHash) {
@@ -1027,9 +1046,11 @@ class StateCacheManager @Inject constructor(
             }
 
             val uploadFileName = buildUploadFileName(state, romBaseName)
+            gzipFile = gzipToTemp(cacheFile)
+            val compressed = gzipFile
 
             fun buildStatePart(): MultipartBody.Part {
-                val requestBody = cacheFile.asRequestBody("application/octet-stream".toMediaType())
+                val requestBody = compressed.asRequestBody(GZIP_MEDIA_TYPE.toMediaType())
                 return MultipartBody.Part.createFormData("stateFile", uploadFileName, requestBody)
             }
 
@@ -1038,9 +1059,6 @@ class StateCacheManager @Inject constructor(
                 MultipartBody.Part.createFormData("screenshotFile", ssFile.name, ssBody)
             }
 
-            // The unit the server files this under: the same label saves use (the core for a
-            // libretro host), the channel by its canonical name, and the launcher's slot number.
-            // Rows record the host as their core ("builtin"); the label wants the core itself.
             val coreForLabel = state.coreId?.takeUnless { it == state.emulatorId }
                 ?: saveSyncApiClient.resolveCoreForGame(state.gameId)
             val serverEmulator = EmulatorRegistry.toServerEmulator(state.emulatorId, coreForLabel)
@@ -1102,8 +1120,6 @@ class StateCacheManager @Inject constructor(
             }
 
             if (response.code() == HTTP_CONFLICT) {
-                // Another device moved this slot past the version we built on. The reconcile
-                // pass decides which side wins; until then the row records that the server is ahead.
                 Log.i(TAG, "[StateSync] UPLOAD stateId=${state.id} | Server has a newer version (409), leaving it to reconcile")
                 stateCacheDao.updateSyncState(
                     id = state.id,
@@ -1141,6 +1157,8 @@ class StateCacheManager @Inject constructor(
         } catch (e: Exception) {
             Log.e(TAG, "[StateSync] UPLOAD stateId=${state.id} | Exception", e)
             StateCloudResult.Error(e.message ?: "Upload failed")
+        } finally {
+            gzipFile?.delete()
         }
     }
 
@@ -1175,8 +1193,6 @@ class StateCacheManager @Inject constructor(
                 return@withContext StateCloudResult.Error("Empty response body")
             }
 
-            // The server names the unit outright; the file name is only a fallback for rows
-            // written before it did.
             val parsed = parseStateFileName(fileName)
             val channelName = serverState?.channel?.let { SaveSyncApiClient.namedChannelOrNull(it) }
                 ?: if (serverState?.channel != null) null else parsed.channelName
@@ -1615,17 +1631,21 @@ class StateCacheManager @Inject constructor(
     }
 
     suspend fun processPendingStateUploads(): Int = withContext(Dispatchers.IO) {
+        pendingUploadMutex.withLock { drainPendingStateUploads() }
+    }
+
+    private suspend fun drainPendingStateUploads(): Int {
         val api = saveSyncApiClient.getApi()
         if (api == null) {
             Log.d(TAG, "[StateSync] processPendingStateUploads | No API connection")
-            return@withContext 0
+            return 0
         }
 
         val activeOwnerId = syncPreferencesRepository.getRommUserId()
         val pending = pendingSyncQueueDao.getRetryableBySyncType(SyncType.SAVE_STATE)
             .filter { it.ownerUserId == null || it.ownerUserId == activeOwnerId }
         if (pending.isEmpty()) {
-            return@withContext 0
+            return 0
         }
 
         Log.d(TAG, "[StateSync] processPendingStateUploads | Processing ${pending.size} pending uploads")
@@ -1668,6 +1688,6 @@ class StateCacheManager @Inject constructor(
         }
 
         Log.d(TAG, "[StateSync] processPendingStateUploads | Completed | uploaded=$uploadedCount")
-        uploadedCount
+        return uploadedCount
     }
 }

@@ -14,6 +14,10 @@ import javax.inject.Singleton
 
 private const val DOWNLOAD_STALL_TIMEOUT_SECONDS = 300
 
+/** Save and state bodies are bulk transfers; a slow uplink must not trip the API timeout. */
+private fun isAssetTransfer(path: String): Boolean =
+    path.contains("/api/saves") || path.contains("/api/states")
+
 /**
  * Builds a RomM client bound to one base URL and token.
  *
@@ -44,7 +48,7 @@ class RomMApiFactory @Inject constructor() {
 
         val downloadTimeoutInterceptor = Interceptor { chain ->
             val path = chain.request().url.encodedPath
-            if (path.contains("/content") || path.endsWith("/api/roms")) {
+            if (path.contains("/content") || path.endsWith("/api/roms") || isAssetTransfer(path)) {
                 chain.withReadTimeout(DOWNLOAD_STALL_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                     .withWriteTimeout(DOWNLOAD_STALL_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                     .proceed(chain.request())

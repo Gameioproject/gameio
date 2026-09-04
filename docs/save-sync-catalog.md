@@ -29,6 +29,9 @@ This note is the client-side map.
   with explicit `channel` and `slot` query parameters; the server echoes `channel` and
   `state_slot` back, and the file name is only parsed for rows older than that.
 - Quick-save slots are `100..109` and sync like any other slot.
+- State bodies go up gzip-compressed (`application/gzip` part) and come down with
+  `Content-Encoding: gzip`, which OkHttp undoes transparently. Save and state requests use
+  the 300 s stall timeout, not the 60 s API timeout.
 - Downloads made outside a launch only reach the state cache. `PreLaunchStateSyncUseCase`
   places the newest cached state of each slot into the live slot when the slot is empty, or
   when the cached row is synced, newer than the live file and holds different bytes. A live
