@@ -731,8 +731,6 @@ class PlaySessionTracker @Inject constructor(
                     } catch (e: Exception) {
                         Logger.error(TAG, "[StateSync] SESSION gameId=${session.gameId} | State sync failed", e)
                     }
-                    // A session just wrote saves and states; settle them with the server now
-                    // rather than at the next connect, and pull whatever another device sent.
                     runCatching { syncCoordinator.get().reconcileAll(force = true) }
                         .onFailure { Logger.warn(TAG, "[SaveSync] SESSION gameId=${session.gameId} | post-session reconcile failed: ${it.message}") }
                 }
