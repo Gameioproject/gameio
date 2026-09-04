@@ -1,6 +1,8 @@
 package com.nendo.argosy.data.sync.strategy
 
 import com.nendo.argosy.data.local.dao.GameDao
+import com.nendo.argosy.data.local.dao.getByIdsChunked
+import com.nendo.argosy.data.remote.romm.RomMApi
 import com.nendo.argosy.data.remote.romm.RomMApiClient
 import com.nendo.argosy.data.emulator.EmulatorRegistry
 import com.nendo.argosy.data.repository.SaveSyncApiClient
@@ -18,6 +20,11 @@ private const val TAG = "CatalogSaveSync"
  * conflict for the auto-resolver, which already carries the rules for local-vs-server age.
  * Server saves with no matching local row become downloads; the effect applier skips them
  * safely when the game has no local ROM yet.
+ *
+ * Games on disk with no local save at all never enter the inventory, so they are covered by a
+ * second pass over one listing of everything the account holds on the server. That is the
+ * shape of a fresh sign-in (signing out removes the account's saves) and of a second device;
+ * without it the server's saves stayed unseen until a launch or the six-hourly scan.
  */
 @Singleton
 class CatalogSaveSyncStrategy @Inject constructor(
@@ -129,6 +136,8 @@ class CatalogSaveSyncStrategy @Inject constructor(
             }
         }
 
+        operations.addAll(serverOnlyForGamesWithoutSaves(api, byRom.keys))
+
         val plan = ReconcilePlan(sessionId = null, operations = operations)
         Logger.info(
             TAG,
@@ -136,5 +145,50 @@ class CatalogSaveSyncStrategy @Inject constructor(
                 "conflict=${plan.conflictCount} noop=${plan.noOpCount}"
         )
         return plan
+    }
+
+    /**
+     * Download operations for server saves of downloaded games that have no local save row.
+     * One request covers every such game: the account's whole save list, filtered to the roms
+     * on disk that the per-rom pass above did not already ask about.
+     */
+    private suspend fun serverOnlyForGamesWithoutSaves(
+        api: RomMApi,
+        alreadyQueried: Set<Long>
+    ): List<ReconcileOperation> {
+        val onDisk = gameDao.getByIdsChunked(gameDao.getDownloadedRommGameIds())
+            .mapNotNull { it.rommId }
+            .filter { it > 0 && it !in alreadyQueried }
+            .toSet()
+        if (onDisk.isEmpty()) return emptyList()
+
+        val response = try {
+            api.getAllSaves()
+        } catch (e: Exception) {
+            Logger.warn(TAG, "plan: listing the account's saves failed: ${e.message}")
+            return emptyList()
+        }
+        if (!response.isSuccessful) {
+            Logger.warn(TAG, "plan: listing the account's saves returned ${response.code()}")
+            return emptyList()
+        }
+
+        val found = response.body().orEmpty().filter { it.romId in onDisk }
+        if (found.isNotEmpty()) {
+            Logger.info(TAG, "plan: ${found.size} server saves for ${found.map { it.romId }.toSet().size} downloaded games with no local save")
+        }
+        return found.map { server ->
+            ReconcileOperation(
+                action = ReconcileAction.DOWNLOAD,
+                romId = server.romId,
+                saveId = server.id,
+                fileName = server.fileName,
+                slot = server.slot,
+                emulator = server.emulator,
+                reason = "server only, no local save",
+                serverUpdatedAt = server.updatedAt,
+                serverContentHash = server.contentHash,
+            )
+        }
     }
 }
