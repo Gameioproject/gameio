@@ -216,6 +216,8 @@ data class HomeUiState(
     val shelves: List<HomeShelfUi> = emptyList(),
     val shelfItems: List<HomeRowItem> = emptyList(),
     val platformItems: List<HomeRowItem> = emptyList(),
+    /** The platform row is empty only until its first page arrives. */
+    val platformRowLoading: Boolean = false,
     val focusedGameIndex: Int = 0,
     val recentGames: List<HomeGameUi> = emptyList(),
     val favoriteGames: List<HomeGameUi> = emptyList(),

@@ -90,7 +90,9 @@ data class LibraryState(
     val pinnedCollections: List<PinnedCollection> = emptyList(),
     val pinnedGames: Map<Long, List<HomeGameUi>> = emptyMap(),
     val pinnedGamesLoading: Set<Long> = emptySet(),
-    val repairedCoverPaths: Map<Long, String> = emptyMap()
+    val repairedCoverPaths: Map<Long, String> = emptyMap(),
+    /** The platform row is empty because its first page is still coming, not because it is empty. */
+    val platformRowLoading: Boolean = false
 )
 
 private data class RecentGamesCache(
@@ -468,8 +470,23 @@ class HomeLibraryDelegate @Inject constructor(
         val prefs = preferencesRepository.userPreferences.first()
         val uncapped = showsEveryGame(prefs)
         val limit = if (uncapped) PLATFORM_GAMES_UNCAPPED else PLATFORM_GAMES_LIMIT
+        val platform = _state.value.platforms.getOrNull(platformIndex)
         var games = gameRepository.getByPlatformSorted(platformId, limit = limit)
         val catalogWant = if (uncapped) catalogTotalFor(platformId) else limit
+        if (catalogPager.isCatalogOnly() && games.size < catalogWant) {
+            // The rest is a server round trip away. Acknowledge the switch now: whatever is
+            // already stored shows at once, and an empty row shows as loading rather than as
+            // the previous platform's games or as an empty platform.
+            val known = applyLibraryFilter(games, prefs.homeLibraryFilter)
+            // A lone View All card would read as an empty platform, so nothing known means
+            // an empty row, which the screen paints as a loading rail.
+            _state.update {
+                it.copy(
+                    platformItems = if (known.isEmpty()) emptyList() else platformRowItems(known, platform, prefs, uncapped),
+                    platformRowLoading = known.isEmpty()
+                )
+            }
+        }
         if (ensureCatalogPage(platformId, games.size, catalogWant)) {
             games = gameRepository.getByPlatformSorted(platformId, limit = limit)
         }
@@ -480,9 +497,22 @@ class HomeLibraryDelegate @Inject constructor(
         if (uncapped) {
             games = orderedForEveryGame(games, prefs)
         }
-        val platform = _state.value.platforms.getOrNull(platformIndex)
+        _state.update {
+            it.copy(
+                platformItems = platformRowItems(games, platform, prefs, uncapped),
+                platformRowLoading = false
+            )
+        }
+    }
+
+    private suspend fun platformRowItems(
+        games: List<GameEntity>,
+        platform: HomePlatformUi?,
+        prefs: UserPreferences,
+        uncapped: Boolean
+    ): List<HomeRowItem> {
         val gameItems: List<HomeRowItem> = games.map { HomeRowItem.Game(it.toUi()) }
-        val items: List<HomeRowItem> = if (platform != null && !uncapped) {
+        return if (platform != null && !uncapped) {
             gameItems + HomeRowItem.ViewAll(
                 platformId = platform.id,
                 platformName = platform.name,
@@ -492,7 +522,6 @@ class HomeLibraryDelegate @Inject constructor(
         } else {
             gameItems
         }
-        _state.update { it.copy(platformItems = items) }
     }
 
     /**
@@ -798,7 +827,9 @@ class HomeLibraryDelegate @Inject constructor(
             return catalogPager.ensureAvailable(platformId, want.coerceAtLeast(CATALOG_PAGE_SIZE))
         }
         if (have >= want) return false
-        return catalogPager.ensureThrough(platformId, want)
+        // Exactly the rows the rail shows, and nothing ahead of them: the row paints after one
+        // small response. The library tops the window up when it is opened.
+        return catalogPager.ensureThrough(platformId, want, prefetch = 0)
     }
 
     private suspend fun discoverGamesIfNeeded(games: List<GameEntity>): Boolean {
