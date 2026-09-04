@@ -93,15 +93,16 @@ class SaveUploader @Inject constructor(
         }
 
         val ownerUserId = syncPreferencesRepository.getRommUserId()
-        val syncEntity = if (channelName != null) {
-            saveSyncDao.getByGameEmulatorAndChannel(gameId, resolvedEmulatorId, channelName, ownerUserId)
+        val syncEntity = if (SaveSyncApiClient.isAutosaveChannel(channelName)) {
+            saveSyncDao.getByGameEmulatorAndAutosave(gameId, resolvedEmulatorId, ownerUserId)
+                ?: saveSyncDao.getByGameAndEmulatorWithDefault(
+                    gameId,
+                    resolvedEmulatorId,
+                    SaveSyncApiClient.DEFAULT_SAVE_NAME,
+                    ownerUserId
+                )
         } else {
-            saveSyncDao.getByGameAndEmulatorWithDefault(
-                gameId,
-                resolvedEmulatorId,
-                SaveSyncApiClient.DEFAULT_SAVE_NAME,
-                ownerUserId
-            )
+            saveSyncDao.getByGameEmulatorAndChannel(gameId, resolvedEmulatorId, channelName!!, ownerUserId)
         }
 
         val emulatorPackage = emulatorResolver.getEmulatorPackageForGame(gameId, game.platformId, game.platformSlug)
@@ -328,10 +329,13 @@ class SaveUploader @Inject constructor(
             val isAutosaveSlot = SaveSyncApiClient.isAutosaveChannel(channelName)
             val autocleanupEnabled = isAutosaveSlot
             val autocleanupLimit = if (isAutosaveSlot) SaveSyncApiClient.AUTOCLEANUP_LIMIT else null
+            // Name the version this upload builds on, so a slot another device moved past comes
+            // back as 409 for the reconcile pass instead of being overwritten.
+            val baseHash = syncEntity?.lastUploadedHash
             val response = if (deviceId != null) {
-                api.uploadSaveWithDevice(rommId, serverEmulator, deviceId, overwrite = forceOverwrite, slot = slotForUpload, autocleanup = autocleanupEnabled, autocleanupLimit = autocleanupLimit, saveFile = filePart)
+                api.uploadSaveWithDevice(rommId, serverEmulator, deviceId, overwrite = forceOverwrite, slot = slotForUpload, autocleanup = autocleanupEnabled, autocleanupLimit = autocleanupLimit, saveFile = filePart, baseHash = baseHash)
             } else {
-                api.uploadSave(rommId, serverEmulator, slot = slotForUpload, autocleanup = autocleanupEnabled, autocleanupLimit = autocleanupLimit, filePart)
+                api.uploadSave(rommId, serverEmulator, slot = slotForUpload, autocleanup = autocleanupEnabled, autocleanupLimit = autocleanupLimit, filePart, baseHash = baseHash, overwrite = forceOverwrite)
             }
 
             if (response.code() == 409) {

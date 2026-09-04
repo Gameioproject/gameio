@@ -65,8 +65,9 @@ class ConflictResolutionService @Inject constructor(
     }
 
     private suspend fun resolveEmulator(conflict: PendingConflictEntity): String? {
-        conflict.emulator?.let { return it }
-        val game = gameDao.getById(conflict.gameId) ?: return null
-        return saveSyncRepository.resolveEmulatorForGame(game)
+        // What the game launches with wins: a conflict parked by an older build carries the
+        // server's label for the core, which is not an emulator this device can upload from.
+        val game = gameDao.getById(conflict.gameId)
+        return game?.let { saveSyncRepository.resolveEmulatorForGame(it) } ?: conflict.emulator
     }
 }

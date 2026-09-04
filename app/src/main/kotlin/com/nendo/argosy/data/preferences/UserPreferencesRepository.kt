@@ -346,6 +346,7 @@ class UserPreferencesRepository @Inject constructor(
     suspend fun setRomMCredentials(baseUrl: String, token: String, username: String? = null, userId: Long? = null) =
         syncPrefs.setRomMCredentials(baseUrl, token, username, userId)
     suspend fun clearRomMCredentials() = syncPrefs.clearRomMCredentials()
+    suspend fun clearLastNegotiateAt() = syncPrefs.clearLastNegotiateAt()
     suspend fun setRommDeviceId(deviceId: String, clientVersion: String) = syncPrefs.setRommDeviceId(deviceId, clientVersion)
     suspend fun clearRommDeviceId() = syncPrefs.clearRommDeviceId()
     suspend fun setRACredentials(username: String, token: String) = syncPrefs.setRACredentials(username, token)

@@ -127,6 +127,7 @@ class SyncCoordinatorApplyPlanTest {
         )
 
         every { strategySelector.current() } returns fakeStrategy
+        every { fakeStrategy.plansRemotely } returns true
         coEvery { saveSyncDao.getAllWithLocalPath(any()) } returns listOf(
             SaveSyncEntity(
                 id = 1L,
@@ -324,7 +325,7 @@ class SyncCoordinatorApplyPlanTest {
     @Test
     fun `conflict entity carries current local file hash and serverHash from plan op`() = runTest {
         coEvery { conflictAutoResolver.classify(any(), any()) } returns ConflictAutoResolver.Resolution.AsIs
-        coEvery { saveSyncDao.getByGameEmulatorAndChannel(game.id, "mgba", "autosave", any()) } returns SaveSyncEntity(
+        coEvery { saveSyncDao.getByGameEmulatorAndAutosave(game.id, "mgba", any()) } returns SaveSyncEntity(
             gameId = game.id,
             rommId = 100L,
             emulatorId = "mgba",
@@ -347,7 +348,7 @@ class SyncCoordinatorApplyPlanTest {
     @Test
     fun `conflict entity has null localHash when no save_sync row exists yet`() = runTest {
         coEvery { conflictAutoResolver.classify(any(), any()) } returns ConflictAutoResolver.Resolution.AsIs
-        coEvery { saveSyncDao.getByGameEmulatorAndChannel(game.id, "mgba", "autosave", any()) } returns null
+        coEvery { saveSyncDao.getByGameEmulatorAndAutosave(game.id, "mgba", any()) } returns null
         val captured = slot<PendingConflictEntity>()
         coEvery { pendingConflictDao.upsert(capture(captured)) } returns 1L
 

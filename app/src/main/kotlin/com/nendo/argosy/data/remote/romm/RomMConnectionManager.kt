@@ -528,6 +528,7 @@ class RomMConnectionManager @Inject constructor(
         }
         disconnect()
         userPreferencesRepository.clearRomMCredentials()
+        userPreferencesRepository.clearLastNegotiateAt()
         retroAchievementsRepository.get().syncRetroArchCredentials()
         Logger.info(TAG, "signOut: removed user ${active.rommUserId} and cleared the stored identity")
         return result

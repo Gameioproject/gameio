@@ -76,6 +76,7 @@ class SaveUploaderTest {
 
     @Before
     fun setUp() {
+        coEvery { saveSyncDao.getByGameEmulatorAndAutosave(any(), any(), any()) } returns null
         tempDir = createTempDirectory("save_uploader_test").toFile()
         preparedFile = File(tempDir, "smw.srm").apply {
             writeBytes(ByteArray(256) { 0x42 })

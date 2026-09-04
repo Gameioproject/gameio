@@ -9,7 +9,7 @@ import javax.inject.Singleton
 class SaveSyncStrategySelector @Inject constructor(
     private val legacy: Lazy<LegacySaveSyncStrategy>,
     private val negotiator: Lazy<NegotiatorSaveSyncStrategy>,
-    private val catalog: Lazy<CatalogSaveSyncStrategy>,
+    private val catalog: Lazy<CatalogSyncStrategy>,
     private val connectionManager: RomMConnectionManager,
 ) {
     fun current(): SaveSyncStrategy {
