@@ -864,7 +864,7 @@ class MainActivity : ComponentActivity() {
 
     private fun handleDeepLink(intent: Intent): Boolean {
         val uri = intent.data ?: return false
-        if (uri.scheme == "argosy") {
+        if (uri.scheme in DEEP_LINK_SCHEMES) {
             Log.d(TAG, "Received deep link: $uri")
             _pendingDeepLink.value = uri
             return true
@@ -1042,3 +1042,6 @@ class MainActivity : ComponentActivity() {
         }
     )
 }
+
+/** The manifest registers the rebranded scheme; the old one still works for existing shortcuts. */
+private val DEEP_LINK_SCHEMES = setOf("gameio", "argosy")

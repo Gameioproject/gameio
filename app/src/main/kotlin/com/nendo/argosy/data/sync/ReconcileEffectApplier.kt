@@ -8,6 +8,7 @@ import com.nendo.argosy.data.local.entity.GameEntity
 import com.nendo.argosy.data.local.entity.PendingConflictEntity
 import com.nendo.argosy.data.local.entity.PendingSyncQueueEntity
 import com.nendo.argosy.data.local.entity.SaveSyncEntity
+import com.nendo.argosy.data.repository.SaveSyncApiClient
 import com.nendo.argosy.data.local.entity.SyncPriority
 import com.nendo.argosy.data.local.entity.SyncType
 import com.nendo.argosy.data.preferences.SyncPreferencesRepository
@@ -208,11 +209,8 @@ class ReconcileEffectApplier @Inject constructor(
         }
     }
 
-    private fun parseInstantOrNull(value: String): Instant? = try {
-        Instant.parse(value)
-    } catch (_: Exception) {
-        null
-    }
+    private fun parseInstantOrNull(value: String): Instant? =
+        SaveSyncApiClient.parseTimestampOrNull(value)
 
     private suspend fun canonicalEmulatorId(raw: String?, game: GameEntity): String? {
         return saveSyncRepository.get().resolveEmulatorForGame(game)

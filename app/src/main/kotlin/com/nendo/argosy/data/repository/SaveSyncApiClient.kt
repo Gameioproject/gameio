@@ -576,21 +576,25 @@ class SaveSyncApiClient @Inject constructor(
             } else text
         }
 
-        internal fun parseTimestamp(timestamp: String): Instant {
-            return try {
-                Instant.parse(timestamp)
-            } catch (_: Exception) {
-                try {
-                    java.time.OffsetDateTime.parse(timestamp).toInstant()
-                } catch (_: Exception) {
-                    try {
-                        java.time.ZonedDateTime.parse(timestamp).toInstant()
-                    } catch (_: Exception) {
-                        Logger.warn(TAG, "Failed to parse timestamp: $timestamp, using current time")
-                        Instant.now()
-                    }
-                }
+        internal fun parseTimestamp(timestamp: String): Instant =
+            parseTimestampOrNull(timestamp) ?: run {
+                Logger.warn(TAG, "Failed to parse timestamp: $timestamp, using current time")
+                Instant.now()
             }
+
+        /**
+         * Every shape a server has sent: an instant with Z, an offset, a zone, or a bare
+         * local date-time, which is taken as UTC because that is what a naive database
+         * column holds. Null when it is none of those.
+         */
+        internal fun parseTimestampOrNull(timestamp: String): Instant? {
+            runCatching { return Instant.parse(timestamp) }
+            runCatching { return java.time.OffsetDateTime.parse(timestamp).toInstant() }
+            runCatching { return java.time.ZonedDateTime.parse(timestamp).toInstant() }
+            runCatching {
+                return java.time.LocalDateTime.parse(timestamp).toInstant(java.time.ZoneOffset.UTC)
+            }
+            return null
         }
 
         internal fun parseServerChannelName(fileName: String): String? {

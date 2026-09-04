@@ -250,7 +250,7 @@ fun ArgosyApp(
     LaunchedEffect(pendingDeepLink) {
         pendingDeepLink?.let { uri ->
             android.util.Log.d("ArgosyApp", "Handling deep link: $uri")
-            if (uri.scheme == "argosy") {
+            if (uri.scheme == "gameio" || uri.scheme == "argosy") {
                 when (uri.host) {
                     "game" -> {
                         val gameId = uri.lastPathSegment?.toLongOrNull()
