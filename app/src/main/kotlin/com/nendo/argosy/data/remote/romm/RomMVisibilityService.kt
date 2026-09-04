@@ -5,6 +5,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val TAG = "RomMVisibility"
+private const val VISIBILITY_CACHE_MS = 60_000L
 
 /**
  * What the server withholds from the connected account.
@@ -29,6 +30,28 @@ sealed class RomMVisibility {
 
 @Singleton
 class RomMVisibilityService @Inject constructor() {
+
+    private var cached: RomMVisibility.Known? = null
+    private var cachedAt = 0L
+    private var cachedFor: RomMApi? = null
+
+    /**
+     * [fetch], but an answer younger than [maxAgeMs] for the same client is reused. Catalog paging
+     * needs the hidden sets on every page, and repeating the round trip per page put a full
+     * network latency in front of each one.
+     */
+    suspend fun fetchCached(api: RomMApi?, maxAgeMs: Long = VISIBILITY_CACHE_MS): RomMVisibility {
+        if (api == null) return RomMVisibility.Unavailable
+        val now = android.os.SystemClock.elapsedRealtime()
+        cached?.let { if (cachedFor === api && now - cachedAt < maxAgeMs) return it }
+        val fresh = fetch(api)
+        if (fresh is RomMVisibility.Known) {
+            cached = fresh
+            cachedAt = now
+            cachedFor = api
+        }
+        return fresh
+    }
 
     /**
      * Reads the caller's hidden sets once, for a whole sync pass. Any failure at all - endpoint

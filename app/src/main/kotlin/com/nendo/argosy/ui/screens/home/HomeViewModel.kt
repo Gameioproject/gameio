@@ -189,6 +189,7 @@ class HomeViewModel @Inject constructor(
                     it.copy(
                         platforms = lib.platforms,
                         platformItems = lib.platformItems.applyRowGradients(gradients),
+                        platformRowLoading = lib.platformRowLoading,
                         shelves = lib.shelves,
                         shelfItems = lib.shelfItems.applyRowGradients(gradients),
                         recentGames = lib.recentGames.applyGradients(gradients),
@@ -334,6 +335,7 @@ class HomeViewModel @Inject constructor(
             it.copy(
                 platforms = lib.platforms,
                 platformItems = lib.platformItems.applyRowGradients(gradients),
+                platformRowLoading = lib.platformRowLoading,
                         shelves = lib.shelves,
                         shelfItems = lib.shelfItems.applyRowGradients(gradients),
                 recentGames = lib.recentGames.applyGradients(gradients),

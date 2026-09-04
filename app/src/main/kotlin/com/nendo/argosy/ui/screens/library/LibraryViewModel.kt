@@ -405,6 +405,9 @@ private const val TAG = "LibraryVM"
 // switch still feels immediate.
 private const val MIN_SWITCH_VISIBLE_MS = 180L
 
+/** Owned rows to pull before the Available grid first paints; the scroll handler pages the rest. */
+private const val AVAILABLE_FIRST_PAGE = 200
+
 sealed class LibraryEvent {
     data class LaunchIntent(val intent: Intent, val options: android.os.Bundle? = null) : LibraryEvent()
 }
@@ -1025,6 +1028,20 @@ class LibraryViewModel @Inject constructor(
         val filters = state.activeFilters
         Log.d(TAG, "loadGames: platformIndex=$platformIndex, filters=$filters")
 
+        // On a catalog server the platform's first page is asked for here, not when the grid
+        // reports a scroll: a grid with nothing in it never reports one.
+        val pagedPlatformId = state.platforms.getOrNull(platformIndex)?.id
+            ?.takeIf { catalogPager.isCatalogOnly() && filters.source != SourceFilter.HIDDEN }
+        if (pagedPlatformId != null) {
+            viewModelScope.launch {
+                if (filters.source == SourceFilter.AVAILABLE) {
+                    catalogPager.ensureAvailable(pagedPlatformId, AVAILABLE_FIRST_PAGE)
+                } else {
+                    catalogPager.ensureThrough(pagedPlatformId, 0)
+                }
+            }
+        }
+
         gamesJob?.cancel()
         gamesJob = viewModelScope.launch {
             val baseFlow = if (filters.source == SourceFilter.HIDDEN) {
@@ -1057,7 +1074,11 @@ class LibraryViewModel @Inject constructor(
                     .map<List<Long>, Set<Long>?> { it.toSet() }
             }
 
-            val source = combine(baseFlow, seriesIdsFlow) { games, seriesIds -> games to seriesIds }
+            val source = combine(
+                baseFlow,
+                seriesIdsFlow,
+                catalogPager.settledPlatforms
+            ) { games, seriesIds, settled -> Triple(games, seriesIds, settled) }
 
             source
                 .catch { e ->
@@ -1065,7 +1086,7 @@ class LibraryViewModel @Inject constructor(
                     kotlinx.coroutines.delay(100)
                     emitAll(source)
                 }
-                .collectLatest { (games, seriesIds) ->
+                .collectLatest { (games, seriesIds, settledPlatforms) ->
                     val normalizedQuery = com.nendo.argosy.util.SearchNormalizer.normalize(filters.searchQuery)
                     val filteredGames = games.filter { game ->
                         val matchesSearch = filters.searchQuery.isEmpty() ||
@@ -1118,7 +1139,12 @@ class LibraryViewModel @Inject constructor(
                             currentSectionLabel = currentSectionLabel
                         )
                     }
-                    finishContentSwitch()
+                    // Room answers empty before the server's first page has landed; that is not
+                    // an empty platform, so the skeleton stays up until the pager has been through.
+                    val awaitingFirstPage = gamesList.isEmpty() &&
+                        pagedPlatformId != null &&
+                        pagedPlatformId !in settledPlatforms
+                    if (!awaitingFirstPage) finishContentSwitch()
                     extractGradientsForVisibleGames(_uiState.value.focusedIndex)
                 }
         }

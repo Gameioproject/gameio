@@ -994,7 +994,7 @@ class RomMLibrarySyncService @Inject constructor(
         // decides that anything is gone.
         val scope = SyncScope(
             ownerUserId = overlayWriter.activeOwnerId(),
-            visibility = visibilityService.fetch(api),
+            visibility = visibilityService.fetchCached(api),
             serverRomIds = null
         )
 

@@ -101,6 +101,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -809,6 +810,11 @@ fun HomeScreen(
                                 onPosterLoaded = viewModel::extractGradientForMedia,
                                 modifier = Modifier.fillMaxSize()
                             )
+                        }
+                        uiState.currentRow is HomeRow.Platform &&
+                            uiState.platformRowLoading &&
+                            uiState.currentItems.isEmpty() -> {
+                            PlatformRowSkeleton(cardSize = cardSize)
                         }
                         uiState.isMediaRow && !uiState.isMediaSignedIn -> {
                             MediaSignedOutState()
@@ -2042,6 +2048,35 @@ private fun rememberHomeCarouselItems(
         }
     }
 }
+
+/**
+ * Stand-in rail while a platform's first page is on its way from the server. Blank cards at the
+ * carousel's size, so the switch reads as the row redrawing rather than as an empty platform,
+ * and the previous platform's covers are gone the moment the tab moves.
+ */
+@Composable
+private fun PlatformRowSkeleton(cardSize: DpSize, modifier: Modifier = Modifier) {
+    val shape = RoundedCornerShape(Dimens.radiusMd)
+    val cardColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.06f)
+    Row(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = Dimens.spacingLg),
+        horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMd),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        repeat(PLATFORM_SKELETON_CARDS) {
+            Box(
+                modifier = Modifier
+                    .size(cardSize)
+                    .clip(shape)
+                    .background(cardColor)
+            )
+        }
+    }
+}
+
+private const val PLATFORM_SKELETON_CARDS = 4
 
 @Composable
 private fun LoadingState() {
