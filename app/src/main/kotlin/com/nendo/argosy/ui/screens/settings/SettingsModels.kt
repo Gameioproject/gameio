@@ -1443,7 +1443,7 @@ data class SettingsUiState(
     val isMigrating: Boolean = false,
     val showBuiltinPathMigrationDialog: Boolean = false,
     val pendingBuiltinPathMigration: BuiltinPathMigration? = null,
-    val appVersion: String = BuildConfig.VERSION_NAME,
+    val appVersion: String = "${BuildConfig.VERSION_NAME} (${BuildConfig.GIT_SHA})",
     val updateCheck: UpdateCheckState = UpdateCheckState(),
     val changelog: ChangelogState = ChangelogState(),
     val aboutUpdateActionIndex: Int = 0,
