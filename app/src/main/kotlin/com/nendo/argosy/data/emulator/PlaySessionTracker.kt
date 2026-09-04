@@ -105,7 +105,8 @@ class PlaySessionTracker @Inject constructor(
     private val fileAccessLayer: FileAccessLayer,
     private val socialRepository: dagger.Lazy<SocialRepository>,
     private val saveRecoveryGate: com.nendo.argosy.data.sync.SaveRecoveryGate,
-    private val reconcileAchievementsOnSessionEndUseCase: dagger.Lazy<com.nendo.argosy.domain.usecase.achievement.ReconcileAchievementsOnSessionEndUseCase>
+    private val reconcileAchievementsOnSessionEndUseCase: dagger.Lazy<com.nendo.argosy.domain.usecase.achievement.ReconcileAchievementsOnSessionEndUseCase>,
+    private val syncCoordinator: dagger.Lazy<com.nendo.argosy.data.sync.SyncCoordinator>
 ) {
     companion object {
         private const val TAG = "PlaySessionTracker"
@@ -730,6 +731,10 @@ class PlaySessionTracker @Inject constructor(
                     } catch (e: Exception) {
                         Logger.error(TAG, "[StateSync] SESSION gameId=${session.gameId} | State sync failed", e)
                     }
+                    // A session just wrote saves and states; settle them with the server now
+                    // rather than at the next connect, and pull whatever another device sent.
+                    runCatching { syncCoordinator.get().reconcileAll(force = true) }
+                        .onFailure { Logger.warn(TAG, "[SaveSync] SESSION gameId=${session.gameId} | post-session reconcile failed: ${it.message}") }
                 }
 
                 val cacheResult = saveOutcome.getOrThrow()

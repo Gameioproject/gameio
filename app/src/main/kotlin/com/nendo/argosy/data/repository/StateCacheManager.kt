@@ -17,6 +17,7 @@ import com.nendo.argosy.data.local.dao.StateTombstoneDao
 import com.nendo.argosy.data.local.entity.StateTombstoneEntity
 import com.nendo.argosy.data.local.entity.PendingSyncQueueEntity
 import com.nendo.argosy.data.local.entity.StateCacheEntity
+import com.nendo.argosy.data.emulator.EmulatorRegistry
 import com.nendo.argosy.data.local.entity.SyncPriority
 import com.nendo.argosy.data.local.entity.SyncType
 import com.nendo.argosy.data.sync.SaveStatePayload
@@ -49,6 +50,7 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private const val HTTP_CONFLICT = 409
 private const val HTTP_NOT_FOUND = 404
 
 data class DiscoveredState(
@@ -1006,7 +1008,8 @@ class StateCacheManager @Inject constructor(
         state: StateCacheEntity,
         rommId: Long,
         romBaseName: String,
-        api: RomMApi
+        api: RomMApi,
+        overwrite: Boolean = false
     ): StateCloudResult = withContext(Dispatchers.IO) {
         Log.d(TAG, "[StateSync] UPLOAD stateId=${state.id} gameId=${state.gameId} slot=${state.slotNumber}")
 
@@ -1035,18 +1038,35 @@ class StateCacheManager @Inject constructor(
                 MultipartBody.Part.createFormData("screenshotFile", ssFile.name, ssBody)
             }
 
+            // The unit the server files this under: the same label saves use (the core for a
+            // libretro host), the channel by its canonical name, and the launcher's slot number.
+            // Rows record the host as their core ("builtin"); the label wants the core itself.
+            val coreForLabel = state.coreId?.takeUnless { it == state.emulatorId }
+                ?: saveSyncApiClient.resolveCoreForGame(state.gameId)
+            val serverEmulator = EmulatorRegistry.toServerEmulator(state.emulatorId, coreForLabel)
+            val channel = state.channelName ?: SaveSyncApiClient.AUTOSAVE_SLOT_NAME
+            val deviceId = saveSyncApiClient.getDeviceId()
+            val baseHash = state.lastUploadedHash
             val firstResponse = if (state.rommSaveId != null) {
                 api.updateState(
                     state.rommSaveId,
                     stateFile = buildStatePart(),
-                    screenshotFile = buildScreenshotPart()
+                    screenshotFile = buildScreenshotPart(),
+                    baseHash = baseHash,
+                    overwrite = overwrite,
+                    deviceId = deviceId
                 )
             } else {
                 api.uploadState(
                     rommId,
-                    state.emulatorId,
+                    serverEmulator,
                     stateFile = buildStatePart(),
-                    screenshotFile = buildScreenshotPart()
+                    screenshotFile = buildScreenshotPart(),
+                    channel = channel,
+                    slot = state.slotNumber,
+                    baseHash = baseHash,
+                    overwrite = overwrite,
+                    deviceId = deviceId
                 )
             }
 
@@ -1068,12 +1088,31 @@ class StateCacheManager @Inject constructor(
                 )
                 api.uploadState(
                     rommId,
-                    state.emulatorId,
+                    serverEmulator,
                     stateFile = buildStatePart(),
-                    screenshotFile = buildScreenshotPart()
+                    screenshotFile = buildScreenshotPart(),
+                    channel = channel,
+                    slot = state.slotNumber,
+                    baseHash = null,
+                    overwrite = overwrite,
+                    deviceId = deviceId
                 )
             } else {
                 firstResponse
+            }
+
+            if (response.code() == HTTP_CONFLICT) {
+                // Another device moved this slot past the version we built on. The reconcile
+                // pass decides which side wins; until then the row records that the server is ahead.
+                Log.i(TAG, "[StateSync] UPLOAD stateId=${state.id} | Server has a newer version (409), leaving it to reconcile")
+                stateCacheDao.updateSyncState(
+                    id = state.id,
+                    rommSaveId = state.rommSaveId,
+                    syncStatus = StateCacheEntity.STATUS_SERVER_NEWER,
+                    serverUpdatedAt = state.serverUpdatedAt?.toEpochMilli(),
+                    lastUploadedHash = state.lastUploadedHash
+                )
+                return@withContext StateCloudResult.Error("Server has a newer version of this slot")
             }
 
             if (response.isSuccessful) {
@@ -1089,7 +1128,7 @@ class StateCacheManager @Inject constructor(
                     rommSaveId = serverState.id,
                     syncStatus = StateCacheEntity.STATUS_SYNCED,
                     serverUpdatedAt = serverTimestamp?.toEpochMilli(),
-                    lastUploadedHash = contentHash
+                    lastUploadedHash = serverState.contentHash ?: contentHash
                 )
 
                 Log.i(TAG, "[StateSync] UPLOAD stateId=${state.id} | Complete | serverStateId=${serverState.id}")
@@ -1136,9 +1175,12 @@ class StateCacheManager @Inject constructor(
                 return@withContext StateCloudResult.Error("Empty response body")
             }
 
+            // The server names the unit outright; the file name is only a fallback for rows
+            // written before it did.
             val parsed = parseStateFileName(fileName)
-            val channelName = parsed.channelName
-            val parsedSlot = parsed.slotNumber
+            val channelName = serverState?.channel?.let { SaveSyncApiClient.namedChannelOrNull(it) }
+                ?: if (serverState?.channel != null) null else parsed.channelName
+            val parsedSlot = serverState?.stateSlot ?: parsed.slotNumber
 
             val relativeDir = stateRelativeDir(ownerUserId, gameId, platformSlug, channelName, coreId)
             val coreDir = File(cacheBaseDir, relativeDir)
@@ -1200,7 +1242,7 @@ class StateCacheManager @Inject constructor(
                 rommSaveId = rommStateId,
                 syncStatus = StateCacheEntity.STATUS_SYNCED,
                 serverUpdatedAt = parseTimestamp(serverState.updatedAt) ?: now,
-                lastUploadedHash = contentHash,
+                lastUploadedHash = serverState.contentHash ?: contentHash,
                 ownerUserId = existing?.ownerUserId ?: ownerUserId
             )
 
@@ -1417,8 +1459,9 @@ class StateCacheManager @Inject constructor(
     suspend fun getByGameAndEmulator(gameId: Long, emulatorId: String): List<StateCacheEntity> =
         stateCacheDao.getByGameAndEmulator(gameId, emulatorId, syncPreferencesRepository.getRommUserId())
 
-    private fun calculateFileHash(file: File): String {
-        val md = MessageDigest.getInstance("MD5")
+    /** SHA-256 of the file, the same hash the catalog server records for the bytes it stores. */
+    fun calculateFileHash(file: File): String {
+        val md = MessageDigest.getInstance("SHA-256")
         file.inputStream().buffered().use { input ->
             val buffer = ByteArray(BUFFER_SIZE)
             var bytesRead: Int

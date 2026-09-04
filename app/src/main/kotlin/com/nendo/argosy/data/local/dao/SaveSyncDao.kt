@@ -57,6 +57,21 @@ interface SaveSyncDao {
     """)
     suspend fun deleteDuplicateRows(): Int
 
+    /**
+     * The autosave channel's row whichever way it was spelled. Session end writes "autosave",
+     * discovery and older rows write null, and the unique index keeps both; callers deciding a
+     * unit's state must see one row, the attributed one first.
+     */
+    @Query("""
+        SELECT * FROM save_sync
+        WHERE gameId = :gameId AND emulatorId = :emulatorId
+          AND (channelName IS NULL OR LOWER(channelName) = 'autosave')
+          AND (ownerUserId IS NULL OR ownerUserId IS :ownerUserId)
+        ORDER BY (ownerUserId IS NULL) ASC, (channelName IS NULL) ASC, id DESC
+        LIMIT 1
+    """)
+    suspend fun getByGameEmulatorAndAutosave(gameId: Long, emulatorId: String, ownerUserId: Long?): SaveSyncEntity?
+
     @Query("""
         SELECT * FROM save_sync
         WHERE gameId = :gameId AND emulatorId = :emulatorId

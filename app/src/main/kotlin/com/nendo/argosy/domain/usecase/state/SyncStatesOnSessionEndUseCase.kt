@@ -8,6 +8,7 @@ import com.nendo.argosy.data.local.dao.GameDao
 import com.nendo.argosy.data.local.entity.StateCacheEntity
 import com.nendo.argosy.data.preferences.UserPreferencesRepository
 import com.nendo.argosy.data.repository.ActiveSaveRepository
+import com.nendo.argosy.data.repository.SaveSyncApiClient
 import com.nendo.argosy.data.repository.StateCacheManager
 import com.nendo.argosy.data.sync.StateClaim
 import com.nendo.argosy.data.sync.StateOwnershipTracker
@@ -99,7 +100,8 @@ class SyncStatesOnSessionEndUseCase @Inject constructor(
         }
 
         var cachedCount = 0
-        val channelName = activeSaveRepository.getActiveChannel(gameId)
+        // The state cache spells the default channel as null; the active save row says "autosave".
+        val channelName = SaveSyncApiClient.namedChannelOrNull(activeSaveRepository.getActiveChannel(gameId))
 
         for (state in discoveredStates) {
             val claim = stateOwnershipTracker.claim(state.file.absolutePath, emulatorId)

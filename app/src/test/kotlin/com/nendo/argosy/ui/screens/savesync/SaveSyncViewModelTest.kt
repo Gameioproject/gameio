@@ -305,7 +305,8 @@ class SaveSyncViewModelTest {
         romMRepository = romMRepository,
         conflictResolutionService = conflictResolutionService,
         saveSyncRepository = saveSyncRepository,
-        saveAccessNotices = com.nendo.argosy.data.sync.SaveAccessNotices()
+        saveAccessNotices = com.nendo.argosy.data.sync.SaveAccessNotices(),
+        syncCoordinator = dagger.Lazy { mockk<com.nendo.argosy.data.sync.SyncCoordinator>(relaxed = true) }
     )
 
     private fun makeGame(id: Long, title: String): GameEntity = GameEntity(

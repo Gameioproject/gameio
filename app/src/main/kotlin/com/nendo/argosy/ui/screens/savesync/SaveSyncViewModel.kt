@@ -58,7 +58,8 @@ class SaveSyncViewModel @Inject constructor(
     private val romMRepository: RomMRepository,
     private val conflictResolutionService: ConflictResolutionService,
     private val saveSyncRepository: SaveSyncRepository,
-    private val saveAccessNotices: SaveAccessNotices
+    private val saveAccessNotices: SaveAccessNotices,
+    private val syncCoordinator: dagger.Lazy<com.nendo.argosy.data.sync.SyncCoordinator>
 ) : ViewModel() {
 
     private val _forceCheckStatus = MutableStateFlow<ForceSaveCheckUiState>(ForceSaveCheckUiState.Idle)
@@ -74,9 +75,15 @@ class SaveSyncViewModel @Inject constructor(
             _focusedRowKey.collect { _attentionAction.value = AttentionAction.SKIP }
         }
         viewModelScope.launch {
+            var reconciled = false
             romMRepository.connectionState.collect { state ->
                 if (state is ConnectionState.Connected) {
                     _registeredDevices.value = romMRepository.getRegisteredDevices()
+                    // Opening this screen is a request to see the current state of things.
+                    if (!reconciled) {
+                        reconciled = true
+                        runCatching { syncCoordinator.get().reconcileAll(force = true) }
+                    }
                 } else {
                     _registeredDevices.value = emptyList()
                 }
@@ -324,7 +331,10 @@ class SaveSyncViewModel @Inject constructor(
         if (_forceCheckStatus.value is ForceSaveCheckUiState.Running) return
         _forceCheckStatus.value = ForceSaveCheckUiState.Running
         viewModelScope.launch {
-            val result = runCatching { saveSyncRepository.forceSaveCheck() }
+            val result = runCatching {
+                syncCoordinator.get().reconcileAll(force = true)
+                saveSyncRepository.forceSaveCheck()
+            }
             _forceCheckStatus.value = result.fold(
                 onSuccess = { r ->
                     ForceSaveCheckUiState.Complete(

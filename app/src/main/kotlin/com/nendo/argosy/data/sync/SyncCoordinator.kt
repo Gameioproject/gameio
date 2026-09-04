@@ -24,6 +24,7 @@ import com.nendo.argosy.data.repository.SaveSyncRepository
 import com.nendo.argosy.data.repository.SaveSyncResult
 import com.nendo.argosy.data.repository.ScreenshotUploader
 import com.nendo.argosy.data.repository.StateCacheManager
+import com.nendo.argosy.data.sync.strategy.CatalogSyncStrategy
 import com.nendo.argosy.data.sync.strategy.LocalSaveState
 import com.nendo.argosy.data.sync.strategy.ReconcilePlan
 import com.nendo.argosy.data.sync.strategy.SaveSyncStrategySelector
@@ -93,7 +94,11 @@ class SyncCoordinator @Inject constructor(
         data class Completed(val processed: Int, val failed: Int) : ProcessResult()
     }
 
-    suspend fun reconcileAll(): ReconcileSummary = withContext(Dispatchers.IO) {
+    /**
+     * Plans and carries out a full reconcile. [force] skips the negotiate cooldown: a sign-in,
+     * a finished play session and the Save Sync screen each have a reason to look now.
+     */
+    suspend fun reconcileAll(force: Boolean = false): ReconcileSummary = withContext(Dispatchers.IO) {
         if (accountSwitchMarkerStore.isSwitching()) {
             Logger.info(TAG, "reconcileAll: account switch in progress, not touching save files")
             return@withContext ReconcileSummary(ProcessResult.NotConnected, planConflicts = 0, planApplied = 0)
@@ -110,7 +115,7 @@ class SyncCoordinator @Inject constructor(
 
         val now = Instant.now()
         val last = syncPreferencesRepository.getLastNegotiateAt()
-        if (last != null && Duration.between(last, now) < NEGOTIATE_COOLDOWN) {
+        if (!force && last != null && Duration.between(last, now) < NEGOTIATE_COOLDOWN) {
             Logger.debug(TAG, "reconcileAll: negotiate cooldown active (last=$last), skipping")
             return@withContext ReconcileSummary(queueResult, planConflicts = 0, planApplied = 0)
         }
@@ -125,14 +130,16 @@ class SyncCoordinator @Inject constructor(
         }
 
         val inventory = buildInventory(secureSaves)
-        val plan = strategySelector.current().planReconcile(inventory)
-        if (plan.operations.isEmpty()) {
+        val strategy = strategySelector.current()
+        val plan = strategy.planReconcile(inventory)
+        val (conflicts, applied) = if (plan.operations.isEmpty()) 0 to 0 else applyPlan(plan)
+        val statesApplied = (strategy as? CatalogSyncStrategy)?.applyStateOperations() ?: 0
+        if (plan.operations.isEmpty() && statesApplied == 0) {
             return@withContext ReconcileSummary(queueResult, planConflicts = 0, planApplied = 0)
         }
-
-        val (conflicts, applied) = applyPlan(plan)
-        Logger.info(TAG, "reconcileAll: plan applied | conflicts=$conflicts handled=$applied sessionId=${plan.sessionId}")
-        ReconcileSummary(queueResult, planConflicts = conflicts, planApplied = applied)
+        Logger.info(TAG, "reconcileAll: plan applied | conflicts=$conflicts handled=$applied states=$statesApplied sessionId=${plan.sessionId}")
+        val drained = processQueue()
+        ReconcileSummary(drained, planConflicts = conflicts, planApplied = applied + statesApplied)
     }
 
     private suspend fun buildInventory(secureSaves: Boolean): List<LocalSaveState> {

@@ -22,6 +22,8 @@ data class RomMSave(
     @Json(name = "device_syncs") val deviceSyncs: List<RomMDeviceSync>? = null,
     @Json(name = "screenshot") val screenshot: RomMScreenshot? = null,
     @Json(name = "content_hash") val contentHash: String? = null,
+    // Unit identity from the catalog server (docs/SAVE_SYNC.md); absent on classic RomM.
+    @Json(name = "channel") val channel: String? = null,
     @Json(name = "origin_device_id") val originDeviceId: String? = null
 )
 
@@ -63,7 +65,11 @@ data class RomMState(
     @Json(name = "download_path") val downloadPath: String? = null,
     @Json(name = "updated_at") val updatedAt: String,
     @Json(name = "created_at") val createdAt: String? = null,
-    @Json(name = "screenshot") val screenshot: RomMScreenshot? = null
+    @Json(name = "screenshot") val screenshot: RomMScreenshot? = null,
+    // Unit identity from the catalog server (docs/SAVE_SYNC.md); absent on classic RomM.
+    @Json(name = "channel") val channel: String? = null,
+    @Json(name = "state_slot") val stateSlot: Int? = null,
+    @Json(name = "content_hash") val contentHash: String? = null
 )
 
 @JsonClass(generateAdapter = true)

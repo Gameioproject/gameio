@@ -183,7 +183,9 @@ interface RomMApi {
         @Query("autocleanup") autocleanup: Boolean = false,
         @Query("autocleanup_limit") autocleanupLimit: Int? = null,
         @Part saveFile: MultipartBody.Part,
-        @Part screenshotFile: MultipartBody.Part? = null
+        @Part screenshotFile: MultipartBody.Part? = null,
+        @Query("base_hash") baseHash: String? = null,
+        @Query("overwrite") overwrite: Boolean? = null
     ): Response<RomMSave>
 
     @Multipart
@@ -218,7 +220,12 @@ interface RomMApi {
         @Query("rom_id") romId: Long,
         @Query("emulator") emulator: String?,
         @Part stateFile: MultipartBody.Part,
-        @Part screenshotFile: MultipartBody.Part? = null
+        @Part screenshotFile: MultipartBody.Part? = null,
+        @Query("channel") channel: String? = null,
+        @Query("slot") slot: Int? = null,
+        @Query("base_hash") baseHash: String? = null,
+        @Query("overwrite") overwrite: Boolean? = null,
+        @Query("device_id") deviceId: String? = null
     ): Response<RomMState>
 
     @Multipart
@@ -226,7 +233,10 @@ interface RomMApi {
     suspend fun updateState(
         @Path("id") stateId: Long,
         @Part stateFile: MultipartBody.Part,
-        @Part screenshotFile: MultipartBody.Part? = null
+        @Part screenshotFile: MultipartBody.Part? = null,
+        @Query("base_hash") baseHash: String? = null,
+        @Query("overwrite") overwrite: Boolean? = null,
+        @Query("device_id") deviceId: String? = null
     ): Response<RomMState>
 
     @POST("api/states/delete")
@@ -282,7 +292,8 @@ interface RomMApi {
         @Query("autocleanup") autocleanup: Boolean = false,
         @Query("autocleanup_limit") autocleanupLimit: Int? = null,
         @Part saveFile: MultipartBody.Part,
-        @Part screenshotFile: MultipartBody.Part? = null
+        @Part screenshotFile: MultipartBody.Part? = null,
+        @Query("base_hash") baseHash: String? = null
     ): Response<RomMSave>
 
     @Multipart
@@ -353,6 +364,10 @@ interface RomMApi {
     suspend fun clearActivity(
         @Query("device_id") deviceId: String
     ): Response<ResponseBody>
+
+    /** The catalog server's one-shot plan for saves and states; see the server's docs/SAVE_SYNC.md. */
+    @POST("api/sync/reconcile")
+    suspend fun reconcile(@Body payload: RomMReconcilePayload): Response<RomMReconcileResponse>
 
     @POST("api/sync/negotiate")
     suspend fun negotiateSync(

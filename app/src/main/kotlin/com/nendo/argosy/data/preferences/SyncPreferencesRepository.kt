@@ -177,6 +177,11 @@ class SyncPreferencesRepository @Inject constructor(
         dataStore.edit { it[Keys.LAST_NEGOTIATE_AT] = time.toString() }
     }
 
+    /** The next sign-in must reconcile at once, whatever the previous account did minutes ago. */
+    suspend fun clearLastNegotiateAt() {
+        dataStore.edit { it.remove(Keys.LAST_NEGOTIATE_AT) }
+    }
+
     suspend fun isSaveSyncLocalRekeyDone(): Boolean =
         dataStore.data.map { it[Keys.SAVE_SYNC_LOCAL_REKEY_DONE] ?: false }.first()
 

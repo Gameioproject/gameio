@@ -216,7 +216,9 @@ class SaveSyncApiClient @Inject constructor(
     }
 
     private suspend fun adoptServerHashes(gameId: Long, serverSaves: List<RomMSave>, ownerUserId: Long?) {
-        if (serverSaves.isEmpty() || !capabilities.trustsServerHash) return
+        // On the catalog server the stored hash is the base of the reconcile rule: it may only
+        // move when this device uploads or downloads, or another device's newer save reads as ours.
+        if (serverSaves.isEmpty() || !capabilities.trustsServerHash || capabilities.catalogOnly) return
         val hashByServerId = serverSaves.associate { it.id to it.contentHash }
         saveSyncDao.getByGame(gameId, ownerUserId).forEach { row ->
             val hash = row.rommSaveId?.let { hashByServerId[it] } ?: return@forEach

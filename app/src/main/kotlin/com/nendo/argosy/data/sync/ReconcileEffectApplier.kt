@@ -65,13 +65,9 @@ class ReconcileEffectApplier @Inject constructor(
     private suspend fun dispatchConflict(op: ReconcileOperation, sessionId: Long?): ReconcileEffectOutcome {
         val ownerUserId = syncPreferencesRepository.getRommUserId()
         val game = gameDao.getByRommId(op.romId)
-        val existing = game?.id?.let { gid ->
-            val emu = op.emulator ?: ""
-            if (op.slot != null) {
-                saveSyncDao.getByGameEmulatorAndChannel(gid, emu, op.slot, ownerUserId)
-            } else {
-                saveSyncDao.getByGameAndEmulator(gid, emu, ownerUserId)
-            }
+        val existing = game?.let { g ->
+            val emu = canonicalEmulatorId(op.emulator, g) ?: (op.emulator ?: "")
+            findRow(g.id, emu, op.slot, ownerUserId)
         }
         val clientHash = existing?.localSavePath?.let { saveCacheManager.get().calculateLocalSaveHash(it) }
         val localTime = resolveLocalTimeFromEntity(existing, fallback = null)
@@ -109,13 +105,14 @@ class ReconcileEffectApplier @Inject constructor(
             Logger.debug(TAG, "applyPlan: skipping CONFLICT for romId=${op.romId} saveId=${op.saveId} (previously dismissed, server unchanged)")
             return ReconcileEffectOutcome.NONE
         }
+        val localEmulatorId = canonicalEmulatorId(op.emulator, game)
         pendingConflictDao.upsert(
             PendingConflictEntity(
                 gameId = game.id,
                 rommSaveId = op.saveId,
                 fileName = op.fileName,
                 slot = op.slot,
-                emulator = op.emulator,
+                emulator = localEmulatorId,
                 localUpdatedAt = localTime,
                 serverUpdatedAt = opServerTime,
                 localHash = clientHash,
@@ -167,11 +164,7 @@ class ReconcileEffectApplier @Inject constructor(
             return false
         }
         val ownerUserId = syncPreferencesRepository.getRommUserId()
-        val existing = if (op.slot != null) {
-            saveSyncDao.getByGameEmulatorAndChannel(game.id, emulatorId, op.slot, ownerUserId)
-        } else {
-            saveSyncDao.getByGameAndEmulator(game.id, emulatorId, ownerUserId)
-        }
+        val existing = findRow(game.id, emulatorId, op.slot, ownerUserId)
         val serverTime = op.serverUpdatedAt?.let { parseInstantOrNull(it) }
         saveSyncDao.upsert(
             SaveSyncEntity(
@@ -208,6 +201,14 @@ class ReconcileEffectApplier @Inject constructor(
             else -> fileMtime ?: existing.localUpdatedAt ?: fallback
         }
     }
+
+    /** One row for a unit: the autosave channel matches both of its spellings. */
+    private suspend fun findRow(gameId: Long, emulatorId: String, channel: String?, ownerUserId: Long?): SaveSyncEntity? =
+        if (SaveSyncApiClient.isAutosaveChannel(channel)) {
+            saveSyncDao.getByGameEmulatorAndAutosave(gameId, emulatorId, ownerUserId)
+        } else {
+            saveSyncDao.getByGameEmulatorAndChannel(gameId, emulatorId, channel!!, ownerUserId)
+        }
 
     private fun parseInstantOrNull(value: String): Instant? =
         SaveSyncApiClient.parseTimestampOrNull(value)

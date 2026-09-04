@@ -163,7 +163,7 @@ class PreLaunchStateSyncUseCase @Inject constructor(
         var downloadedCount = 0
 
         for (serverState in newestPerSlot(serverStates)) {
-            val parsed = stateCacheManager.parseStateFileName(serverState.fileName)
+            val parsed = identityOf(serverState)
             val slotNumber = parsed.slotNumber
             val linked = localByRommId[serverState.id]
             val localState = linked ?: localBySlot[slotNumber to parsed.channelName]
@@ -245,7 +245,7 @@ class PreLaunchStateSyncUseCase @Inject constructor(
             }
         }
 
-        placeMissingLiveStates(gameId, game.localPath, game.platformSlug, emulatorId, coreId, coreVersion, channelName)
+        placeLiveStates(gameId, game.localPath, game.platformSlug, emulatorId, coreId, coreVersion, channelName)
         return if (downloadedCount > 0) {
             Log.i(TAG, "Downloaded $downloadedCount states for ${game.title}")
             Result.Downloaded(downloadedCount)
@@ -255,12 +255,12 @@ class PreLaunchStateSyncUseCase @Inject constructor(
     }
 
     /**
-     * Puts every cached state of the active channel into its live slot if the file is not there.
-     * A download only materialises when it lands; a state cached earlier (a previous launch that
-     * decided it belonged to another channel, an account switch, a cleared live directory) would
-     * otherwise sit in the cache with the emulator's slot empty.
+     * Puts the newest cached state of each slot on the active channel into its live slot when the
+     * slot is empty or holds an older file than the synced copy. Downloads made outside launch (the
+     * connect edge, a session end, the periodic worker) only reach the cache; without this pass the
+     * emulator would keep loading the slot as it was before the other device moved it.
      */
-    private suspend fun placeMissingLiveStates(
+    private suspend fun placeLiveStates(
         gameId: Long,
         romPath: String?,
         platformSlug: String,
@@ -287,7 +287,9 @@ class PreLaunchStateSyncUseCase @Inject constructor(
                 romPath = romPath,
                 gameId = gameId
             ) ?: continue
-            if (File(target).exists()) continue
+            val live = File(target)
+            if (live.exists() && !cacheSupersedesLive(cached, live)) continue
+            val placement = if (live.exists()) "stale" else "empty"
             when (val restore = restoreStateUseCase(
                 cacheId = cached.id,
                 emulatorId = emulatorId,
@@ -297,11 +299,23 @@ class PreLaunchStateSyncUseCase @Inject constructor(
                 currentCoreVersion = coreVersion
             )) {
                 is RestoreStateResult.Success ->
-                    Log.i(TAG, "Placed cached state slot ${cached.slotNumber} into its empty live slot")
+                    Log.i(TAG, "Placed cached state slot ${cached.slotNumber} into its $placement live slot")
                 else ->
                     Log.w(TAG, "Could not place cached state slot ${cached.slotNumber} into its live slot: $restore")
             }
         }
+    }
+
+    /**
+     * A synced cache row written after the live file, holding different bytes, is the version
+     * another device or an earlier reconcile brought down. A live file written after the cache
+     * row is play the session end has not captured yet and stays.
+     */
+    private fun cacheSupersedesLive(cached: StateCacheEntity, live: File): Boolean {
+        if (cached.syncStatus != StateCacheEntity.STATUS_SYNCED) return false
+        if (!cached.cachedAt.isAfter(Instant.ofEpochMilli(live.lastModified()))) return false
+        val syncedHash = cached.lastUploadedHash ?: return false
+        return stateCacheManager.calculateFileHash(live) != syncedHash
     }
 
     /**
@@ -314,10 +328,20 @@ class PreLaunchStateSyncUseCase @Inject constructor(
      * Recency is read from the name rather than the server's `updated_at`, which is the time the
      * file was last rescanned rather than last written.
      */
+    /** Slot and channel as the server names them, or as the file name encodes them on older rows. */
+    private fun identityOf(serverState: RomMState): StateCacheManager.ParsedStateFileName {
+        val parsed = stateCacheManager.parseStateFileName(serverState.fileName)
+        val channel = serverState.channel ?: return parsed.copy(slotNumber = serverState.stateSlot ?: parsed.slotNumber)
+        return parsed.copy(
+            slotNumber = serverState.stateSlot ?: parsed.slotNumber,
+            channelName = SaveSyncApiClient.namedChannelOrNull(channel)
+        )
+    }
+
     private fun newestPerSlot(serverStates: List<RomMState>): List<RomMState> =
         serverStates
             .groupBy {
-                val parsed = stateCacheManager.parseStateFileName(it.fileName)
+                val parsed = identityOf(it)
                 parsed.slotNumber to parsed.channelName
             }
             .map { (_, candidates) ->

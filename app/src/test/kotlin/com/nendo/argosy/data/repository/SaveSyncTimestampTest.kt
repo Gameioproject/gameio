@@ -50,19 +50,8 @@ class SaveSyncTimestampTest {
     }
 
     @Test
-    fun `parseTimestamp handles RomM format without timezone`() {
-        // RomM sometimes returns timestamps without timezone info.
-        // OffsetDateTime.parse handles "2026-02-28T12:09:00" if we fall through to Instant.parse
-        // which will fail, then OffsetDateTime which will fail, then ZonedDateTime which will fail,
-        // so this should return ~now as fallback. This documents the current behavior.
-        val before = Instant.now()
-        val result = parseTimestamp("2026-02-28T12:09:00")
-        val after = Instant.now()
-        // Without timezone, all parsers fail -> falls through to Instant.now()
-        assertTrue(
-            "No-timezone format should fallback to now",
-            !result.isBefore(before.minusSeconds(1)) && !result.isAfter(after.plusSeconds(1))
-        )
+    fun `parseTimestamp takes a bare local date-time as UTC`() {
+        assertEquals(Instant.parse("2026-02-28T12:09:00Z"), parseTimestamp("2026-02-28T12:09:00"))
     }
 
     // --- isTimestampSaveName (tested via TIMESTAMP_ONLY_PATTERN) ---
