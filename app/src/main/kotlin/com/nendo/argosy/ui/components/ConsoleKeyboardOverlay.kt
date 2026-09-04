@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -132,7 +134,7 @@ fun ConsoleKeyboardOverlay(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Dimens.spacingSm),
-            modifier = (if (embedded) modifier else Modifier.width(440.dp))
+            modifier = (if (embedded) modifier else Modifier.widthIn(max = OVERLAY_MAX_WIDTH).fillMaxWidth())
                 .background(
                     MaterialTheme.colorScheme.surface,
                     RoundedCornerShape(Dimens.radiusLg)
@@ -186,3 +188,6 @@ fun ConsoleKeyboardOverlay(
         }
     }
 }
+
+/** Ten 44dp keys with their gaps and inset; narrower screens shrink the keys instead. */
+private val OVERLAY_MAX_WIDTH = 520.dp

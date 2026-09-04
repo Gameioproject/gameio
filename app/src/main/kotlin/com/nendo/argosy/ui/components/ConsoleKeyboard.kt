@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -23,20 +25,24 @@ import com.nendo.argosy.ui.theme.Dimens
 import com.nendo.argosy.ui.util.clickableNoFocus
 
 /**
- * The grid the search keyboard walks. Alphabetical on purpose: with a d-pad, predictable
- * hunt-time beats QWERTY familiarity, which is why consoles lay their keyboards out this way.
+ * The grid the console keyboard walks. Standard QWERTY, the layout everyone already knows
+ * from a phone, with a number row above and the symbols an address or a password needs below.
+ * Rows are of unequal length and are centred like a real keyboard; the d-pad clamps to the
+ * row it lands on.
  */
 object ConsoleKeyboardLayout {
     val charRows: List<String> = listOf(
-        "abcdefg",
-        "hijklmn",
-        "opqrstu",
-        "vwxyz-'",
-        "0123456",
-        "789.:&/",
-        "@_,!?+="
+        "1234567890",
+        "qwertyuiop",
+        "asdfghjkl",
+        "zxcvbnm",
+        ".@-_:/&'!?",
+        ",+=#\$%*~;"
     )
-    const val COLS = 7
+
+    /** The widest row; key size is chosen so this many fit the available width. */
+    val COLS: Int = charRows.maxOf { it.length }
+
     // Derived, so adding a character row cannot leave the action row pointing at it.
     val ACTION_ROW: Int get() = charRows.size
 
@@ -47,7 +53,7 @@ object ConsoleKeyboardLayout {
     val rowCount = charRows.size + 1
 
     fun maxColFor(row: Int): Int =
-        if (row == ACTION_ROW) actions.size - 1 else COLS - 1
+        if (row == ACTION_ROW) actions.size - 1 else (charRows.getOrNull(row)?.length ?: 1) - 1
 
     fun charAt(row: Int, col: Int): Char? =
         charRows.getOrNull(row)?.getOrNull(col)
@@ -81,23 +87,33 @@ fun ConsoleKeyboard(
     modifier: Modifier = Modifier,
     caps: Boolean = false
 ) {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(Dimens.spacingXs),
-        modifier = modifier.padding(Dimens.spacingMd)
-    ) {
-        ConsoleKeyboardLayout.charRows.forEachIndexed { rowIndex, row ->
-            Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingXs)) {
-                row.forEachIndexed { colIndex, char ->
-                    KeyCap(
-                        label = (if (caps) char.uppercaseChar() else char).toString(),
-                        focused = active && focusedRow == rowIndex && focusedCol == colIndex,
-                        onTap = { onKeyTap(rowIndex, colIndex) },
-                        modifier = Modifier.size(44.dp)
-                    )
+    val gap = Dimens.spacingXs
+    val inset = Dimens.spacingMd
+    BoxWithConstraints(modifier = modifier.padding(inset)) {
+        // Ten keys have to fit whatever width the caller gives, portrait phone included.
+        val keySize = ((maxWidth - gap * (ConsoleKeyboardLayout.COLS - 1)) / ConsoleKeyboardLayout.COLS)
+            .coerceAtMost(KEY_SIZE_MAX)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(gap),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            ConsoleKeyboardLayout.charRows.forEachIndexed { rowIndex, row ->
+                Row(horizontalArrangement = Arrangement.spacedBy(gap)) {
+                    row.forEachIndexed { colIndex, char ->
+                        KeyCap(
+                            label = (if (caps) char.uppercaseChar() else char).toString(),
+                            focused = active && focusedRow == rowIndex && focusedCol == colIndex,
+                            onTap = { onKeyTap(rowIndex, colIndex) },
+                            modifier = Modifier.size(keySize)
+                        )
+                    }
                 }
             }
-        }
-        Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingXs)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(gap),
+                modifier = Modifier.width(keySize * ConsoleKeyboardLayout.COLS + gap * (ConsoleKeyboardLayout.COLS - 1))
+            ) {
             ConsoleKeyboardLayout.actions.forEachIndexed { colIndex, action ->
                 KeyCap(
                     label = stringResource(
@@ -113,12 +129,15 @@ fun ConsoleKeyboard(
                     onTap = { onKeyTap(ConsoleKeyboardLayout.ACTION_ROW, colIndex) },
                     modifier = Modifier
                         .weight(1f)
-                        .height(44.dp)
+                        .height(keySize)
                 )
+            }
             }
         }
     }
 }
+
+private val KEY_SIZE_MAX = 44.dp
 
 @Composable
 private fun KeyCap(
