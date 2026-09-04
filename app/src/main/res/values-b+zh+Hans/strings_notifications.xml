@@ -128,6 +128,7 @@
     <string name="notif_dualscreen_no_local_path">游戏没有本地路径</string>
     <string name="notif_dualscreen_state_slot_auto">自动即时存档</string>
     <string name="notif_dualscreen_state_slot_numbered">即时存档槽位%1$d</string>
+    <string name="notif_dualscreen_state_slot_quick">快速存档 %1$d</string>
     <string name="notif_dualscreen_state_restored">已恢复%1$s</string>
     <string name="notif_dualscreen_state_version_mismatch">%1$s是由不同的核心版本创建的</string>
     <string name="notif_dualscreen_state_restore_failed">无法恢复%1$s</string>

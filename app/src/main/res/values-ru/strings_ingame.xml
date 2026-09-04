@@ -42,6 +42,7 @@
     <string name="ingame_states_load_body">Текущий прогресс будет заменён.</string>
     <string name="ingame_states_slot_auto">Авто</string>
     <string name="ingame_states_slot_numbered">Слот %1$d</string>
+    <string name="ingame_states_slot_quick">Быстрое сохранение %1$d</string>
     <string name="ingame_states_preview_no_screenshot">Нет скриншота</string>
     <string name="ingame_states_preview_empty_slot">Пустой слот</string>
     <string name="ingame_states_carousel_no_screenshot">Нет скриншота</string>

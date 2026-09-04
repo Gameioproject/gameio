@@ -42,6 +42,7 @@
     <string name="ingame_states_load_body">मौजूदा प्रगति बदल दी जाएगी।</string>
     <string name="ingame_states_slot_auto">ऑटो</string>
     <string name="ingame_states_slot_numbered">स्लॉट %1$d</string>
+    <string name="ingame_states_slot_quick">क्विक सेव %1$d</string>
     <string name="ingame_states_preview_no_screenshot">कोई स्क्रीनशॉट नहीं</string>
     <string name="ingame_states_preview_empty_slot">खाली स्लॉट</string>
     <string name="ingame_states_carousel_no_screenshot">कोई स्क्रीनशॉट नहीं</string>

@@ -24,11 +24,20 @@ class LaunchGameUseCase @Inject constructor(
         val result = gameLauncher.launch(gameId, discId, forResume, selectedDiscPath, variantFileId, skipVariantPrompt, allowVariantPrompt, prefetchedGame)
         if (result is LaunchResult.Success) {
             val coreName = extractCoreName(result.intent)
+            // The built-in emulator's intent targets this app, but the session has to name the
+            // emulator, not the launcher: every resolver keys on the synthetic built-in package,
+            // and a session recorded under the app's own id ends without a save or state sync.
+            val targetPackage = result.intent.component?.packageName
+                ?: result.intent.`package`
+                ?: ""
+            val emulatorPackage = if (targetPackage == com.nendo.argosy.BuildConfig.APPLICATION_ID) {
+                com.nendo.argosy.data.emulator.EmulatorRegistry.BUILTIN_PACKAGE
+            } else {
+                targetPackage
+            }
             playSessionTracker.startSession(
                 gameId = gameId,
-                emulatorPackage = result.intent.component?.packageName
-                    ?: result.intent.`package`
-                    ?: "",
+                emulatorPackage = emulatorPackage,
                 coreName = coreName,
                 isNewGame = !forResume,
                 variantFileId = variantFileId

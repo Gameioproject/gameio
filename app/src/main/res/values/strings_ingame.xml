@@ -101,6 +101,8 @@
     <string name="ingame_states_slot_auto">Auto</string>
     <!-- Name of a numbered save state slot. %1$d is the slot number. -->
     <string name="ingame_states_slot_numbered">Slot %1$d</string>
+    <!-- Label of one entry of the quick-save ring in the state manager. %1$d is its position, 1-based. -->
+    <string name="ingame_states_slot_quick">Quick save %1$d</string>
     <!-- Drawn in the preview panel for a slot that holds a state but no picture of it. -->
     <string name="ingame_states_preview_no_screenshot">No Screenshot</string>
     <!-- Drawn in the preview panel for a slot that holds nothing. Adjective phrase describing

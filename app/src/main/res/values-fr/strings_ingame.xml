@@ -42,6 +42,7 @@
     <string name="ingame_states_load_body">La progression actuelle sera remplacée.</string>
     <string name="ingame_states_slot_auto">Auto</string>
     <string name="ingame_states_slot_numbered">Emplacement %1$d</string>
+    <string name="ingame_states_slot_quick">Sauvegarde rapide %1$d</string>
     <string name="ingame_states_preview_no_screenshot">Aucune capture d\'écran</string>
     <string name="ingame_states_preview_empty_slot">Emplacement vide</string>
     <string name="ingame_states_carousel_no_screenshot">Aucune capture d\'écran</string>

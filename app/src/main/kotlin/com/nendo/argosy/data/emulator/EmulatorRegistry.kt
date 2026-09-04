@@ -1029,9 +1029,18 @@ object EmulatorRegistry {
 
     fun getById(id: String): EmulatorDef? = emulatorMap[id]
 
-    fun getByPackage(packageName: String): EmulatorDef? = packageMap[packageName]
+    /**
+     * The launcher's own package stands for the built-in emulator: its activity lives here, so a
+     * session or intent recorded under the app id means the built-in core. The pre-rebrand id is
+     * kept for records written by older builds.
+     */
+    private val ownPackages = setOf(com.nendo.argosy.BuildConfig.APPLICATION_ID, "com.nendo.argosy")
 
-    fun isKnownPackage(packageName: String): Boolean = packageMap.containsKey(packageName)
+    fun getByPackage(packageName: String): EmulatorDef? =
+        packageMap[packageName] ?: builtinEmulator.takeIf { packageName in ownPackages }
+
+    fun isKnownPackage(packageName: String): Boolean =
+        packageMap.containsKey(packageName) || packageName in ownPackages
 
     /**
      * Synthesize an [EmulatorDef] for an ad-hoc app binding. The `id` is deterministic per

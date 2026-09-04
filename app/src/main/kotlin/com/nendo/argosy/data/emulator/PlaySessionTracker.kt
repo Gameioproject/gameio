@@ -350,7 +350,14 @@ class PlaySessionTracker @Inject constructor(
      * treated as ended and its save is still recovered.
      */
     private fun isSessionStillOnScreen(persisted: PersistedSession): Boolean =
-        permissionHelper.isPackageOnScreenOrRecent(application, persisted.emulatorPackage)
+        permissionHelper.isPackageOnScreenOrRecent(application, usageStatsPackage(persisted.emulatorPackage))
+
+    /**
+     * The package the OS knows a session by. The built-in emulator is an activity of this app, so
+     * its synthetic package has no usage events; the launcher's own does.
+     */
+    private fun usageStatsPackage(emulatorPackage: String): String =
+        if (emulatorPackage == EmulatorRegistry.BUILTIN_PACKAGE) application.packageName else emulatorPackage
 
     /**
      * Adopts a persisted session back into memory rather than closing it out.
@@ -424,13 +431,7 @@ class PlaySessionTracker @Inject constructor(
         endTime: Instant,
         totalMs: Long
     ): Pair<Long, Long> {
-        // Built-in libretro uses a synthetic package name; query the launcher's
-        // own package for UsageStats since the activity runs in this process.
-        val statsPackage = if (emulatorPackage == EmulatorRegistry.BUILTIN_PACKAGE) {
-            application.packageName
-        } else {
-            emulatorPackage
-        }
+        val statsPackage = usageStatsPackage(emulatorPackage)
         val durations = permissionHelper.getSessionDurations(
             application,
             statsPackage,

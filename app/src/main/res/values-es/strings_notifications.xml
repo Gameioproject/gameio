@@ -140,6 +140,7 @@
     <string name="notif_dualscreen_no_local_path">El juego no tiene una ruta local</string>
     <string name="notif_dualscreen_state_slot_auto">estado automático</string>
     <string name="notif_dualscreen_state_slot_numbered">ranura de estado %1$d</string>
+    <string name="notif_dualscreen_state_slot_quick">guardado rápido %1$d</string>
     <string name="notif_dualscreen_state_restored">%1$s restaurado</string>
     <string name="notif_dualscreen_state_version_mismatch">%1$s fue creado por una versión distinta del núcleo</string>
     <string name="notif_dualscreen_state_restore_failed">No se pudo restaurar %1$s</string>

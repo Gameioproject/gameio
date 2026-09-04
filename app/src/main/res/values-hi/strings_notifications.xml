@@ -158,6 +158,7 @@
     <string name="notif_dualscreen_no_local_path">गेम का कोई लोकल पाथ नहीं है</string>
     <string name="notif_dualscreen_state_slot_auto">ऑटो स्टेट</string>
     <string name="notif_dualscreen_state_slot_numbered">स्टेट स्लॉट %1$d</string>
+    <string name="notif_dualscreen_state_slot_quick">क्विक सेव %1$d</string>
     <string name="notif_dualscreen_state_restored">%1$s रीस्टोर हुआ</string>
     <string name="notif_dualscreen_state_version_mismatch">%1$s एक अलग कोर वर्शन से बनाया गया था</string>
     <string name="notif_dualscreen_state_restore_failed">%1$s रीस्टोर नहीं हो सका</string>
