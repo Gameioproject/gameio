@@ -42,6 +42,7 @@
     <string name="ingame_states_load_body">当前进度将被替换。</string>
     <string name="ingame_states_slot_auto">自动</string>
     <string name="ingame_states_slot_numbered">槽位%1$d</string>
+    <string name="ingame_states_slot_quick">快速存档 %1$d</string>
     <string name="ingame_states_preview_no_screenshot">无截图</string>
     <string name="ingame_states_preview_empty_slot">空槽位</string>
     <string name="ingame_states_carousel_no_screenshot">无截图</string>

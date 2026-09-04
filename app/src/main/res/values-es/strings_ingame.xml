@@ -42,6 +42,7 @@
     <string name="ingame_states_load_body">El progreso actual se reemplazará.</string>
     <string name="ingame_states_slot_auto">Auto</string>
     <string name="ingame_states_slot_numbered">Ranura %1$d</string>
+    <string name="ingame_states_slot_quick">Guardado rápido %1$d</string>
     <string name="ingame_states_preview_no_screenshot">Sin captura de pantalla</string>
     <string name="ingame_states_preview_empty_slot">Ranura vacía</string>
     <string name="ingame_states_carousel_no_screenshot">Sin captura de pantalla</string>

@@ -42,6 +42,7 @@
     <string name="ingame_states_load_body">Der aktuelle Fortschritt wird ersetzt.</string>
     <string name="ingame_states_slot_auto">Auto</string>
     <string name="ingame_states_slot_numbered">Slot %1$d</string>
+    <string name="ingame_states_slot_quick">Schnellspeicherung %1$d</string>
     <string name="ingame_states_preview_no_screenshot">Kein Screenshot</string>
     <string name="ingame_states_preview_empty_slot">Leerer Slot</string>
     <string name="ingame_states_carousel_no_screenshot">Kein Screenshot</string>

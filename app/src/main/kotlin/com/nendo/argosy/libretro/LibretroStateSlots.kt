@@ -30,12 +30,20 @@ object LibretroStateSlots {
         else -> "$romBaseName.state$slotNumber"
     }
 
+    private val QUICK_SUFFIX = Regex("""\.state\.q(\d)""", RegexOption.IGNORE_CASE)
+
+    /** Whether [slotNumber] is one of the quick-save ring. */
+    fun isQuickSlot(slotNumber: Int): Boolean =
+        slotNumber in QUICK_SLOT_BASE until QUICK_SLOT_BASE + QUICK_RING_SIZE
+
     /**
-     * Inverse of [fileName] for the cache/sync-eligible slots -- the auto slot and the numbered
-     * slots (0..N). Returns null for everything else, including the live-only resume and
-     * quick-ring states ("$romBaseName.state.resume" / ".state.qN"): those are never discovered,
-     * cached, or synced by design. Keeping this next to [fileName] makes the write and read codecs
-     * one source of truth, so a change to the flat naming can't silently diverge from the parser.
+     * Inverse of [fileName] for the cache/sync-eligible slots: the auto slot, the numbered slots
+     * (0..N) and the quick-save ring ("$romBaseName.state.qN", reported as [QUICK_SLOT_BASE] + N).
+     * A quick save is the way most sessions end on a handheld, so it travels with the account like
+     * any other slot; leaving it live-only meant signing out threw it away and a second device never
+     * saw it. Returns null for the one-shot resume state, which is consumed by the next launch and
+     * must never be cached. Keeping this next to [fileName] makes the write and read codecs one
+     * source of truth, so a change to the flat naming can't silently diverge from the parser.
      */
     fun parseSlotNumber(romBaseName: String, fileName: String): Int? {
         if (!fileName.startsWith(romBaseName, ignoreCase = true)) return null
@@ -44,6 +52,7 @@ object LibretroStateSlots {
             suffix.equals(".state", ignoreCase = true) -> 0
             suffix.equals(".state.auto", ignoreCase = true) -> AUTO_SLOT
             else -> NUMBERED_SUFFIX.matchEntire(suffix)?.groupValues?.get(1)?.toIntOrNull()
+                ?: QUICK_SUFFIX.matchEntire(suffix)?.groupValues?.get(1)?.toIntOrNull()?.let { QUICK_SLOT_BASE + it }
         }
     }
 }

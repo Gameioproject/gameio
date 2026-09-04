@@ -3060,12 +3060,14 @@ class DualScreenManager(
     private fun stateEntriesFor(gameId: Long): List<UnifiedStateEntry> =
         lastStateEntries?.takeIf { it.first == gameId }?.second ?: emptyList()
 
-    private fun stateSlotLabel(slot: Int): String =
-        if (slot < 0) {
-            appContext.getString(R.string.notif_dualscreen_state_slot_auto)
-        } else {
-            appContext.getString(R.string.notif_dualscreen_state_slot_numbered, slot)
-        }
+    private fun stateSlotLabel(slot: Int): String = when {
+        slot < 0 -> appContext.getString(R.string.notif_dualscreen_state_slot_auto)
+        com.nendo.argosy.libretro.LibretroStateSlots.isQuickSlot(slot) -> appContext.getString(
+            R.string.notif_dualscreen_state_slot_quick,
+            slot - com.nendo.argosy.libretro.LibretroStateSlots.QUICK_SLOT_BASE + 1
+        )
+        else -> appContext.getString(R.string.notif_dualscreen_state_slot_numbered, slot)
+    }
 
     /**
      * A state the companion restores goes through the same use case the handheld uses, so a

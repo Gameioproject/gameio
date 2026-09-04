@@ -45,6 +45,7 @@ import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.nendo.argosy.R
+import com.nendo.argosy.libretro.LibretroStateSlots
 import com.nendo.argosy.libretro.SaveStateManager
 import com.nendo.argosy.util.formatSaveSize
 import com.nendo.argosy.util.formatSaveTimestamp
@@ -666,7 +667,11 @@ private fun SlotCard(
 private fun slotLabel(slotNumber: Int): String {
     return when (slotNumber) {
         SaveStateManager.AUTO_SLOT -> stringResource(R.string.ingame_states_slot_auto)
-        else -> stringResource(R.string.ingame_states_slot_numbered, slotNumber)
+        else -> if (LibretroStateSlots.isQuickSlot(slotNumber)) {
+            stringResource(R.string.ingame_states_slot_quick, slotNumber - LibretroStateSlots.QUICK_SLOT_BASE + 1)
+        } else {
+            stringResource(R.string.ingame_states_slot_numbered, slotNumber)
+        }
     }
 }
 

@@ -7,6 +7,7 @@ import com.nendo.argosy.data.emulator.StatePathRegistry
 import com.nendo.argosy.data.local.dao.EmulatorConfigDao
 import com.nendo.argosy.data.local.dao.GameDao
 import com.nendo.argosy.data.local.entity.StateCacheEntity
+import com.nendo.argosy.data.repository.SaveSyncApiClient
 import com.nendo.argosy.data.preferences.UserPreferencesRepository
 import com.nendo.argosy.data.repository.SaveSyncRepository
 import com.nendo.argosy.data.repository.StateCacheManager
@@ -38,7 +39,16 @@ internal data class ReconciledState(
  * comparison ignores case because the server round-trips the name through a file name.
  */
 internal fun belongsToChannel(stateChannel: String?, activeChannel: String?): Boolean =
-    stateChannel.orEmpty().equals(activeChannel.orEmpty(), ignoreCase = true)
+    canonicalChannel(stateChannel).equals(canonicalChannel(activeChannel), ignoreCase = true)
+
+/**
+ * Null, empty and "autosave" all name the default channel: the server calls it autosave, a
+ * restore stores that literal, and a fresh sign-in has no active row at all. Comparing the raw
+ * strings left a state uploaded under "autosave" looking like another channel's on the next
+ * device, cached but never placed in a live slot.
+ */
+private fun canonicalChannel(channel: String?): String =
+    if (SaveSyncApiClient.isAutosaveChannel(channel)) "" else channel.orEmpty()
 
 internal fun reconcileDeadServerLinks(
     localStates: List<StateCacheEntity>,
@@ -235,11 +245,62 @@ class PreLaunchStateSyncUseCase @Inject constructor(
             }
         }
 
+        placeMissingLiveStates(gameId, game.localPath, game.platformSlug, emulatorId, coreId, coreVersion, channelName)
         return if (downloadedCount > 0) {
             Log.i(TAG, "Downloaded $downloadedCount states for ${game.title}")
             Result.Downloaded(downloadedCount)
         } else {
             Result.Ready
+        }
+    }
+
+    /**
+     * Puts every cached state of the active channel into its live slot if the file is not there.
+     * A download only materialises when it lands; a state cached earlier (a previous launch that
+     * decided it belonged to another channel, an account switch, a cleared live directory) would
+     * otherwise sit in the cache with the emulator's slot empty.
+     */
+    private suspend fun placeMissingLiveStates(
+        gameId: Long,
+        romPath: String?,
+        platformSlug: String,
+        emulatorId: String,
+        coreId: String?,
+        coreVersion: String?,
+        activeChannel: String?
+    ) {
+        if (romPath == null) return
+        val config = StatePathRegistry.getConfig(emulatorId) ?: return
+        val romBaseName = File(romPath).nameWithoutExtension
+        val newestPerSlot = stateCacheManager.getByGameAndEmulator(gameId, emulatorId)
+            .filter { belongsToChannel(it.channelName, activeChannel) }
+            .groupBy { it.slotNumber }
+            .mapNotNull { (_, rows) -> rows.maxByOrNull { it.cachedAt } }
+        for (cached in newestPerSlot) {
+            val target = stateCacheManager.buildStateTargetPath(
+                config = config,
+                platformId = platformSlug,
+                romBaseName = romBaseName,
+                slotNumber = cached.slotNumber,
+                emulatorId = emulatorId,
+                coreName = coreId,
+                romPath = romPath,
+                gameId = gameId
+            ) ?: continue
+            if (File(target).exists()) continue
+            when (val restore = restoreStateUseCase(
+                cacheId = cached.id,
+                emulatorId = emulatorId,
+                platformId = platformSlug,
+                romPath = romPath,
+                currentCoreId = coreId,
+                currentCoreVersion = coreVersion
+            )) {
+                is RestoreStateResult.Success ->
+                    Log.i(TAG, "Placed cached state slot ${cached.slotNumber} into its empty live slot")
+                else ->
+                    Log.w(TAG, "Could not place cached state slot ${cached.slotNumber} into its live slot: $restore")
+            }
         }
     }
 

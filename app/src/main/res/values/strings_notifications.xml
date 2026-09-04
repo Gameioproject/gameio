@@ -311,6 +311,8 @@
     <string name="notif_dualscreen_state_slot_auto">auto state</string>
     <!-- Label for a numbered save state slot. %1$d is the slot number. -->
     <string name="notif_dualscreen_state_slot_numbered">state slot %1$d</string>
+    <!-- Same as the numbered label, for one entry of the quick-save ring. %1$d is its position, 1-based. -->
+    <string name="notif_dualscreen_state_slot_quick">quick save %1$d</string>
     <!-- Notification after restoring a save state. %1$s is the slot label (state_slot_auto or
          state_slot_numbered above). -->
     <string name="notif_dualscreen_state_restored">Restored %1$s</string>

@@ -42,6 +42,7 @@
     <string name="ingame_states_load_body">目前的進度將被取代。</string>
     <string name="ingame_states_slot_auto">自動</string>
     <string name="ingame_states_slot_numbered">第%1$d格</string>
+    <string name="ingame_states_slot_quick">快速存檔 %1$d</string>
     <string name="ingame_states_preview_no_screenshot">無截圖</string>
     <string name="ingame_states_preview_empty_slot">空白格位</string>
     <string name="ingame_states_carousel_no_screenshot">無截圖</string>
