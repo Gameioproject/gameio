@@ -918,6 +918,9 @@ fun HomeScreen(
                     val gridPageLabel = stringResource(R.string.home_footer_grid_page)
                     val gridFinishedLabel = stringResource(R.string.home_footer_grid_finished)
                     val gridOptionsLabel = stringResource(R.string.home_footer_grid_options)
+                    val gridSearchLabel = stringResource(R.string.home_footer_search)
+                    val gridLibraryOnlyLabel = stringResource(R.string.home_footer_library_only)
+                    val gridSurpriseLabel = stringResource(R.string.home_surprise_label)
                     val engagedFullscreenLabel =
                         stringResource(R.string.home_footer_grid_engaged_fullscreen)
                     val engagedIsMedia = grid.engagedTile?.target is
@@ -988,9 +991,20 @@ fun HomeScreen(
                                     add(InputButton.Y to gridFinishedLabel)
                                 }
                                 add(InputButton.SELECT to gridOptionsLabel)
+                                add(InputButton.LT to gridSearchLabel)
+                                add(InputButton.RT to gridLibraryOnlyLabel)
+                                add(InputButton.RS to gridSurpriseLabel)
                             }
                         },
-                        variant = FooterVariant.SUBTLE
+                        variant = FooterVariant.SUBTLE,
+                        onHintClick = { button ->
+                            when (button) {
+                                InputButton.LT -> viewModel.navigateToSearch()
+                                InputButton.RT -> viewModel.toggleInstalledOnly()
+                                InputButton.RS -> viewModel.surpriseMe()
+                                else -> {}
+                            }
+                        }
                     )
                     FooterSpacer()
                 } else if (uiState.isMediaRow || uiState.focusedMedia != null) {
@@ -1067,13 +1081,15 @@ fun HomeScreen(
                                 },
                                 InputButton.X to stringResource(R.string.home_footer_game_details),
                                 InputButton.LT to stringResource(R.string.home_footer_search),
-                                InputButton.RT to stringResource(R.string.home_footer_library_only)
+                                InputButton.RT to stringResource(R.string.home_footer_library_only),
+                                InputButton.RS to stringResource(R.string.home_surprise_label)
                             ),
                             variant = FooterVariant.SUBTLE,
                             onHintClick = { button ->
                                 when (button) {
                                     InputButton.LT -> viewModel.navigateToSearch()
                                     InputButton.RT -> viewModel.toggleInstalledOnly()
+                                    InputButton.RS -> viewModel.surpriseMe()
                                     InputButton.A -> {
                                         when {
                                             focusedGame.needsInstall -> viewModel.installApk(focusedGame.id)
@@ -1103,12 +1119,20 @@ fun HomeScreen(
                                 InputButton.DPAD_VERTICAL to
                                     stringResource(R.string.home_footer_viewall_platform)
                             },
-                            InputButton.A to stringResource(R.string.home_footer_viewall_library)
+                            InputButton.A to stringResource(R.string.home_footer_viewall_library),
+                            InputButton.LT to stringResource(R.string.home_footer_search),
+                            InputButton.RT to stringResource(R.string.home_footer_library_only),
+                            InputButton.RS to stringResource(R.string.home_surprise_label)
                         ),
                         variant = FooterVariant.SUBTLE,
                         onHintClick = { button ->
-                            if (button == InputButton.A) {
-                                onNavigateToLibrary(viewAll?.platformId, viewAll?.sourceFilter)
+                            when (button) {
+                                InputButton.A ->
+                                    onNavigateToLibrary(viewAll?.platformId, viewAll?.sourceFilter)
+                                InputButton.LT -> viewModel.navigateToSearch()
+                                InputButton.RT -> viewModel.toggleInstalledOnly()
+                                InputButton.RS -> viewModel.surpriseMe()
+                                else -> {}
                             }
                         }
                     )
@@ -2010,6 +2034,7 @@ private fun GameInfoLayout(
  * to leave over, which at square ratios is a few dp and overlaps the game info.
  */
 private const val COMPACT_COVER_SCALE = 0.6f
+
 
 @Composable
 private fun rememberCarouselCardSize(

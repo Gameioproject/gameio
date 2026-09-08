@@ -1,22 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Gameio mark "Rack": games on a shelf seen edge-on, with one drawn out and
-     turned to face you. Artwork sits inside the 72dp safe centre of the 108dp
-     canvas so no launcher mask clips it. -->
+<!-- Gameio mark "Fan": three covers fanned like a hand of cards, the front one
+     ringed. Scaled into the 66dp safe centre of the 108dp canvas so no launcher
+     mask clips a corner. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M20,52 H24 A2,2 0 0 1 26,54 V84 A2,2 0 0 1 24,86 H20 A2,2 0 0 1 18,84 V54 A2,2 0 0 1 20,52 Z M31,52 H35 A2,2 0 0 1 37,54 V84 A2,2 0 0 1 35,86 H31 A2,2 0 0 1 29,84 V54 A2,2 0 0 1 31,52 Z M42,52 H46 A2,2 0 0 1 48,54 V84 A2,2 0 0 1 46,86 H42 A2,2 0 0 1 40,84 V54 A2,2 0 0 1 42,52 Z M62,52 H66 A2,2 0 0 1 68,54 V84 A2,2 0 0 1 66,86 H62 A2,2 0 0 1 60,84 V54 A2,2 0 0 1 62,52 Z M73,52 H77 A2,2 0 0 1 79,54 V84 A2,2 0 0 1 77,86 H73 A2,2 0 0 1 71,84 V54 A2,2 0 0 1 73,52 Z M84,52 H88 A2,2 0 0 1 90,54 V84 A2,2 0 0 1 88,86 H84 A2,2 0 0 1 82,84 V54 A2,2 0 0 1 84,52 Z" />
     <group
-        android:name="pulled"
         android:pivotX="54"
-        android:pivotY="32.5"
-        android:rotation="-9">
+        android:pivotY="54"
+        android:scaleX="0.7"
+        android:scaleY="0.7"
+        android:translateY="-5.6">
+        <group
+            android:pivotX="40"
+            android:pivotY="62"
+            android:rotation="-18">
+        <path
+            android:fillColor="#E64A8B"
+            android:pathData="M28.00,36.00 H52.00 A5,5 0 0 1 57.00,41.00 V83.00 A5,5 0 0 1 52.00,88.00 H28.00 A5,5 0 0 1 23.00,83.00 V41.00 A5,5 0 0 1 28.00,36.00 Z" />
+        </group>
+        <group
+            android:pivotX="68"
+            android:pivotY="62"
+            android:rotation="18">
+        <path
+            android:fillColor="#2FBF8F"
+            android:pathData="M56.00,36.00 H80.00 A5,5 0 0 1 85.00,41.00 V83.00 A5,5 0 0 1 80.00,88.00 H56.00 A5,5 0 0 1 51.00,83.00 V41.00 A5,5 0 0 1 56.00,36.00 Z" />
+        </group>
         <path
             android:fillColor="#FFFFFF"
-            android:pathData="M46,16 H62 A3,3 0 0 1 65,19 V46 A3,3 0 0 1 62,49 H46 A3,3 0 0 1 43,46 V19 A3,3 0 0 1 46,16 Z" />
+            android:pathData="M42.00,28.50 H66.00 A8.5,8.5 0 0 1 74.50,37.00 V79.00 A8.5,8.5 0 0 1 66.00,87.50 H42.00 A8.5,8.5 0 0 1 33.50,79.00 V37.00 A8.5,8.5 0 0 1 42.00,28.50 Z" />
+        <path
+            android:fillColor="#F2B734"
+            android:pathData="M42.00,32.00 H66.00 A5,5 0 0 1 71.00,37.00 V79.00 A5,5 0 0 1 66.00,84.00 H42.00 A5,5 0 0 1 37.00,79.00 V37.00 A5,5 0 0 1 42.00,32.00 Z" />
+        <path
+            android:fillColor="#FF5A3C"
+            android:pathData="M46.00,41.00 H62.00 A2,2 0 0 1 64.00,43.00 V57.00 A2,2 0 0 1 62.00,59.00 H46.00 A2,2 0 0 1 44.00,57.00 V43.00 A2,2 0 0 1 46.00,41.00 Z" />
+        <path
+            android:fillColor="#1C3C8F"
+            android:fillAlpha="0.45"
+            android:pathData="M45.50,66.00 H62.50 A1.5,1.5 0 0 1 64.00,67.50 V67.50 A1.5,1.5 0 0 1 62.50,69.00 H45.50 A1.5,1.5 0 0 1 44.00,67.50 V67.50 A1.5,1.5 0 0 1 45.50,66.00 Z" />
+        <path
+            android:fillColor="#1C3C8F"
+            android:fillAlpha="0.3"
+            android:pathData="M45.50,72.00 H54.50 A1.5,1.5 0 0 1 56.00,73.50 V73.50 A1.5,1.5 0 0 1 54.50,75.00 H45.50 A1.5,1.5 0 0 1 44.00,73.50 V73.50 A1.5,1.5 0 0 1 45.50,72.00 Z" />
     </group>
 </vector>

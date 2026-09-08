@@ -158,7 +158,7 @@ private fun StatusNotificationBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_helm),
+                painter = painterResource(R.drawable.ic_notification_mark),
                 contentDescription = null,
                 tint = accentColor,
                 modifier = Modifier.size(Dimens.iconSm + Dimens.borderMedium)
@@ -243,7 +243,7 @@ private fun NotificationBar(
                 modifier = Modifier.size(Dimens.iconMd)
             )
             else -> Icon(
-                painter = painterResource(R.drawable.ic_helm),
+                painter = painterResource(R.drawable.ic_notification_mark),
                 contentDescription = null,
                 tint = colors.icon,
                 modifier = Modifier.size(Dimens.iconMd)

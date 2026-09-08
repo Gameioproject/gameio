@@ -5,6 +5,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import com.nendo.argosy.ui.util.clickableNoFocus
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -52,7 +54,9 @@ enum class InputButton {
     A, B, X, Y,
     DPAD, DPAD_UP, DPAD_DOWN, DPAD_LEFT, DPAD_RIGHT, DPAD_HORIZONTAL, DPAD_VERTICAL,
     LB, RB, LB_RB, LT, RT, LT_RT,
-    START, SELECT
+    START, SELECT,
+    /** Pressing the right stick in. */
+    RS
 }
 
 private enum class HintCategory { DPAD, BUMPER, SHOULDER_MENU, FACE }
@@ -62,7 +66,8 @@ private fun InputButton.category(): HintCategory = when (this) {
     InputButton.DPAD_LEFT, InputButton.DPAD_RIGHT,
     InputButton.DPAD_HORIZONTAL, InputButton.DPAD_VERTICAL -> HintCategory.DPAD
     InputButton.LB, InputButton.RB, InputButton.LB_RB -> HintCategory.BUMPER
-    InputButton.LT, InputButton.RT, InputButton.LT_RT, InputButton.START, InputButton.SELECT -> HintCategory.SHOULDER_MENU
+    InputButton.LT, InputButton.RT, InputButton.LT_RT, InputButton.START, InputButton.SELECT,
+    InputButton.RS -> HintCategory.SHOULDER_MENU
     InputButton.A, InputButton.B, InputButton.X, InputButton.Y -> HintCategory.FACE
 }
 
@@ -95,6 +100,7 @@ fun InputButton.toPainter(): Painter? {
         InputButton.LT_RT -> null
         InputButton.START -> if (swapStartSelect) InputIcons.Options else InputIcons.Menu
         InputButton.SELECT -> if (swapStartSelect) InputIcons.Menu else InputIcons.Options
+        InputButton.RS -> InputIcons.StickRight
     }
 }
 
@@ -209,12 +215,13 @@ private fun <T> filterHintsByWidth(
     hints: List<T>,
     buttonOf: (T) -> InputButton,
     labelOf: (T) -> String,
-    priorityOf: (T) -> Int
+    priorityOf: (T) -> Int,
+    maxRows: Int = 1
 ): List<T> {
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
     val paddingDp = 48
     val gapDp = 24
-    val availableDp = screenWidthDp - paddingDp
+    val availableDp = (screenWidthDp - paddingDp) * maxRows
 
     fun estimateWidth(button: InputButton, label: String): Int {
         val iconDp = if (button.isComposite()) 44 else 22
@@ -251,7 +258,7 @@ private fun InputButton.faceButtonPriority(): Int = when (this) {
 private fun InputButton.hidePriority(): Int = when (this) {
     InputButton.X, InputButton.Y -> 4
     InputButton.LB, InputButton.RB, InputButton.LB_RB,
-    InputButton.LT, InputButton.RT, InputButton.LT_RT -> 3
+    InputButton.LT, InputButton.RT, InputButton.LT_RT, InputButton.RS -> 3
     InputButton.START, InputButton.SELECT -> 2
     InputButton.A, InputButton.B -> 1
     else -> 0
@@ -437,6 +444,7 @@ private fun TappableFooterHint(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SubtleFooterBar(
     hints: List<Pair<InputButton, String>>,
@@ -450,14 +458,28 @@ fun SubtleFooterBar(
     if (!quiet) displayHints = hints
     val collapseProgress = footerCollapseProgress(quiet)
 
-    val filteredHints = filterHintsByWidth(
+    val oneRow = filterHintsByWidth(
         displayHints,
         buttonOf = { it.first },
         labelOf = { it.second },
         priorityOf = { it.first.hidePriority() }
     )
+    val wraps = oneRow.size < displayHints.size
+    val filteredHints = if (wraps) {
+        filterHintsByWidth(
+            displayHints,
+            buttonOf = { it.first },
+            labelOf = { it.second },
+            priorityOf = { it.first.hidePriority() },
+            maxRows = 2
+        )
+    } else {
+        oneRow
+    }
 
     val dpadHints = filteredHints.filter { it.first.category() == HintCategory.DPAD }
+    val bumperHints = filteredHints.filter { it.first.category() == HintCategory.BUMPER }
+    val shoulderHints = filteredHints.filter { it.first.category() == HintCategory.SHOULDER_MENU }
     val faceHints = filteredHints.filter { it.first.category() == HintCategory.FACE }
         .sortedBy { it.first.faceButtonPriority() }
 
@@ -468,16 +490,31 @@ fun SubtleFooterBar(
         if (isDarkTheme) Color.Black.copy(alpha = 0.4f) else Color.White.copy(alpha = 0.4f)
     }
 
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .footerCollapse(collapseProgress)
-            .background(backgroundColor)
-            .padding(horizontal = Dimens.spacingLg, vertical = Dimens.spacingSm),
-        verticalAlignment = Alignment.Top
-    ) {
+    val barModifier = modifier
+        .fillMaxWidth()
+        .footerCollapse(collapseProgress)
+        .background(backgroundColor)
+        .padding(horizontal = Dimens.spacingLg, vertical = Dimens.spacingSm)
+
+    if (wraps) {
+        FlowRow(
+            modifier = barModifier,
+            horizontalArrangement = Arrangement.spacedBy(Dimens.spacingLg),
+            maxLines = 2
+        ) {
+            (dpadHints + bumperHints + shoulderHints + faceHints).forEach { (button, action) ->
+                TappableFooterHint(button, action, onHintClick)
+            }
+        }
+        return
+    }
+
+    Row(modifier = barModifier, verticalAlignment = Alignment.Top) {
         Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingLg)) {
             dpadHints.forEach { (button, action) ->
+                TappableFooterHint(button, action, onHintClick)
+            }
+            bumperHints.forEach { (button, action) ->
                 TappableFooterHint(button, action, onHintClick)
             }
         }
@@ -485,6 +522,9 @@ fun SubtleFooterBar(
         Spacer(modifier = Modifier.weight(1f))
 
         Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingLg)) {
+            shoulderHints.forEach { (button, action) ->
+                TappableFooterHint(button, action, onHintClick)
+            }
             faceHints.forEach { (button, action) ->
                 TappableFooterHint(button, action, onHintClick)
             }

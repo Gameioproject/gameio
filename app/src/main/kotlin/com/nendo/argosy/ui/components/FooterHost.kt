@@ -1,6 +1,10 @@
 package com.nendo.argosy.ui.components
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
@@ -45,6 +49,9 @@ class FooterHostController {
     }
 
     val top: FooterEntry? get() = stack.lastOrNull()?.second
+
+    var measuredHeight by mutableStateOf(0.dp)
+        internal set
 }
 
 val LocalFooterHost = staticCompositionLocalOf { FooterHostController() }
@@ -93,16 +100,20 @@ fun FooterHost(
     modifier: Modifier = Modifier
 ) {
     val entry = controller.top
+    val density = LocalDensity.current
+    val measured = modifier.onSizeChanged { size ->
+        controller.measuredHeight = with(density) { size.height.toDp() }
+    }
     CompositionLocalProvider(LocalFooterStyle provides (entry?.style ?: FooterStyleConfig())) {
         when (entry?.variant) {
             FooterVariant.SUBTLE -> SubtleFooterBar(
                 hints = entry.hints.map { it.button to it.action },
-                modifier = modifier,
+                modifier = measured,
                 onHintClick = entry.onHintClick
             )
             else -> FooterBarWithState(
                 hints = entry?.hints ?: emptyList(),
-                modifier = modifier,
+                modifier = measured,
                 onHintClick = entry?.onHintClick,
                 trailingContent = entry?.trailingContent,
                 forceVisible = entry?.forced == true
@@ -121,7 +132,7 @@ val FooterHostController.isBarVisible: Boolean
 fun FooterSpacer() {
     val controller = LocalFooterHost.current
     val height by animateDpAsState(
-        targetValue = if (controller.isBarVisible) Dimens.footerHeight else 0.dp,
+        targetValue = if (controller.isBarVisible) maxOf(Dimens.footerHeight, controller.measuredHeight) else 0.dp,
         animationSpec = tween(Motion.durationContent, easing = Motion.argosyEase),
         label = "footer-spacer",
     )

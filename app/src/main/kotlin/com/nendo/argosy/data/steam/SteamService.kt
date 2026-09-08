@@ -218,7 +218,7 @@ class SteamService : Service() {
         return androidx.core.app.NotificationCompat.Builder(
             this, com.nendo.argosy.data.sync.SyncNotificationChannel.CHANNEL_ID
         )
-            .setSmallIcon(com.nendo.argosy.R.drawable.ic_helm)
+            .setSmallIcon(com.nendo.argosy.R.drawable.ic_notification_mark)
             .setContentTitle("Steam")
             .setContentText(status)
             .setPriority(androidx.core.app.NotificationCompat.PRIORITY_LOW)

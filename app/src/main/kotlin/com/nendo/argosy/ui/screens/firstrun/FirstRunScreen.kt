@@ -84,16 +84,13 @@ import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.TextField
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.foundation.layout.offset
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
@@ -102,6 +99,11 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import com.nendo.argosy.R
 import com.nendo.argosy.data.remote.romm.DEFAULT_SERVER_URL
 import com.nendo.argosy.data.local.entity.PlatformEntity
+import androidx.compose.runtime.CompositionLocalProvider
+import com.nendo.argosy.ui.components.FooterStyleConfig
+import com.nendo.argosy.ui.components.LocalFooterStyle
+import com.nendo.argosy.ui.components.GameioBrand
+import com.nendo.argosy.ui.components.GameioMark
 import com.nendo.argosy.ui.components.PermissionCard
 import com.nendo.argosy.ui.components.PlatformFilterHeader
 import com.nendo.argosy.ui.components.SwitchPreference
@@ -383,16 +385,23 @@ private fun WelcomeStep(isFocused: Boolean, onGetStarted: () -> Unit) {
                 .verticalScroll(rememberScrollState())
                 .padding(Dimens.spacingXl)
         ) {
-            GameioMark(modifier = Modifier.size(72.dp))
-            Spacer(modifier = Modifier.height(16.dp))
+            GameioMark(tile = false, modifier = Modifier.size(120.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = "Gameio",
                 color = GioInk,
-                fontSize = 44.sp,
+                fontSize = 52.sp,
                 fontWeight = FontWeight.ExtraBold,
-                letterSpacing = (-1.4).sp
+                letterSpacing = (-1.8).sp
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.firstrun_brand_tagline),
+                color = GioAccent,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = (-0.2).sp
+            )
+            Spacer(modifier = Modifier.height(14.dp))
             Text(
                 text = stringResource(R.string.firstrun_welcome_intro),
                 color = GioDim,
@@ -465,16 +474,22 @@ private fun RommLoginStep(
 
             val brand: @Composable () -> Unit = {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    GameioMark(modifier = Modifier.size(if (twoPane) 66.dp else 52.dp))
-                    Spacer(modifier = Modifier.height(12.dp))
+                    GameioMark(tile = false, modifier = Modifier.size(if (twoPane) 112.dp else 76.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         text = "Gameio",
                         color = GioInk,
-                        fontSize = if (twoPane) 40.sp else 32.sp,
+                        fontSize = if (twoPane) 44.sp else 34.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = (-1.2).sp
+                        letterSpacing = (-1.4).sp
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(R.string.firstrun_brand_tagline),
+                        color = GioAccent,
+                        fontSize = if (twoPane) 16.sp else 14.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
                     Text(
                         text = if (urlCommitted) {
                             stringResource(R.string.firstrun_romm_sign_in_hint)
@@ -506,7 +521,13 @@ private fun RommLoginStep(
             }
 
             val form: @Composable () -> Unit = {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .widthIn(max = 560.dp)
+                        .background(GioPanel, RoundedCornerShape(22.dp))
+                        .padding(horizontal = 22.dp, vertical = 26.dp)
+                ) {
                     if (!urlCommitted) {
                         GioTextField(
                             value = url,
@@ -651,67 +672,39 @@ private fun RommLoginStep(
 }
 
 
-// ---- The sign-in is the first thing anyone sees, so it carries the brand's dark
-// ground and mark rather than the theme surface the rest of first-run uses.
+// ---- The sign-in is the first thing anyone sees, so it is the brand: the launcher icon's
+// blue tile as the ground, the fanned covers as the mark, and the front cover's yellow as the
+// focus colour. Flat colour throughout, no glows.
 
-private val GioGround = Color(0xFF0B0E13)
-private val GioFieldBg = Color(0xFF12171F)
-private val GioLine = Color(0xFF242C38)
-private val GioInk = Color(0xFFF3F6F9)
-private val GioDim = Color(0xFF98A2B0)
-private val GioFaint = Color(0xFF5D6775)
-private val GioAccent = Color(0xFF2F62E8)
-private val GioViolet = Color(0xFF6C4DF6)
-private val GioErrorRed = Color(0xFFFF6161)
-
-/** The launcher mark: shelf spines edge-on, one game drawn out and turned to face you. */
-@Composable
-private fun GameioMark(modifier: Modifier = Modifier, tint: Color = GioInk) {
-    Canvas(modifier = modifier) {
-        val u = size.minDimension / 108f
-        fun bar(x: Float, y: Float, w: Float, h: Float, r: Float) {
-            drawRoundRect(
-                color = tint,
-                topLeft = Offset(x * u, y * u),
-                size = Size(w * u, h * u),
-                cornerRadius = CornerRadius(r * u, r * u)
-            )
-        }
-        listOf(18f, 29f, 40f, 60f, 71f, 82f).forEach { x -> bar(x, 52f, 8f, 34f, 2f) }
-        rotate(degrees = -9f, pivot = Offset(54f * u, 32.5f * u)) {
-            bar(43f, 16f, 22f, 33f, 3f)
-        }
-    }
-}
+private val GioGround = Color(0xFF070C1F)
+private val GioPanel = Color(0xFF101A3C)
+private val GioFieldBg = Color(0xFF192657)
+private val GioLine = Color(0x40FFFFFF)
+private val GioInk = Color.White
+private val GioDim = Color(0xB8FFFFFF)
+private val GioFaint = Color(0x66FFFFFF)
+private val GioAccent = GameioBrand.Cover
+private val GioErrorRed = Color(0xFFFFC2B3)
 
 @Composable
 private fun GioBackdrop(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalFooterStyle provides FooterStyleConfig(useAccentColor = true)) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .drawBehind {
-                drawRect(GioGround)
-                // a warm glow up top and a cool one low in the corner, like the website
-                drawCircle(
-                    brush = Brush.radialGradient(
-                        colors = listOf(GioAccent.copy(alpha = 0.16f), Color.Transparent),
-                        center = Offset(size.width * 0.5f, -size.height * 0.15f),
-                        radius = size.width * 0.5f
-                    ),
-                    radius = size.width * 0.5f,
-                    center = Offset(size.width * 0.5f, -size.height * 0.15f)
-                )
-                drawCircle(
-                    brush = Brush.radialGradient(
-                        colors = listOf(GioViolet.copy(alpha = 0.10f), Color.Transparent),
-                        center = Offset(size.width * 0.08f, size.height * 1.05f),
-                        radius = size.width * 0.45f
-                    ),
-                    radius = size.width * 0.45f,
-                    center = Offset(size.width * 0.08f, size.height * 1.05f)
-                )
-            }
-    ) { content() }
+            .background(GioGround)
+    ) {
+        GameioMark(
+            tile = false,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .size(460.dp)
+                .offset(x = 150.dp, y = 170.dp)
+                .alpha(0.14f)
+        )
+        content()
+    }
+    }
 }
 
 @Composable
@@ -746,7 +739,7 @@ private fun GioTextField(
             focusedBorderColor = GioAccent,
             unfocusedBorderColor = GioLine,
             focusedLabelColor = GioAccent,
-            unfocusedLabelColor = GioFaint,
+            unfocusedLabelColor = GioDim,
             cursorColor = GioAccent
         ),
         modifier = Modifier
@@ -790,15 +783,15 @@ private fun GioPrimaryButton(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .clip(shape)
-            .background(if (enabled) GioAccent else GioAccent.copy(alpha = 0.25f))
-            .then(if (isFocused) Modifier.border(2.dp, GioInk, shape) else Modifier)
+            .background(if (enabled) GioInk else GioInk.copy(alpha = 0.22f))
+            .then(if (isFocused) Modifier.border(3.dp, GioAccent, shape) else Modifier)
             .clickable(enabled = enabled, onClick = onClick)
             .padding(horizontal = 30.dp, vertical = 14.dp)
     ) {
         Text(
             text = text,
-            color = if (enabled) GioInk else GioInk.copy(alpha = 0.55f),
-            fontWeight = FontWeight.Bold,
+            color = if (enabled) GioGround else GioInk.copy(alpha = 0.6f),
+            fontWeight = FontWeight.ExtraBold,
             fontSize = 15.sp,
             maxLines = 1
         )
@@ -817,7 +810,7 @@ private fun GioGhostButton(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .clip(shape)
-            .border(if (isFocused) 2.dp else 1.dp, if (isFocused) GioAccent else GioLine, shape)
+            .border(if (isFocused) 3.dp else 1.5.dp, if (isFocused) GioAccent else GioLine, shape)
             .clickable(enabled = enabled, onClick = onClick)
             .padding(horizontal = 26.dp, vertical = 14.dp)
     ) {
@@ -839,39 +832,57 @@ private fun RommSuccessStep(
     isFocused: Boolean,
     onContinue: () -> Unit
 ) {
-    StepColumn {
-        Icon(
-            Icons.Default.Check,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.size(64.dp)
-        )
-        Spacer(modifier = Modifier.height(Dimens.spacingMd))
-        Text(
-            text = stringResource(R.string.firstrun_romm_success_title),
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Spacer(modifier = Modifier.height(Dimens.spacingLg))
-        Text(
-            text = stringResource(R.string.firstrun_romm_success_server, serverName),
-            style = MaterialTheme.typography.bodyLarge
-        )
-        Text(
-            text = stringResource(
-                R.string.firstrun_romm_success_library,
-                pluralStringResource(R.plurals.firstrun_romm_success_game_count, gameCount, gameCount),
-                pluralStringResource(R.plurals.firstrun_romm_success_platform_count, platformCount, platformCount)
-            ),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(modifier = Modifier.height(Dimens.spacingLg))
-        FocusableButton(
-            text = stringResource(R.string.firstrun_romm_success_button_continue),
-            isFocused = isFocused,
-            onClick = onContinue
-        )
+    GioBackdrop {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(Dimens.spacingXl)
+        ) {
+            GameioMark(tile = false, modifier = Modifier.size(96.dp))
+            Spacer(modifier = Modifier.height(10.dp))
+            Icon(
+                Icons.Default.Check,
+                contentDescription = null,
+                tint = GioAccent,
+                modifier = Modifier.size(40.dp)
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = stringResource(R.string.firstrun_romm_success_title),
+                color = GioInk,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = (-0.8).sp,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(14.dp))
+            Text(
+                text = stringResource(R.string.firstrun_romm_success_server, serverName),
+                color = GioDim,
+                fontSize = 15.sp,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = stringResource(
+                    R.string.firstrun_romm_success_library,
+                    pluralStringResource(R.plurals.firstrun_romm_success_game_count, gameCount, gameCount),
+                    pluralStringResource(R.plurals.firstrun_romm_success_platform_count, platformCount, platformCount)
+                ),
+                color = GioAccent,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(28.dp))
+            GioPrimaryButton(
+                text = stringResource(R.string.firstrun_romm_success_button_continue),
+                isFocused = isFocused,
+                onClick = onContinue
+            )
+        }
     }
 }
 

@@ -50,23 +50,35 @@ class ShelfRepository @Inject constructor(
         }
     }
 
-    /** The shelf's games as local ids in server order, fetching through [through] rows. */
-    suspend fun gamesFor(shelf: RomMShelf, through: Int = PAGE): List<Long> {
+    /**
+     * The shelf's games as local ids in server order, fetching through [through] rows. With
+     * [platformSlugs] the server ranks only games on those platforms, so a device that follows a
+     * few systems still gets a full row instead of the top of a list it cannot show.
+     */
+    suspend fun gamesFor(
+        shelf: RomMShelf,
+        platformSlugs: Collection<String> = emptyList(),
+        through: Int = PAGE
+    ): List<Long> {
         if (!isCatalogOnly()) return emptyList()
+        val slugs = platformSlugs.sorted()
+        val key = if (slugs.isEmpty()) shelf.key else "${shelf.key}|${slugs.joinToString(",")}"
+        val params = wireParams(shelf.params).toMutableMap()
+        if (slugs.isNotEmpty()) params["platform_slugs"] = slugs.joinToString(",")
         mutex.withLock {
-            val ids = orderedIds.getOrPut(shelf.key) { mutableListOf() }
-            while (ids.size < through && shelf.key !in exhausted) {
+            val ids = orderedIds.getOrPut(key) { mutableListOf() }
+            while (ids.size < through && key !in exhausted) {
                 val page = librarySync.get().fetchRomsByParams(
-                    params = wireParams(shelf.params),
+                    params = params,
                     limit = PAGE,
                     offset = ids.size
                 )
                 if (page.isEmpty()) {
-                    exhausted.add(shelf.key)
+                    exhausted.add(key)
                     break
                 }
                 ids.addAll(page.filter { it !in ids })
-                if (page.size < PAGE) exhausted.add(shelf.key)
+                if (page.size < PAGE) exhausted.add(key)
             }
             return ids.take(through)
         }

@@ -93,7 +93,7 @@ class CompanionGuardService : Service() {
         val notification = NotificationCompat.Builder(
             this, SecondaryDisplayNotificationChannel.CHANNEL_ID
         )
-            .setSmallIcon(R.drawable.ic_helm)
+            .setSmallIcon(R.drawable.ic_notification_mark)
             .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.dual_notification_guard_text))
             .setPriority(NotificationCompat.PRIORITY_LOW)

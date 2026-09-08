@@ -167,7 +167,7 @@ fun ConsoleKeyboardOverlay(
                 hints = listOf(
                     InputButton.X to stringResource(R.string.search_kb_delete),
                     InputButton.Y to stringResource(R.string.search_kb_space),
-                    InputButton.LB to stringResource(R.string.search_kb_caps),
+                    InputButton.LB_RB to stringResource(R.string.search_kb_caps),
                     InputButton.B to stringResource(R.string.search_kb_done)
                 )
             )

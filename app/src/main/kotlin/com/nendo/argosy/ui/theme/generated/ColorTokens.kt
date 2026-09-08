@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 object ColorTokens {
     object Scheme {
         object Dark {
-            val primary = Color(0xFF2F62E8)
+            val primary = Color(0xFF1C3C8F)
             val secondary = Color(0xFF26A69A)
             val surface = Color(0xFF13141A)
             val surfaceVariant = Color(0xFF1C1E26)
@@ -22,7 +22,7 @@ object ColorTokens {
             val outlineVariant = Color(0x0FFFFFFF)
         }
         object Light {
-            val primary = Color(0xFF1D4ED8)
+            val primary = Color(0xFF1C3C8F)
             val secondary = Color(0xFF00766C)
             val surface = Color(0xFFF3F4F8)
             val surfaceVariant = Color(0xFFE9EBF0)
@@ -34,10 +34,10 @@ object ColorTokens {
         }
         object DebugOverrides {
             object Dark {
-                val primary = Color(0xFF2F62E8)
+                val primary = Color(0xFF1C3C8F)
             }
             object Light {
-                val primary = Color(0xFF1D4ED8)
+                val primary = Color(0xFF1C3C8F)
             }
         }
     }
