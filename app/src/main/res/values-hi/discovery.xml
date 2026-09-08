@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="discovery_home">होम</string>
+    <string name="discovery_library">लाइब्रेरी</string>
+    <string name="discovery_favorites">पसंदीदा</string>
+    <string name="discovery_on_device">इस डिवाइस पर</string>
+    <string name="discovery_continue">खेलना जारी रखें</string>
+    <string name="discovery_all_platforms">सभी प्लेटफ़ॉर्म</string>
+    <string name="discovery_details">विवरण</string>
+    <string name="discovery_resume">रिज़्यूम</string>
+    <string name="discovery_play">प्ले</string>
+    <string name="discovery_download">डाउनलोड</string>
+    <string name="discovery_install">इंस्टॉल</string>
+    <string name="discovery_favorite">पसंदीदा</string>
+    <string name="discovery_unfavorite">पसंदीदा हटाएं</string>
+    <string name="discovery_search">खोजें</string>
+    <string name="discovery_all_games">सभी गेम</string>
+    <string name="discovery_available">उपलब्ध</string>
+    <string name="discovery_library_only">केवल लाइब्रेरी</string>
+    <string name="discovery_retry">फिर कोशिश करें</string>
+    <string name="discovery_platform">प्लेटफ़ॉर्म</string>
+    <string name="discovery_explore">खोजें</string>
+    <string name="discovery_top_rated">सबसे अधिक रेटिंग वाले</string>
+    <string name="discovery_recommended">आपके लिए सुझाए गए</string>
+    <string name="discovery_hero_fallback">अपने गेम खोजें</string>
+    <string name="discovery_full_library">पूरी लाइब्रेरी</string>
+    <string name="discovery_surprise">कोई गेम चुनें</string>
+    <string name="discovery_empty_catalog">कोई मेल खाता गेम नहीं मिला। सभी गेम या कोई दूसरा प्लेटफ़ॉर्म आज़माएँ।</string>
+    <string name="discovery_empty_library">इस डिवाइस पर अभी कोई गेम नहीं है। गेम डाउनलोड करने के लिए कैटलॉग देखें।</string>
+    <string name="discovery_empty_favorites">आपके पसंदीदा गेम यहाँ दिखेंगे। बाद में खेलने के लिए किसी गेम को पसंदीदा बनाएँ।</string>
+    <string name="discovery_empty_recommended">सुझाव पाने के लिए कुछ गेम खेलें। सबसे अधिक रेटिंग वाले गेम से शुरुआत करें।</string>
+    <string name="discovery_loading">गेम लोड हो रहे हैं…</string>
+    <string name="discovery_error">कैटलॉग अपडेट नहीं हो सका। अपना कनेक्शन जाँचें और फिर कोशिश करें।</string>
+    <string name="discovery_no_recent">हाल ही में खेले गए गेम यहाँ दिखेंगे। गेम खोजने के लिए नीचे देखें।</string>
+    <string name="discovery_no_platforms">प्लेटफ़ॉर्म के गेम देखने के लिए सेटिंग में उन्हें फ़ॉलो करें।</string>
+    <string name="discovery_rating">समुदाय %1$d%%</string>
+    <string name="discovery_offline">ऑफ़लाइन · सहेजे गए गेम दिखाए जा रहे हैं</string>
+</resources>

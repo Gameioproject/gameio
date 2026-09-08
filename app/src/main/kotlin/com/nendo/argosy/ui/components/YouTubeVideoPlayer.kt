@@ -14,6 +14,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.key
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
@@ -30,11 +32,28 @@ fun YouTubeVideoPlayer(
     onError: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    key(videoId) {
+        YouTubeVideoPlayerInstance(videoId, muted, onReady, onError, modifier)
+    }
+}
+
+@SuppressLint("SetJavaScriptEnabled")
+@Composable
+private fun YouTubeVideoPlayerInstance(
+    videoId: String,
+    muted: Boolean,
+    onReady: () -> Unit,
+    onError: () -> Unit,
+    modifier: Modifier
+) {
+    val currentOnReady by rememberUpdatedState(onReady)
+    val currentOnError by rememberUpdatedState(onError)
+    var disposed by remember { mutableStateOf(false) }
     var webView by remember { mutableStateOf<WebView?>(null) }
     val processLifecycle = ProcessLifecycleOwner.get().lifecycle
 
     LaunchedEffect(muted) {
-        val js = if (muted) "if(player && player.mute) player.mute();" else "if(player && player.unMute) player.unMute();"
+        val js = if (muted) "if(typeof player !== 'undefined' && player && player.mute) player.mute();" else "if(typeof player !== 'undefined' && player && player.unMute) player.unMute();"
         webView?.evaluateJavascript(js, null)
     }
 
@@ -42,7 +61,7 @@ fun YouTubeVideoPlayer(
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_PAUSE, Lifecycle.Event.ON_STOP -> {
-                    webView?.evaluateJavascript("if(player && player.stopVideo) player.stopVideo();", null)
+                    webView?.evaluateJavascript("if(typeof player !== 'undefined' && player && player.stopVideo) player.stopVideo();", null)
                     webView?.onPause()
                 }
                 Lifecycle.Event.ON_RESUME, Lifecycle.Event.ON_START -> {
@@ -53,8 +72,9 @@ fun YouTubeVideoPlayer(
         }
         processLifecycle.addObserver(observer)
         onDispose {
+            disposed = true
             processLifecycle.removeObserver(observer)
-            webView?.evaluateJavascript("if(player && player.destroy) player.destroy();", null)
+            webView?.evaluateJavascript("if(typeof player !== 'undefined' && player && player.destroy) player.destroy();", null)
             webView?.destroy()
         }
     }
@@ -109,6 +129,10 @@ fun YouTubeVideoPlayer(
         factory = { context ->
             WebView(context).apply {
                 setBackgroundColor(Color.TRANSPARENT)
+                isFocusable = false
+                isFocusableInTouchMode = false
+                descendantFocusability = android.view.ViewGroup.FOCUS_BLOCK_DESCENDANTS
+                setOnTouchListener { _, _ -> true }
                 settings.javaScriptEnabled = true
                 settings.mediaPlaybackRequiresUserGesture = false
                 settings.domStorageEnabled = true
@@ -119,17 +143,17 @@ fun YouTubeVideoPlayer(
                 addJavascriptInterface(object {
                     @android.webkit.JavascriptInterface
                     fun onVideoReady() {
-                        post { onReady() }
+                        post { if (!disposed) currentOnReady() }
                     }
                     @android.webkit.JavascriptInterface
                     fun onVideoError(@Suppress("UNUSED_PARAMETER") code: Int) {
-                        post { onError() }
+                        post { if (!disposed) currentOnError() }
                     }
                 }, "Android")
 
                 webViewClient = object : WebViewClient() {
                     override fun onReceivedError(view: WebView?, req: WebResourceRequest?, err: WebResourceError?) {
-                        if (req?.isForMainFrame == true) onError()
+                        if (req?.isForMainFrame == true && !disposed) currentOnError()
                     }
                 }
                 webChromeClient = WebChromeClient()

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="discovery_home">Главная</string>
+    <string name="discovery_library">Библиотека</string>
+    <string name="discovery_favorites">Избранное</string>
+    <string name="discovery_on_device">На этом устройстве</string>
+    <string name="discovery_continue">Продолжить игру</string>
+    <string name="discovery_all_platforms">Все платформы</string>
+    <string name="discovery_details">Детали</string>
+    <string name="discovery_resume">Продолжить</string>
+    <string name="discovery_play">Воспроизвести</string>
+    <string name="discovery_download">Скачать</string>
+    <string name="discovery_install">Установить</string>
+    <string name="discovery_favorite">В избранное</string>
+    <string name="discovery_unfavorite">Убрать из избранного</string>
+    <string name="discovery_search">Поиск</string>
+    <string name="discovery_all_games">Все игры</string>
+    <string name="discovery_available">ДОСТУПНЫЕ</string>
+    <string name="discovery_library_only">Только библиотека</string>
+    <string name="discovery_retry">Повторить</string>
+    <string name="discovery_platform">Платформа</string>
+    <string name="discovery_explore">Обзор</string>
+    <string name="discovery_top_rated">Лучшие по оценкам</string>
+    <string name="discovery_recommended">Рекомендовано вам</string>
+    <string name="discovery_hero_fallback">Откройте свои игры</string>
+    <string name="discovery_full_library">Вся библиотека</string>
+    <string name="discovery_surprise">Удиви меня</string>
+    <string name="discovery_empty_catalog">Подходящих игр нет. Выберите Все игры или другую платформу.</string>
+    <string name="discovery_empty_library">На этом устройстве ещё нет игр. Найдите игру в каталоге и скачайте её.</string>
+    <string name="discovery_empty_favorites">Здесь появятся избранные игры. Добавьте игру в избранное, чтобы вернуться к ней позже.</string>
+    <string name="discovery_empty_recommended">Поиграйте в несколько игр, чтобы получить рекомендации. Начните с лучших по оценкам.</string>
+    <string name="discovery_loading">Загрузка игр…</string>
+    <string name="discovery_error">Не удалось обновить каталог. Проверьте подключение и повторите попытку.</string>
+    <string name="discovery_no_recent">Здесь появятся недавно запущенные игры. Найдите новую игру ниже.</string>
+    <string name="discovery_no_platforms">Подпишитесь на платформы в настройках, чтобы просматривать их игры.</string>
+    <string name="discovery_rating">Сообщество %1$d%%</string>
+    <string name="discovery_offline">Нет подключения · Показаны сохранённые игры</string>
+</resources>

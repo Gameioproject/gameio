@@ -37,7 +37,7 @@ fun argosyThemeTokens(
         hairlineLow = tintSurface(ColorTokens.Scheme.Dark.outlineVariant, tintHue, tintBleed),
         hairlineHigh = tintSurface(ColorTokens.Scheme.Dark.outline, tintHue, tintBleed),
         textPrimary = ColorTokens.Scheme.Dark.onSurface,
-        textDim = ColorTokens.Scheme.Dark.onSurface.copy(alpha = 0.7f),
+        textDim = ColorTokens.Scheme.Dark.onSurfaceVariant,
         textMute = ColorTokens.Scheme.Dark.onSurface.copy(alpha = 0.45f),
     ) else ArgosyThemeTokens(
         isDark = false,
@@ -49,7 +49,7 @@ fun argosyThemeTokens(
         hairlineLow = tintSurface(ColorTokens.Scheme.Light.outlineVariant, tintHue, tintBleed),
         hairlineHigh = tintSurface(ColorTokens.Scheme.Light.outline, tintHue, tintBleed),
         textPrimary = ColorTokens.Scheme.Light.onSurface,
-        textDim = ColorTokens.Scheme.Light.onSurface.copy(alpha = 0.7f),
+        textDim = ColorTokens.Scheme.Light.onSurfaceVariant,
         textMute = ColorTokens.Scheme.Light.onSurface.copy(alpha = 0.55f),
     )
 }

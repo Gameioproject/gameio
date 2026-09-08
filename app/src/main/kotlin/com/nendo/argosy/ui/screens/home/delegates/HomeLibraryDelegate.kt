@@ -232,7 +232,7 @@ class HomeLibraryDelegate @Inject constructor(
             )
         }
 
-        return startRow
+        return if (prefs.homeLayout.selected == HomeLayoutKind.CAROUSEL) HomeRow.Continue else startRow
     }
 
     private fun startBackgroundFollowUp(scope: CoroutineScope, startRow: HomeRow) {

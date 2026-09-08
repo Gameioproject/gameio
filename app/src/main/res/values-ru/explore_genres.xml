@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="explore_sports">Спорт</string>
+    <string name="explore_adventure">Приключения</string>
+    <string name="explore_racing">Гонки</string>
+    <string name="explore_rpg">Ролевые игры</string>
+    <string name="explore_platform">Платформеры</string>
+    <string name="explore_puzzle">Головоломки</string>
+    <string name="explore_fighting">Файтинги</string>
+    <string name="explore_shooter">Шутеры</string>
+    <string name="explore_arcade">Аркады</string>
+    <string name="explore_strategy">Стратегии</string>
+    <string name="explore_simulation">Симуляторы</string>
+    <string name="explore_music">Музыка и ритм</string>
+    <string name="explore_beat_em_up">Битемапы</string>
+    <string name="explore_tactical">Тактика</string>
+    <string name="explore_card_board">Карточные и настольные игры</string>
+    <string name="explore_indie">Инди</string>
+    <string name="explore_keep_going">Продолжайте исследовать</string>
+    <string name="explore_more">Прокрутите вниз, чтобы найти больше игр</string>
+    <string name="explore_end">Вы просмотрели эти платформы. Выберите другую платформу или фильтр.</string>
+    <string name="explore_more_genre">Больше открытий</string>
+</resources>

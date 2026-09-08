@@ -67,6 +67,7 @@ class LibretroGamepadInputHandler(
             GamepadEvent.NextTrigger -> handler.onNextTrigger()
             GamepadEvent.LeftStickClick -> handler.onLeftStickClick()
             GamepadEvent.RightStickClick -> handler.onRightStickClick()
+            GamepadEvent.ToggleGuide -> InputResult.HANDLED
             GamepadEvent.Home -> InputResult.UNHANDLED
             GamepadEvent.LongConfirm -> handler.onLongConfirm()
         }

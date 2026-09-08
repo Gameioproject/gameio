@@ -1,18 +1,17 @@
 package com.nendo.argosy.ui.screens.home.delegates
 
-import com.nendo.argosy.data.preferences.UserPreferencesRepository
 import com.nendo.argosy.ui.audio.AmbientAudioManager
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+data class VideoPreviewRequest(val gameId: Long, val videoId: String, val generation: Long)
 
 data class VideoPreviewState(
     val isVideoPreviewActive: Boolean = false,
-    val videoPreviewId: String? = null,
+    val videoPreviewRequest: VideoPreviewRequest? = null,
     val isVideoPreviewLoading: Boolean = false,
     val muteVideoPreview: Boolean = false,
     val videoWallpaperEnabled: Boolean = false,
@@ -64,16 +63,21 @@ class HomeVideoPreviewDelegate @Inject constructor(
         if (pageOwnsAudio) ambientAudioManager.fadeOut() else ambientAudioManager.fadeIn()
     }
 
-    fun startVideoPreviewLoading(videoId: String) {
+    private var generation = 0L
+
+    fun startVideoPreviewLoading(gameId: Long, videoId: String) {
+        deactivateVideoPreview()
+        val request = VideoPreviewRequest(gameId, videoId, ++generation)
         _state.update {
             it.copy(
                 isVideoPreviewLoading = true,
-                videoPreviewId = videoId
+                videoPreviewRequest = request
             )
         }
     }
 
-    fun activateVideoPreview() {
+    fun activateVideoPreview(request: VideoPreviewRequest) {
+        if (_state.value.videoPreviewRequest != request || !_state.value.isVideoPreviewLoading) return
         _state.update {
             it.copy(
                 isVideoPreviewActive = true,
@@ -85,14 +89,9 @@ class HomeVideoPreviewDelegate @Inject constructor(
         }
     }
 
-    fun cancelVideoPreviewLoading() {
-        _state.update {
-            it.copy(
-                isVideoPreviewLoading = false,
-                videoPreviewId = null
-            )
-        }
-        ambientAudioManager.fadeIn()
+    fun cancelVideoPreviewLoading(request: VideoPreviewRequest) {
+        if (_state.value.videoPreviewRequest != request) return
+        deactivateVideoPreview()
     }
 
     fun deactivateVideoPreview() {
@@ -101,7 +100,7 @@ class HomeVideoPreviewDelegate @Inject constructor(
             it.copy(
                 isVideoPreviewActive = false,
                 isVideoPreviewLoading = false,
-                videoPreviewId = null
+                videoPreviewRequest = null
             )
         }
         if (wasActive) {

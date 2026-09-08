@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="explore_sports">खेलकूद</string>
+    <string name="explore_adventure">रोमांच</string>
+    <string name="explore_racing">रेसिंग</string>
+    <string name="explore_rpg">रोल-प्लेइंग</string>
+    <string name="explore_platform">प्लैटफ़ॉर्मर</string>
+    <string name="explore_puzzle">पहेली</string>
+    <string name="explore_fighting">फ़ाइटिंग</string>
+    <string name="explore_shooter">शूटर</string>
+    <string name="explore_arcade">आर्केड</string>
+    <string name="explore_strategy">रणनीति</string>
+    <string name="explore_simulation">सिमुलेशन</string>
+    <string name="explore_music">संगीत और लय</string>
+    <string name="explore_beat_em_up">बीट एम अप</string>
+    <string name="explore_tactical">सामरिक</string>
+    <string name="explore_card_board">कार्ड और बोर्ड गेम</string>
+    <string name="explore_indie">इंडी</string>
+    <string name="explore_keep_going">और खोजें</string>
+    <string name="explore_more">और गेम खोजने के लिए नीचे स्क्रॉल करें</string>
+    <string name="explore_end">आपने ये प्लेटफ़ॉर्म देख लिए हैं। कोई और प्लेटफ़ॉर्म या फ़िल्टर आज़माएँ।</string>
+    <string name="explore_more_genre">खोजने के लिए और भी</string>
+</resources>

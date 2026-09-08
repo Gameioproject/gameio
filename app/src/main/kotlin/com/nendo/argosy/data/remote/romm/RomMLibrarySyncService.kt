@@ -907,7 +907,8 @@ class RomMLibrarySyncService @Inject constructor(
             if (syncFiles) syncGameFiles(savedGame.id, rom, platformSlug)
         }
 
-        return isNew to game
+        val storedId = checkNotNull(savedGame) { "Synced ROM ${rom.id} is missing from local storage" }.id
+        return isNew to game.copy(id = storedId)
     }
 
     /**
@@ -1073,9 +1074,10 @@ class RomMLibrarySyncService @Inject constructor(
     suspend fun fetchRomsByParams(
         params: Map<String, String>,
         limit: Int,
-        offset: Int
-    ): List<Long> = withContext(NonCancellable + Dispatchers.IO) {
-        val api = apiClient.api ?: return@withContext emptyList()
+        offset: Int,
+        strict: Boolean = false
+    ): List<Long> = withContext(Dispatchers.IO) {
+        val api = apiClient.api ?: if (strict) error("Catalog is disconnected") else return@withContext emptyList()
         if (!connectionManager.getCapabilities().catalogOnly) return@withContext emptyList()
         val query = params.toMutableMap()
         query["limit"] = limit.toString()
@@ -1086,11 +1088,15 @@ class RomMLibrarySyncService @Inject constructor(
         query["with_filter_values"] = "false"
         val response = try {
             api.getRoms(query)
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
         } catch (e: Exception) {
+            if (strict) throw e
             Logger.warn(TAG, "fetchRomsByParams: request failed: ${e.message}")
             return@withContext emptyList()
         }
         if (!response.isSuccessful) {
+            if (strict) throw retrofit2.HttpException(response)
             Logger.warn(TAG, "fetchRomsByParams: server returned ${response.code()}")
             return@withContext emptyList()
         }
@@ -1106,7 +1112,10 @@ class RomMLibrarySyncService @Inject constructor(
             try {
                 val (_, entity) = syncRom(rom, scope, syncFiles = false)
                 ids.add(entity.id)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
             } catch (e: Exception) {
+                if (strict) throw e
                 Logger.warn(TAG, "fetchRomsByParams: failed to store ${rom.name}: ${e.message}")
             }
         }
@@ -1114,11 +1123,11 @@ class RomMLibrarySyncService @Inject constructor(
     }
 
     /** One random well-rated catalog game, stored locally; its local id, or null. */
-    suspend fun fetchRandomRom(): Long? = withContext(NonCancellable + Dispatchers.IO) {
+    suspend fun fetchRandomRom(platformSlugs: Collection<String> = emptyList(), owned: Boolean = false): Long? = withContext(NonCancellable + Dispatchers.IO) {
         val api = apiClient.api ?: return@withContext null
         if (!connectionManager.getCapabilities().catalogOnly) return@withContext null
         val response = try {
-            api.getRandomRom()
+            api.getRandomRom(platformSlugs = platformSlugs.joinToString(",").takeIf { it.isNotEmpty() }, owned = owned)
         } catch (e: Exception) {
             Logger.warn(TAG, "fetchRandomRom: request failed: ${e.message}")
             return@withContext null

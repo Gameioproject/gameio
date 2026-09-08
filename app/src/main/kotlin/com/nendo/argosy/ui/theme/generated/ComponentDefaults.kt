@@ -251,4 +251,47 @@ object ComponentDefaults {
         const val audioFadeMs = 450
     }
 
+    object DiscoveryHome {
+        const val referenceHeightDp = 480
+        const val minScale = 0.65f
+        const val maxScale = 1.6f
+        const val pagePaddingDp = 20
+        const val barHeightDp = 34
+        const val platformHeightDp = 30
+        const val footerHeightDp = 30
+        const val heroHeightDp = 210
+        const val heroWidthRatio = 0.34f
+        const val heroCardHeightDp = 158
+        const val rowCardHeightDp = 132
+        const val cardAspectRatio = 0.72f
+        const val trailerAspectRatio = 1.7777778f
+        const val cardGapDp = 12
+        const val sectionGapDp = 18
+        const val controlHeightDp = 28
+        const val radiusDp = 5
+        const val ringWidthDp = 1
+        const val ringPaddingDp = 3
+        const val titleSp = 23
+        const val bodySp = 10
+        const val labelSp = 9
+        const val sectionTitleSp = 12
+        const val brandSp = 14
+        const val emptyHeightDp = 62
+        const val rowHeadingHeightDp = 30
+        const val focusScale = 1.035f
+        const val platformMinWidthDp = 42
+    }
+
+    object ConsoleUi {
+        const val brandSizeDp = 80
+        const val compactBrandSizeDp = 56
+        const val formWidthDp = 520
+        const val brandWidthDp = 320
+        const val keySizeDp = 44
+        const val keyboardReservedHeightDp = 164
+        const val keyMinSizeDp = 18
+        const val systemRowHeightDp = 64
+        const val systemCellMinWidthDp = 128
+    }
+
 }

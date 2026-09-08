@@ -11,33 +11,35 @@ import androidx.compose.ui.graphics.Color
 object ColorTokens {
     object Scheme {
         object Dark {
-            val primary = Color(0xFF1C3C8F)
-            val secondary = Color(0xFF26A69A)
-            val surface = Color(0xFF13141A)
-            val surfaceVariant = Color(0xFF1C1E26)
-            val surfaceElevated = Color(0xFF262834)
-            val background = Color(0xFF050507)
-            val onSurface = Color(0xFFE6E8EC)
+            val primary = Color(0xFF295CCC)
+            val secondary = Color(0xFF548CFF)
+            val surface = Color(0xFF111B2B)
+            val surfaceVariant = Color(0xFF222D40)
+            val surfaceElevated = Color(0xFF2B3950)
+            val background = Color(0xFF080C14)
+            val onSurface = Color(0xFFEDF2FA)
+            val onSurfaceVariant = Color(0xFF9AAAC1)
             val outline = Color(0x1FFFFFFF)
             val outlineVariant = Color(0x0FFFFFFF)
         }
         object Light {
-            val primary = Color(0xFF1C3C8F)
-            val secondary = Color(0xFF00766C)
-            val surface = Color(0xFFF3F4F8)
-            val surfaceVariant = Color(0xFFE9EBF0)
-            val surfaceElevated = Color(0xFFDEE1E9)
-            val background = Color(0xFFFBFBFD)
-            val onSurface = Color(0xFF1C1B1F)
+            val primary = Color(0xFF295CCC)
+            val secondary = Color(0xFF295CCC)
+            val surface = Color(0xFFE0E7F1)
+            val surfaceVariant = Color(0xFFCCD8E8)
+            val surfaceElevated = Color(0xFFBDCADB)
+            val background = Color(0xFFEFF3F9)
+            val onSurface = Color(0xFF14243D)
+            val onSurfaceVariant = Color(0xFF50627E)
             val outline = Color(0x1F000000)
             val outlineVariant = Color(0x0F000000)
         }
         object DebugOverrides {
             object Dark {
-                val primary = Color(0xFF1C3C8F)
+                val primary = Color(0xFF295CCC)
             }
             object Light {
-                val primary = Color(0xFF1C3C8F)
+                val primary = Color(0xFF295CCC)
             }
         }
     }

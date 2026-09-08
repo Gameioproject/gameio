@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="discovery_home">Start</string>
+    <string name="discovery_library">Bibliothek</string>
+    <string name="discovery_favorites">Favoriten</string>
+    <string name="discovery_on_device">Auf diesem Gerät</string>
+    <string name="discovery_continue">Weiterspielen</string>
+    <string name="discovery_all_platforms">Alle Plattformen</string>
+    <string name="discovery_details">Details</string>
+    <string name="discovery_resume">Fortsetzen</string>
+    <string name="discovery_play">Wiedergabe</string>
+    <string name="discovery_download">Herunterladen</string>
+    <string name="discovery_install">Installieren</string>
+    <string name="discovery_favorite">Favorit</string>
+    <string name="discovery_unfavorite">Favorit entfernen</string>
+    <string name="discovery_search">Suchen</string>
+    <string name="discovery_all_games">Alle Spiele</string>
+    <string name="discovery_available">VERFÜGBAR</string>
+    <string name="discovery_library_only">Nur Bibliothek</string>
+    <string name="discovery_retry">Wiederholen</string>
+    <string name="discovery_platform">Plattform</string>
+    <string name="discovery_explore">Entdecken</string>
+    <string name="discovery_top_rated">Bestbewertet</string>
+    <string name="discovery_recommended">Für dich empfohlen</string>
+    <string name="discovery_hero_fallback">Entdecke deine Spiele</string>
+    <string name="discovery_full_library">Gesamte Bibliothek</string>
+    <string name="discovery_surprise">Überrasch mich</string>
+    <string name="discovery_empty_catalog">Keine passenden Spiele. Wähle Alle Spiele oder eine andere Plattform.</string>
+    <string name="discovery_empty_library">Noch keine Spiele auf diesem Gerät. Entdecke den Katalog, um ein Spiel herunterzuladen.</string>
+    <string name="discovery_empty_favorites">Deine Favoriten erscheinen hier. Markiere ein Spiel als Favorit, um es für später zu speichern.</string>
+    <string name="discovery_empty_recommended">Spiele ein paar Spiele, um Empfehlungen zu erhalten. Beginne mit Bestbewertet.</string>
+    <string name="discovery_loading">Spiele werden geladen…</string>
+    <string name="discovery_error">Der Katalog konnte nicht aktualisiert werden. Prüfe deine Verbindung und versuche es erneut.</string>
+    <string name="discovery_no_recent">Deine zuletzt gespielten Spiele erscheinen hier. Entdecke unten weitere Spiele.</string>
+    <string name="discovery_no_platforms">Folge Plattformen in den Einstellungen, um ihre Spiele zu entdecken.</string>
+    <string name="discovery_rating">Community %1$d%%</string>
+    <string name="discovery_offline">Offline · Gespeicherte Spiele werden angezeigt</string>
+</resources>

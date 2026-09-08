@@ -61,6 +61,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
+import com.nendo.argosy.ui.screens.home.delegates.HomeDiscoveryLoader
 import javax.inject.Inject
 
 @HiltViewModel
@@ -82,6 +87,7 @@ class HomeViewModel @Inject constructor(
     private val gradientExtractionDelegate: GradientExtractionDelegate,
     private val ambientLedManager: AmbientLedManager,
     val libraryDelegate: HomeLibraryDelegate,
+    private val discoveryLoader: HomeDiscoveryLoader,
     val navigationDelegate: HomeNavigationDelegate,
     val downloadDelegate: HomeDownloadDelegate,
     val syncDelegate: HomeSyncDelegate,
@@ -108,6 +114,10 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(restoreInitialState())
     override val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
+
+    private val exploreDelegate by lazy {
+        com.nendo.argosy.ui.screens.home.delegates.HomeExploreDelegate(_uiState, discoveryLoader, viewModelScope)
+    }
 
     private val _events = MutableSharedFlow<HomeEvent>()
     val events: SharedFlow<HomeEvent> = _events.asSharedFlow()
@@ -174,11 +184,148 @@ class HomeViewModel @Inject constructor(
         observeFocusedGameForLed()
         observeCollectionModal()
         observeDelegateStates()
+        observeDiscoveryData()
         observeHomeTiles()
         observeTilePrompts()
         customGrid.setLocalVideoSupported(true)
         mediaDelegate.observe(viewModelScope)
         gradientExtractionDelegate.startBackgroundProcessing(viewModelScope)
+    }
+
+    fun loadMoreExplore() = exploreDelegate.loadMore()
+    fun retryExplore() = exploreDelegate.loadMore(retry = true)
+
+    private val discoveryPositions = mutableMapOf<HomeRow, Pair<DiscoveryFocus, Int>>()
+
+    private fun observeDiscoveryData() {
+        viewModelScope.launch {
+            combine(
+                _uiState.map { Triple(it.isDiscoveryHome, it.currentPlatform?.id to it.libraryFilter, it.platforms.map { p -> p.id }) }
+                    .distinctUntilChanged(),
+                discoveryLoader.connectionState
+            ) { scope, connection -> scope to connection }
+                .collectLatest { (scope, _) ->
+                    if (scope.first) refreshDiscoveryData()
+                }
+        }
+    }
+
+    private suspend fun refreshDiscoveryData() {
+        exploreDelegate.reset()
+        val platformId = _uiState.value.currentPlatform?.id
+        val filter = _uiState.value.libraryFilter
+        _uiState.update { it.copy(discoveryData = it.discoveryData.copy(loading = true, failed = false)) }
+        val loaded = try {
+            discoveryLoader.load(platformId, filter)
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            _uiState.value.discoveryData.copy(platformId = platformId, loading = false, failed = true, filter = filter)
+        }
+        _uiState.update {
+            if (it.currentPlatform?.id == platformId && it.libraryFilter == filter) it.copy(discoveryData = loaded).let { updated ->
+                val clamped = updated.copy(discoveryFocus = updated.discoveryFocus.copy(
+                    zone = updated.discoveryFocus.zone.coerceAtMost(
+                        DiscoveryFocus.FIRST_ROW + updated.discoverySections.lastIndex)))
+                clamped.copy(focusedGameIndex = clamped.focusedGameIndex.coerceIn(
+                    0, clamped.currentItems.lastIndex.coerceAtLeast(0)))
+            } else it
+        }
+    }
+
+    fun retryDiscovery() {
+        viewModelScope.launch { refreshDiscoveryData() }
+    }
+
+    private fun moveToHomeRow(row: HomeRow, index: Int) {
+        val current = _uiState.value
+        discoveryPositions[current.currentRow] = current.discoveryFocus to current.focusedGameIndex
+        val restored = discoveryPositions[row]
+        _uiState.update { it.copy(currentRow = row,
+            discoveryFocus = restored?.first ?: DiscoveryFocus(),
+            focusedGameIndex = restored?.second ?: index) }
+    }
+
+    override fun moveDiscoveryVertical(delta: Int) {
+        _uiState.update { DiscoveryNavigation.vertical(it, delta) }
+        val state = _uiState.value
+        if (delta > 0 && state.discoveryFocus.zone >= state.discoverySections.lastIndex) loadMoreExplore()
+        saveCurrentState()
+    }
+
+    override fun moveDiscoveryHorizontal(delta: Int) {
+        _uiState.update { DiscoveryNavigation.horizontal(it, delta) }
+        saveCurrentState()
+    }
+
+    fun selectDiscoveryGame(zone: Int, index: Int, activate: Boolean = false) {
+        val state = _uiState.value
+        val alreadySelected = state.discoveryFocus.zone == zone && state.focusedGameIndex == index
+        _uiState.update { it.copy(discoveryFocus = it.discoveryFocus.copy(zone = zone,
+            heroIndex = when {
+                zone == DiscoveryFocus.HERO -> index
+                it.discoveryFocus.zone == DiscoveryFocus.HERO -> it.focusedGameIndex
+                else -> it.discoveryFocus.heroIndex
+            }),
+            focusedGameIndex = index) }
+        if (activate && alreadySelected) handleItemTap(index) { }
+        saveCurrentState()
+    }
+
+    fun selectDiscoveryFeed(feed: DiscoveryFeed) {
+        _uiState.update { DiscoveryNavigation.selectFeed(it, feed) }
+        if (feed == DiscoveryFeed.EXPLORE) loadMoreExplore()
+    }
+
+    fun focusDiscoveryControl(zone: Int, index: Int) {
+        _uiState.update { it.copy(discoveryFocus = it.discoveryFocus.copy(zone = zone, control = index,
+            heroIndex = if (it.discoveryFocus.zone == DiscoveryFocus.HERO) it.focusedGameIndex else it.discoveryFocus.heroIndex)) }
+    }
+
+    override fun confirmDiscoveryControl(onGameSelect: (Long) -> Unit): Boolean {
+        val state = _uiState.value
+        val control = state.discoveryFocus.control
+        when (state.discoveryFocus.zone) {
+            DiscoveryFocus.TOOLS -> when (control) {
+                0 -> surpriseMe()
+                1 -> navigateToSearch()
+                else -> toggleInstalledOnly()
+            }
+            DiscoveryFocus.PLATFORMS -> state.availableRows.getOrNull(control)?.let { selectRow(it) }
+            DiscoveryFocus.ACTIONS -> state.discoveryHeroGame?.let { game ->
+                when (control) {
+                    0 -> {
+                        _uiState.update { it.copy(focusedGameIndex = it.discoveryFocus.heroIndex) }
+                        handleItemTap(_uiState.value.focusedGameIndex) { }
+                    }
+                    1 -> onGameSelect(game.id)
+                    else -> toggleFavorite(game.id)
+                }
+            }
+            DiscoveryFocus.FEEDS -> {
+                if (control < DiscoveryFeed.entries.size) selectDiscoveryFeed(DiscoveryFeed.entries[control])
+                else openDiscoveryLibrary()
+            }
+            else -> {
+                if (state.currentItems.isEmpty()) {
+                    if (state.discoverySections.getOrNull(state.discoveryFocus.zone - DiscoveryFocus.FIRST_ROW)?.key == "explore-tail") {
+                        retryExplore()
+                    } else retryDiscovery()
+                    return true
+                }
+                return false
+            }
+        }
+        return true
+    }
+
+    fun openDiscoveryLibrary() {
+        val source = when (_uiState.value.libraryFilter) {
+            com.nendo.argosy.data.preferences.HomeLibraryFilter.ALL -> "ALL"
+            com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE -> "AVAILABLE"
+            com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY -> "PLAYABLE"
+        }
+        navigateToLibrary(_uiState.value.currentPlatform?.id, source)
     }
 
     private fun observeDelegateStates() {
@@ -227,7 +374,7 @@ class HomeViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         isVideoPreviewActive = vp.isVideoPreviewActive,
-                        videoPreviewId = vp.videoPreviewId,
+                        videoPreviewRequest = vp.videoPreviewRequest,
                         isVideoPreviewLoading = vp.isVideoPreviewLoading,
                         muteVideoPreview = vp.muteVideoPreview,
                         videoWallpaperEnabled = vp.videoWallpaperEnabled,
@@ -587,6 +734,18 @@ class HomeViewModel @Inject constructor(
             return
         }
         val focusedGameId = state.focusedGame?.id
+        if (state.isDiscoveryHome) {
+            libraryDelegate.loadRecentGames()
+            libraryDelegate.loadFavorites()
+            refreshDiscoveryData()
+            flushLibraryState()
+            _uiState.update { current ->
+                val index = current.currentItems.indexOfFirst { (it as? HomeRowItem.Game)?.game?.id == focusedGameId }
+                current.copy(focusedGameIndex = index.takeIf { it >= 0 }
+                    ?: current.focusedGameIndex.coerceIn(0, current.currentItems.lastIndex.coerceAtLeast(0)))
+            }
+            return
+        }
         val result = libraryDelegate.refreshCurrentRow(state.currentRow, focusedGameId)
 
         val newIndex = if (focusedGameId != null) {
@@ -613,7 +772,7 @@ class HomeViewModel @Inject constructor(
 
     override fun nextRow() {
         val result = navigationDelegate.nextRow(_uiState.value) ?: return
-        _uiState.update { it.copy(currentRow = result.first, focusedGameIndex = result.second) }
+        moveToHomeRow(result.first, result.second)
         syncSelectedMediaLibrary()
         navigationDelegate.loadRowWithDebounce(viewModelScope, result.first) { row ->
             loadRowContent(row)
@@ -624,7 +783,7 @@ class HomeViewModel @Inject constructor(
     fun selectRow(row: HomeRow) {
         val state = _uiState.value
         if (row == state.currentRow || row !in state.availableRows) return
-        _uiState.update { it.copy(currentRow = row, focusedGameIndex = 0) }
+        moveToHomeRow(row, 0)
         syncSelectedMediaLibrary()
         navigationDelegate.loadRowWithDebounce(viewModelScope, row) { loadRowContent(it) }
         saveCurrentState()
@@ -632,7 +791,7 @@ class HomeViewModel @Inject constructor(
 
     override fun previousRow() {
         val result = navigationDelegate.previousRow(_uiState.value) ?: return
-        _uiState.update { it.copy(currentRow = result.first, focusedGameIndex = result.second) }
+        moveToHomeRow(result.first, result.second)
         syncSelectedMediaLibrary()
         navigationDelegate.loadRowWithDebounce(viewModelScope, result.first) { row ->
             loadRowContent(row)
@@ -1413,9 +1572,11 @@ class HomeViewModel @Inject constructor(
 
     // --- Public API: Video Preview ---
 
-    fun startVideoPreviewLoading(videoId: String) = videoPreviewDelegate.startVideoPreviewLoading(videoId)
-    fun activateVideoPreview() = videoPreviewDelegate.activateVideoPreview()
-    fun cancelVideoPreviewLoading() = videoPreviewDelegate.cancelVideoPreviewLoading()
+    fun startVideoPreviewLoading(gameId: Long, videoId: String) = videoPreviewDelegate.startVideoPreviewLoading(gameId, videoId)
+    fun activateVideoPreview(request: com.nendo.argosy.ui.screens.home.delegates.VideoPreviewRequest) =
+        videoPreviewDelegate.activateVideoPreview(request)
+    fun cancelVideoPreviewLoading(request: com.nendo.argosy.ui.screens.home.delegates.VideoPreviewRequest) =
+        videoPreviewDelegate.cancelVideoPreviewLoading(request)
     fun deactivateVideoPreview() = videoPreviewDelegate.deactivateVideoPreview()
 
     // --- Public API: Library ---
@@ -1458,13 +1619,15 @@ class HomeViewModel @Inject constructor(
         isDefaultView: Boolean,
         onGameSelect: (Long) -> Unit,
         onNavigateToDefault: () -> Unit,
-        onDrawerToggle: () -> Unit
+        onDrawerToggle: () -> Unit,
+        onToggleGuide: () -> Unit
     ): InputHandler = HomeInputHandler(
         actions = this,
         isDefaultView = isDefaultView,
         onGameSelect = onGameSelect,
         onNavigateToDefault = onNavigateToDefault,
-        onDrawerToggle = onDrawerToggle
+        onDrawerToggle = onDrawerToggle,
+        onToggleGuide = onToggleGuide
     )
 
     // --- HomeInputActions Implementation ---
@@ -1479,8 +1642,17 @@ class HomeViewModel @Inject constructor(
 
     override fun surpriseMe() {
         viewModelScope.launch {
-            val gameId = shelfRepository.randomLocalId() ?: return@launch
-            _events.emit(HomeEvent.OpenGameDetail(gameId))
+            val state = _uiState.value
+            val gameId = if (state.libraryFilter == com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY) {
+                state.discoveryGames(state.discoveryData.library).randomOrNull()?.id
+            } else {
+                val slugs = state.currentPlatform?.let { listOf(it.slug) } ?: state.platforms.map { it.slug }
+                if (slugs.isEmpty()) null else shelfRepository.randomLocalId(slugs,
+                    owned = state.libraryFilter == com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE)
+            }
+            if (gameId != null && !gameRepository.isGameHidden(gameId)) {
+                _events.emit(HomeEvent.OpenGameDetail(gameId))
+            }
         }
     }
 
@@ -1500,6 +1672,11 @@ class HomeViewModel @Inject constructor(
 
     override fun scrollToFirst(): Boolean {
         val state = _uiState.value
+        if (state.isDiscoveryHome && state.discoveryFocus.zone != DiscoveryFocus.HERO) {
+            _uiState.update { it.copy(discoveryFocus = it.discoveryFocus.copy(zone = DiscoveryFocus.HERO),
+                focusedGameIndex = it.discoveryFocus.heroIndex) }
+            return true
+        }
         if (!navigationDelegate.scrollToFirstItem(state.focusedGameIndex)) return false
         _uiState.update { it.copy(focusedGameIndex = 0) }
         return true

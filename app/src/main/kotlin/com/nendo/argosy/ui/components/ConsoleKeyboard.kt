@@ -20,6 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalConfiguration
+import com.nendo.argosy.ui.theme.generated.ComponentDefaults.ConsoleUi
 import com.nendo.argosy.R
 import com.nendo.argosy.ui.theme.Dimens
 import com.nendo.argosy.ui.util.clickableNoFocus
@@ -88,11 +91,13 @@ fun ConsoleKeyboard(
     caps: Boolean = false
 ) {
     val gap = Dimens.spacingXs
-    val inset = Dimens.spacingMd
-    BoxWithConstraints(modifier = modifier.padding(inset)) {
+    val availableHeight = LocalConfiguration.current.screenHeightDp - ConsoleUi.keyboardReservedHeightDp
+    val heightLimit = (availableHeight / ConsoleKeyboardLayout.rowCount).dp.coerceAtLeast(ConsoleUi.keyMinSizeDp.dp)
+    BoxWithConstraints(modifier = modifier) {
         // Ten keys have to fit whatever width the caller gives, portrait phone included.
         val keySize = ((maxWidth - gap * (ConsoleKeyboardLayout.COLS - 1)) / ConsoleKeyboardLayout.COLS)
-            .coerceAtMost(KEY_SIZE_MAX)
+            .coerceIn(ConsoleUi.keyMinSizeDp.dp, ConsoleUi.keySizeDp.dp)
+            .coerceAtMost(heightLimit)
         Column(
             verticalArrangement = Arrangement.spacedBy(gap),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -105,6 +110,7 @@ fun ConsoleKeyboard(
                             label = (if (caps) char.uppercaseChar() else char).toString(),
                             focused = active && focusedRow == rowIndex && focusedCol == colIndex,
                             onTap = { onKeyTap(rowIndex, colIndex) },
+                            keySize = keySize,
                             modifier = Modifier.size(keySize)
                         )
                     }
@@ -127,6 +133,7 @@ fun ConsoleKeyboard(
                         focusedRow == ConsoleKeyboardLayout.ACTION_ROW &&
                         focusedCol == colIndex,
                     onTap = { onKeyTap(ConsoleKeyboardLayout.ACTION_ROW, colIndex) },
+                    keySize = keySize,
                     modifier = Modifier
                         .weight(1f)
                         .height(keySize)
@@ -137,13 +144,12 @@ fun ConsoleKeyboard(
     }
 }
 
-private val KEY_SIZE_MAX = 44.dp
-
 @Composable
 private fun KeyCap(
     label: String,
     focused: Boolean,
     onTap: () -> Unit,
+    keySize: androidx.compose.ui.unit.Dp,
     modifier: Modifier = Modifier
 ) {
     val shape = RoundedCornerShape(Dimens.radiusSm)
@@ -152,16 +158,16 @@ private fun KeyCap(
         modifier = modifier
             .background(
                 if (focused) {
-                    MaterialTheme.colorScheme.primary
+                    MaterialTheme.colorScheme.onSurface
                 } else {
                     MaterialTheme.colorScheme.surfaceVariant
                 },
                 shape
             )
             .border(
-                Dimens.borderThin,
+                if (focused) Dimens.borderMedium else Dimens.borderThin,
                 if (focused) {
-                    MaterialTheme.colorScheme.primary
+                    MaterialTheme.colorScheme.secondary
                 } else {
                     MaterialTheme.colorScheme.outlineVariant
                 },
@@ -172,8 +178,9 @@ private fun KeyCap(
         Text(
             text = label,
             style = MaterialTheme.typography.titleMedium,
+            fontSize = minOf(MaterialTheme.typography.titleMedium.fontSize.value, keySize.value / 2).sp,
             color = if (focused) {
-                MaterialTheme.colorScheme.onPrimary
+                MaterialTheme.colorScheme.background
             } else {
                 MaterialTheme.colorScheme.onSurface
             },

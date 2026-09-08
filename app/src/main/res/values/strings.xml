@@ -8,4 +8,40 @@
     <string name="secondary_home_label">Gameio Companion</string>
     <!-- Spoken by the screen reader for the accessibility service that pins gamepad focus. -->
     <string name="focus_accessibility_description">Keeps gamepad focus on the game display during dual-screen gameplay</string>
+    <string name="discovery_home">Home</string>
+    <string name="discovery_explore">Explore</string>
+    <string name="discovery_library">Library</string>
+    <string name="discovery_favorites">Favorites</string>
+    <string name="discovery_on_device">On this device</string>
+    <string name="discovery_top_rated">Top rated</string>
+    <string name="discovery_recommended">Recommended for you</string>
+    <string name="discovery_continue">Continue playing</string>
+    <string name="discovery_hero_fallback">Explore your games</string>
+    <string name="discovery_full_library">Full library</string>
+    <string name="discovery_all_platforms">All platforms</string>
+    <string name="discovery_details">Details</string>
+    <string name="discovery_resume">Resume</string>
+    <string name="discovery_play">Play</string>
+    <string name="discovery_download">Download</string>
+    <string name="discovery_install">Install</string>
+    <string name="discovery_favorite">Favorite</string>
+    <string name="discovery_unfavorite">Unfavorite</string>
+    <string name="discovery_search">Search</string>
+    <string name="discovery_surprise">Surprise me</string>
+    <string name="discovery_all_games">All games</string>
+    <string name="discovery_available">Available</string>
+    <string name="discovery_library_only">Library only</string>
+    <string name="discovery_empty_catalog">No matching games. Try All games or another platform.</string>
+    <string name="discovery_empty_library">No games on this device yet. Explore the catalog to download a game.</string>
+    <string name="discovery_empty_favorites">Your favorites will appear here. Favorite a game to save it for later.</string>
+    <string name="discovery_empty_recommended">Play a few games to get recommendations. Explore Top rated to get started.</string>
+    <string name="discovery_loading">Loading games…</string>
+    <string name="discovery_retry">Retry</string>
+    <string name="discovery_error">Could not refresh the catalog. Check your connection and retry.</string>
+    <string name="discovery_no_recent">Your recently played games will appear here. Explore below to find a game.</string>
+    <string name="discovery_no_platforms">Follow platforms in Settings to explore their games.</string>
+    <string name="discovery_platform">Platform</string>
+    <string name="discovery_brand" translatable="false">Gameio</string>
+    <string name="discovery_rating">Community %1$d%%</string>
+    <string name="discovery_offline">Offline · Showing saved games</string>
 </resources>

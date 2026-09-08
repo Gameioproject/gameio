@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="discovery_home">Accueil</string>
+    <string name="discovery_library">Bibliothèque</string>
+    <string name="discovery_favorites">Favoris</string>
+    <string name="discovery_on_device">Sur cet appareil</string>
+    <string name="discovery_continue">Reprendre la partie</string>
+    <string name="discovery_all_platforms">Toutes les plateformes</string>
+    <string name="discovery_details">Détails</string>
+    <string name="discovery_resume">Reprendre</string>
+    <string name="discovery_play">Lecture</string>
+    <string name="discovery_download">Télécharger</string>
+    <string name="discovery_install">Installer</string>
+    <string name="discovery_favorite">Favori</string>
+    <string name="discovery_unfavorite">Retirer des favoris</string>
+    <string name="discovery_search">Rechercher</string>
+    <string name="discovery_all_games">Tous les jeux</string>
+    <string name="discovery_available">DISPONIBLE</string>
+    <string name="discovery_library_only">Bibliothèque seule</string>
+    <string name="discovery_retry">Réessayer</string>
+    <string name="discovery_platform">Plateforme</string>
+    <string name="discovery_explore">Explorer</string>
+    <string name="discovery_top_rated">Les mieux notés</string>
+    <string name="discovery_recommended">Recommandés pour vous</string>
+    <string name="discovery_hero_fallback">Explorez vos jeux</string>
+    <string name="discovery_full_library">Bibliothèque complète</string>
+    <string name="discovery_surprise">Surprenez-moi</string>
+    <string name="discovery_empty_catalog">Aucun jeu correspondant. Essayez Tous les jeux ou une autre plateforme.</string>
+    <string name="discovery_empty_library">Aucun jeu sur cet appareil. Explorez le catalogue pour télécharger un jeu.</string>
+    <string name="discovery_empty_favorites">Vos favoris apparaîtront ici. Ajoutez un jeu aux favoris pour le retrouver plus tard.</string>
+    <string name="discovery_empty_recommended">Jouez à quelques jeux pour obtenir des recommandations. Commencez par Les mieux notés.</string>
+    <string name="discovery_loading">Chargement des jeux…</string>
+    <string name="discovery_error">Impossible d’actualiser le catalogue. Vérifiez votre connexion et réessayez.</string>
+    <string name="discovery_no_recent">Vos jeux récents apparaîtront ici. Explorez ci-dessous pour trouver un jeu.</string>
+    <string name="discovery_no_platforms">Suivez des plateformes dans les paramètres pour explorer leurs jeux.</string>
+    <string name="discovery_rating">Communauté %1$d%%</string>
+    <string name="discovery_offline">Hors ligne · Jeux enregistrés affichés</string>
+</resources>

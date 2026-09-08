@@ -1,5 +1,6 @@
 package com.nendo.argosy.ui.screens.home.delegates
 
+import com.nendo.argosy.ui.input.InputDispatcher
 import com.nendo.argosy.ui.input.InputHandler
 import com.nendo.argosy.ui.input.InputResult
 import com.nendo.argosy.core.input.SoundType
@@ -10,6 +11,7 @@ import com.nendo.argosy.ui.components.AutoGridMove
 import com.nendo.argosy.ui.components.TileEditMode
 import com.nendo.argosy.ui.screens.home.HomeRow
 import com.nendo.argosy.ui.screens.home.HomeRowItem
+import com.nendo.argosy.ui.screens.home.isDiscoveryHome
 import com.nendo.argosy.ui.screens.home.HomeUiState
 import kotlinx.coroutines.flow.StateFlow
 
@@ -22,6 +24,9 @@ interface HomeInputActions {
     fun moveGameMenuFocus(delta: Int)
     fun toggleGameMenu()
     fun confirmGameMenuSelection(onGameSelect: (Long) -> Unit)
+    fun moveDiscoveryVertical(delta: Int)
+    fun moveDiscoveryHorizontal(delta: Int)
+    fun confirmDiscoveryControl(onGameSelect: (Long) -> Unit): Boolean
     fun previousRow()
     fun nextRow()
     fun previousGame(): Boolean
@@ -104,7 +109,8 @@ class HomeInputHandler(
     private val isDefaultView: Boolean,
     private val onGameSelect: (Long) -> Unit,
     private val onNavigateToDefault: () -> Unit,
-    private val onDrawerToggle: () -> Unit
+    private val onDrawerToggle: () -> Unit,
+    private val onToggleGuide: () -> Unit
 ) : InputHandler {
 
     override fun onUp(): InputResult {
@@ -134,6 +140,10 @@ class HomeInputHandler(
             }
             state.showTilePicker -> {
                 actions.moveTilePickerFocus(-1)
+                InputResult.HANDLED
+            }
+            state.isDiscoveryHome -> {
+                actions.moveDiscoveryVertical(-1)
                 InputResult.HANDLED
             }
             isCustomGrid(state) -> customMove(GridDirection2D.UP)
@@ -174,6 +184,10 @@ class HomeInputHandler(
                 actions.moveTilePickerFocus(1)
                 InputResult.HANDLED
             }
+            state.isDiscoveryHome -> {
+                actions.moveDiscoveryVertical(1)
+                InputResult.HANDLED
+            }
             isCustomGrid(state) -> customMove(GridDirection2D.DOWN)
             isGrid(state) -> gridMove(GridDirection.DOWN)
             else -> {
@@ -202,6 +216,10 @@ class HomeInputHandler(
             return InputResult.HANDLED
         }
         if (state.showAddToCollectionModal || state.showGameMenu) return InputResult.HANDLED
+        if (state.isDiscoveryHome) {
+            actions.moveDiscoveryHorizontal(-1)
+            return InputResult.HANDLED
+        }
         if (isCustomGrid(state)) return customMove(GridDirection2D.LEFT)
         if (isGrid(state)) return gridMove(GridDirection.LEFT)
         val moved = if (railIsReversed(state)) actions.nextGame() else actions.previousGame()
@@ -227,6 +245,10 @@ class HomeInputHandler(
             return InputResult.HANDLED
         }
         if (state.showAddToCollectionModal || state.showGameMenu) return InputResult.HANDLED
+        if (state.isDiscoveryHome) {
+            actions.moveDiscoveryHorizontal(1)
+            return InputResult.HANDLED
+        }
         if (isCustomGrid(state)) return customMove(GridDirection2D.RIGHT)
         if (isGrid(state)) return gridMove(GridDirection.RIGHT)
         val moved = if (railIsReversed(state)) actions.previousGame() else actions.nextGame()
@@ -333,6 +355,7 @@ class HomeInputHandler(
             }
             state.showAddToCollectionModal -> actions.confirmCollectionSelection()
             state.showGameMenu -> actions.confirmGameMenuSelection(onGameSelect)
+            state.isDiscoveryHome && actions.confirmDiscoveryControl(onGameSelect) -> Unit
             isCustomGrid(state) -> confirmCustomGridCell()
             else -> {
                 when (val item = state.focusedItem) {
@@ -536,8 +559,9 @@ class HomeInputHandler(
         if (state.showTilePicker || state.showGameMenu || state.showAddToCollectionModal) {
             return InputResult.UNHANDLED
         }
-        actions.surpriseMe()
-        return InputResult.handled(SoundType.OPEN_MODAL)
+        if (InputDispatcher.currentIsRepeat) return InputResult.HANDLED
+        onToggleGuide()
+        return InputResult.handled(SoundType.TOGGLE)
     }
 
     override fun onPrevTrigger(): InputResult {

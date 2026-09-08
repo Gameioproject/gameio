@@ -394,7 +394,7 @@
     <!-- Heading over the rows about what is drawn behind the home screen. Noun. -->
     <string name="settings_home_screen_section_background">Background</string>
     <!-- Heading over the rows about a moving video behind the home screen. Noun phrase. -->
-    <string name="settings_home_screen_section_video">Video Wallpaper</string>
+    <string name="settings_home_screen_section_video">Video previews</string>
     <!-- Heading over the rows that choose what the home screen lists. Noun. -->
     <string name="settings_home_screen_section_content">Content</string>
 
@@ -441,9 +441,9 @@
     <string name="settings_home_screen_opacity_title">Opacity</string>
 
     <!-- Row title. Verb phrase: play a moving background. -->
-    <string name="settings_home_screen_video_wallpaper_title">Show Video Wallpaper</string>
+    <string name="settings_home_screen_video_wallpaper_title">Show video previews</string>
     <!-- Second line of that row. -->
-    <string name="settings_home_screen_video_wallpaper_subtitle">Play video backgrounds on home screen</string>
+    <string name="settings_home_screen_video_wallpaper_subtitle">Automatically play trailers for the selected game</string>
     <!-- Row title. Noun phrase: how long the video waits before it starts. -->
     <string name="settings_home_screen_video_delay_title">Delay Before Playback</string>
     <!-- Value of that row for no wait at all. Adjective used as a noun. -->

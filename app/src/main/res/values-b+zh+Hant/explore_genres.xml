@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="explore_sports">運動</string>
+    <string name="explore_adventure">冒險</string>
+    <string name="explore_racing">競速</string>
+    <string name="explore_rpg">角色扮演</string>
+    <string name="explore_platform">平台跳躍</string>
+    <string name="explore_puzzle">益智</string>
+    <string name="explore_fighting">格鬥</string>
+    <string name="explore_shooter">射擊</string>
+    <string name="explore_arcade">街機</string>
+    <string name="explore_strategy">策略</string>
+    <string name="explore_simulation">模擬</string>
+    <string name="explore_music">音樂與節奏</string>
+    <string name="explore_beat_em_up">清版動作</string>
+    <string name="explore_tactical">戰術</string>
+    <string name="explore_card_board">卡牌與桌遊</string>
+    <string name="explore_indie">獨立遊戲</string>
+    <string name="explore_keep_going">繼續探索</string>
+    <string name="explore_more">向下捲動以探索更多遊戲</string>
+    <string name="explore_end">已瀏覽完這些平台。試試其他平台或篩選條件。</string>
+    <string name="explore_more_genre">更多值得探索</string>
+</resources>

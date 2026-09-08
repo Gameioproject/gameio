@@ -42,6 +42,9 @@ class InputFeedbackPlayer(
                 hapticManager?.vibrate(HapticPattern.SELECTION)
                 soundManager?.play(result.soundOverride ?: SoundType.SELECT)
             }
+            GamepadEvent.RightStickClick -> {
+                result.soundOverride?.let { soundManager?.play(it) }
+            }
             GamepadEvent.Back -> {
                 soundManager?.play(result.soundOverride ?: SoundType.BACK)
             }

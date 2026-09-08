@@ -116,7 +116,14 @@ internal fun createDarkColorScheme(
     surface = tintSurface(ColorTokens.Scheme.Dark.surface, tintHue, tintBleed),
     onSurface = ColorTokens.Scheme.Dark.onSurface,
     surfaceVariant = tintSurface(ColorTokens.Scheme.Dark.surfaceVariant, tintHue, tintBleed),
-    onSurfaceVariant = ColorTokens.Scheme.Dark.onSurface.copy(alpha = 0.8f),
+    surfaceDim = tintSurface(ColorTokens.Scheme.Dark.background, tintHue, tintBleed),
+    surfaceBright = tintSurface(ColorTokens.Scheme.Dark.surfaceElevated, tintHue, tintBleed),
+    surfaceContainerLowest = tintSurface(ColorTokens.Scheme.Dark.background, tintHue, tintBleed),
+    surfaceContainerLow = tintSurface(ColorTokens.Scheme.Dark.surface, tintHue, tintBleed),
+    surfaceContainer = tintSurface(ColorTokens.Scheme.Dark.surface, tintHue, tintBleed),
+    surfaceContainerHigh = tintSurface(ColorTokens.Scheme.Dark.surfaceVariant, tintHue, tintBleed),
+    surfaceContainerHighest = tintSurface(ColorTokens.Scheme.Dark.surfaceElevated, tintHue, tintBleed),
+    onSurfaceVariant = ColorTokens.Scheme.Dark.onSurfaceVariant,
 
     outline = tintSurface(ColorTokens.Scheme.Dark.outline, tintHue, tintBleed),
     outlineVariant = tintSurface(ColorTokens.Scheme.Dark.outlineVariant, tintHue, tintBleed)
@@ -149,7 +156,14 @@ internal fun createLightColorScheme(
     surface = tintSurface(ColorTokens.Scheme.Light.surface, tintHue, tintBleed),
     onSurface = ColorTokens.Scheme.Light.onSurface,
     surfaceVariant = tintSurface(ColorTokens.Scheme.Light.surfaceVariant, tintHue, tintBleed),
-    onSurfaceVariant = ColorTokens.Scheme.Light.onSurface.copy(alpha = 0.8f),
+    surfaceDim = tintSurface(ColorTokens.Scheme.Light.surfaceVariant, tintHue, tintBleed),
+    surfaceBright = tintSurface(ColorTokens.Scheme.Light.background, tintHue, tintBleed),
+    surfaceContainerLowest = tintSurface(ColorTokens.Scheme.Light.background, tintHue, tintBleed),
+    surfaceContainerLow = tintSurface(ColorTokens.Scheme.Light.surface, tintHue, tintBleed),
+    surfaceContainer = tintSurface(ColorTokens.Scheme.Light.surface, tintHue, tintBleed),
+    surfaceContainerHigh = tintSurface(ColorTokens.Scheme.Light.surfaceVariant, tintHue, tintBleed),
+    surfaceContainerHighest = tintSurface(ColorTokens.Scheme.Light.surfaceElevated, tintHue, tintBleed),
+    onSurfaceVariant = ColorTokens.Scheme.Light.onSurfaceVariant,
 
     outline = tintSurface(ColorTokens.Scheme.Light.outline, tintHue, tintBleed),
     outlineVariant = tintSurface(ColorTokens.Scheme.Light.outlineVariant, tintHue, tintBleed)
@@ -274,7 +288,9 @@ internal fun rememberArgosyPalette(
     val rawPrimary = primaryOverride ?: themeState.primaryColor?.let { Color(it) }
     val rawSecondary = themeState.secondaryColor?.let { Color(it) }
     val effectivePrimary = rawPrimary ?: if (isDarkTheme) defaultPrimary else defaultPrimaryDark
-    val effectiveSecondary = rawSecondary ?: effectivePrimary
+    val effectiveSecondary = rawSecondary ?: if (rawPrimary != null) effectivePrimary else {
+        if (isDarkTheme) ColorTokens.Scheme.Dark.secondary else ColorTokens.Scheme.Light.secondary
+    }
     return ArgosyPalette(
         isDarkTheme, rawPrimary, effectivePrimary, rawSecondary, effectiveSecondary,
         themeState.surfaceTintBleed

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Empty result in the setup console selector after filtering. -->
+    <string name="firstrun_platform_select_empty">沒有符合篩選條件的系統。</string>
+</resources>

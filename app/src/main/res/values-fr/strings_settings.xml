@@ -199,7 +199,7 @@
 
     <string name="settings_home_screen_section_layout">Disposition</string>
     <string name="settings_home_screen_section_background">Arrière-plan</string>
-    <string name="settings_home_screen_section_video">Fond animé</string>
+    <string name="settings_home_screen_section_video">Aperçus vidéo</string>
     <string name="settings_home_screen_section_content">Contenu</string>
 
     <string name="settings_home_screen_background_title">Arrière-plan</string>
@@ -217,8 +217,8 @@
     <string name="settings_home_screen_saturation_title">Saturation</string>
     <string name="settings_home_screen_opacity_title">Opacité</string>
 
-    <string name="settings_home_screen_video_wallpaper_title">Afficher le fond animé</string>
-    <string name="settings_home_screen_video_wallpaper_subtitle">Lire des fonds animés sur l\'écran d\'accueil</string>
+    <string name="settings_home_screen_video_wallpaper_title">Afficher les aperçus vidéo</string>
+    <string name="settings_home_screen_video_wallpaper_subtitle">Lire automatiquement les bandes-annonces du jeu sélectionné</string>
     <string name="settings_home_screen_video_delay_title">Délai avant lecture</string>
     <string name="settings_home_screen_video_delay_instant">Instantané</string>
     <plurals name="settings_home_screen_video_delay_seconds">

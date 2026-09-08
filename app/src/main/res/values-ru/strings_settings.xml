@@ -202,7 +202,7 @@
 
     <string name="settings_home_screen_section_layout">Раскладка</string>
     <string name="settings_home_screen_section_background">Фон</string>
-    <string name="settings_home_screen_section_video">Видеообои</string>
+    <string name="settings_home_screen_section_video">Видеопревью</string>
     <string name="settings_home_screen_section_content">Содержимое</string>
 
     <string name="settings_home_screen_background_title">Фон</string>
@@ -220,8 +220,8 @@
     <string name="settings_home_screen_saturation_title">Насыщенность</string>
     <string name="settings_home_screen_opacity_title">Непрозрачность</string>
 
-    <string name="settings_home_screen_video_wallpaper_title">Показывать видеообои</string>
-    <string name="settings_home_screen_video_wallpaper_subtitle">Воспроизводить видеофон на главном экране</string>
+    <string name="settings_home_screen_video_wallpaper_title">Показывать видеопревью</string>
+    <string name="settings_home_screen_video_wallpaper_subtitle">Автоматически воспроизводить трейлеры выбранной игры</string>
     <string name="settings_home_screen_video_delay_title">Задержка перед воспроизведением</string>
     <string name="settings_home_screen_video_delay_instant">Мгновенно</string>
     <plurals name="settings_home_screen_video_delay_seconds">

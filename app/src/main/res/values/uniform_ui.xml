@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Empty result in the setup console selector after filtering. -->
+    <string name="firstrun_platform_select_empty">No systems match your filters.</string>
+    <string name="firstrun_welcome_brand_name" translatable="false">Gameio</string>
+    <string name="firstrun_login_brand_name" translatable="false">Gameio</string>
+</resources>
