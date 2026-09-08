@@ -47,6 +47,7 @@ sealed interface GamepadEvent {
     data object RightStickClick : GamepadEvent
     data object Home : GamepadEvent
     data object LongConfirm : GamepadEvent
+    data object ToggleGuide : GamepadEvent
 }
 
 @Singleton
@@ -66,7 +67,7 @@ class GamepadInputHandler @Inject constructor(
 
     private enum class ModifierState { IDLE, HELD, COMBO_FIRED }
     private var modifierState = ModifierState.IDLE
-    private var comboMap: Map<GamepadEvent, GamepadEvent> = emptyMap()
+    private var comboMap: Map<GamepadEvent, GamepadEvent> = buildComboMap("", "")
 
     var onActivity: (() -> Unit)? = null
     override var lastInputDevice: InputDevice? = null
@@ -87,7 +88,7 @@ class GamepadInputHandler @Inject constructor(
     }
 
     private fun buildComboMap(selectL: String, selectR: String): Map<GamepadEvent, GamepadEvent> {
-        val map = mutableMapOf<GamepadEvent, GamepadEvent>()
+        val map = mutableMapOf<GamepadEvent, GamepadEvent>(GamepadEvent.Down to GamepadEvent.ToggleGuide)
         comboActionToEvent(selectL)?.let { map[GamepadEvent.PrevSection] = it }
         comboActionToEvent(selectR)?.let { map[GamepadEvent.NextSection] = it }
         return map
@@ -181,7 +182,7 @@ class GamepadInputHandler @Inject constructor(
         if (gamepadEvent == GamepadEvent.Select && comboMap.isNotEmpty()) {
             when (event.action) {
                 KeyEvent.ACTION_DOWN -> {
-                    modifierState = ModifierState.HELD
+                    if (event.repeatCount == 0) modifierState = ModifierState.HELD
                     return true
                 }
                 KeyEvent.ACTION_UP -> {

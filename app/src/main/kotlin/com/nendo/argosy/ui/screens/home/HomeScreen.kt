@@ -182,6 +182,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val footerController = com.nendo.argosy.ui.components.LocalFooterHost.current
     val listState = rememberLazyListState()
     val gridState = rememberLazyGridState()
     val isAutoGrid = uiState.layoutKind == HomeLayoutKind.AUTO_GRID
@@ -198,7 +199,7 @@ fun HomeScreen(
     LaunchedEffect(Unit) {
         snapshotFlow { Triple(uiState.focusedGameIndex, uiState.currentRow, uiState.currentItems.size) }
             .collectLatest { (focusedIndex, _, itemsSize) ->
-                if (itemsSize > 0) {
+                if (itemsSize > 0 && !uiState.isDiscoveryHome) {
                     if (skipNextProgrammaticScroll) {
                         skipNextProgrammaticScroll = false
                     } else {
@@ -222,7 +223,7 @@ fun HomeScreen(
                 listState.layoutInfo
             )
         }.collect { (isScrolling, programmatic, layoutInfo) ->
-            if (isScrolling && !programmatic) {
+            if (isScrolling && !programmatic && !uiState.isDiscoveryHome) {
                 val viewportStart = layoutInfo.viewportStartOffset
                 val visibleItems = layoutInfo.visibleItemsInfo
                 if (visibleItems.isNotEmpty()) {
@@ -272,12 +273,13 @@ fun HomeScreen(
     }
 
     val inputDispatcher = LocalInputDispatcher.current
-    val inputHandler = remember(onGameSelect, onDrawerToggle, isDefaultView) {
+    val inputHandler = remember(onGameSelect, onDrawerToggle, isDefaultView, footerController) {
         viewModel.createInputHandler(
             isDefaultView = isDefaultView,
             onGameSelect = onGameSelect,
             onNavigateToDefault = onNavigateToDefault,
-            onDrawerToggle = onDrawerToggle
+            onDrawerToggle = onDrawerToggle,
+            onToggleGuide = footerController::toggle
         )
     }
 
@@ -436,18 +438,22 @@ fun HomeScreen(
         }
     }
 
-    LaunchedEffect(uiState.focusedGame?.id) {
-        val currentGameId = uiState.focusedGame?.id
-        if (currentGameId != videoPlayedForGameId) {
-            videoPlayedForGameId = null
-            suppressVideoPreview = false
-        }
+    LaunchedEffect(uiState.focusedGame?.id, uiState.discoveryFocus.zone) {
+        videoPlayedForGameId = null
+        suppressVideoPreview = false
     }
 
-    LaunchedEffect(uiState.focusedGameIndex, uiState.focusedGame?.youtubeVideoId, uiState.videoWallpaperEnabled) {
+    LaunchedEffect(
+        uiState.focusedGame?.id, uiState.focusedGame?.youtubeVideoId,
+        uiState.discoveryFocus.zone, uiState.currentRow, uiState.layoutKind,
+        uiState.videoWallpaperEnabled, uiState.videoWallpaperDelayMs,
+        uiState.showGameMenu, uiState.discPickerState, suppressVideoPreview
+    ) {
         viewModel.deactivateVideoPreview()
         if (!uiState.videoWallpaperEnabled) return@LaunchedEffect
         if (uiState.layoutKind != HomeLayoutKind.CAROUSEL) return@LaunchedEffect
+        if (uiState.isDiscoveryHome && uiState.discoveryFocus.zone != DiscoveryFocus.HERO &&
+            uiState.discoveryFocus.zone < DiscoveryFocus.FIRST_ROW) return@LaunchedEffect
         val game = uiState.focusedGame ?: return@LaunchedEffect
         val videoId = game.youtubeVideoId ?: return@LaunchedEffect
         val shouldSkip = uiState.showGameMenu ||
@@ -459,23 +465,24 @@ fun HomeScreen(
         }
         delay(uiState.videoWallpaperDelayMs)
         val isResumed = lifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)
-        val stillValid = isResumed &&
+        val stillValid = isResumed && !inputDispatcher.hasActiveModal() &&
             uiState.videoWallpaperEnabled &&
             !suppressVideoPreview &&
             uiState.discPickerState == null &&
             videoPlayedForGameId != game.id
         if (stillValid) {
             videoPlayedForGameId = game.id
-            viewModel.startVideoPreviewLoading(videoId)
+            viewModel.startVideoPreviewLoading(game.id, videoId)
         }
     }
 
+    val previewFocusedGameId by rememberUpdatedState(uiState.focusedGame?.id)
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
                     viewModel.deactivateVideoPreview()
-                    videoPlayedForGameId = uiState.focusedGame?.id
+                    videoPlayedForGameId = previewFocusedGameId
                 }
                 Lifecycle.Event.ON_RESUME -> {
                     suppressVideoPreview = true
@@ -486,11 +493,12 @@ fun HomeScreen(
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
+            viewModel.deactivateVideoPreview()
         }
     }
 
     val backgroundAlpha by animateFloatAsState(
-        targetValue = if (uiState.isVideoPreviewActive) 0f else 1f,
+        targetValue = if (uiState.isVideoPreviewActive && !uiState.isDiscoveryHome) 0f else 1f,
         animationSpec = tween(500),
         label = "backgroundAlpha"
     )
@@ -623,28 +631,33 @@ fun HomeScreen(
                 }
             }
 
-            if (uiState.isVideoPreviewLoading || uiState.isVideoPreviewActive) {
+            if (!uiState.isDiscoveryHome && (uiState.isVideoPreviewLoading || uiState.isVideoPreviewActive)) {
                 val videoAlpha by animateFloatAsState(
                     targetValue = if (uiState.isVideoPreviewActive) 1f else 0f,
                     animationSpec = tween(500),
                     label = "videoAlpha"
                 )
-                uiState.videoPreviewId?.let { videoId ->
+                uiState.videoPreviewRequest?.let { request ->
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
                             .graphicsLayer { alpha = videoAlpha }
                     ) {
                         YouTubeVideoPlayer(
-                            videoId = videoId,
+                            videoId = request.videoId,
                             muted = uiState.muteVideoPreview,
-                            onReady = { viewModel.activateVideoPreview() },
-                            onError = { viewModel.cancelVideoPreviewLoading() }
+                            onReady = { viewModel.activateVideoPreview(request) },
+                            onError = { viewModel.cancelVideoPreviewLoading(request) }
                         )
                     }
                 }
             }
 
+        if (uiState.isDiscoveryHome) {
+            com.nendo.argosy.ui.screens.home.discovery.DiscoveryHomeScreen(
+                uiState, viewModel, onGameSelect, onDrawerToggle, useBackdrop = backdropEnabled || showArtLayer
+            )
+        } else {
         val edgeThresholdPx = with(LocalDensity.current) { 80.dp.toPx() }
 
         val swipeGestureModifier = Modifier
@@ -920,7 +933,7 @@ fun HomeScreen(
                     val gridOptionsLabel = stringResource(R.string.home_footer_grid_options)
                     val gridSearchLabel = stringResource(R.string.home_footer_search)
                     val gridLibraryOnlyLabel = stringResource(R.string.home_footer_library_only)
-                    val gridSurpriseLabel = stringResource(R.string.home_surprise_label)
+                    val gridHideGuideLabel = stringResource(R.string.home_footer_grid_hide_guide)
                     val engagedFullscreenLabel =
                         stringResource(R.string.home_footer_grid_engaged_fullscreen)
                     val engagedIsMedia = grid.engagedTile?.target is
@@ -993,7 +1006,7 @@ fun HomeScreen(
                                 add(InputButton.SELECT to gridOptionsLabel)
                                 add(InputButton.LT to gridSearchLabel)
                                 add(InputButton.RT to gridLibraryOnlyLabel)
-                                add(InputButton.RS to gridSurpriseLabel)
+                                add(InputButton.RS to gridHideGuideLabel)
                             }
                         },
                         variant = FooterVariant.SUBTLE,
@@ -1001,7 +1014,7 @@ fun HomeScreen(
                             when (button) {
                                 InputButton.LT -> viewModel.navigateToSearch()
                                 InputButton.RT -> viewModel.toggleInstalledOnly()
-                                InputButton.RS -> viewModel.surpriseMe()
+                                InputButton.RS -> footerController.toggle()
                                 else -> {}
                             }
                         }
@@ -1082,14 +1095,14 @@ fun HomeScreen(
                                 InputButton.X to stringResource(R.string.home_footer_game_details),
                                 InputButton.LT to stringResource(R.string.home_footer_search),
                                 InputButton.RT to stringResource(R.string.home_footer_library_only),
-                                InputButton.RS to stringResource(R.string.home_surprise_label)
+                                InputButton.RS to stringResource(R.string.home_footer_game_hide_guide)
                             ),
                             variant = FooterVariant.SUBTLE,
                             onHintClick = { button ->
                                 when (button) {
                                     InputButton.LT -> viewModel.navigateToSearch()
                                     InputButton.RT -> viewModel.toggleInstalledOnly()
-                                    InputButton.RS -> viewModel.surpriseMe()
+                                    InputButton.RS -> footerController.toggle()
                                     InputButton.A -> {
                                         when {
                                             focusedGame.needsInstall -> viewModel.installApk(focusedGame.id)
@@ -1122,7 +1135,7 @@ fun HomeScreen(
                             InputButton.A to stringResource(R.string.home_footer_viewall_library),
                             InputButton.LT to stringResource(R.string.home_footer_search),
                             InputButton.RT to stringResource(R.string.home_footer_library_only),
-                            InputButton.RS to stringResource(R.string.home_surprise_label)
+                            InputButton.RS to stringResource(R.string.home_footer_viewall_hide_guide)
                         ),
                         variant = FooterVariant.SUBTLE,
                         onHintClick = { button ->
@@ -1131,7 +1144,7 @@ fun HomeScreen(
                                     onNavigateToLibrary(viewAll?.platformId, viewAll?.sourceFilter)
                                 InputButton.LT -> viewModel.navigateToSearch()
                                 InputButton.RT -> viewModel.toggleInstalledOnly()
-                                InputButton.RS -> viewModel.surpriseMe()
+                                InputButton.RS -> footerController.toggle()
                                 else -> {}
                             }
                         }
@@ -1241,6 +1254,8 @@ fun HomeScreen(
             )
             }
         }
+        }
+
         }
 
         AnimatedVisibility(

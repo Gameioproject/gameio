@@ -191,7 +191,7 @@
 
     <string name="settings_home_screen_section_layout">布局</string>
     <string name="settings_home_screen_section_background">背景</string>
-    <string name="settings_home_screen_section_video">视频壁纸</string>
+    <string name="settings_home_screen_section_video">视频预览</string>
     <string name="settings_home_screen_section_content">内容</string>
 
     <string name="settings_home_screen_background_title">背景</string>
@@ -209,8 +209,8 @@
     <string name="settings_home_screen_saturation_title">饱和度</string>
     <string name="settings_home_screen_opacity_title">不透明度</string>
 
-    <string name="settings_home_screen_video_wallpaper_title">显示视频壁纸</string>
-    <string name="settings_home_screen_video_wallpaper_subtitle">在主屏幕播放视频背景</string>
+    <string name="settings_home_screen_video_wallpaper_title">显示视频预览</string>
+    <string name="settings_home_screen_video_wallpaper_subtitle">自动播放所选游戏的预告片</string>
     <string name="settings_home_screen_video_delay_title">播放前延迟</string>
     <string name="settings_home_screen_video_delay_instant">立即</string>
     <plurals name="settings_home_screen_video_delay_seconds">

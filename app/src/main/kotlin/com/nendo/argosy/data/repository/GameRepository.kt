@@ -879,6 +879,12 @@ class GameRepository @Inject constructor(
         emitAll(gameDao.observeAllList(hiddenOwnerId()))
     }
 
+    suspend fun getExploreGenrePage(
+        genre: String, platformIds: List<Long>, playableOnly: Boolean, offset: Int, limit: Int
+    ): List<GameEntity> = if (platformIds.isEmpty()) emptyList() else gameDao.getExploreGenrePage(
+        genre, platformIds, playableOnly, hiddenOwnerId(), offset, limit
+    )
+
     fun observePlayableList(): Flow<List<GameListItem>> = flow {
         emitAll(gameDao.observePlayableList(hiddenOwnerId()))
     }

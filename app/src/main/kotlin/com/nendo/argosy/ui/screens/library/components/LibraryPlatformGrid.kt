@@ -1,6 +1,7 @@
 package com.nendo.argosy.ui.screens.library.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -133,18 +134,20 @@ private fun PlatformCell(
             .argosyFocusIndicators(
                 focused = isFocused,
                 indicators = FocusIndicators.Ring,
-                shape = shape
+                shape = shape,
+                ringColor = MaterialTheme.colorScheme.secondary
             )
             .clip(shape)
             .background(
                 if (isFocused) {
-                    MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.35f)
+                    MaterialTheme.colorScheme.surfaceVariant
                 } else {
-                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
+                    MaterialTheme.colorScheme.surface
                 }
             )
+            .border(Dimens.borderThin, MaterialTheme.colorScheme.outlineVariant, shape)
             .clickableNoFocus(onClick = onClick)
-            .padding(horizontal = Dimens.spacingXs, vertical = Dimens.spacingSm),
+            .padding(horizontal = Dimens.spacingSm, vertical = Dimens.spacingMd),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         PlatformCellIcon(
@@ -162,12 +165,8 @@ private fun PlatformCell(
                 cell.name
             },
             style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold,
-            color = if (isFocused) {
-                MaterialTheme.colorScheme.onPrimaryContainer
-            } else {
-                MaterialTheme.colorScheme.onSurface
-            },
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center
@@ -201,7 +200,7 @@ private fun PlatformCellIcon(
     isFocused: Boolean
 ) {
     val tint = if (isFocused) {
-        MaterialTheme.colorScheme.onPrimaryContainer
+        MaterialTheme.colorScheme.onSurface
     } else {
         MaterialTheme.colorScheme.onSurfaceVariant
     }
@@ -243,7 +242,7 @@ private fun PlatformCellIcon(
             Text(
                 text = cell.name.take(3).uppercase(),
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Medium,
                 color = tint,
                 maxLines = 1
             )

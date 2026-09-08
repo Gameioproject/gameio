@@ -10,6 +10,7 @@ import com.nendo.argosy.data.local.entity.getDisplayName
 import com.nendo.argosy.data.media.MediaAvailability
 import com.nendo.argosy.data.platform.PlatformDefinitions
 import com.nendo.argosy.data.preferences.HomeBackgroundMode
+import com.nendo.argosy.domain.model.HomeLayoutKind
 import com.nendo.argosy.domain.model.HomeSectionKind
 import com.nendo.argosy.domain.model.PinnedCollection
 import com.nendo.argosy.domain.usecase.collection.CategoryType
@@ -212,6 +213,9 @@ sealed class HomeRow(
 }
 
 data class HomeUiState(
+    val discoveryFocus: DiscoveryFocus = DiscoveryFocus(),
+    val discoveryData: DiscoveryData = DiscoveryData(),
+    val explore: ExploreState = ExploreState(),
     val platforms: List<HomePlatformUi> = emptyList(),
     val shelves: List<HomeShelfUi> = emptyList(),
     val shelfItems: List<HomeRowItem> = emptyList(),
@@ -281,7 +285,7 @@ data class HomeUiState(
     val memcardPickerFocusIndex: Int = 0,
     val changelogEntry: com.nendo.argosy.domain.model.ChangelogEntry? = null,
     val isVideoPreviewActive: Boolean = false,
-    val videoPreviewId: String? = null,
+    val videoPreviewRequest: com.nendo.argosy.ui.screens.home.delegates.VideoPreviewRequest? = null,
     val isVideoPreviewLoading: Boolean = false,
     val muteVideoPreview: Boolean = false,
     val videoWallpaperEnabled: Boolean = false,
@@ -299,6 +303,14 @@ data class HomeUiState(
      */
     val availableRows: List<HomeRow>
         get() = buildList {
+            if (layoutKind == HomeLayoutKind.CAROUSEL) {
+                add(HomeRow.Continue)
+                addAll(platforms.indices.map { HomeRow.Platform(it) })
+                addAll(pinnedRows)
+                HomeSectionKind.TRAILING.forEach { kind -> fixedRow(kind)?.let { add(it) } }
+                addAll(repeatingRows(HomeSectionKind.MEDIA_LIBRARY))
+                return@buildList
+            }
             HomeSectionKind.LEADING.forEach { kind ->
                 if (kind == HomeSectionKind.FAVORITES) {
                     addAll(shelves.indices.map { HomeRow.Shelf(it) })
@@ -411,7 +423,7 @@ data class HomeUiState(
      * the row was theirs, and an existing shelf should not move when titles start appearing after it.
      */
     val currentItems: List<HomeRowItem>
-        get() = when (currentRow) {
+        get() = if (isDiscoveryHome) discoveryItems else when (currentRow) {
             HomeRow.Favorites -> {
                 if (!hasFavorites) emptyList()
                 else favoriteGames.map { HomeRowItem.Game(it) } +

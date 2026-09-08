@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="discovery_home">首頁</string>
+    <string name="discovery_library">遊戲庫</string>
+    <string name="discovery_favorites">最愛</string>
+    <string name="discovery_on_device">在此裝置上</string>
+    <string name="discovery_continue">繼續遊玩</string>
+    <string name="discovery_all_platforms">所有平台</string>
+    <string name="discovery_details">詳情</string>
+    <string name="discovery_resume">繼續播放</string>
+    <string name="discovery_play">播放</string>
+    <string name="discovery_download">下載</string>
+    <string name="discovery_install">安裝</string>
+    <string name="discovery_favorite">最愛</string>
+    <string name="discovery_unfavorite">取消最愛</string>
+    <string name="discovery_search">搜尋</string>
+    <string name="discovery_all_games">全部遊戲</string>
+    <string name="discovery_available">可用</string>
+    <string name="discovery_library_only">僅顯示已下載</string>
+    <string name="discovery_retry">重試</string>
+    <string name="discovery_platform">平台</string>
+    <string name="discovery_explore">探索</string>
+    <string name="discovery_top_rated">高分遊戲</string>
+    <string name="discovery_recommended">為你推薦</string>
+    <string name="discovery_hero_fallback">探索你的遊戲</string>
+    <string name="discovery_full_library">完整遊戲庫</string>
+    <string name="discovery_surprise">隨機推薦</string>
+    <string name="discovery_empty_catalog">沒有符合的遊戲。請嘗試所有遊戲或其他平台。</string>
+    <string name="discovery_empty_library">此裝置上還沒有遊戲。探索目錄並下載遊戲。</string>
+    <string name="discovery_empty_favorites">收藏的遊戲會顯示在這裡。收藏遊戲，方便以後遊玩。</string>
+    <string name="discovery_empty_recommended">遊玩幾款遊戲即可獲得推薦。先看看高分遊戲吧。</string>
+    <string name="discovery_loading">正在載入遊戲…</string>
+    <string name="discovery_error">無法重新整理目錄。請檢查網路連線後重試。</string>
+    <string name="discovery_no_recent">最近玩過的遊戲會顯示在這裡。向下探索，尋找遊戲。</string>
+    <string name="discovery_no_platforms">在設定中追蹤平台，即可探索該平台的遊戲。</string>
+    <string name="discovery_rating">社群評分 %1$d%%</string>
+    <string name="discovery_offline">離線 · 正在顯示已儲存的遊戲</string>
+</resources>

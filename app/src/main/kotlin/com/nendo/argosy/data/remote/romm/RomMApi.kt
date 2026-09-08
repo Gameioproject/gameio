@@ -78,7 +78,9 @@ interface RomMApi {
 
     @GET("api/roms/random")
     suspend fun getRandomRom(
-        @Query("min_rating") minRating: Float = 75f
+        @Query("min_rating") minRating: Float = 75f,
+        @Query("platform_slugs") platformSlugs: String? = null,
+        @Query("owned") owned: Boolean = false
     ): Response<RomMRom>
 
     @GET("api/roms/identifiers")

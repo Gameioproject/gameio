@@ -1,6 +1,8 @@
 package com.nendo.argosy.ui.screens.library
 
 import androidx.annotation.PluralsRes
+import com.nendo.argosy.ui.theme.generated.ComponentDefaults.ConsoleUi
+import com.nendo.argosy.ui.theme.generated.DimensionTokens
 import com.nendo.argosy.R
 import com.nendo.argosy.data.local.entity.MediaCollectionType
 import com.nendo.argosy.data.local.entity.MediaLibraryEntity
@@ -167,3 +169,10 @@ fun allGamesCell(gameCount: Int): LibraryCellUi = LibraryCellUi(
     itemCount = gameCount,
     logoPath = null
 )
+
+internal fun libraryPlatformColumns(preferredColumns: Int, screenWidthDp: Int): Int {
+    val preferred = preferredColumns.coerceAtLeast(1)
+    if (screenWidthDp <= 0) return preferred
+    val cellWidth = ConsoleUi.systemCellMinWidthDp + DimensionTokens.Layout.listGap
+    return minOf(preferred, (screenWidthDp / cellWidth).coerceAtLeast(1))
+}

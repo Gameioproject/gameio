@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="discovery_home">首页</string>
+    <string name="discovery_library">游戏库</string>
+    <string name="discovery_favorites">收藏</string>
+    <string name="discovery_on_device">在此设备上</string>
+    <string name="discovery_continue">继续游玩</string>
+    <string name="discovery_all_platforms">所有平台</string>
+    <string name="discovery_details">详情</string>
+    <string name="discovery_resume">继续观看</string>
+    <string name="discovery_play">播放</string>
+    <string name="discovery_download">下载</string>
+    <string name="discovery_install">安装</string>
+    <string name="discovery_favorite">收藏</string>
+    <string name="discovery_unfavorite">取消收藏</string>
+    <string name="discovery_search">搜索</string>
+    <string name="discovery_all_games">全部游戏</string>
+    <string name="discovery_available">可用</string>
+    <string name="discovery_library_only">仅显示已下载</string>
+    <string name="discovery_retry">重试</string>
+    <string name="discovery_platform">平台</string>
+    <string name="discovery_explore">探索</string>
+    <string name="discovery_top_rated">高分游戏</string>
+    <string name="discovery_recommended">为你推荐</string>
+    <string name="discovery_hero_fallback">探索你的游戏</string>
+    <string name="discovery_full_library">完整游戏库</string>
+    <string name="discovery_surprise">随机推荐</string>
+    <string name="discovery_empty_catalog">没有匹配的游戏。请尝试所有游戏或其他平台。</string>
+    <string name="discovery_empty_library">此设备上还没有游戏。探索目录并下载游戏。</string>
+    <string name="discovery_empty_favorites">收藏的游戏会显示在这里。收藏游戏，方便以后游玩。</string>
+    <string name="discovery_empty_recommended">游玩几款游戏即可获得推荐。先看看高分游戏吧。</string>
+    <string name="discovery_loading">正在加载游戏…</string>
+    <string name="discovery_error">无法刷新目录。请检查网络连接后重试。</string>
+    <string name="discovery_no_recent">最近玩过的游戏会显示在这里。向下探索，寻找游戏。</string>
+    <string name="discovery_no_platforms">在设置中关注平台，即可探索该平台的游戏。</string>
+    <string name="discovery_rating">社区评分 %1$d%%</string>
+    <string name="discovery_offline">离线 · 正在显示已保存的游戏</string>
+</resources>

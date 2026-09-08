@@ -829,6 +829,25 @@ interface GameDao {
         limit: Int
     ): List<GameListItem>
 
+    @Query("""
+        SELECT * FROM games
+        WHERE platformId IN (:platformIds)
+        AND NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id
+            AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
+        AND instr(',' || lower(replace(COALESCE(genres, genre, ''), ', ', ',')) || ',',
+            ',' || lower(:genre) || ',') > 0
+        AND (:playableOnly = 0 OR (
+            source IN ('LOCAL_ONLY', 'ROMM_SYNCED', 'STEAM', 'ANDROID_APP')
+            AND (source != 'STEAM' OR localPath IS NOT NULL
+                OR (steamLauncher IS NOT NULL AND steamLauncher != 'native'))))
+        ORDER BY rating DESC, id ASC
+        LIMIT :limit OFFSET :offset
+    """)
+    suspend fun getExploreGenrePage(
+        genre: String, platformIds: List<Long>, playableOnly: Boolean,
+        ownerUserId: Long?, offset: Int, limit: Int
+    ): List<GameEntity>
+
     @Query("SELECT * FROM games WHERE screenshotPaths IS NOT NULL AND cachedScreenshotPaths IS NULL AND rommId IS NOT NULL")
     suspend fun getGamesWithUncachedScreenshots(): List<GameEntity>
 

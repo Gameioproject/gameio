@@ -1,6 +1,5 @@
 package com.nendo.argosy.ui.screens.firstrun
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -11,7 +10,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,56 +18,37 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Folder
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -83,38 +62,14 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.TextField
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.ui.draw.clip
-import androidx.compose.foundation.layout.offset
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.layout.BoxWithConstraints
 import com.nendo.argosy.R
-import com.nendo.argosy.data.remote.romm.DEFAULT_SERVER_URL
-import com.nendo.argosy.data.local.entity.PlatformEntity
-import androidx.compose.runtime.CompositionLocalProvider
-import com.nendo.argosy.ui.components.FooterStyleConfig
-import com.nendo.argosy.ui.components.LocalFooterStyle
-import com.nendo.argosy.ui.components.GameioBrand
-import com.nendo.argosy.ui.components.GameioMark
 import com.nendo.argosy.ui.components.PermissionCard
-import com.nendo.argosy.ui.components.PlatformFilterHeader
-import com.nendo.argosy.ui.components.SwitchPreference
 import com.nendo.argosy.ui.filebrowser.FileBrowserMode
 import com.nendo.argosy.ui.filebrowser.FileBrowserScreen
 import com.nendo.argosy.ui.input.LocalInputDispatcher
-import androidx.compose.ui.graphics.Color
 import com.nendo.argosy.ui.primitives.ActionButton
 import com.nendo.argosy.ui.theme.Dimens
-import com.nendo.argosy.ui.theme.LocalArgosyTheme
-import com.nendo.argosy.util.PlatformFilterLogic
 
 @Composable
 fun FirstRunScreen(
@@ -208,7 +163,7 @@ fun FirstRunScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         AnimatedContent(
@@ -372,518 +327,6 @@ private fun StepColumn(
             .padding(horizontal = Dimens.spacingXl, vertical = Dimens.spacingMd),
         content = content
     )
-}
-
-@Composable
-private fun WelcomeStep(isFocused: Boolean, onGetStarted: () -> Unit) {
-    GioBackdrop {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(Dimens.spacingXl)
-        ) {
-            GameioMark(tile = false, modifier = Modifier.size(120.dp))
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = "Gameio",
-                color = GioInk,
-                fontSize = 52.sp,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = (-1.8).sp
-            )
-            Text(
-                text = stringResource(R.string.firstrun_brand_tagline),
-                color = GioAccent,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = (-0.2).sp
-            )
-            Spacer(modifier = Modifier.height(14.dp))
-            Text(
-                text = stringResource(R.string.firstrun_welcome_intro),
-                color = GioDim,
-                fontSize = 15.sp,
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(30.dp))
-            GioPrimaryButton(
-                text = stringResource(R.string.firstrun_welcome_button_start),
-                isFocused = isFocused,
-                onClick = onGetStarted
-            )
-        }
-    }
-}
-
-@Composable
-private fun RommLoginStep(
-    url: String,
-    urlCommitted: Boolean,
-    username: String,
-    password: String,
-    isConnecting: Boolean,
-    error: String?,
-    focusedIndex: Int,
-    rommFocusField: Int?,
-    onUrlChange: (String) -> Unit,
-    onUsernameChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit,
-    onCommitUrl: () -> Unit,
-    onEditUrl: () -> Unit,
-    onConnect: () -> Unit,
-    onBack: () -> Unit,
-    onClearFocusField: () -> Unit,
-    keyboardField: Int?,
-    keyboardText: String,
-    onKeyboardTextChange: (String) -> Unit,
-    onKeyboardDismiss: () -> Unit
-) {
-    val urlFocusRequester = remember { FocusRequester() }
-    val usernameFocusRequester = remember { FocusRequester() }
-    val passwordFocusRequester = remember { FocusRequester() }
-    val focusManager: FocusManager = LocalFocusManager.current
-    val keyboard: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current
-
-    var wasUrlFocused by remember { mutableStateOf(false) }
-    val canConnect = url.isNotBlank() && username.isNotBlank() && password.isNotBlank()
-
-    LaunchedEffect(rommFocusField) {
-        when (rommFocusField) {
-            0 -> urlFocusRequester.requestFocus()
-            1 -> usernameFocusRequester.requestFocus()
-            2 -> passwordFocusRequester.requestFocus()
-        }
-        if (rommFocusField != null) {
-            onClearFocusField()
-        }
-    }
-    LaunchedEffect(focusedIndex, urlCommitted) {
-        val onAField = if (urlCommitted) focusedIndex <= 2 else focusedIndex == 0
-        if (!onAField) {
-            keyboard?.hide()
-            focusManager.clearFocus()
-        }
-    }
-
-    GioBackdrop {
-        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
-            val twoPane = maxWidth > maxHeight
-
-            val brand: @Composable () -> Unit = {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    GameioMark(tile = false, modifier = Modifier.size(if (twoPane) 112.dp else 76.dp))
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = "Gameio",
-                        color = GioInk,
-                        fontSize = if (twoPane) 44.sp else 34.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = (-1.4).sp
-                    )
-                    Text(
-                        text = stringResource(R.string.firstrun_brand_tagline),
-                        color = GioAccent,
-                        fontSize = if (twoPane) 16.sp else 14.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = if (urlCommitted) {
-                            stringResource(R.string.firstrun_romm_sign_in_hint)
-                        } else {
-                            stringResource(R.string.firstrun_romm_url_hint)
-                        },
-                        color = GioDim,
-                        fontSize = 13.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.widthIn(max = 340.dp)
-                    )
-                }
-            }
-
-            val keyboardOpen = keyboardField != null
-            val keyboardPane: @Composable () -> Unit = {
-                com.nendo.argosy.ui.components.ConsoleKeyboardOverlay(
-                    query = keyboardText,
-                    onQueryChange = onKeyboardTextChange,
-                    onDismiss = onKeyboardDismiss,
-                    placeholder = when (keyboardField) {
-                        0 -> DEFAULT_SERVER_URL
-                        1 -> stringResource(R.string.settings_romm_config_username_label)
-                        else -> stringResource(R.string.settings_romm_config_password_label)
-                    },
-                    embedded = true,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-
-            val form: @Composable () -> Unit = {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .widthIn(max = 560.dp)
-                        .background(GioPanel, RoundedCornerShape(22.dp))
-                        .padding(horizontal = 22.dp, vertical = 26.dp)
-                ) {
-                    if (!urlCommitted) {
-                        GioTextField(
-                            value = url,
-                            onValueChange = onUrlChange,
-                            label = stringResource(R.string.firstrun_romm_url_field_label),
-                            placeholder = DEFAULT_SERVER_URL,
-                            gamepadFocused = focusedIndex == 0,
-                            focusRequester = urlFocusRequester,
-                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
-                            keyboardActions = KeyboardActions(
-                                onGo = {
-                                    if (!isConnecting && url.isNotBlank()) {
-                                        keyboard?.hide()
-                                        focusManager.clearFocus()
-                                        onCommitUrl()
-                                    }
-                                }
-                            ),
-                            onFocusChanged = { focused ->
-                                if (wasUrlFocused && !focused && url.isNotBlank()) onCommitUrl()
-                                wasUrlFocused = focused
-                            }
-                        )
-                        GioError(error)
-                        Spacer(modifier = Modifier.height(22.dp))
-                        Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMd)) {
-                            GioPrimaryButton(
-                                text = if (isConnecting) {
-                                    stringResource(R.string.firstrun_romm_url_button_checking)
-                                } else {
-                                    stringResource(R.string.firstrun_romm_url_button_continue)
-                                },
-                                isFocused = focusedIndex == 1,
-                                enabled = !isConnecting && url.isNotBlank(),
-                                onClick = onCommitUrl
-                            )
-                            GioGhostButton(
-                                text = stringResource(R.string.firstrun_romm_url_button_back),
-                                isFocused = focusedIndex == 2,
-                                onClick = onBack
-                            )
-                        }
-                    } else {
-                        GioTextField(
-                            value = username,
-                            onValueChange = onUsernameChange,
-                            label = stringResource(R.string.settings_romm_config_username_label),
-                            gamepadFocused = focusedIndex == 1,
-                            focusRequester = usernameFocusRequester,
-                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                            keyboardActions = KeyboardActions(
-                                onNext = { passwordFocusRequester.requestFocus() }
-                            )
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                        GioTextField(
-                            value = password,
-                            onValueChange = onPasswordChange,
-                            label = stringResource(R.string.settings_romm_config_password_label),
-                            gamepadFocused = focusedIndex == 2,
-                            focusRequester = passwordFocusRequester,
-                            isPassword = true,
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Password,
-                                imeAction = ImeAction.Go
-                            ),
-                            keyboardActions = KeyboardActions(
-                                onGo = {
-                                    if (!isConnecting && canConnect) {
-                                        keyboard?.hide()
-                                        focusManager.clearFocus()
-                                        onConnect()
-                                    }
-                                }
-                            )
-                        )
-                        GioError(error)
-                        Spacer(modifier = Modifier.height(22.dp))
-                        Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMd)) {
-                            GioPrimaryButton(
-                                text = if (isConnecting) {
-                                    stringResource(R.string.firstrun_romm_sign_in_connecting)
-                                } else {
-                                    stringResource(R.string.firstrun_romm_sign_in_button)
-                                },
-                                isFocused = focusedIndex == 3,
-                                enabled = !isConnecting && canConnect,
-                                onClick = onConnect
-                            )
-                            GioGhostButton(
-                                text = stringResource(R.string.firstrun_romm_sign_in_change_server),
-                                isFocused = focusedIndex == 4,
-                                enabled = !isConnecting,
-                                onClick = onEditUrl
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(14.dp))
-                        Text(
-                            text = url.removePrefix("https://").removePrefix("http://").trimEnd('/'),
-                            color = GioFaint,
-                            fontSize = 12.sp
-                        )
-                    }
-                }
-            }
-
-            if (twoPane) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(horizontal = Dimens.spacingXl, vertical = Dimens.spacingMd)
-                ) {
-                    Box(
-                        modifier = Modifier.weight(if (keyboardOpen) 1.15f else 0.9f),
-                        contentAlignment = Alignment.Center
-                    ) { if (keyboardOpen) keyboardPane() else brand() }
-                    Spacer(modifier = Modifier.width(Dimens.spacingXl))
-                    Box(
-                        modifier = Modifier.weight(if (keyboardOpen) 0.85f else 1.1f),
-                        contentAlignment = Alignment.Center
-                    ) { form() }
-                }
-            } else {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(horizontal = Dimens.spacingXl, vertical = Dimens.spacingMd)
-                ) {
-                    if (keyboardOpen) keyboardPane() else brand()
-                    Spacer(modifier = Modifier.height(24.dp))
-                    form()
-                }
-            }
-        }
-    }
-}
-
-
-// ---- The sign-in is the first thing anyone sees, so it is the brand: the launcher icon's
-// blue tile as the ground, the fanned covers as the mark, and the front cover's yellow as the
-// focus colour. Flat colour throughout, no glows.
-
-private val GioGround = Color(0xFF070C1F)
-private val GioPanel = Color(0xFF101A3C)
-private val GioFieldBg = Color(0xFF192657)
-private val GioLine = Color(0x40FFFFFF)
-private val GioInk = Color.White
-private val GioDim = Color(0xB8FFFFFF)
-private val GioFaint = Color(0x66FFFFFF)
-private val GioAccent = GameioBrand.Cover
-private val GioErrorRed = Color(0xFFFFC2B3)
-
-@Composable
-private fun GioBackdrop(content: @Composable () -> Unit) {
-    CompositionLocalProvider(LocalFooterStyle provides FooterStyleConfig(useAccentColor = true)) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(GioGround)
-    ) {
-        GameioMark(
-            tile = false,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .size(460.dp)
-                .offset(x = 150.dp, y = 170.dp)
-                .alpha(0.14f)
-        )
-        content()
-    }
-    }
-}
-
-@Composable
-private fun GioTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    gamepadFocused: Boolean,
-    focusRequester: FocusRequester,
-    placeholder: String? = null,
-    isPassword: Boolean = false,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    onFocusChanged: ((Boolean) -> Unit)? = null
-) {
-    val shape = RoundedCornerShape(12.dp)
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        placeholder = placeholder?.let { { Text(it, color = GioFaint) } },
-        singleLine = true,
-        shape = shape,
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedTextColor = GioInk,
-            unfocusedTextColor = GioInk,
-            focusedContainerColor = GioFieldBg,
-            unfocusedContainerColor = GioFieldBg,
-            focusedBorderColor = GioAccent,
-            unfocusedBorderColor = GioLine,
-            focusedLabelColor = GioAccent,
-            unfocusedLabelColor = GioDim,
-            cursorColor = GioAccent
-        ),
-        modifier = Modifier
-            .widthIn(max = 520.dp)
-            .fillMaxWidth(0.92f)
-            .focusRequester(focusRequester)
-            .then(
-                if (onFocusChanged != null) {
-                    Modifier.onFocusChanged { onFocusChanged(it.isFocused) }
-                } else Modifier
-            )
-            .then(
-                // the gamepad cursor, distinct from IME focus
-                if (gamepadFocused) Modifier.border(2.dp, GioAccent, shape) else Modifier
-            )
-    )
-}
-
-@Composable
-private fun GioError(message: String?) {
-    if (message == null) return
-    Spacer(modifier = Modifier.height(14.dp))
-    Text(
-        text = message,
-        color = GioErrorRed,
-        fontSize = 13.sp,
-        textAlign = TextAlign.Center,
-        modifier = Modifier.widthIn(max = 460.dp)
-    )
-}
-
-@Composable
-private fun GioPrimaryButton(
-    text: String,
-    isFocused: Boolean,
-    onClick: () -> Unit,
-    enabled: Boolean = true
-) {
-    val shape = RoundedCornerShape(12.dp)
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .clip(shape)
-            .background(if (enabled) GioInk else GioInk.copy(alpha = 0.22f))
-            .then(if (isFocused) Modifier.border(3.dp, GioAccent, shape) else Modifier)
-            .clickable(enabled = enabled, onClick = onClick)
-            .padding(horizontal = 30.dp, vertical = 14.dp)
-    ) {
-        Text(
-            text = text,
-            color = if (enabled) GioGround else GioInk.copy(alpha = 0.6f),
-            fontWeight = FontWeight.ExtraBold,
-            fontSize = 15.sp,
-            maxLines = 1
-        )
-    }
-}
-
-@Composable
-private fun GioGhostButton(
-    text: String,
-    isFocused: Boolean,
-    onClick: () -> Unit,
-    enabled: Boolean = true
-) {
-    val shape = RoundedCornerShape(12.dp)
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .clip(shape)
-            .border(if (isFocused) 3.dp else 1.5.dp, if (isFocused) GioAccent else GioLine, shape)
-            .clickable(enabled = enabled, onClick = onClick)
-            .padding(horizontal = 26.dp, vertical = 14.dp)
-    ) {
-        Text(
-            text = text,
-            color = if (isFocused) GioInk else GioDim,
-            fontWeight = FontWeight.Medium,
-            fontSize = 15.sp,
-            maxLines = 1
-        )
-    }
-}
-
-@Composable
-private fun RommSuccessStep(
-    serverName: String,
-    gameCount: Int,
-    platformCount: Int,
-    isFocused: Boolean,
-    onContinue: () -> Unit
-) {
-    GioBackdrop {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(Dimens.spacingXl)
-        ) {
-            GameioMark(tile = false, modifier = Modifier.size(96.dp))
-            Spacer(modifier = Modifier.height(10.dp))
-            Icon(
-                Icons.Default.Check,
-                contentDescription = null,
-                tint = GioAccent,
-                modifier = Modifier.size(40.dp)
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = stringResource(R.string.firstrun_romm_success_title),
-                color = GioInk,
-                fontSize = 30.sp,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = (-0.8).sp,
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(14.dp))
-            Text(
-                text = stringResource(R.string.firstrun_romm_success_server, serverName),
-                color = GioDim,
-                fontSize = 15.sp,
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = stringResource(
-                    R.string.firstrun_romm_success_library,
-                    pluralStringResource(R.plurals.firstrun_romm_success_game_count, gameCount, gameCount),
-                    pluralStringResource(R.plurals.firstrun_romm_success_platform_count, platformCount, platformCount)
-                ),
-                color = GioAccent,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(28.dp))
-            GioPrimaryButton(
-                text = stringResource(R.string.firstrun_romm_success_button_continue),
-                isFocused = isFocused,
-                onClick = onContinue
-            )
-        }
-    }
 }
 
 @Composable
@@ -1136,137 +579,6 @@ private fun ImageCacheStep(
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-    }
-}
-
-@Composable
-private fun PlatformSelectStep(
-    platforms: List<PlatformEntity>,
-    filterMode: PlatformFilterLogic.FilterMode,
-    searchQuery: String,
-    focusedIndex: Int,
-    buttonFocusIndex: Int,
-    headerFocused: Boolean,
-    headerIndex: Int,
-    searchActive: Boolean,
-    sortMenuOpen: Boolean,
-    sortMenuIndex: Int,
-    onToggle: (Long) -> Unit,
-    onToggleAll: () -> Unit,
-    onSortModeChange: (PlatformFilterLogic.SortMode) -> Unit,
-    onFilterModeChange: () -> Unit,
-    onSearchQueryChange: (String) -> Unit,
-    onOpenSearch: () -> Unit,
-    onCloseSearch: () -> Unit,
-    onOpenSortMenu: () -> Unit,
-    onCloseSortMenu: () -> Unit,
-    onContinue: () -> Unit
-) {
-    val listState = rememberLazyListState()
-    val enabledCount = platforms.count { it.syncEnabled }
-    val allEnabled = platforms.isNotEmpty() && enabledCount == platforms.size
-    val isOnButtons = !headerFocused && focusedIndex >= platforms.size
-
-    LaunchedEffect(focusedIndex, headerFocused) {
-        if (!headerFocused && platforms.isNotEmpty() && focusedIndex in platforms.indices) {
-            listState.animateScrollToItem(focusedIndex)
-        }
-    }
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = Dimens.spacingXl, vertical = Dimens.spacingMd)
-    ) {
-        Text(
-            text = stringResource(R.string.firstrun_platform_select_eyebrow),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Spacer(modifier = Modifier.height(Dimens.spacingSm))
-        Text(
-            text = stringResource(R.string.firstrun_platform_select_title),
-            style = MaterialTheme.typography.headlineSmall
-        )
-        Spacer(modifier = Modifier.height(Dimens.spacingSm))
-        Text(
-            text = pluralStringResource(
-                R.plurals.firstrun_platform_select_selected_count,
-                platforms.size,
-                enabledCount,
-                platforms.size
-            ),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(modifier = Modifier.height(Dimens.spacingSm))
-
-        PlatformFilterHeader(
-            platformCount = platforms.size,
-            filterMode = filterMode,
-            searchQuery = searchQuery,
-            headerFocused = headerFocused,
-            headerIndex = headerIndex,
-            searchActive = searchActive,
-            sortMenuOpen = sortMenuOpen,
-            sortMenuIndex = sortMenuIndex,
-            onSearchQueryChange = onSearchQueryChange,
-            onSortModeChange = onSortModeChange,
-            onFilterModeChange = onFilterModeChange,
-            onOpenSearch = onOpenSearch,
-            onCloseSearch = onCloseSearch,
-            onOpenSortMenu = onOpenSortMenu,
-            onCloseSortMenu = onCloseSortMenu,
-            modifier = Modifier.fillMaxWidth(0.9f)
-        )
-        Spacer(modifier = Modifier.height(Dimens.spacingMd))
-
-        LazyColumn(
-            state = listState,
-            modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(Dimens.spacingSm)
-        ) {
-            itemsIndexed(platforms, key = { _, p -> p.id }) { index, platform ->
-                val isFocused = !headerFocused && index == focusedIndex
-                SwitchPreference(
-                    title = platform.name,
-                    subtitle = pluralStringResource(
-                        R.plurals.firstrun_platform_select_game_count,
-                        platform.gameCount,
-                        platform.gameCount
-                    ),
-                    isEnabled = platform.syncEnabled,
-                    isFocused = isFocused,
-                    onToggle = { onToggle(platform.id) }
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(Dimens.spacingMd))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(0.9f),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMd)
-        ) {
-            FocusableOutlinedButton(
-                text = if (allEnabled) {
-                    stringResource(R.string.firstrun_platform_select_button_deselect_all)
-                } else {
-                    stringResource(R.string.firstrun_platform_select_button_select_all)
-                },
-                isFocused = isOnButtons && buttonFocusIndex == 0,
-                onClick = onToggleAll
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            FocusableButton(
-                text = stringResource(R.string.firstrun_platform_select_button_continue),
-                isFocused = isOnButtons && buttonFocusIndex == 1,
-                onClick = onContinue
-            )
-        }
     }
 }
 
@@ -1619,19 +931,7 @@ private fun FocusableButton(
     enabled: Boolean = true,
     icon: androidx.compose.ui.graphics.vector.ImageVector? = null
 ) {
-    val labelColor = if (enabled) Color.White else LocalArgosyTheme.current.textMute
-    ActionButton(
-        onClick = onClick,
-        focused = isFocused,
-        primary = true,
-        enabled = enabled
-    ) {
-        if (icon != null) {
-            Icon(icon, contentDescription = null, tint = labelColor)
-            Spacer(modifier = Modifier.width(Dimens.spacingSm))
-        }
-        Text(text, style = MaterialTheme.typography.titleSmall, color = labelColor, maxLines = 1)
-    }
+    SetupPrimaryButton(text, isFocused, onClick, enabled, icon)
 }
 
 @Composable
@@ -1641,10 +941,5 @@ private fun FocusableOutlinedButton(
     onClick: () -> Unit,
     enabled: Boolean = true
 ) {
-    ActionButton(
-        label = text,
-        onClick = onClick,
-        focused = isFocused,
-        enabled = enabled
-    )
+    SetupSecondaryButton(text, isFocused, onClick, enabled)
 }

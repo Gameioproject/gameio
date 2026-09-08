@@ -64,6 +64,7 @@
         "surfaceVariant":   { "$ref": "#/$defs/colorValue" },
         "background":       { "$ref": "#/$defs/colorValue" },
         "onSurface":        { "$ref": "#/$defs/colorValue" },
+        "onSurfaceVariant": { "$ref": "#/$defs/colorValue" },
         "outline":          { "$ref": "#/$defs/colorValue" },
         "outlineVariant":   { "$ref": "#/$defs/colorValue" }
       }

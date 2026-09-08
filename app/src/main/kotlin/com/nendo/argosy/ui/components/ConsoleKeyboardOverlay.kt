@@ -1,6 +1,11 @@
 package com.nendo.argosy.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.ui.text.style.TextOverflow
+import com.nendo.argosy.ui.theme.generated.ComponentDefaults.ConsoleUi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +48,7 @@ fun ConsoleKeyboardOverlay(
     // Embedded drops the scrim and the centering, so the caller can seat the
     // keyboard in its own pane instead of floating it over the screen.
     embedded: Boolean = false,
+    isPassword: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val dispatcher = LocalInputDispatcher.current
@@ -121,6 +127,14 @@ fun ConsoleKeyboardOverlay(
                 return InputResult.HANDLED
             }
 
+            override fun onMenu() = InputResult.HANDLED
+            override fun onSelect() = InputResult.HANDLED
+            override fun onPrevTrigger() = InputResult.HANDLED
+            override fun onNextTrigger() = InputResult.HANDLED
+            override fun onLeftStickClick() = InputResult.HANDLED
+            override fun onRightStickClick() = InputResult.HANDLED
+            override fun onLongConfirm() = InputResult.HANDLED
+
             override fun onBack(): InputResult {
                 dismissNow.value()
                 return InputResult.HANDLED
@@ -134,24 +148,39 @@ fun ConsoleKeyboardOverlay(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Dimens.spacingSm),
-            modifier = (if (embedded) modifier else Modifier.widthIn(max = OVERLAY_MAX_WIDTH).fillMaxWidth())
+            modifier = (if (embedded) modifier else Modifier.widthIn(max = ConsoleUi.formWidthDp.dp).fillMaxWidth())
                 .background(
                     MaterialTheme.colorScheme.surface,
                     RoundedCornerShape(Dimens.radiusLg)
                 )
+                .border(Dimens.borderThin, MaterialTheme.colorScheme.outline, RoundedCornerShape(Dimens.radiusLg))
                 .clickableNoFocus(onClick = {})
                 .padding(Dimens.spacingMd)
         ) {
-            Text(
-                text = query.ifEmpty { placeholder },
-                style = MaterialTheme.typography.titleLarge,
-                color = if (query.isEmpty()) {
-                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                } else {
-                    MaterialTheme.colorScheme.onSurface
-                },
-                maxLines = 1
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSm),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                KeyboardToolbarButton(
+                    label = stringResource(R.string.search_kb_caps),
+                    selected = caps.value,
+                    onClick = { caps.value = !caps.value }
+                )
+                Text(
+                    text = if (isPassword) "•".repeat(query.length).ifEmpty { placeholder } else query.ifEmpty { placeholder },
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = if (query.isEmpty()) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f).padding(horizontal = Dimens.spacingSm)
+                )
+                KeyboardToolbarButton(
+                    label = stringResource(R.string.search_kb_done),
+                    selected = false,
+                    onClick = onDismiss
+                )
+            }
             ConsoleKeyboard(
                 focusedRow = row.intValue,
                 focusedCol = col.intValue,
@@ -169,7 +198,16 @@ fun ConsoleKeyboardOverlay(
                     InputButton.Y to stringResource(R.string.search_kb_space),
                     InputButton.LB_RB to stringResource(R.string.search_kb_caps),
                     InputButton.B to stringResource(R.string.search_kb_done)
-                )
+                ),
+                onHintClick = { button ->
+                    when (button) {
+                        InputButton.X -> applyAt(ConsoleKeyboardLayout.ACTION_ROW, 1)
+                        InputButton.Y -> applyAt(ConsoleKeyboardLayout.ACTION_ROW, 0)
+                        InputButton.LB_RB -> caps.value = !caps.value
+                        InputButton.B -> onDismiss()
+                        else -> Unit
+                    }
+                }
             )
         }
     }
@@ -189,5 +227,17 @@ fun ConsoleKeyboardOverlay(
     }
 }
 
-/** Ten 44dp keys with their gaps and inset; narrower screens shrink the keys instead. */
-private val OVERLAY_MAX_WIDTH = 520.dp
+@Composable
+private fun KeyboardToolbarButton(label: String, selected: Boolean, onClick: () -> Unit) {
+    val colors = MaterialTheme.colorScheme
+    val shape = RoundedCornerShape(Dimens.radiusMd)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.heightIn(min = Dimens.buttonHeight)
+            .background(if (selected) colors.onSurface else colors.surfaceVariant, shape)
+            .clickableNoFocus(onClick = onClick)
+            .padding(horizontal = Dimens.spacingMd, vertical = Dimens.spacingXs)
+    ) {
+        Text(label, style = MaterialTheme.typography.labelLarge, color = if (selected) colors.background else colors.onSurface)
+    }
+}

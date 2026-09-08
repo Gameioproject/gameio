@@ -291,7 +291,9 @@ fun ArgosyApp(
         )
     }
 
-    val footerHostController = remember { FooterHostController() }
+    val footerHostController = androidx.compose.runtime.saveable.rememberSaveable(
+        saver = FooterHostController.Saver
+    ) { FooterHostController() }
 
     val rootFocusRequester = remember { FocusRequester() }
     var resumeCount by remember { mutableStateOf(0) }
@@ -942,6 +944,10 @@ fun ArgosyApp(
     // Collect gamepad events (Menu toggles drawer, L3 toggles quick menu, R3 toggles quick settings)
     LaunchedEffect(Unit) {
         viewModel.gamepadInputHandler.eventFlow().collect { input ->
+            if (footerHostController.handleInput(input)) {
+                if (!input.isRepeat) viewModel.soundManager.play(SoundType.TOGGLE)
+                return@collect
+            }
             val result = inputDispatcher.dispatch(input)
             val event = input.event
             if (!result.handled && !inputDispatcher.hasActiveModal()) {

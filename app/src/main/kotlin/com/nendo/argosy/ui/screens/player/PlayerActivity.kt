@@ -284,6 +284,7 @@ class PlayerActivity : ComponentActivity() {
         GamepadEvent.LeftStickClick -> inputHandler.onLeftStickClick()
         GamepadEvent.RightStickClick -> inputHandler.onRightStickClick()
         GamepadEvent.LongConfirm -> inputHandler.onLongConfirm()
+        GamepadEvent.ToggleGuide -> InputResult.HANDLED
         GamepadEvent.Home -> InputResult.UNHANDLED
     }
 

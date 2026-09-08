@@ -17,6 +17,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.saveable.Saver
+import com.nendo.argosy.ui.input.GamepadEvent
+import com.nendo.argosy.ui.input.GamepadInput
 import androidx.compose.ui.unit.dp
 import com.nendo.argosy.ui.theme.Dimens
 import com.nendo.argosy.ui.theme.Motion
@@ -33,7 +38,27 @@ data class FooterEntry(
 )
 
 /** Singleton hint stack backing the app-root guide bar; the most recently registered active surface wins. */
-class FooterHostController {
+class FooterHostController(initiallyHidden: Boolean = false) {
+    companion object {
+        val Saver = Saver<FooterHostController, Boolean>(
+            save = { it.isHidden },
+            restore = { FooterHostController(it) }
+        )
+    }
+
+    var isHidden by mutableStateOf(initiallyHidden)
+        private set
+
+    fun toggle() {
+        isHidden = !isHidden
+    }
+
+    fun handleInput(input: GamepadInput): Boolean {
+        if (input.event != GamepadEvent.ToggleGuide) return false
+        if (!input.isRepeat) toggle()
+        return true
+    }
+
     private var nextId = 0L
     private val stack = mutableStateListOf<Pair<Long, FooterEntry>>()
 
@@ -101,31 +126,39 @@ fun FooterHost(
 ) {
     val entry = controller.top
     val density = LocalDensity.current
-    val measured = modifier.onSizeChanged { size ->
+    val measured = Modifier.onSizeChanged { size ->
         controller.measuredHeight = with(density) { size.height.toDp() }
     }
-    CompositionLocalProvider(LocalFooterStyle provides (entry?.style ?: FooterStyleConfig())) {
-        when (entry?.variant) {
-            FooterVariant.SUBTLE -> SubtleFooterBar(
-                hints = entry.hints.map { it.button to it.action },
-                modifier = measured,
-                onHintClick = entry.onHintClick
-            )
-            else -> FooterBarWithState(
-                hints = entry?.hints ?: emptyList(),
-                modifier = measured,
-                onHintClick = entry?.onHintClick,
-                trailingContent = entry?.trailingContent,
-                forceVisible = entry?.forced == true
-            )
+    Box(modifier.fillMaxWidth()) {
+        if (!controller.isHidden) {
+            CompositionLocalProvider(LocalFooterStyle provides (entry?.style ?: FooterStyleConfig())) {
+                when (entry?.variant) {
+                    FooterVariant.SUBTLE -> SubtleFooterBar(
+                        hints = entry.hints.map { it.button to it.action },
+                        modifier = measured,
+                        onHintClick = entry.onHintClick
+                    )
+                    else -> FooterBarWithState(
+                        hints = entry?.hints ?: emptyList(),
+                        modifier = measured,
+                        onHintClick = entry?.onHintClick,
+                        trailingContent = entry?.trailingContent,
+                        forceVisible = entry?.forced == true
+                    )
+                }
+            }
         }
+
     }
 }
 
-val FooterHostController.isBarVisible: Boolean
+private val FooterHostController.hasGuide: Boolean
     get() = top?.let { entry ->
         entry.forced || entry.hints.any { !isObviousHint(it.button) }
     } == true
+
+val FooterHostController.isBarVisible: Boolean
+    get() = !isHidden && hasGuide
 
 /** Reserves footer space only while the singleton bar is actually showing. */
 @Composable

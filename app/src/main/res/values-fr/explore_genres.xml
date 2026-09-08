@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="explore_sports">Sports</string>
+    <string name="explore_adventure">Aventure</string>
+    <string name="explore_racing">Course</string>
+    <string name="explore_rpg">Jeux de rôle</string>
+    <string name="explore_platform">Plateformes</string>
+    <string name="explore_puzzle">Réflexion</string>
+    <string name="explore_fighting">Combat</string>
+    <string name="explore_shooter">Tir</string>
+    <string name="explore_arcade">Arcade</string>
+    <string name="explore_strategy">Stratégie</string>
+    <string name="explore_simulation">Simulation</string>
+    <string name="explore_music">Musique et rythme</string>
+    <string name="explore_beat_em_up">Beat ’em ups</string>
+    <string name="explore_tactical">Tactique</string>
+    <string name="explore_card_board">Cartes et jeux de société</string>
+    <string name="explore_indie">Indépendants</string>
+    <string name="explore_keep_going">Continuez à explorer</string>
+    <string name="explore_more">Faites défiler vers le bas pour découvrir plus de jeux</string>
+    <string name="explore_end">Vous avez exploré ces plateformes. Essayez une autre plateforme ou un autre filtre.</string>
+    <string name="explore_more_genre">Encore à découvrir</string>
+</resources>

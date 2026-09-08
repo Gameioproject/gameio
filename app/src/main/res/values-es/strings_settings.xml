@@ -209,7 +209,7 @@
 
     <string name="settings_home_screen_section_layout">Diseño</string>
     <string name="settings_home_screen_section_background">Fondo</string>
-    <string name="settings_home_screen_section_video">Fondo de video</string>
+    <string name="settings_home_screen_section_video">Vistas previas de video</string>
     <string name="settings_home_screen_section_content">Contenido</string>
 
     <string name="settings_home_screen_background_title">Fondo</string>
@@ -227,8 +227,8 @@
     <string name="settings_home_screen_saturation_title">Saturación</string>
     <string name="settings_home_screen_opacity_title">Opacidad</string>
 
-    <string name="settings_home_screen_video_wallpaper_title">Mostrar fondo de video</string>
-    <string name="settings_home_screen_video_wallpaper_subtitle">Reproducir fondos de video en la pantalla de inicio</string>
+    <string name="settings_home_screen_video_wallpaper_title">Mostrar vistas previas de video</string>
+    <string name="settings_home_screen_video_wallpaper_subtitle">Reproducir tráilers del juego seleccionado automáticamente</string>
     <string name="settings_home_screen_video_delay_title">Retraso antes de reproducir</string>
     <string name="settings_home_screen_video_delay_instant">Instantáneo</string>
     <plurals name="settings_home_screen_video_delay_seconds">

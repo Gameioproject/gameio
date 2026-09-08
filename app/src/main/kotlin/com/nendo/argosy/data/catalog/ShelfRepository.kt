@@ -8,6 +8,7 @@ import com.nendo.argosy.util.Logger
 import dagger.Lazy
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -31,17 +32,24 @@ class ShelfRepository @Inject constructor(
     private val orderedIds = mutableMapOf<String, MutableList<Long>>()
     private val exhausted = mutableSetOf<String>()
 
+    val connectionState get() = connectionManager.connectionState
+
     fun isCatalogOnly(): Boolean = connectionManager.getCapabilities().catalogOnly
 
-    suspend fun definitions(): List<RomMShelf> {
+    suspend fun definitions(strict: Boolean = false): List<RomMShelf> {
         if (!isCatalogOnly()) return emptyList()
         definitions?.let { return it }
         return mutex.withLock {
             definitions?.let { return@withLock it }
-            val api = apiClient.api ?: return@withLock emptyList()
+            val api = apiClient.api ?: if (strict) error("Catalog is disconnected") else return@withLock emptyList()
             val fetched = try {
-                api.getShelves().body().orEmpty()
+                val response = api.getShelves()
+                if (strict && !response.isSuccessful) throw retrofit2.HttpException(response)
+                response.body().orEmpty()
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
+                if (strict) throw e
                 Logger.warn(TAG, "definitions: ${e.message}")
                 emptyList()
             }
@@ -58,12 +66,15 @@ class ShelfRepository @Inject constructor(
     suspend fun gamesFor(
         shelf: RomMShelf,
         platformSlugs: Collection<String> = emptyList(),
-        through: Int = PAGE
+        through: Int = PAGE,
+        strict: Boolean = false,
+        owned: Boolean = false
     ): List<Long> {
         if (!isCatalogOnly()) return emptyList()
         val slugs = platformSlugs.sorted()
-        val key = if (slugs.isEmpty()) shelf.key else "${shelf.key}|${slugs.joinToString(",")}"
+        val key = "${shelf.key}|${slugs.joinToString(",")}|$owned"
         val params = wireParams(shelf.params).toMutableMap()
+        if (owned) params["owned"] = "true"
         if (slugs.isNotEmpty()) params["platform_slugs"] = slugs.joinToString(",")
         mutex.withLock {
             val ids = orderedIds.getOrPut(key) { mutableListOf() }
@@ -71,7 +82,8 @@ class ShelfRepository @Inject constructor(
                 val page = librarySync.get().fetchRomsByParams(
                     params = params,
                     limit = PAGE,
-                    offset = ids.size
+                    offset = ids.size,
+                    strict = strict
                 )
                 if (page.isEmpty()) {
                     exhausted.add(key)
@@ -82,6 +94,24 @@ class ShelfRepository @Inject constructor(
             }
             return ids.take(through)
         }
+    }
+
+    suspend fun genrePage(
+        genre: String,
+        platformSlugs: Collection<String>,
+        offset: Int,
+        limit: Int,
+        owned: Boolean
+    ): List<Long> {
+        if (platformSlugs.isEmpty()) return emptyList()
+        val params = mutableMapOf(
+            "genre" to genre,
+            "platform_slugs" to platformSlugs.sorted().joinToString(","),
+            "order_by" to "rating",
+            "order_dir" to "desc"
+        )
+        if (owned) params["owned"] = "true"
+        return librarySync.get().fetchRomsByParams(params, limit, offset, strict = true)
     }
 
     /** Sync a slice of a genre into the local store, as recommendation candidates. */
@@ -99,9 +129,9 @@ class ShelfRepository @Inject constructor(
         )
     }
 
-    suspend fun randomLocalId(): Long? {
+    suspend fun randomLocalId(platformSlugs: Collection<String> = emptyList(), owned: Boolean = false): Long? {
         if (!isCatalogOnly()) return null
-        return librarySync.get().fetchRandomRom()
+        return librarySync.get().fetchRandomRom(platformSlugs, owned)
     }
 
     fun reset() {

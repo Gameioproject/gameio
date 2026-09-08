@@ -290,13 +290,8 @@ data class LibraryUiState(
     val isPlatformGrid: Boolean
         get() = view == LibraryView.PLATFORM_GRID
 
-    /**
-     * A platform cell is a badge - a mark and two short lines - so it wants the game grid's narrower
-     * columns rather than the app grid's wide ones. The landing only earns its place while the whole
-     * shelf is in front of you, and app-width columns spent that on air.
-     */
     val platformGridColumns: Int
-        get() = GridUtils.getGameGridColumns(gridDensity, screenWidthDp)
+        get() = libraryPlatformColumns(GridUtils.getGameGridColumns(gridDensity, screenWidthDp), screenWidthDp)
 
     /**
      * Nothing to land on: no platform row, no media library, and nothing in the library as a whole.
