@@ -271,7 +271,7 @@ data class HomeUiState(
     val backgroundBlur: Int = 0,
     val backgroundSaturation: Int = 100,
     val backgroundOpacity: Int = 100,
-    val useGameBackground: Boolean = true,
+    val useGameBackground: Boolean = false,
     val customBackgroundPath: String? = null,
     val homeBackgroundMode: HomeBackgroundMode = HomeBackgroundMode.GAME_ART,
     val syncOverlayState: SyncOverlayState? = null,

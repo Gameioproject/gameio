@@ -571,7 +571,7 @@ private fun SplashContent() {
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_helm),
+            painter = painterResource(id = R.drawable.ic_notification_mark),
             contentDescription = null,
             modifier = Modifier.size(120.dp),
             alpha = 0.6f

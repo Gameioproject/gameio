@@ -354,4 +354,7 @@
     <string name="firstrun_romm_sign_in_change_server">Change server</string>
     <!-- Shown when sign in is pressed with the username or password still empty. -->
     <string name="firstrun_romm_credentials_required">Enter your username and password</string>
+    <!-- Brand line under the wordmark on the welcome and sign-in screens. Not translated: it is
+         the product's own tagline, the same words as on the website. -->
+    <string name="firstrun_brand_tagline" translatable="false">Netflix for retro games.</string>
 </resources>

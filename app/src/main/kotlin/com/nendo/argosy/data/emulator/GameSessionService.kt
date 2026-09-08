@@ -432,7 +432,7 @@ class GameSessionService : Service() {
 
     private fun buildNotification(gameTitle: String, state: NotificationState) = when (state) {
         NotificationState.PLAYING -> NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_helm)
+            .setSmallIcon(R.drawable.ic_notification_mark)
             .setContentTitle(getString(R.string.sync_session_notification_playing))
             .setContentText(gameTitle)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -444,7 +444,7 @@ class GameSessionService : Service() {
             .build()
 
         NotificationState.SAVE_DETECTED -> NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_helm)
+            .setSmallIcon(R.drawable.ic_notification_mark)
             .setContentTitle(getString(R.string.sync_session_notification_save_detected))
             .setContentText(gameTitle)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -500,7 +500,7 @@ class GameSessionService : Service() {
 
         helmIcon = ImageView(this).apply {
             layoutParams = FrameLayout.LayoutParams(iconSize, iconSize)
-            setImageResource(R.drawable.ic_helm)
+            setImageResource(R.drawable.ic_notification_mark)
             setColorFilter(helmTint)
             scaleType = ImageView.ScaleType.FIT_CENTER
             setLayerType(View.LAYER_TYPE_SOFTWARE, shadowPaint)

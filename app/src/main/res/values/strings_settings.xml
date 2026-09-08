@@ -411,6 +411,21 @@
     <string name="settings_home_screen_game_artwork_title">Game Artwork</string>
     <!-- Second line of that row. -->
     <string name="settings_home_screen_game_artwork_subtitle">Use game cover as background</string>
+    <!-- Row title. Noun phrase: one of the bundled backgrounds drawn in the style of a console's
+         home screen. -->
+    <string name="settings_home_screen_wallpaper_title">Console Wallpaper</string>
+    <!-- Second line of that row. -->
+    <string name="settings_home_screen_wallpaper_subtitle">Backgrounds in the style of the big consoles</string>
+    <!-- Value of that row: no bundled background. -->
+    <string name="settings_home_screen_wallpaper_none">None</string>
+    <!-- Value of that row: deep blue with drifting light, like a PlayStation home screen. -->
+    <string name="settings_home_screen_wallpaper_playstation">PlayStation</string>
+    <!-- Value of that row: neon red and blue halves, like a Switch's Joy-Cons. -->
+    <string name="settings_home_screen_wallpaper_switch">Switch</string>
+    <!-- Value of that row: black with a green glow, like an Xbox home screen. -->
+    <string name="settings_home_screen_wallpaper_xbox">Xbox</string>
+    <!-- Value of that row when the background is a picture the user picked instead. -->
+    <string name="settings_home_screen_wallpaper_custom">Your image</string>
     <!-- Row title. Noun phrase: a picture the user picks themselves. -->
     <string name="settings_home_screen_custom_image_title">Custom Image</string>
     <!-- Second line of that row once a picture has been picked. -->

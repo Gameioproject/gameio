@@ -56,4 +56,7 @@ object InputIcons {
 
     val Options: Painter
         @Composable get() = painterResource(R.drawable.ic_input_options)
+
+    val StickRight: Painter
+        @Composable get() = painterResource(R.drawable.ic_input_stick_right)
 }

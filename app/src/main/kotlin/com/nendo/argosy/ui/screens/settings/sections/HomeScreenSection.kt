@@ -20,6 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nendo.argosy.R
 import com.nendo.argosy.data.preferences.HomeBackgroundMode
+import com.nendo.argosy.data.preferences.HomeWallpaperPreset
+import com.nendo.argosy.ui.common.labelRes
 import com.nendo.argosy.domain.model.HomeLayoutKind
 import com.nendo.argosy.ui.components.ActionPreference
 import com.nendo.argosy.ui.components.CyclePreference
@@ -60,6 +62,11 @@ internal sealed class HomeScreenItem(
         key = "gameArtwork",
         section = "background",
         visibleWhen = { showsArtLayer(it) }
+    )
+    data object WallpaperPreset : HomeScreenItem(
+        key = "wallpaperPreset",
+        section = "background",
+        visibleWhen = { showsArtLayer(it) && !it.useGameBackground }
     )
     data object CustomImage : HomeScreenItem(
         key = "customImage",
@@ -160,7 +167,7 @@ internal sealed class HomeScreenItem(
                 CompactCovers,
                 *homeRailFields().map { LayoutField(it) }.toTypedArray(),
                 BackgroundHeader,
-                Background, GameArtwork, CustomImage, Blur, Saturation, Opacity,
+                Background, GameArtwork, WallpaperPreset, CustomImage, Blur, Saturation, Opacity,
                 VideoHeader,
                 VideoWallpaper, VideoDelay, VideoMuted
             )
@@ -265,6 +272,27 @@ fun HomeScreenSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
                     isFocused = isFocused(item),
                     onToggle = { viewModel.setUseGameBackground(it) }
                 )
+
+                HomeScreenItem.WallpaperPreset -> {
+                    val preset = HomeWallpaperPreset.fromPath(display.customBackgroundPath)
+                    CyclePreference(
+                        title = stringResource(R.string.settings_home_screen_wallpaper_title),
+                        subtitle = stringResource(R.string.settings_home_screen_wallpaper_subtitle),
+                        value = if (preset != null) {
+                            stringResource(preset.labelRes)
+                        } else {
+                            stringResource(R.string.settings_home_screen_wallpaper_custom)
+                        },
+                        isFocused = isFocused(item),
+                        onClick = { viewModel.cycleHomeWallpaperPreset() },
+                        onPrev = { viewModel.cycleHomeWallpaperPreset(-1) },
+                        options = remember(context) {
+                            HomeWallpaperPreset.entries.map { context.getString(it.labelRes) }
+                        },
+                        onSelect = { index -> viewModel.setHomeWallpaperPreset(HomeWallpaperPreset.entries[index]) },
+                        pickerRequestToken = pickerToken(item)
+                    )
+                }
 
                 HomeScreenItem.CustomImage -> {
                     val subtitle = if (display.customBackgroundPath != null) {

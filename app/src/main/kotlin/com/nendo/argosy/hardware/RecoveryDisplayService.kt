@@ -118,7 +118,7 @@ class RecoveryDisplayService : Service() {
 
     private fun startForegroundNotification() {
         val notification = NotificationCompat.Builder(this, SecondaryDisplayNotificationChannel.CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_helm)
+            .setSmallIcon(R.drawable.ic_notification_mark)
             .setContentTitle(getString(R.string.app_name))
             .setContentText("Recovering...")
             .setPriority(NotificationCompat.PRIORITY_LOW)

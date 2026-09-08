@@ -437,12 +437,14 @@ class HomeLibraryDelegate @Inject constructor(
             return
         }
         val prefs = preferencesRepository.userPreferences.first()
-        val ids = shelfRepository.gamesFor(shelf)
+        val shownPlatforms = platformRepository.getPlatformsWithGames()
+            .filter { it.id != LocalPlatformIds.STEAM && it.id != LocalPlatformIds.ANDROID }
+        val ids = shelfRepository.gamesFor(shelf, shownPlatforms.map { it.slug })
         val byId = gameRepository.getByIds(ids).associateBy { it.id }
         var games = ids.mapNotNull { byId[it] }
         // A recommendation is only useful on a platform the user actually keeps,
         // and it has to obey the same All/Available/Library filter as the rest of Home.
-        val visiblePlatformIds = _state.value.platforms.map { it.id }.toSet()
+        val visiblePlatformIds = shownPlatforms.map { it.id }.toSet()
         if (visiblePlatformIds.isNotEmpty()) {
             games = games.filter { it.platformId in visiblePlatformIds }
         }

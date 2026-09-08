@@ -28,6 +28,7 @@ import com.nendo.argosy.data.preferences.BoxArtOuterEffectThickness
 import com.nendo.argosy.data.preferences.FontSlot
 import com.nendo.argosy.data.preferences.GridDensity
 import com.nendo.argosy.data.preferences.HomeBackgroundMode
+import com.nendo.argosy.data.preferences.HomeWallpaperPreset
 import com.nendo.argosy.data.preferences.SystemIconPadding
 import com.nendo.argosy.data.preferences.SystemIconPosition
 import com.nendo.argosy.data.preferences.ThemeMode
@@ -542,6 +543,14 @@ class DisplaySettingsDelegate @Inject constructor(
             preferencesRepository.setCustomBackgroundPath(path)
             _state.update { it.copy(customBackgroundPath = path) }
         }
+    }
+
+    fun setHomeWallpaperPreset(scope: CoroutineScope, preset: HomeWallpaperPreset, packageName: String) =
+        setCustomBackgroundPath(scope, preset.uri(packageName))
+
+    fun cycleHomeWallpaperPreset(scope: CoroutineScope, direction: Int, packageName: String) {
+        val current = HomeWallpaperPreset.fromPath(_state.value.customBackgroundPath) ?: HomeWallpaperPreset.NONE
+        setHomeWallpaperPreset(scope, cycleEnum(current, direction), packageName)
     }
 
     fun openBackgroundPicker(scope: CoroutineScope) {

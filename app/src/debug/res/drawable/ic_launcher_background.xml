@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Debug builds keep a coral ground so they are tellable apart on a home screen
-     from a release install, which sits on the near-black one. -->
+<!-- Debug builds keep a charcoal ground so they are tellable apart on a home screen
+     from a release install, which sits on the dark blue one. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"

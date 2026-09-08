@@ -58,7 +58,7 @@ data class DisplayPreferences(
     val backgroundBlur: Int = 0,
     val backgroundSaturation: Int = 100,
     val backgroundOpacity: Int = 100,
-    val useGameBackground: Boolean = true,
+    val useGameBackground: Boolean = false,
     val customBackgroundPath: String? = null,
     val homeBackgroundMode: HomeBackgroundMode = HomeBackgroundMode.GAME_ART,
     val homeLayout: com.nendo.argosy.domain.model.HomeLayoutSettings =
@@ -103,7 +103,7 @@ data class DisplayPreferences(
     val dualScreenEnabled: Boolean = false,
     val displayRoleOverride: DisplayRoleOverride = DisplayRoleOverride.AUTO,
     val dualScreenInputFocus: DualScreenInputFocus = DualScreenInputFocus.AUTO,
-    val homeLibraryFilter: HomeLibraryFilter = HomeLibraryFilter.LIBRARY,
+    val homeLibraryFilter: HomeLibraryFilter = HomeLibraryFilter.ALL,
     val homeCompactCovers: Boolean = false
 )
 
@@ -238,7 +238,7 @@ class DisplayPreferencesRepository @Inject constructor(
             backgroundBlur = prefs[Keys.BACKGROUND_BLUR] ?: 40,
             backgroundSaturation = prefs[Keys.BACKGROUND_SATURATION] ?: 100,
             backgroundOpacity = prefs[Keys.BACKGROUND_OPACITY] ?: 100,
-            useGameBackground = prefs[Keys.USE_GAME_BACKGROUND] ?: true,
+            useGameBackground = prefs[Keys.USE_GAME_BACKGROUND] ?: false,
             customBackgroundPath = prefs[Keys.CUSTOM_BACKGROUND_PATH],
             homeBackgroundMode = HomeBackgroundMode.fromString(prefs[Keys.HOME_BACKGROUND_MODE]),
             homeLayout = com.nendo.argosy.domain.model.HomeLayoutSettings.fromJson(
@@ -291,8 +291,8 @@ class DisplayPreferencesRepository @Inject constructor(
             dualScreenInputFocus = DualScreenInputFocus.fromString(prefs[Keys.DUAL_SCREEN_INPUT_FOCUS]),
             homeLibraryFilter = HomeLibraryFilter.fromOrdinal(
                 prefs[Keys.HOME_LIBRARY_FILTER]
-                    // Home opens on the device's own games; the chip widens from there.
-                    ?: HomeLibraryFilter.LIBRARY.ordinal
+                    // Home opens on the whole catalog; RT narrows it to the device's own games.
+                    ?: HomeLibraryFilter.ALL.ordinal
             ),
             homeCompactCovers = prefs[Keys.HOME_COMPACT_COVERS] ?: false
         )

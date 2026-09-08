@@ -81,7 +81,7 @@ class SocialOverlayService : Service() {
 
         val helmIcon = ImageView(this).apply {
             layoutParams = LinearLayout.LayoutParams(iconSize, iconSize)
-            setImageResource(R.drawable.ic_helm)
+            setImageResource(R.drawable.ic_notification_mark)
             setColorFilter(helmTint)
             scaleType = ImageView.ScaleType.FIT_CENTER
         }

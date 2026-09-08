@@ -19,6 +19,7 @@ import com.nendo.argosy.data.local.dao.SaveCacheDao
 import com.nendo.argosy.data.preferences.FontSlot
 import com.nendo.argosy.data.preferences.GridDensity
 import com.nendo.argosy.data.preferences.HomeBackgroundMode
+import com.nendo.argosy.data.preferences.HomeWallpaperPreset
 import com.nendo.argosy.data.preferences.UserPreferencesRepository
 import com.nendo.argosy.data.remote.github.UpdateRepository
 import com.nendo.argosy.data.remote.jellyfin.JellyfinConnectionManager
@@ -1036,6 +1037,10 @@ class SettingsViewModel @Inject constructor(
         displayDelegate.removeGripAutoController(viewModelScope, controllerId)
     fun setCustomBackgroundPath(path: String?) = displayDelegate.setCustomBackgroundPath(viewModelScope, path)
     fun openBackgroundPicker() = displayDelegate.openBackgroundPicker(viewModelScope)
+    fun setHomeWallpaperPreset(preset: HomeWallpaperPreset) =
+        displayDelegate.setHomeWallpaperPreset(viewModelScope, preset, context.packageName)
+    fun cycleHomeWallpaperPreset(direction: Int = 1) =
+        displayDelegate.cycleHomeWallpaperPreset(viewModelScope, direction, context.packageName)
 
     fun navigateToBoxArt() = routeNavigateToBoxArt(this)
     fun navigateToControllerGrip() = routeNavigateToControllerGrip(this)

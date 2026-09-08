@@ -772,6 +772,10 @@ private fun routeHomeScreenConfirm(vm: SettingsViewModel, state: SettingsUiState
             vm.setUseGameBackground(!state.display.useGameBackground)
             return InputResult.handled(SoundType.TOGGLE)
         }
+        HomeScreenItem.WallpaperPreset -> {
+            vm.requestEnumPicker(HomeScreenItem.WallpaperPreset.key)
+            return InputResult.handled(SoundType.OPEN_MODAL)
+        }
         HomeScreenItem.CustomImage -> vm.openBackgroundPicker()
         HomeScreenItem.Blur -> vm.cycleBackgroundBlur()
         HomeScreenItem.Saturation -> vm.cycleBackgroundSaturation()
