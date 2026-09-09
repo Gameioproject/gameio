@@ -211,7 +211,7 @@
     <string name="settings_shell_modal_delete_game_plain_message">Entfernt alle heruntergeladenen Dateien für dieses Spiel.%1$s Dies kann nicht rückgängig gemacht werden.</string>
     <string name="settings_shell_modal_delete_game_plain_confirm">Spiel löschen</string>
 
-    <string name="settings_shell_modal_romm_signout_title">Von RomM abmelden?</string>
+    <string name="settings_shell_modal_romm_signout_title">Von Gameio abmelden?</string>
     <plurals name="settings_shell_romm_signout_pending_message">
         <item quantity="one">%1$d Spielstand wird zuerst hochgeladen. Sobald alles auf Ihrem Server ist, werden die zwischengespeicherten Spielstände, Savestates und Einstellungen dieses Kontos von diesem Gerät entfernt. Ihre heruntergeladenen Spiele bleiben erhalten.</item>
         <item quantity="other">%1$d Spielstände werden zuerst hochgeladen. Sobald alles auf Ihrem Server ist, werden die zwischengespeicherten Spielstände, Savestates und Einstellungen dieses Kontos von diesem Gerät entfernt. Ihre heruntergeladenen Spiele bleiben erhalten.</item>
@@ -258,8 +258,8 @@
     <string name="settings_shell_accounts_remove_fallback_name">Konto</string>
     <string name="settings_shell_accounts_removal_message_base">Entfernt die Spielstände, Savestates, wartenden Aufgaben, Erfolge und die Bibliotheks-Überlagerung dieses Kontos von diesem Gerät. Heruntergeladene Spiele bleiben erhalten.</string>
     <string name="settings_shell_accounts_removal_pending_suffix"> Noch nicht gesendet: %1$s.</string>
-    <string name="settings_shell_accounts_removal_last_account_suffix"> Dies ist das letzte Konto, daher wird das Gerät von RomM abgemeldet.</string>
-    <string name="settings_shell_accounts_removal_revoke_suffix"> Das Gerät bleibt beim RomM-Server registriert; widerrufen Sie es dort.</string>
+    <string name="settings_shell_accounts_removal_last_account_suffix"> Dies ist das letzte Konto, daher wird das Gerät von Gameio abgemeldet.</string>
+    <string name="settings_shell_accounts_removal_revoke_suffix"> Das Gerät bleibt beim Gameio-Server registriert; widerrufen Sie es dort.</string>
     <string name="settings_shell_accounts_cancel">Abbrechen</string>
     <string name="settings_shell_accounts_keep_queued_work">Wartende Aufgaben behalten</string>
     <string name="settings_shell_accounts_discard_and_remove">Verwerfen und entfernen</string>

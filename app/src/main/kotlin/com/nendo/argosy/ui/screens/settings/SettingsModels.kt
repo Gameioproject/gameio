@@ -889,6 +889,7 @@ enum class AccountRowAction { SWITCH, REMOVE }
 
 /** The add-an-account form: the same credentials the server owner issued. */
 data class AccountSignInState(
+    val keyboardField: Int? = null,
     val active: Boolean = false,
     val connecting: Boolean = false,
     val username: String = "",
@@ -1399,6 +1400,7 @@ internal fun SettingsUiState.poppedSection(restoredFocus: Int? = null): Settings
 }
 
 data class SettingsUiState(
+    val showLicensesDialog: Boolean = false,
     val currentSection: SettingsSection = SettingsSection.MAIN,
     val focusedIndex: Int = 0,
     /**

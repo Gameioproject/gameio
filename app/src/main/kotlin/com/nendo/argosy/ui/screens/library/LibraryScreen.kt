@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -37,16 +36,13 @@ import com.nendo.argosy.ui.common.rememberCoverAspectRatio
 import com.nendo.argosy.ui.screens.library.components.LibraryPlatformGrid
 import com.nendo.argosy.ui.screens.library.components.LibraryPlatformGridEmpty
 import com.nendo.argosy.ui.screens.library.components.LibraryPlatformGridHeaderHeight
-import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.GridView
-import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.InstallMobile
 import androidx.compose.material.icons.filled.PlayArrow
@@ -94,7 +90,6 @@ import com.nendo.argosy.ui.theme.Dimens
 import com.nendo.argosy.ui.theme.LocalArgosyTheme
 import com.nendo.argosy.ui.theme.Motion
 import com.nendo.argosy.data.model.GameSource
-import com.nendo.argosy.data.preferences.GridDensity
 import com.nendo.argosy.ui.components.FocusedScroll
 import com.nendo.argosy.ui.components.fastAnimateScrollToItem
 import com.nendo.argosy.ui.components.AddToCollectionModal
@@ -117,9 +112,7 @@ import com.nendo.argosy.domain.model.SyncProgress
 import com.nendo.argosy.ui.navigation.Screen
 import com.nendo.argosy.ui.theme.LocalBoxArtStyle
 import com.nendo.argosy.ui.theme.LocalLauncherTheme
-import com.nendo.argosy.ui.theme.generated.ColorTokens
 import com.nendo.argosy.ui.components.GameCard
-import com.nendo.argosy.ui.components.SourceBadge
 import com.nendo.argosy.ui.screens.home.HomeGameUi
 import com.nendo.argosy.ui.util.clickableNoFocus
 import androidx.compose.foundation.lazy.LazyColumn
@@ -1676,13 +1669,6 @@ private fun QuickMenuOverlay(
             )
         )
         add(MenuEntry(Icons.Default.Info, stringResource(R.string.library_quickmenu_details), onClick = onDetails))
-        add(
-            MenuEntry(
-                Icons.AutoMirrored.Filled.PlaylistAdd,
-                stringResource(R.string.library_quickmenu_add_to_collection),
-                onClick = onAddToCollection
-            )
-        )
         if (onAddToGrid != null) {
             add(
                 MenuEntry(

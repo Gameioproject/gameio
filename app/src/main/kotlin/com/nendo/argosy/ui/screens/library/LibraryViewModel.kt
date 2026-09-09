@@ -32,7 +32,6 @@ import com.nendo.argosy.data.model.GameSection
 import com.nendo.argosy.data.model.GameSource
 import com.nendo.argosy.data.model.SortOption
 import com.nendo.argosy.data.model.computeSections
-import com.nendo.argosy.data.preferences.BoxArtBorderStyle
 import com.nendo.argosy.data.preferences.GridDensity
 import com.nendo.argosy.data.preferences.UserPreferencesRepository
 import com.nendo.argosy.data.remote.romm.RomMRepository
@@ -1733,7 +1732,7 @@ class LibraryViewModel @Inject constructor(
             val game = it.focusedGame ?: return@update it
             val canRefresh = game.isRommGame || game.isAndroidApp
             val hasDelete = game.isDownloaded || game.needsInstall
-            var maxIndex = 5
+            var maxIndex = 4
             if (it.isCustomGridHome) maxIndex++
             if (canRefresh) maxIndex++
             if (hasDelete) maxIndex++
@@ -1755,7 +1754,6 @@ class LibraryViewModel @Inject constructor(
         val playIdx = currentIdx++
         val favoriteIdx = currentIdx++
         val detailsIdx = currentIdx++
-        val addToCollectionIdx = currentIdx++
         val addToGridIdx = if (_uiState.value.isCustomGridHome) currentIdx++ else -1
         val refreshIdx = if (canRefresh) currentIdx++ else -1
         val resyncPlatformIdx = currentIdx++
@@ -1782,11 +1780,6 @@ class LibraryViewModel @Inject constructor(
                 gameNavigationContext.setContext(_uiState.value.games.map { it.id })
                 onGameSelect(game.id)
                 toggleQuickMenu()
-                InputResult.HANDLED
-            }
-            addToCollectionIdx -> {
-                toggleQuickMenu()
-                showAddToCollectionModal(game.id)
                 InputResult.HANDLED
             }
             addToGridIdx -> {

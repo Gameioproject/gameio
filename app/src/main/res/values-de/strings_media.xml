@@ -262,8 +262,8 @@
     <string name="media_music_facet_all_albums">Alle Alben</string>
     <string name="media_music_facet_all_genres">Alle Genres</string>
 
-    <string name="media_music_offline_message">Nicht mit Ihrem RomM-Server verbunden</string>
-    <string name="media_music_unsupported_message">Dieser RomM-Server unterstützt noch keine Musiksuche</string>
+    <string name="media_music_offline_message">Nicht mit Ihrem Gameio-Server verbunden</string>
+    <string name="media_music_unsupported_message">Dieser Gameio-Server unterstützt noch keine Musiksuche</string>
     <string name="media_music_error_fallback">Etwas ist schiefgelaufen</string>
     <string name="media_music_error_retry">Wiederholen</string>
     <string name="media_music_empty_message">Keine Titel gefunden</string>

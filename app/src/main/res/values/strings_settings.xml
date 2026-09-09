@@ -93,18 +93,18 @@
 
     <!-- Row opening the RomM game server settings. Proper name of the server software Gameio
          talks to, never translated. -->
-    <string name="settings_main_romm_title" translatable="false">RomM</string>
+    <string name="settings_main_romm_title" translatable="false">Gameio</string>
     <!-- Row opening the Steam settings. Proper name of an outside service, never translated. -->
     <string name="settings_main_steam_title" translatable="false">Steam</string>
     <!-- Row opening the Jellyfin media server settings. Proper name of an outside service, never
          translated. -->
     <string name="settings_main_jellyfin_title" translatable="false">Jellyfin</string>
     <!-- Second line of the game server row when no server address has been entered. -->
-    <string name="settings_main_romm_subtitle_unconfigured">Server not configured</string>
+    <string name="settings_main_romm_subtitle_unconfigured">Sign in to Gameio</string>
     <!-- Second line of that row while Gameio is testing whether the server answers. -->
     <string name="settings_main_romm_subtitle_checking">Checking connection...</string>
     <!-- Second line of that row when the server does not answer. -->
-    <string name="settings_main_romm_subtitle_offline">Server offline</string>
+    <string name="settings_main_romm_subtitle_offline">Offline</string>
     <!-- Second line of that row after a successful sync. %1$s is a date and time. -->
     <string name="settings_main_romm_subtitle_last_sync">Last sync: %1$s</string>
     <!-- Second line of that row when the library has never been fetched. -->
@@ -112,7 +112,7 @@
     <!-- Second line of the Steam row with no account signed in. -->
     <string name="settings_main_steam_subtitle_signed_out">Not signed in</string>
     <!-- Second line of the Jellyfin row when no media server address has been entered. -->
-    <string name="settings_main_jellyfin_subtitle_unconfigured">Server not configured</string>
+    <string name="settings_main_jellyfin_subtitle_unconfigured">Sign in to Gameio</string>
     <!-- Second line of that row. %1$s is the media server account name. -->
     <string name="settings_main_jellyfin_subtitle_signed_in_as">Signed in as %1$s</string>
     <!-- Second line of that row when signed in but the account name is unknown. -->
@@ -218,7 +218,7 @@
     <!-- Row opening the settings for the launcher's first screen. Noun phrase. -->
     <string name="settings_interface_home_screen_title">Home Screen</string>
     <!-- Second line of that row, listing what is inside. -->
-    <string name="settings_interface_home_screen_subtitle">Layout, content and background</string>
+    <string name="settings_interface_home_screen_subtitle">Background artwork and game-cover previews</string>
     <!-- Row opening the settings for the full game list. Noun. -->
     <string name="settings_interface_library_view_title">Library</string>
     <!-- Second line of that row, listing what is inside. -->
@@ -443,7 +443,7 @@
     <!-- Row title. Verb phrase: play a moving background. -->
     <string name="settings_home_screen_video_wallpaper_title">Show video previews</string>
     <!-- Second line of that row. -->
-    <string name="settings_home_screen_video_wallpaper_subtitle">Automatically play trailers for the selected game</string>
+    <string name="settings_home_screen_video_wallpaper_subtitle">Play a preview inside the selected game cover</string>
     <!-- Row title. Noun phrase: how long the video waits before it starts. -->
     <string name="settings_home_screen_video_delay_title">Delay Before Playback</string>
     <!-- Value of that row for no wait at all. Adjective used as a noun. -->
@@ -479,12 +479,12 @@
     <!-- Row title. Noun phrase: copying game saves to and from the server. -->
     <string name="settings_saves_save_sync_title">Save Sync</string>
     <!-- Second line of that row. -->
-    <string name="settings_saves_save_sync_subtitle">Sync game saves with server</string>
+    <string name="settings_saves_save_sync_subtitle">Sync game saves with your Gameio account</string>
     <!-- Value shown in place of the switch when no game server is connected. Adjective. -->
     <string name="settings_saves_save_sync_locked_value">Unavailable</string>
     <!-- Second line of that row when it is unavailable. "RomM" is the server software's name;
          leave it untranslated. -->
-    <string name="settings_saves_save_sync_locked_subtitle">Requires a RomM server</string>
+    <string name="settings_saves_save_sync_locked_subtitle">Sign in to Gameio</string>
 
     <!-- Row title. Noun phrase naming the strict mode where Gameio owns the save files. -->
     <string name="settings_saves_secure_saves_title">Secure Saves</string>
@@ -495,7 +495,7 @@
     <!-- Value shown in place of the switch when no game server is connected. Adjective. -->
     <string name="settings_saves_secure_saves_locked_value">Unavailable</string>
     <!-- Second line of that row when it is unavailable. "RomM" is the server software's name. -->
-    <string name="settings_saves_secure_saves_locked_subtitle">Requires a RomM server</string>
+    <string name="settings_saves_secure_saves_locked_subtitle">Sign in to Gameio</string>
 
     <!-- Row title. Noun phrase: how many old saves are kept on the device. -->
     <string name="settings_saves_cache_limit_title">Local Save Cache</string>
@@ -577,10 +577,10 @@
     <!-- Row title. Verb phrase: send pictures taken in game up to the server. -->
     <string name="settings_sync_upload_screenshots_title">Upload Screenshots</string>
     <!-- Second line of that row. "RomM" is the server software's name; leave it untranslated. -->
-    <string name="settings_sync_upload_screenshots_subtitle">Send screenshots taken during play to RomM</string>
+    <string name="settings_sync_upload_screenshots_subtitle">Send screenshots taken during play to Gameio</string>
     <!-- Second line of that row when the server is too old. "RomM 5.0" is a version of that
          software. -->
-    <string name="settings_sync_upload_screenshots_subtitle_unsupported">Requires RomM 5.0 or newer</string>
+    <string name="settings_sync_upload_screenshots_subtitle_unsupported">Screenshot sync is not available.</string>
     <!-- Second line of that row when Android's usage-access permission is missing. "Usage access"
          is that permission's name in Android's own settings. -->
     <string name="settings_sync_upload_screenshots_subtitle_needs_usage">Grant usage access for exact game matching</string>
@@ -712,7 +712,7 @@
     <!-- Shown in place of that list before anything has been fetched. -->
     <string name="settings_bios_empty_notice">No BIOS files synced yet. Sync your library to discover available firmware.</string>
     <!-- Note under the list. The word in quotes must match settings_bios_summary_distribute. -->
-    <string name="settings_bios_footer_note">BIOS files are downloaded from your RomM server and stored locally. Use \'Distribute\' to copy them to emulator directories.</string>
+    <string name="settings_bios_footer_note">BIOS files are downloaded from Gameio and stored locally. Use \'Distribute\' to copy them to emulator directories.</string>
 
     <!-- Value beside one file that is already on the device. Adjective. -->
     <string name="settings_bios_firmware_downloaded">Downloaded</string>
@@ -927,7 +927,7 @@
     <string name="settings_about_version_argosy_label" translatable="false">Gameio</string>
     <!-- Label above the game server's version number. "RomM" is the server software's name and
          "API" the interface Gameio talks to; leave both untranslated. -->
-    <string name="settings_about_version_romm_label" translatable="false">RomM API</string>
+    <string name="settings_about_version_romm_label" translatable="false">Gameio API</string>
     <!-- That version number. %1$s is the number; the v stands for "version". -->
     <string name="settings_about_version_romm_value">v%1$s</string>
     <!-- Link opening the list of open source licences. Noun, plural. -->
@@ -1098,7 +1098,7 @@
     <!-- Row opening the music the game server holds. Verb phrase. -->
     <string name="settings_music_browse_server_title">Browse Server Music</string>
     <!-- Second line of that row. "RomM" is the server software's name; leave it untranslated. -->
-    <string name="settings_music_browse_server_subtitle">Preview and download tracks from RomM</string>
+    <string name="settings_music_browse_server_subtitle">Preview and download tracks from Gameio</string>
     <!-- Row opening the music files on this device. Verb phrase. -->
     <string name="settings_music_browse_local_title">Browse Local Music</string>
     <!-- Second line of that row. -->
@@ -2014,7 +2014,7 @@
          that server's own feature name; keep it as it is unless Jellyfin itself is translated. -->
 
     <!-- Heading over the server address and sign-in rows. Noun. Rendered in caps in English. -->
-    <string name="settings_jellyfin_section_server">SERVER</string>
+    <string name="settings_jellyfin_section_server">ACCOUNT</string>
     <!-- Heading over the row that fetches the media list. Noun. Rendered in caps in English. -->
     <string name="settings_jellyfin_section_library">LIBRARY</string>
     <!-- Heading over the rows about how titles play. Noun. Rendered in caps in English. -->
@@ -2136,13 +2136,13 @@
          "RomM" is the game server software's proper name and is never translated. -->
 
     <!-- Heading over the server address and account rows. Noun. Rendered in caps in English. -->
-    <string name="settings_romm_section_server">SERVER</string>
+    <string name="settings_romm_section_server">ACCOUNT</string>
     <!-- Heading over the rows about the game list. Noun. Rendered in caps in English. -->
     <string name="settings_romm_section_library">LIBRARY</string>
 
     <!-- Row naming the game server. "Rom Manager" is what the server software calls itself in
          full; leave it untranslated. -->
-    <string name="settings_romm_server_title">Rom Manager</string>
+    <string name="settings_romm_server_title">Sign in</string>
     <!-- Second line of that row while Gameio is testing the connection. -->
     <string name="settings_romm_server_checking">Checking connection...</string>
     <!-- Second line of that row when the server answers but has no address to show. -->
@@ -2150,7 +2150,7 @@
     <!-- Second line of that row when the server does not answer. %1$s is the server address. -->
     <string name="settings_romm_server_offline">%1$s (offline)</string>
     <!-- Second line of that row when no address has been entered. -->
-    <string name="settings_romm_server_unconfigured">Not configured</string>
+    <string name="settings_romm_server_unconfigured">Sign in to your Gameio account</string>
 
     <!-- Row that signs the server account out. Verb phrase. -->
     <string name="settings_romm_sign_out_title">Sign Out</string>
@@ -2159,7 +2159,7 @@
     <!-- Second line of that row. %1$s is the server account name. -->
     <string name="settings_romm_sign_out_signed_in_as">Signed in as %1$s</string>
     <!-- Second line of that row when the account name is unknown. Verb phrase. -->
-    <string name="settings_romm_sign_out_subtitle">Forget this RomM account</string>
+    <string name="settings_romm_sign_out_subtitle">Forget this Gameio account</string>
 
     <!-- Row opening the list of paired server accounts. Noun, plural. -->
     <string name="settings_romm_accounts_title">Accounts</string>
@@ -2205,17 +2205,17 @@
     <!-- Button that takes an account off this device. Verb. -->
     <string name="settings_accounts_action_remove">Remove</string>
     <!-- Note under an account that cannot be removed because it is the last one. -->
-    <string name="settings_accounts_remove_blocked_only">This is the only account on this device. Sign out from RomM to leave it.</string>
+    <string name="settings_accounts_remove_blocked_only">This is the only account on this device. Sign out from Gameio to leave it.</string>
     <!-- Note under an account that cannot be removed because it is in use. -->
     <string name="settings_accounts_remove_blocked_active">Switch to another account before removing this one.</string>
 
     <!-- Row that starts pairing another person's account. Verb phrase. -->
     <string name="settings_accounts_add_title">Add Account</string>
     <!-- Second line of that row. %1$s names the server the new account will be on. -->
-    <string name="settings_accounts_add_subtitle">Pair another user on %1$s</string>
+    <string name="settings_accounts_add_subtitle">Add another account on %1$s</string>
     <!-- Second line of that row before any account exists. "RomM" names the settings row where
          the first sign-in happens. -->
-    <string name="settings_accounts_add_subtitle_locked">Sign in under RomM first</string>
+    <string name="settings_accounts_add_subtitle_locked">Sign in to your Gameio account</string>
 
     <!-- Heading over the list of games whose saves are still empty. Rendered in caps in
          English. -->
@@ -2227,10 +2227,10 @@
     <string name="settings_accounts_needs_sync_message">These were left empty because the copy on this device was known to be older than the server\'s. Sync to fill them in.</string>
 
     <!-- Heading shown when no account has been paired. -->
-    <string name="settings_accounts_empty_title">No RomM account is paired yet</string>
+    <string name="settings_accounts_empty_title">No Gameio account yet</string>
     <!-- Body under that heading. "RomM" names the settings row where the first sign-in
          happens. -->
-    <string name="settings_accounts_empty_message">Sign in under RomM. Once one account is paired you can add more here.</string>
+    <string name="settings_accounts_empty_message">Choose Add account to sign in and sync your library.</string>
     <!-- Shown while the account list is being read. -->
     <string name="settings_accounts_loading">Loading accounts...</string>
 
@@ -2246,7 +2246,7 @@
     <!-- Heading beside the square code used to pair another account. Verb phrase. -->
     <string name="settings_accounts_pairing_title">Scan to add an account</string>
     <!-- Body under that heading. "Gameio" is this app's name. -->
-    <string name="settings_accounts_pairing_message">Sign in to RomM on your phone as the user you want to add, scan this code, then approve this device. Gameio signs in as them once approved.</string>
+    <string name="settings_accounts_pairing_message">Sign in to Gameio on your phone as the user you want to add, scan this code, then approve this device. Gameio signs in as them once approved.</string>
     <!-- Button that tries the pairing again after a failure. Verb phrase. -->
     <string name="settings_accounts_pairing_retry">Try Again</string>
     <!-- Button that abandons the pairing. Verb. -->
@@ -2864,7 +2864,7 @@
     <!-- Second line of that row while it runs. -->
     <string name="settings_platform_sync_now_busy">Sync in progress...</string>
     <!-- Second line of that row otherwise. "RomM" is the server software's name. -->
-    <string name="settings_platform_sync_now_subtitle">Sync this platform with RomM</string>
+    <string name="settings_platform_sync_now_subtitle">Sync this platform with Gameio</string>
 
     <!-- Row opening the per-console file-type choices. Noun phrase, plural. -->
     <string name="settings_platform_download_defaults_title">Download Defaults</string>
@@ -3325,9 +3325,9 @@
     <!-- Auth method value: pairs by typing a short code generated on the server. -->
     <string name="settings_romm_config_auth_method_pairing_code">Pairing Code</string>
     <!-- Instructions shown while Device Pairing is selected. -->
-    <string name="settings_romm_config_device_instructions">Pair this device by scanning a QR code with your phone, then approve it in RomM. Requires RomM 5.0 or newer.</string>
+    <string name="settings_romm_config_device_instructions">Pair this device by scanning a QR code with your phone, then approve it in Gameio. Requires Gameio 5.0 or newer.</string>
     <!-- Instructions shown while Pairing Code is selected. -->
-    <string name="settings_romm_config_pairing_code_instructions">Create an API token in the RomM web UI, then click Pair Device to get a code.</string>
+    <string name="settings_romm_config_pairing_code_instructions">Create an API token in the Gameio web UI, then click Pair Device to get a code.</string>
     <!-- Button title while a device-pairing QR code is being requested. -->
     <string name="settings_romm_config_connect_generating_title">Generating code...</string>
     <!-- Button title while the connection attempt is in progress. -->
@@ -3339,11 +3339,11 @@
     <!-- Second line of the connect button while Device Pairing is selected. -->
     <string name="settings_romm_config_connect_device_subtitle">Generate a pairing QR code</string>
     <!-- Second line of the connect button while Pairing Code is selected. -->
-    <string name="settings_romm_config_connect_subtitle">Connect to RomM server</string>
+    <string name="settings_romm_config_connect_subtitle">Connect to Gameio server</string>
     <!-- Button title. Verb phrase: open the camera to scan a pairing QR code. -->
     <string name="settings_romm_config_scan_title">Scan QR Code</string>
     <!-- Second line of that button. -->
-    <string name="settings_romm_config_scan_subtitle">Scan pairing QR from the RomM web UI</string>
+    <string name="settings_romm_config_scan_subtitle">Scan pairing QR from the Gameio web UI</string>
     <!-- Button title. Verb: abandon this configuration screen. -->
     <string name="settings_romm_config_cancel_title">Cancel</string>
     <!-- Second line of that button. -->
@@ -3351,7 +3351,7 @@
     <!-- Title on the device-pairing QR screen. Imperative. -->
     <string name="settings_romm_device_pairing_title">Scan to pair</string>
     <!-- Subtitle on the device-pairing QR screen. -->
-    <string name="settings_romm_device_pairing_subtitle">Scan this code with your phone, then approve this device in RomM.</string>
+    <string name="settings_romm_device_pairing_subtitle">Scan this code with your phone, then approve this device in Gameio.</string>
     <!-- Button title on the device-pairing QR screen. Verb: abandon pairing. -->
     <string name="settings_romm_device_pairing_cancel_title">Cancel</string>
     <!-- Second line of that button. -->
@@ -3648,7 +3648,7 @@
     <string name="settings_hard_reset_keeps_header">Keeps</string>
     <!-- Bullet item under the Keeps heading. "RomM" and "Steam" are service names, never
          translated. -->
-    <string name="settings_hard_reset_keeps_sign_ins">Settings and sign-ins - RomM and Steam stay connected</string>
+    <string name="settings_hard_reset_keeps_sign_ins">Settings and sign-ins - Gameio and Steam stay connected</string>
     <!-- Bullet item under the Keeps heading. -->
     <string name="settings_hard_reset_keeps_synced_saves">Saves already synced to the server</string>
     <!-- Bullet item under the Keeps heading. -->
@@ -3766,9 +3766,9 @@
 
     <!-- Fallback account display name when the server has no username on record. %1$d is the
          numeric user id. -->
-    <string name="settings_accounts_delegate_fallback_username">RomM user %1$d</string>
+    <string name="settings_accounts_delegate_fallback_username">Gameio user %1$d</string>
     <!-- Notice shown when trying to add a second account with no server configured yet. -->
-    <string name="settings_accounts_delegate_notice_no_server">Sign in to a RomM server first, under RomM.</string>
+    <string name="settings_accounts_delegate_notice_no_server">Sign in to your Gameio account to continue.</string>
     <!-- Transitional status label shown while an account switch begins. -->
     <string name="settings_accounts_delegate_progress_preparing">Preparing</string>
     <!-- Transitional status label shown while resuming an interrupted account switch. -->
@@ -3817,7 +3817,7 @@
     <string name="settings_accounts_delegate_removal_aborted">%1$d saves changed while archiving and were left on disk.</string>
     <!-- Appended sentence reminding the user the device registration on the server survives
          local removal. -->
-    <string name="settings_accounts_delegate_removal_registered_note">The device is still registered on the RomM server; revoke it there.</string>
+    <string name="settings_accounts_delegate_removal_registered_note">Your device remains registered with Gameio.</string>
     <!-- Completion notice after an account switch. First sentence. -->
     <string name="settings_accounts_delegate_completion_switched">Switched account.</string>
     <!-- Appended sentence when some files changed mid-archive during a switch. %1$d is the
@@ -4212,7 +4212,7 @@
     <!-- Button that signs in to the server with the username and password above. -->
     <string name="settings_romm_config_sign_in_title">Sign in</string>
     <!-- Line under the sign-in button. -->
-    <string name="settings_romm_config_sign_in_subtitle">Connect this device to your account</string>
+    <string name="settings_romm_config_sign_in_subtitle">Sign in to Gameio on this device</string>
     <!-- Shown when sign in is pressed with the username or password still empty. -->
     <string name="settings_romm_config_credentials_required">Enter your username and password</string>
     <!-- Button that submits the add-an-account form. -->

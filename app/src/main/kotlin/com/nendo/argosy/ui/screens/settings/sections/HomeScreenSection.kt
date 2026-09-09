@@ -56,7 +56,7 @@ internal sealed class HomeScreenItem(
     data object Background : HomeScreenItem(
         key = "homeBackgroundMode",
         section = "background",
-        visibleWhen = { it.surfaceBackdrop.enabled && drawsBackgroundArt(it) }
+        visibleWhen = { it.surfaceBackdrop.enabled }
     )
     data object GameArtwork : HomeScreenItem(
         key = "gameArtwork",
@@ -80,17 +80,17 @@ internal sealed class HomeScreenItem(
     data object VideoWallpaper : HomeScreenItem(
         key = "videoWallpaper",
         section = "video",
-        visibleWhen = { drawsBackgroundArt(it) }
+        visibleWhen = { true }
     )
     data object VideoDelay : HomeScreenItem(
         key = "videoDelay",
         section = "video",
-        visibleWhen = { it.videoWallpaperEnabled && drawsBackgroundArt(it) }
+        visibleWhen = { it.videoWallpaperEnabled }
     )
     data object VideoMuted : HomeScreenItem(
         key = "videoMuted",
         section = "video",
-        visibleWhen = { it.videoWallpaperEnabled && drawsBackgroundArt(it) }
+        visibleWhen = { it.videoWallpaperEnabled }
     )
 
     data object LayoutPreview : HomeScreenItem("layoutPreview", "layout")
@@ -134,9 +134,7 @@ internal sealed class HomeScreenItem(
          * layer is hidden when it is not drawn.
          */
         private fun showsArtLayer(state: DisplayState): Boolean =
-            drawsBackgroundArt(state) &&
-                (!state.surfaceBackdrop.enabled ||
-                    state.homeBackgroundMode == HomeBackgroundMode.GAME_ART)
+            !state.surfaceBackdrop.enabled || state.homeBackgroundMode == HomeBackgroundMode.GAME_ART
 
         /**
          * A grid fills the screen with covers, so nothing is drawn behind it and every row that
@@ -154,18 +152,6 @@ internal sealed class HomeScreenItem(
 
         val ALL: List<HomeScreenItem>
             get() = listOf(
-                LayoutHeader,
-                LayoutPreview,
-                LayoutSelector,
-                *HomeLayoutKind.entries
-                    .flatMap { homeLayoutFieldsFor(it) }
-                    .distinct()
-                    .map { LayoutField(it) }
-                    .toTypedArray(),
-                ContentHeader,
-                InstalledOnly,
-                CompactCovers,
-                *homeRailFields().map { LayoutField(it) }.toTypedArray(),
                 BackgroundHeader,
                 Background, GameArtwork, WallpaperPreset, CustomImage, Blur, Saturation, Opacity,
                 VideoHeader,

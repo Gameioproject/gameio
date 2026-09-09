@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gameio_login_success_message">Tu biblioteca de Gameio está lista.</string>
+    <string name="gameio_login_invalid_credentials">Comprueba tu nombre de usuario y contraseña e inténtalo de nuevo.</string>
+    <string name="gameio_login_account_unavailable">Esta cuenta no puede iniciar sesión. Contacta con el soporte de Gameio.</string>
+    <string name="gameio_login_unavailable">Gameio no está disponible ahora. Comprueba tu conexión e inténtalo de nuevo.</string>
+</resources>

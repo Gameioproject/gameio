@@ -113,7 +113,8 @@ fun DiscoveryHero(
             Text(stringResource(if (game?.lastPlayedAt != null) R.string.discovery_continue else R.string.discovery_hero_fallback),
                 fontSize = dimensions.label, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (game != null) {
-                Text(game.title, fontSize = dimensions.title, color = MaterialTheme.colorScheme.onSurface,
+                Text(game.title, fontSize = dimensions.title,
+                style = MaterialTheme.typography.headlineMedium.copy(lineHeight = androidx.compose.ui.unit.TextUnit.Unspecified), color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 2, overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.padding(vertical = dimensions.gap / 2))
                 Text(listOfNotNull(game.genre?.split(",")?.firstOrNull(), game.releaseYear?.toString(),

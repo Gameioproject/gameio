@@ -213,7 +213,7 @@
     <string name="settings_shell_modal_delete_game_plain_message">Удаляет все скачанные файлы этой игры.%1$s Действие необратимо.</string>
     <string name="settings_shell_modal_delete_game_plain_confirm">Удалить игру</string>
 
-    <string name="settings_shell_modal_romm_signout_title">Выйти из RomM?</string>
+    <string name="settings_shell_modal_romm_signout_title">Выйти из Gameio?</string>
     <plurals name="settings_shell_romm_signout_pending_message">
         <item quantity="one">Сначала будет выгружено %1$d сохранение. Когда всё окажется на вашем сервере, кэшированные сохранения, состояния и настройки этого аккаунта будут удалены с этого устройства. Скачанные игры останутся.</item>
         <item quantity="few">Сначала будут выгружены %1$d сохранения. Когда всё окажется на вашем сервере, кэшированные сохранения, состояния и настройки этого аккаунта будут удалены с этого устройства. Скачанные игры останутся.</item>
@@ -262,8 +262,8 @@
     <string name="settings_shell_accounts_remove_fallback_name">аккаунт</string>
     <string name="settings_shell_accounts_removal_message_base">Удаляет с этого устройства сохранения, состояния, отложенные задачи, достижения и наложение библиотеки этого аккаунта. Скачанные игры сохраняются.</string>
     <string name="settings_shell_accounts_removal_pending_suffix"> Ещё не отправлено: %1$s.</string>
-    <string name="settings_shell_accounts_removal_last_account_suffix"> Это последний аккаунт, поэтому устройство будет отключено от RomM.</string>
-    <string name="settings_shell_accounts_removal_revoke_suffix"> Устройство останется зарегистрированным на сервере RomM; отзовите его там.</string>
+    <string name="settings_shell_accounts_removal_last_account_suffix"> Это последний аккаунт, поэтому устройство будет отключено от Gameio.</string>
+    <string name="settings_shell_accounts_removal_revoke_suffix"> Устройство останется зарегистрированным на сервере Gameio; отзовите его там.</string>
     <string name="settings_shell_accounts_cancel">Отмена</string>
     <string name="settings_shell_accounts_keep_queued_work">Сохранить отложенные задачи</string>
     <string name="settings_shell_accounts_discard_and_remove">Отменить и удалить</string>

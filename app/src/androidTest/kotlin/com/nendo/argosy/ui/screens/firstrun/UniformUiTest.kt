@@ -83,18 +83,19 @@ class UniformUiTest {
         compose.setContent {
             Surface {
                 RommLoginStep(
-                    url = "https://playgameio.com", urlCommitted = true,
                     username = "Player", password = "sample-password", isConnecting = false,
-                    error = null, focusedIndex = 3, rommFocusField = null,
-                    onUrlChange = {}, onUsernameChange = {}, onPasswordChange = {},
-                    onCommitUrl = {}, onEditUrl = {}, onConnect = { connected = true },
-                    onBack = {}, onClearFocusField = {}, keyboardField = null,
+                    error = null, focusedIndex = 2, rommFocusField = null,
+                    onUsernameChange = {}, onPasswordChange = {},
+                    onConnect = { connected = true },
+                    onClearFocusField = {}, keyboardField = null,
                     keyboardText = "", onKeyboardTextChange = {}, onKeyboardDismiss = {}
                 )
             }
         }
         compose.onAllNodesWithText("Sign in").onLast().assertIsDisplayed().performClick()
         assertTrue(connected)
+        compose.onNodeWithText("Change server").assertDoesNotExist()
+        compose.onNodeWithText("playgameio.com", substring = true).assertDoesNotExist()
         capture("login")
     }
 
@@ -103,12 +104,11 @@ class UniformUiTest {
         compose.setContent {
             Surface {
                 RommLoginStep(
-                    url = "https://playgameio.com", urlCommitted = true,
                     username = "Player", password = text.value, isConnecting = false,
                     error = null, focusedIndex = 2, rommFocusField = null,
-                    onUrlChange = {}, onUsernameChange = {}, onPasswordChange = { text.value = it },
-                    onCommitUrl = {}, onEditUrl = {}, onConnect = {},
-                    onBack = {}, onClearFocusField = {}, keyboardField = 2,
+                    onUsernameChange = {}, onPasswordChange = { text.value = it },
+                    onConnect = {},
+                    onClearFocusField = {}, keyboardField = 1,
                     keyboardText = text.value, onKeyboardTextChange = { text.value = it }, onKeyboardDismiss = {}
                 )
             }

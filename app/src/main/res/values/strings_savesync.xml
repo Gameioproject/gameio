@@ -41,7 +41,7 @@
     <string name="savesync_footer_open_game">Open game</string>
     <!-- Footer hint. Verb phrase: asks the server for saves this device has not seen yet. "RomM"
          is the name of the server software Gameio talks to; leave it untranslated. -->
-    <string name="savesync_footer_scan_server">Scan RomM</string>
+    <string name="savesync_footer_scan_server">Scan Gameio</string>
     <!-- Footer hint. Verb: leaves this screen. -->
     <string name="savesync_footer_back">Back</string>
 
@@ -51,7 +51,7 @@
     <!-- Stands in for the device name when no server is connected, so Gameio does not yet know
          what this device is registered as. Adjective phrase describing the state, not a command
          to connect. "RomM" is the server software's name; leave it untranslated. -->
-    <string name="savesync_device_not_connected">Not connected to RomM</string>
+    <string name="savesync_device_not_connected">Not connected to Gameio</string>
     <!-- The tail of this device's server-issued id, shown beside its name so two devices with
          the same name can be told apart. %1$s is the last few characters of the id and must not
          be altered; the leading horizontal ellipsis marks that the front was cut off. -->
@@ -62,7 +62,7 @@
     <string name="savesync_device_client_versioned">%1$s v%2$s</string>
     <!-- Names the connected server and its release. %1$s is the version number. "RomM" is the
          server software's name; leave it untranslated. -->
-    <string name="savesync_device_server_versioned">RomM v%1$s</string>
+    <string name="savesync_device_server_versioned">Gameio v%1$s</string>
     <!-- Shown in place of the server version when a server is reachable but did not say which
          release it runs. Adjective describing the link to the server. -->
     <string name="savesync_device_server_connected">Connected</string>
@@ -101,10 +101,10 @@
     <string name="savesync_empty_message_connected">Saves will appear here as you play</string>
     <!-- Heading shown in place of the list when no server is connected. Verb phrase addressed to
          the user. "Saves" is a plural noun, the thing being synced. -->
-    <string name="savesync_empty_title_disconnected">Connect to RomM to sync saves</string>
+    <string name="savesync_empty_title_disconnected">Connect to Gameio to sync saves</string>
     <!-- Body under that heading. Verb phrase addressed to the user. "Settings" names Gameio's own
          settings screen. -->
-    <string name="savesync_empty_message_disconnected">Open Settings to add your RomM server</string>
+    <string name="savesync_empty_message_disconnected">Open Settings to add your Gameio server</string>
 
     <!-- Names the copy of a disagreeing save that is on this handheld, on the line describing it.
          Adjective used as a noun, "the local one". -->
@@ -166,10 +166,10 @@
     <!-- Heading of the card that asks the server for saves this device has never seen. Verb
          phrase addressed to the user. "Saves" is a plural noun. "RomM" is the server software's
          name; leave it untranslated. -->
-    <string name="savesync_force_check_title">Scan RomM for missing saves</string>
+    <string name="savesync_force_check_title">Scan Gameio for missing saves</string>
     <!-- Body of that card before it has been run, saying what running it does. "Save" is a
          noun; "channel" is the named slot a save belongs to on the server. -->
-    <string name="savesync_force_check_idle">Walks local games and pulls the latest save in each channel from RomM.</string>
+    <string name="savesync_force_check_idle">Walks local games and pulls the latest save in each channel from Gameio.</string>
     <!-- Body of that card while the scan is running. Verb in the continuous form. -->
     <string name="savesync_force_check_running">Scanning...</string>
     <!-- Body of that card after a scan that found nothing to fetch. %d is how many games were

@@ -272,8 +272,8 @@
     <string name="media_music_facet_all_albums">Все альбомы</string>
     <string name="media_music_facet_all_genres">Все жанры</string>
 
-    <string name="media_music_offline_message">Нет подключения к вашему серверу RomM</string>
-    <string name="media_music_unsupported_message">Этот сервер RomM пока не поддерживает просмотр музыки</string>
+    <string name="media_music_offline_message">Нет подключения к вашему серверу Gameio</string>
+    <string name="media_music_unsupported_message">Этот сервер Gameio пока не поддерживает просмотр музыки</string>
     <string name="media_music_error_fallback">Что-то пошло не так</string>
     <string name="media_music_error_retry">Повторить</string>
     <string name="media_music_empty_message">Треки не найдены</string>

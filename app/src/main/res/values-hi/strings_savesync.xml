@@ -10,14 +10,14 @@
     <string name="savesync_footer_confirm_keep_server">सर्वर रखें</string>
     <string name="savesync_footer_confirm_skip">छोड़ें</string>
     <string name="savesync_footer_open_game">गेम खोलें</string>
-    <string name="savesync_footer_scan_server">RomM स्कैन करें</string>
+    <string name="savesync_footer_scan_server">Gameio स्कैन करें</string>
     <string name="savesync_footer_back">वापस</string>
 
     <string name="savesync_device_this_label">यह डिवाइस</string>
-    <string name="savesync_device_not_connected">RomM से कनेक्ट नहीं है</string>
+    <string name="savesync_device_not_connected">Gameio से कनेक्ट नहीं है</string>
     <string name="savesync_device_id_pill">&#8230;%1$s</string>
     <string name="savesync_device_client_versioned">%1$s v%2$s</string>
-    <string name="savesync_device_server_versioned">RomM v%1$s</string>
+    <string name="savesync_device_server_versioned">Gameio v%1$s</string>
     <string name="savesync_device_server_connected">कनेक्टेड</string>
     <string name="savesync_device_server_offline">ऑफ़लाइन</string>
     <!-- Just the unit word: the count is rendered beside it, never inside it, so there is no
@@ -40,8 +40,8 @@
 
     <string name="savesync_empty_title_connected">अभी तक कोई गेम सेव सिंक नहीं हुआ</string>
     <string name="savesync_empty_message_connected">जैसे ही आप खेलेंगे, सेव यहां दिखने लगेंगे</string>
-    <string name="savesync_empty_title_disconnected">सेव सिंक करने के लिए RomM से कनेक्ट करें</string>
-    <string name="savesync_empty_message_disconnected">अपना RomM सर्वर जोड़ने के लिए सेटिंग्स खोलें</string>
+    <string name="savesync_empty_title_disconnected">सेव सिंक करने के लिए Gameio से कनेक्ट करें</string>
+    <string name="savesync_empty_message_disconnected">अपना Gameio सर्वर जोड़ने के लिए सेटिंग्स खोलें</string>
 
     <string name="savesync_conflict_side_local">लोकल</string>
     <string name="savesync_conflict_side_server">सर्वर</string>
@@ -65,8 +65,8 @@
     <string name="savesync_game_last_write_unknown">आखिरी राइट - अज्ञात डिवाइस</string>
     <string name="savesync_game_last_write_time">%1$s &#183; %2$s</string>
 
-    <string name="savesync_force_check_title">गायब सेव के लिए RomM स्कैन करें</string>
-    <string name="savesync_force_check_idle">लोकल गेम जांचता है और हर चैनल की नवीनतम सेव RomM से लाता है।</string>
+    <string name="savesync_force_check_title">गायब सेव के लिए Gameio स्कैन करें</string>
+    <string name="savesync_force_check_idle">लोकल गेम जांचता है और हर चैनल की नवीनतम सेव Gameio से लाता है।</string>
     <string name="savesync_force_check_running">स्कैन हो रहा है...</string>
     <plurals name="savesync_force_check_up_to_date">
         <item quantity="one">अपडेट है - %d गेम जांचा, कुछ नया नहीं।</item>

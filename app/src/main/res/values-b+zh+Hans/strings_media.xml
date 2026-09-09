@@ -257,8 +257,8 @@
     <string name="media_music_facet_all_albums">所有专辑</string>
     <string name="media_music_facet_all_genres">所有类型</string>
 
-    <string name="media_music_offline_message">未连接到你的RomM服务器</string>
-    <string name="media_music_unsupported_message">此RomM服务器尚不支持音乐浏览功能</string>
+    <string name="media_music_offline_message">未连接到你的Gameio服务器</string>
+    <string name="media_music_unsupported_message">此Gameio服务器尚不支持音乐浏览功能</string>
     <string name="media_music_error_fallback">出了点问题</string>
     <string name="media_music_error_retry">重试</string>
     <string name="media_music_empty_message">未找到曲目</string>

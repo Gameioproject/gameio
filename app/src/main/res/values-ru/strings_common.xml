@@ -193,7 +193,7 @@
     <string name="ui_changelog_title">Что нового в %1$s</string>
     <string name="ui_changelog_footer_continue">Продолжить</string>
     <string name="ui_changelog_action_required">Требуется действие: %1$s</string>
-    <string name="ui_changelog_action_relogin_romm">Войти в RomM заново</string>
+    <string name="ui_changelog_action_relogin_romm">Войти в Gameio заново</string>
     <string name="ui_changelog_action_resync_library">Синхронизировать библиотеку заново</string>
     <string name="ui_changelog_action_clear_cache">Очистить кэш</string>
     <string name="ui_changelog_action_set_steam_path">Указать путь установки Steam</string>
@@ -289,7 +289,7 @@
     <string name="ui_section_breadcrumb_next">Следующий раздел</string>
 
     <string name="ui_qr_code_description">QR-код для %1$s</string>
-    <string name="ui_qr_scanner_hint">Наведите на QR-код сопряжения RomM</string>
+    <string name="ui_qr_scanner_hint">Наведите на QR-код сопряжения Gameio</string>
 
     <string name="ui_custom_tile_menu_header">ПЛИТКА</string>
 
@@ -559,8 +559,8 @@
     <string name="ui_drawer_friend_favorite">Избранное</string>
     <string name="ui_drawer_account_none">Нет аккаунта</string>
     <string name="ui_drawer_account_caption">Аккаунт</string>
-    <string name="ui_drawer_server_connected">RomM подключен</string>
-    <string name="ui_drawer_server_offline">RomM не в сети</string>
+    <string name="ui_drawer_server_connected">Gameio подключен</string>
+    <string name="ui_drawer_server_offline">Gameio не в сети</string>
     <string name="ui_drawer_nav_home">Главная</string>
     <string name="ui_drawer_nav_social">Общение</string>
     <string name="ui_drawer_nav_quaypass">Регистрация</string>

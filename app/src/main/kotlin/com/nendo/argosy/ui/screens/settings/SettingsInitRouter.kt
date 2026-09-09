@@ -86,7 +86,10 @@ internal fun routeObserveDelegateStates(vm: SettingsViewModel) {
     }.launchIn(vm.viewModelScope)
 
     vm.accountsDelegate.state.onEach { accounts ->
-        vm._uiState.update { it.copy(accounts = accounts) }
+        vm._uiState.update {
+            it.copy(accounts = accounts, focusedIndex =
+                if (accounts.signIn.active != it.accounts.signIn.active) 0 else it.focusedIndex)
+        }
     }.launchIn(vm.viewModelScope)
     vm.accountsDelegate.start(vm.viewModelScope)
 

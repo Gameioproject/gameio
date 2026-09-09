@@ -10,14 +10,14 @@
     <string name="savesync_footer_confirm_keep_server">Server behalten</string>
     <string name="savesync_footer_confirm_skip">Überspringen</string>
     <string name="savesync_footer_open_game">Spiel öffnen</string>
-    <string name="savesync_footer_scan_server">RomM durchsuchen</string>
+    <string name="savesync_footer_scan_server">Gameio durchsuchen</string>
     <string name="savesync_footer_back">Zurück</string>
 
     <string name="savesync_device_this_label">Dieses Gerät</string>
-    <string name="savesync_device_not_connected">Nicht mit RomM verbunden</string>
+    <string name="savesync_device_not_connected">Nicht mit Gameio verbunden</string>
     <string name="savesync_device_id_pill">…%1$s</string>
     <string name="savesync_device_client_versioned">%1$s v%2$s</string>
-    <string name="savesync_device_server_versioned">RomM v%1$s</string>
+    <string name="savesync_device_server_versioned">Gameio v%1$s</string>
     <string name="savesync_device_server_connected">Verbunden</string>
     <string name="savesync_device_server_offline">Offline</string>
     <plurals name="savesync_device_save_count_unit">
@@ -38,8 +38,8 @@
 
     <string name="savesync_empty_title_connected">Noch keine Spielstände synchronisiert</string>
     <string name="savesync_empty_message_connected">Spielstände erscheinen hier, während Sie spielen</string>
-    <string name="savesync_empty_title_disconnected">Verbinden Sie sich mit RomM, um Spielstände zu synchronisieren</string>
-    <string name="savesync_empty_message_disconnected">Öffnen Sie die Einstellungen, um Ihren RomM-Server hinzuzufügen</string>
+    <string name="savesync_empty_title_disconnected">Verbinden Sie sich mit Gameio, um Spielstände zu synchronisieren</string>
+    <string name="savesync_empty_message_disconnected">Öffnen Sie die Einstellungen, um Ihren Gameio-Server hinzuzufügen</string>
 
     <string name="savesync_conflict_side_local">Lokal</string>
     <string name="savesync_conflict_side_server">Server</string>
@@ -63,8 +63,8 @@
     <string name="savesync_game_last_write_unknown">Letzte Änderung - unbekanntes Gerät</string>
     <string name="savesync_game_last_write_time">%1$s · %2$s</string>
 
-    <string name="savesync_force_check_title">RomM nach fehlenden Spielständen durchsuchen</string>
-    <string name="savesync_force_check_idle">Durchsucht lokale Spiele und ruft den neuesten Spielstand jedes Kanals von RomM ab.</string>
+    <string name="savesync_force_check_title">Gameio nach fehlenden Spielständen durchsuchen</string>
+    <string name="savesync_force_check_idle">Durchsucht lokale Spiele und ruft den neuesten Spielstand jedes Kanals von Gameio ab.</string>
     <string name="savesync_force_check_running">Wird durchsucht...</string>
     <plurals name="savesync_force_check_up_to_date">
         <item quantity="one">Aktuell - %d Spiel geprüft, nichts Neues.</item>

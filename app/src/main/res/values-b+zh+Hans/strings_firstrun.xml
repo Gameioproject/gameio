@@ -12,7 +12,7 @@
     <string name="firstrun_romm_url_error_blank">请输入服务器地址</string>
 
     <string name="firstrun_pairing_code_title">输入配对码</string>
-    <string name="firstrun_pairing_code_hint">在RomM网页界面中创建一个API令牌，然后输入8位代码。</string>
+    <string name="firstrun_pairing_code_hint">在Gameio网页界面中创建一个API令牌，然后输入8位代码。</string>
     <string name="firstrun_pairing_code_clear_description">清除代码</string>
     <string name="firstrun_pairing_code_button_connect">连接</string>
     <string name="firstrun_pairing_code_button_connecting">正在连接...</string>
@@ -22,7 +22,7 @@
     <string name="firstrun_pairing_code_error_incomplete">请输入完整的8位配对码</string>
 
     <string name="firstrun_device_pairing_title">扫码配对</string>
-    <string name="firstrun_device_pairing_hint">用手机扫描此二维码，或直接在此设备上登录，然后在RomM中批准该设备。</string>
+    <string name="firstrun_device_pairing_hint">用手机扫描此二维码，或直接在此设备上登录，然后在Gameio中批准该设备。</string>
     <string name="firstrun_device_pairing_no_browser">此设备上没有浏览器。请扫描二维码，或改用配对码。</string>
     <string name="firstrun_device_pairing_button_sign_in">在此设备上登录</string>
     <string name="firstrun_device_pairing_button_manual_code">使用配对码</string>
@@ -123,7 +123,7 @@
     </plurals>
     <string name="firstrun_complete_hint">在合集设置中同步你的游戏库以开始使用。</string>
     <string name="firstrun_complete_button_start">开始游戏</string>
-    <string name="firstrun_romm_sign_in_hint">请使用服务器管理者提供给你的用户名和密码。</string>
+    <string name="firstrun_romm_sign_in_hint">使用你的 Gameio 账户登录。</string>
     <string name="firstrun_romm_sign_in_button">登录</string>
     <string name="firstrun_romm_sign_in_connecting">登录中\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">更换服务器</string>

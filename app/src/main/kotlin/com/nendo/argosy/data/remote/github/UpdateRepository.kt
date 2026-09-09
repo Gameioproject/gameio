@@ -153,9 +153,8 @@ class UpdateRepository @Inject constructor(
 
             val releases = response.body()
             if (releases.isNullOrEmpty()) {
-                val error = UpdateState.Error("No releases found")
-                _updateState.value = error
-                return error
+                _updateState.value = UpdateState.UpToDate
+                return UpdateState.UpToDate
             }
 
             val candidates = releases.filter { release ->

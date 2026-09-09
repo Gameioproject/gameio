@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="error_sync_library_not_connected">尚未連線至RomM</string>
+    <string name="error_sync_library_not_connected">尚未連線至Gameio</string>
     <string name="error_sync_library_unexpected">同步失敗</string>
 
-    <string name="error_sync_platform_not_connected">尚未連線至RomM</string>
+    <string name="error_sync_platform_not_connected">尚未連線至Gameio</string>
     <string name="error_sync_platform_not_found">找不到平台</string>
     <string name="error_sync_platform_unexpected">同步失敗</string>
 
@@ -27,7 +27,7 @@
     <string name="error_restore_cached_save_restore_failed">無法還原存檔</string>
 
     <string name="error_download_game_not_found">找不到遊戲</string>
-    <string name="error_download_game_not_synced">遊戲尚未從RomM同步</string>
+    <string name="error_download_game_not_synced">遊戲尚未從Gameio同步</string>
     <string name="error_download_invalid_file_type">無效的檔案類型：.%1$s</string>
     <string name="error_download_rom_info_fetch_failed">無法取得ROM資訊：%1$s</string>
     <string name="error_download_no_discs_found">找不到此多光碟遊戲的光碟</string>

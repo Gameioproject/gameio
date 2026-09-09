@@ -212,7 +212,7 @@
     <string name="settings_shell_modal_delete_game_plain_message">Elimina todos los archivos descargados para este juego.%1$s Esta acción no se puede deshacer.</string>
     <string name="settings_shell_modal_delete_game_plain_confirm">Eliminar juego</string>
 
-    <string name="settings_shell_modal_romm_signout_title">¿Cerrar sesión en RomM?</string>
+    <string name="settings_shell_modal_romm_signout_title">¿Cerrar sesión en Gameio?</string>
     <plurals name="settings_shell_romm_signout_pending_message">
         <item quantity="one">%1$d partida guardada se subirá primero. Una vez que todo esté en tu servidor, las partidas guardadas, estados y ajustes en caché de esta cuenta se eliminan de este dispositivo. Tus juegos descargados permanecen.</item>
         <item quantity="many">%1$d partidas guardadas se subirán primero. Una vez que todo esté en tu servidor, las partidas guardadas, estados y ajustes en caché de esta cuenta se eliminan de este dispositivo. Tus juegos descargados permanecen.</item>
@@ -260,8 +260,8 @@
     <string name="settings_shell_accounts_remove_fallback_name">cuenta</string>
     <string name="settings_shell_accounts_removal_message_base">Elimina de este dispositivo los guardados, estados, trabajos en cola, logros y la capa de biblioteca de esta cuenta. Los juegos descargados se conservan.</string>
     <string name="settings_shell_accounts_removal_pending_suffix"> Aún sin enviar: %1$s.</string>
-    <string name="settings_shell_accounts_removal_last_account_suffix"> Esta es la última cuenta, así que el dispositivo se desconectará de RomM.</string>
-    <string name="settings_shell_accounts_removal_revoke_suffix"> El dispositivo permanece registrado en el servidor RomM; revócalo allí.</string>
+    <string name="settings_shell_accounts_removal_last_account_suffix"> Esta es la última cuenta, así que el dispositivo se desconectará de Gameio.</string>
+    <string name="settings_shell_accounts_removal_revoke_suffix"> El dispositivo permanece registrado en el servidor Gameio; revócalo allí.</string>
     <string name="settings_shell_accounts_cancel">Cancelar</string>
     <string name="settings_shell_accounts_keep_queued_work">Conservar trabajo en cola</string>
     <string name="settings_shell_accounts_discard_and_remove">Descartar y eliminar</string>

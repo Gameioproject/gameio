@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
-import kotlinx.coroutines.flow.first
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.nendo.argosy.data.cache.GradientPreset
@@ -243,7 +242,7 @@ class DisplayPreferencesRepository @Inject constructor(
             homeBackgroundMode = HomeBackgroundMode.fromString(prefs[Keys.HOME_BACKGROUND_MODE]),
             homeLayout = com.nendo.argosy.domain.model.HomeLayoutSettings.fromJson(
                 prefs[Keys.HOME_LAYOUT_CONFIG]
-            ),
+            ).copy(selected = com.nendo.argosy.domain.model.HomeLayoutKind.CAROUSEL),
             useAccentColorFooter = prefs[Keys.USE_ACCENT_COLOR_FOOTER] ?: false,
             compactFooter = prefs[Keys.COMPACT_FOOTER] ?: false,
             boxArtShape = BoxArtShape.fromString(prefs[Keys.BOX_ART_SHAPE]),

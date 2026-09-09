@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- SyncLibraryUseCase / SyncLibraryFailureReason -->
-    <string name="error_sync_library_not_connected">RomM कनेक्ट नहीं है</string>
+    <string name="error_sync_library_not_connected">Gameio कनेक्ट नहीं है</string>
     <string name="error_sync_library_unexpected">सिंक विफल</string>
 
     <!-- SyncPlatformUseCase / SyncPlatformFailureReason -->
-    <string name="error_sync_platform_not_connected">RomM कनेक्ट नहीं है</string>
+    <string name="error_sync_platform_not_connected">Gameio कनेक्ट नहीं है</string>
     <string name="error_sync_platform_not_found">प्लेटफ़ॉर्म नहीं मिला</string>
     <string name="error_sync_platform_unexpected">सिंक विफल</string>
 
@@ -34,7 +34,7 @@
 
     <!-- DownloadGameUseCase / DownloadGameFailureReason -->
     <string name="error_download_game_not_found">गेम नहीं मिला</string>
-    <string name="error_download_game_not_synced">गेम RomM से सिंक नहीं है</string>
+    <string name="error_download_game_not_synced">गेम Gameio से सिंक नहीं है</string>
     <string name="error_download_invalid_file_type">अमान्य फ़ाइल प्रकार: .%1$s</string>
     <string name="error_download_rom_info_fetch_failed">ROM जानकारी प्राप्त करने में विफल: %1$s</string>
     <string name="error_download_no_discs_found">मल्टी-डिस्क गेम के लिए कोई डिस्क नहीं मिली</string>

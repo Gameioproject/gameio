@@ -106,6 +106,7 @@ private fun routeApplySectionExit(vm: SettingsViewModel, section: SettingsSectio
 }
 
 internal fun routeNavigateToSection(vm: SettingsViewModel, section: SettingsSection) {
+    if (section == SettingsSection.JELLYFIN || section == SettingsSection.SOCIAL) return
     routePushSection(vm, section)
     routeApplySectionEntry(vm, section)
 }

@@ -1,6 +1,5 @@
 package com.nendo.argosy.ui.theme
 
-import android.content.res.Configuration
 import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -254,6 +253,8 @@ data class BoxArtStyleConfig(
     val platformIndicatorContent: PlatformIndicatorContent = PlatformIndicatorContent.NAME
 )
 
+val LocalAccentColorOverride = staticCompositionLocalOf<Color?> { null }
+
 val LocalBoxArtStyle = staticCompositionLocalOf { BoxArtStyleConfig() }
 
 /**
@@ -425,6 +426,7 @@ fun ProvideArgosyThemeLocals(
     CompositionLocalProvider(
         LocalUiScale provides uiScaleConfig,
         LocalLauncherTheme provides launcherConfig,
+        LocalAccentColorOverride provides palette.rawPrimary,
         LocalArgosyTheme provides argosyThemeTokens(palette),
         LocalSurfaceBackdrop provides themeState.surfaceBackdrop,
         LocalBackdropStamps provides stampProvider,

@@ -47,8 +47,7 @@ internal fun buildRomMItems(
     isSignedIntoRomM: Boolean
 ): List<RomMItem> = buildList {
     add(RomMItem.Header("serverHeader", "server", R.string.settings_romm_section_server))
-    add(RomMItem.RomManager)
-    add(RomMItem.Accounts)
+    if (isSignedIntoRomM) add(RomMItem.Accounts) else add(RomMItem.RomManager)
     if (isSignedIntoRomM) {
         add(RomMItem.RomMSignOut)
     }
@@ -168,11 +167,9 @@ private fun RomMContent(uiState: SettingsUiState, viewModel: SettingsViewModel) 
                 subtitle = when (uiState.server.connectionStatus) {
                     ConnectionStatus.CHECKING ->
                         stringResource(R.string.settings_romm_server_checking)
-                    ConnectionStatus.ONLINE -> uiState.server.rommUrl.ifBlank {
-                        stringResource(R.string.settings_romm_server_connected)
-                    }
+                    ConnectionStatus.ONLINE -> stringResource(R.string.settings_romm_server_connected)
                     ConnectionStatus.OFFLINE ->
-                        stringResource(R.string.settings_romm_server_offline, uiState.server.rommUrl)
+                        stringResource(R.string.settings_main_romm_subtitle_offline)
                     ConnectionStatus.NOT_CONFIGURED ->
                         stringResource(R.string.settings_romm_server_unconfigured)
                 },

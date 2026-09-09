@@ -203,7 +203,7 @@
     <string name="settings_shell_modal_delete_game_plain_message">将删除此游戏的所有已下载文件。%1$s此操作无法撤销。</string>
     <string name="settings_shell_modal_delete_game_plain_confirm">删除游戏</string>
 
-    <string name="settings_shell_modal_romm_signout_title">退出RomM登录？</string>
+    <string name="settings_shell_modal_romm_signout_title">退出Gameio登录？</string>
     <plurals name="settings_shell_romm_signout_pending_message">
         <item quantity="other">将先上传%1$d个存档。全部同步到服务器后，此账户在本设备上缓存的存档、即时存档和设置会被移除，已下载的游戏会保留。</item>
     </plurals>
@@ -249,8 +249,8 @@
     <string name="settings_shell_accounts_remove_fallback_name">账户</string>
     <string name="settings_shell_accounts_removal_message_base">将从本设备移除此账户的存档、即时存档、排队中的任务、成就和库叠加数据。已下载的游戏会保留。</string>
     <string name="settings_shell_accounts_removal_pending_suffix"> 仍未发送：%1$s。</string>
-    <string name="settings_shell_accounts_removal_last_account_suffix"> 这是最后一个账户，设备将退出RomM登录。</string>
-    <string name="settings_shell_accounts_removal_revoke_suffix"> 设备仍在RomM服务器上保持注册状态，请在服务器上撤销。</string>
+    <string name="settings_shell_accounts_removal_last_account_suffix"> 这是最后一个账户，设备将退出Gameio登录。</string>
+    <string name="settings_shell_accounts_removal_revoke_suffix"> 设备仍在Gameio服务器上保持注册状态，请在服务器上撤销。</string>
     <string name="settings_shell_accounts_cancel">取消</string>
     <string name="settings_shell_accounts_keep_queued_work">保留排队中的任务</string>
     <string name="settings_shell_accounts_discard_and_remove">放弃并移除</string>

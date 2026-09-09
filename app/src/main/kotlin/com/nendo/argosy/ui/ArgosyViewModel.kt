@@ -9,7 +9,6 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
-import android.view.WindowManager
 import androidx.annotation.StringRes
 import com.nendo.argosy.R
 import androidx.lifecycle.ViewModel
@@ -532,9 +531,9 @@ class ArgosyViewModel @Inject constructor(
         DrawerState(
             rommConnected = connection is ConnectionState.Connected,
             rommConnecting = connection is ConnectionState.Connecting,
-            socialConnected = socialConnection is SocialConnectionState.Connected,
-            localUser = (socialConnection as? SocialConnectionState.Connected)?.user,
-            localAvatarDoodle = userPrefs.socialAvatarDoodle.takeIf { userPrefs.socialAvatarUseDoodle },
+            socialConnected = false,
+            localUser = null,
+            localAvatarDoodle = null,
             rommUsername = userPrefs.rommUsername?.takeIf { it.isNotBlank() },
             downloadCount = downloadCount,
             saveSyncAttentionCount = saveSyncAttentionCount,
@@ -555,11 +554,7 @@ class ArgosyViewModel @Inject constructor(
 
     private val allDrawerItems = listOf(
         DrawerItem(Screen.Home.route, R.string.ui_drawer_nav_home),
-        DrawerItem(Screen.Social.route, R.string.ui_drawer_nav_social),
-        DrawerItem(Screen.QuayPass.route, R.string.ui_drawer_nav_quaypass),
-        DrawerItem(Screen.Collections.route, R.string.ui_drawer_nav_collections),
         DrawerItem(Screen.Library.route, R.string.ui_drawer_nav_library),
-        DrawerItem(Screen.MediaLibrary.route, R.string.ui_drawer_nav_media),
         DrawerItem(Screen.Downloads.route, R.string.ui_drawer_nav_downloads),
         DrawerItem(Screen.SaveSync.route, R.string.ui_drawer_nav_save_sync),
         DrawerItem(Screen.Apps.route, R.string.ui_drawer_nav_apps),

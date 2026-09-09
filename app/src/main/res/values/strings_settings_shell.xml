@@ -116,7 +116,7 @@
     <string name="settings_shell_header_main">SETTINGS</string>
     <string name="settings_shell_header_accounts">ACCOUNTS</string>
     <!-- Proper name of the RomM server this launcher talks to; never translated. -->
-    <string name="settings_shell_header_romm" translatable="false">ROMM</string>
+    <string name="settings_shell_header_romm" translatable="false">GAMEIO</string>
     <string name="settings_shell_header_saves">SAVES</string>
     <string name="settings_shell_header_sync_settings">SYNC SETTINGS</string>
     <!-- "Steam" is Valve's proprietary storefront name; keep it as-is even if you translate the
@@ -272,7 +272,7 @@
     <string name="settings_shell_modal_delete_game_plain_message">Removes all downloaded files for this game.%1$s This cannot be undone.</string>
     <string name="settings_shell_modal_delete_game_plain_confirm">Delete Game</string>
 
-    <string name="settings_shell_modal_romm_signout_title">Sign Out of RomM?</string>
+    <string name="settings_shell_modal_romm_signout_title">Sign Out of Gameio?</string>
     <!-- Shown when saves are still queued to upload before sign-out. "save" here is a noun. -->
     <plurals name="settings_shell_romm_signout_pending_message">
         <item quantity="one">%1$d save will be uploaded first. Once everything is on your server, this account\'s cached saves, states and settings are removed from this device. Your downloaded games stay.</item>
@@ -323,8 +323,8 @@
     <string name="settings_shell_accounts_removal_message_base">Removes this account\'s saves, states, queued work, achievements and library overlay from this device. Downloaded games are kept.</string>
     <!-- Appended when there is unsent work. %1$s is a short summary phrase. -->
     <string name="settings_shell_accounts_removal_pending_suffix"> Still unsent: %1$s.</string>
-    <string name="settings_shell_accounts_removal_last_account_suffix"> This is the last account, so the device will be signed out of RomM.</string>
-    <string name="settings_shell_accounts_removal_revoke_suffix"> The device stays registered on the RomM server; revoke it there.</string>
+    <string name="settings_shell_accounts_removal_last_account_suffix"> This is the last account, so the device will be signed out of Gameio.</string>
+    <string name="settings_shell_accounts_removal_revoke_suffix"> The device remains registered with Gameio.</string>
     <string name="settings_shell_accounts_cancel">Cancel</string>
     <string name="settings_shell_accounts_keep_queued_work">Keep Queued Work</string>
     <string name="settings_shell_accounts_discard_and_remove">Discard and Remove</string>

@@ -25,14 +25,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
@@ -48,7 +46,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.layout.BoxWithConstraints
 import com.nendo.argosy.R
-import com.nendo.argosy.data.remote.romm.DEFAULT_SERVER_URL
 import com.nendo.argosy.ui.components.GameioMark
 import com.nendo.argosy.ui.theme.Dimens
 
@@ -98,48 +95,39 @@ internal fun WelcomeStep(isFocused: Boolean, onGetStarted: () -> Unit) {
 
 @Composable
 internal fun RommLoginStep(
-    url: String,
-    urlCommitted: Boolean,
     username: String,
     password: String,
     isConnecting: Boolean,
     error: String?,
     focusedIndex: Int,
     rommFocusField: Int?,
-    onUrlChange: (String) -> Unit,
     onUsernameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onCommitUrl: () -> Unit,
-    onEditUrl: () -> Unit,
     onConnect: () -> Unit,
-    onBack: () -> Unit,
     onClearFocusField: () -> Unit,
     keyboardField: Int?,
     keyboardText: String,
     onKeyboardTextChange: (String) -> Unit,
     onKeyboardDismiss: () -> Unit
 ) {
-    val urlFocusRequester = remember { FocusRequester() }
     val usernameFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
     val focusManager: FocusManager = LocalFocusManager.current
     val keyboard: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current
 
-    var wasUrlFocused by remember { mutableStateOf(false) }
-    val canConnect = url.isNotBlank() && username.isNotBlank() && password.isNotBlank()
+    val canConnect = username.isNotBlank() && password.isNotBlank()
 
     LaunchedEffect(rommFocusField) {
         when (rommFocusField) {
-            0 -> urlFocusRequester.requestFocus()
-            1 -> usernameFocusRequester.requestFocus()
-            2 -> passwordFocusRequester.requestFocus()
+            0 -> usernameFocusRequester.requestFocus()
+            1 -> passwordFocusRequester.requestFocus()
         }
         if (rommFocusField != null) {
             onClearFocusField()
         }
     }
-    LaunchedEffect(focusedIndex, urlCommitted) {
-        val onAField = if (urlCommitted) focusedIndex <= 2 else focusedIndex == 0
+    LaunchedEffect(focusedIndex) {
+        val onAField = focusedIndex <= 1
         if (!onAField) {
             keyboard?.hide()
             focusManager.clearFocus()
@@ -168,11 +156,7 @@ internal fun RommLoginStep(
                     )
                     Spacer(modifier = Modifier.height(Dimens.spacingSm))
                     Text(
-                        text = if (urlCommitted) {
-                            stringResource(R.string.firstrun_romm_sign_in_hint)
-                        } else {
-                            stringResource(R.string.firstrun_romm_url_hint)
-                        },
+                        text = stringResource(R.string.firstrun_romm_sign_in_hint),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         style = MaterialTheme.typography.bodySmall,
                         textAlign = TextAlign.Center,
@@ -188,12 +172,11 @@ internal fun RommLoginStep(
                     onQueryChange = onKeyboardTextChange,
                     onDismiss = onKeyboardDismiss,
                     placeholder = when (keyboardField) {
-                        0 -> DEFAULT_SERVER_URL
-                        1 -> stringResource(R.string.settings_romm_config_username_label)
+                        0 -> stringResource(R.string.settings_romm_config_username_label)
                         else -> stringResource(R.string.settings_romm_config_password_label)
                     },
                     embedded = true,
-                    isPassword = keyboardField == 2,
+                    isPassword = keyboardField == 1,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -208,59 +191,16 @@ internal fun RommLoginStep(
                         .padding(horizontal = Dimens.spacingLg, vertical = Dimens.spacingLg)
                 ) {
                     Text(
-                        text = stringResource(if (urlCommitted) R.string.firstrun_romm_sign_in_button else R.string.firstrun_romm_url_field_label),
+                        text = stringResource(R.string.firstrun_romm_sign_in_button),
                         style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.fillMaxWidth().padding(bottom = Dimens.spacingMd)
                     )
-                    if (!urlCommitted) {
-                        SetupTextField(
-                            value = url,
-                            onValueChange = onUrlChange,
-                            label = stringResource(R.string.firstrun_romm_url_field_label),
-                            placeholder = DEFAULT_SERVER_URL,
-                            gamepadFocused = focusedIndex == 0,
-                            focusRequester = urlFocusRequester,
-                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
-                            keyboardActions = KeyboardActions(
-                                onGo = {
-                                    if (!isConnecting && url.isNotBlank()) {
-                                        keyboard?.hide()
-                                        focusManager.clearFocus()
-                                        onCommitUrl()
-                                    }
-                                }
-                            ),
-                            onFocusChanged = { focused ->
-                                if (wasUrlFocused && !focused && url.isNotBlank()) onCommitUrl()
-                                wasUrlFocused = focused
-                            }
-                        )
-                        SetupError(error)
-                        Spacer(modifier = Modifier.height(Dimens.spacingLg))
-                        Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMd)) {
-                            SetupPrimaryButton(
-                                text = if (isConnecting) {
-                                    stringResource(R.string.firstrun_romm_url_button_checking)
-                                } else {
-                                    stringResource(R.string.firstrun_romm_url_button_continue)
-                                },
-                                isFocused = focusedIndex == 1,
-                                enabled = !isConnecting && url.isNotBlank(),
-                                onClick = onCommitUrl
-                            )
-                            SetupSecondaryButton(
-                                text = stringResource(R.string.firstrun_romm_url_button_back),
-                                isFocused = focusedIndex == 2,
-                                onClick = onBack
-                            )
-                        }
-                    } else {
                         SetupTextField(
                             value = username,
                             onValueChange = onUsernameChange,
                             label = stringResource(R.string.settings_romm_config_username_label),
-                            gamepadFocused = focusedIndex == 1,
+                            gamepadFocused = focusedIndex == 0,
                             focusRequester = usernameFocusRequester,
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
                             keyboardActions = KeyboardActions(
@@ -272,7 +212,7 @@ internal fun RommLoginStep(
                             value = password,
                             onValueChange = onPasswordChange,
                             label = stringResource(R.string.settings_romm_config_password_label),
-                            gamepadFocused = focusedIndex == 2,
+                            gamepadFocused = focusedIndex == 1,
                             focusRequester = passwordFocusRequester,
                             isPassword = true,
                             keyboardOptions = KeyboardOptions(
@@ -298,24 +238,11 @@ internal fun RommLoginStep(
                                 } else {
                                     stringResource(R.string.firstrun_romm_sign_in_button)
                                 },
-                                isFocused = focusedIndex == 3,
+                                isFocused = focusedIndex == 2,
                                 enabled = !isConnecting && canConnect,
                                 onClick = onConnect
                             )
-                            SetupSecondaryButton(
-                                text = stringResource(R.string.firstrun_romm_sign_in_change_server),
-                                isFocused = focusedIndex == 4,
-                                enabled = !isConnecting,
-                                onClick = onEditUrl
-                            )
                         }
-                        Spacer(modifier = Modifier.height(Dimens.spacingMd))
-                        Text(
-                            text = url.removePrefix("https://").removePrefix("http://").trimEnd('/'),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            style = MaterialTheme.typography.labelMedium
-                        )
-                    }
                 }
             }
 
@@ -359,7 +286,6 @@ internal fun RommLoginStep(
 
 @Composable
 internal fun RommSuccessStep(
-    serverName: String,
     gameCount: Int,
     platformCount: Int,
     isFocused: Boolean,
@@ -392,7 +318,7 @@ internal fun RommSuccessStep(
             )
             Spacer(modifier = Modifier.height(Dimens.spacingMd))
             Text(
-                text = stringResource(R.string.firstrun_romm_success_server, serverName),
+                text = stringResource(R.string.gameio_login_success_message),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center

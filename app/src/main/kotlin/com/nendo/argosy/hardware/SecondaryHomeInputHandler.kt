@@ -1,7 +1,5 @@
 package com.nendo.argosy.hardware
 
-import android.util.Log
-import com.nendo.argosy.data.emulator.EmulatorDetector
 import com.nendo.argosy.data.preferences.EmulatorDisplayTarget
 import com.nendo.argosy.domain.model.HomeLayoutKind
 import com.nendo.argosy.ui.common.GridDirection
@@ -80,10 +78,7 @@ class SecondaryHomeInputHandler(
      * Whether the app bar carries its media button right now. It is the last slot when it is there
      * at all, so the count the movement helpers take is the app count plus this.
      */
-    private fun hasMediaSlot(): Boolean {
-        val dsm = com.nendo.argosy.DualScreenManagerHolder.instance ?: return false
-        return dsm.mediaPlayback.value != null || dsm.mediaSignedIn.value
-    }
+    private fun hasMediaSlot(): Boolean = false
 
     private fun mediaSlotCount(): Int = if (hasMediaSlot()) 1 else 0
 

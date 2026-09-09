@@ -3,7 +3,6 @@ package com.nendo.argosy.ui.screens.settings.sections
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -30,16 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.nendo.argosy.R
 import com.nendo.argosy.ui.components.ActionPreference
 import com.nendo.argosy.ui.components.FocusedScroll
@@ -163,7 +153,6 @@ fun AccountsSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
                         ?.let { stringResource(R.string.settings_accounts_add_subtitle, it.serverLabel) }
                         ?: stringResource(R.string.settings_accounts_add_subtitle_locked),
                     icon = Icons.Default.PersonAdd,
-                    isEnabled = accounts.activeAccount != null,
                     isFocused = focusIndex == uiState.focusedIndex,
                     onClick = { viewModel.startAddAccount() }
                 )
@@ -397,95 +386,21 @@ private fun AccountSwitchProgressPane(state: AccountsState) {
 @Composable
 private fun AccountPairingPane(uiState: SettingsUiState, viewModel: SettingsViewModel) {
     val signIn = uiState.accounts.signIn
-    val inputShape = RoundedCornerShape(Dimens.radiusMd)
-    val passwordFocusRequester = remember { FocusRequester() }
-    val canSubmit = !signIn.connecting &&
-        signIn.username.isNotBlank() && signIn.password.isNotBlank()
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(Dimens.spacingMd),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(Dimens.spacingSm)
-    ) {
-        Text(
-            text = stringResource(R.string.settings_accounts_pairing_title),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Text(
-            text = stringResource(R.string.settings_accounts_pairing_message),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
-        )
-
-        if (signIn.connecting) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimens.spacingLg),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
-            }
-        } else {
-            OutlinedTextField(
-                value = signIn.username,
-                onValueChange = { viewModel.setAddAccountUsername(it) },
-                label = { Text(stringResource(R.string.settings_romm_config_username_label)) },
-                singleLine = true,
-                shape = inputShape,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(onNext = { passwordFocusRequester.requestFocus() }),
-                modifier = Modifier.fillMaxWidth()
-            )
-            OutlinedTextField(
-                value = signIn.password,
-                onValueChange = { viewModel.setAddAccountPassword(it) },
-                label = { Text(stringResource(R.string.settings_romm_config_password_label)) },
-                singleLine = true,
-                shape = inputShape,
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Go
-                ),
-                keyboardActions = KeyboardActions(
-                    onGo = { if (canSubmit) viewModel.submitAddAccount() }
-                ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(passwordFocusRequester)
-            )
-        }
-
-        signIn.error?.let { message ->
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.error,
-                textAlign = TextAlign.Center
-            )
-        }
-
-        Spacer(modifier = Modifier.height(Dimens.spacingSm))
-
-        ActionButton(
-            label = stringResource(R.string.settings_accounts_sign_in_confirm),
-            onClick = { if (canSubmit) viewModel.submitAddAccount() },
-            focused = true,
-            primary = true
-        )
-
-        ActionButton(
-            label = stringResource(R.string.settings_accounts_pairing_cancel),
-            onClick = { viewModel.cancelAddAccount() },
-            focused = false,
-            primary = false
-        )
-    }
+    com.nendo.argosy.ui.screens.firstrun.RommLoginStep(
+        username = signIn.username, password = signIn.password,
+        isConnecting = signIn.connecting, error = signIn.error,
+        focusedIndex = uiState.focusedIndex, rommFocusField = null,
+        onUsernameChange = viewModel::setAddAccountUsername,
+        onPasswordChange = viewModel::setAddAccountPassword,
+        onConnect = viewModel::submitAddAccount, onClearFocusField = {},
+        keyboardField = signIn.keyboardField,
+        keyboardText = if (signIn.keyboardField == 0) signIn.username else signIn.password,
+        onKeyboardTextChange = {
+            if (signIn.keyboardField == 0) viewModel.setAddAccountUsername(it)
+            else viewModel.setAddAccountPassword(it)
+        },
+        onKeyboardDismiss = { viewModel.setAddAccountKeyboardField(null) }
+    )
 }
 
 private const val FOCUS_WASH_ALPHA = 0.15f

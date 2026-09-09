@@ -182,7 +182,6 @@ fun buildMoreOptions(ctx: MoreOptionsContext): List<MoreOptionAction> = buildLis
     if (ctx.hasVariants && isEmulatedGame) add(MoreOptionAction.SelectVariant)
     if ((ctx.hasManageableFiles || ctx.hasUpdates) && ctx.isDownloaded) add(MoreOptionAction.Files)
     if (canTrackProgress) add(MoreOptionAction.RefreshData)
-    add(MoreOptionAction.AddToCollection)
     if (ctx.canSearchCovers) add(MoreOptionAction.ChangeCover)
     if (ctx.coverSetManually) add(MoreOptionAction.ResetCover)
     if (ctx.isDownloaded || ctx.isAndroidApp) add(MoreOptionAction.Delete)

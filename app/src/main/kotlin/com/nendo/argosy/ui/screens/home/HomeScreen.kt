@@ -10,8 +10,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import com.nendo.argosy.ui.util.clickableNoFocus
@@ -31,7 +29,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.foundation.lazy.LazyColumn
@@ -50,7 +47,6 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.InstallMobile
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Whatshot
@@ -62,7 +58,6 @@ import com.nendo.argosy.ui.common.backgroundBlurDp
 import com.nendo.argosy.ui.common.rememberFileImageModel
 import com.nendo.argosy.ui.components.GameTitle
 import com.nendo.argosy.ui.components.SectionBreadcrumb
-import com.nendo.argosy.ui.icons.InputIcons
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalConfiguration
@@ -92,10 +87,7 @@ import com.nendo.argosy.ui.theme.LocalArgosyTheme
 import com.nendo.argosy.ui.theme.backdrop.BackdropRole
 import com.nendo.argosy.ui.theme.backdrop.LocalSurfaceBackdrop
 import com.nendo.argosy.ui.theme.backdrop.surfaceBackdrop
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
@@ -109,7 +101,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import coil.size.Size
 import com.nendo.argosy.R
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Shuffle
@@ -129,11 +120,9 @@ import com.nendo.argosy.ui.components.CarouselMetrics
 import com.nendo.argosy.ui.components.CarouselOverrides
 import com.nendo.argosy.ui.components.CarouselRail
 import com.nendo.argosy.ui.components.HomeAutoGrid
-import com.nendo.argosy.ui.components.HomeCustomGridPage
 import com.nendo.argosy.ui.components.HomeTilePickerModal
 import com.nendo.argosy.ui.components.TileEditMode
 import androidx.compose.foundation.layout.ColumnScope
-import com.nendo.argosy.ui.theme.generated.ComponentDefaults
 import com.nendo.argosy.domain.model.HomeFocusPosition
 import com.nendo.argosy.domain.model.HomeLayoutKind
 import com.nendo.argosy.domain.model.HomeRowAlignment
@@ -161,11 +150,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import com.nendo.argosy.ui.theme.Dimens
 import com.nendo.argosy.ui.theme.LocalBoxArtStyle
-import com.nendo.argosy.ui.theme.LocalUiScale
 import com.nendo.argosy.ui.theme.LocalLauncherTheme
 import com.nendo.argosy.ui.theme.Motion
-import com.nendo.argosy.ui.theme.generated.ColorTokens
-import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
@@ -2275,7 +2261,6 @@ private fun GameSelectOverlay(
         stringResource(R.string.home_quick_actions_favorite)
     }
     val detailsLabel = stringResource(R.string.home_quick_actions_details)
-    val addToCollectionLabel = stringResource(R.string.home_quick_actions_add_to_collection)
     val refreshDataLabel = stringResource(R.string.home_quick_actions_refresh_data)
     val resyncPlatformLabel = stringResource(R.string.home_quick_actions_resync_platform)
     val deleteDownloadLabel = stringResource(R.string.home_quick_actions_delete_download)
@@ -2299,13 +2284,6 @@ private fun GameSelectOverlay(
             )
         )
         add(MenuEntry(Icons.Default.Info, detailsLabel, onClick = onDetails))
-        add(
-            MenuEntry(
-                Icons.AutoMirrored.Filled.PlaylistAdd,
-                addToCollectionLabel,
-                onClick = onAddToCollection
-            )
-        )
         if (game.isRommGame || game.isAndroidApp) {
             add(MenuEntry(Icons.Default.Refresh, refreshDataLabel, onClick = onRefresh))
         }

@@ -254,13 +254,13 @@
     <string name="settings_saves_save_sync_title">Sincronización de guardados</string>
     <string name="settings_saves_save_sync_subtitle">Sincronizar los guardados con el servidor</string>
     <string name="settings_saves_save_sync_locked_value">No disponible</string>
-    <string name="settings_saves_save_sync_locked_subtitle">Requiere un servidor RomM</string>
+    <string name="settings_saves_save_sync_locked_subtitle">Requiere un servidor Gameio</string>
 
     <string name="settings_saves_secure_saves_title">Guardados seguros</string>
     <string name="settings_saves_secure_saves_subtitle_on">Gameio gestiona y controla los archivos de guardado</string>
     <string name="settings_saves_secure_saves_subtitle_off">Gameio intenta sincronizar guardados gestionados fuera del lanzador</string>
     <string name="settings_saves_secure_saves_locked_value">No disponible</string>
-    <string name="settings_saves_secure_saves_locked_subtitle">Requiere un servidor RomM</string>
+    <string name="settings_saves_secure_saves_locked_subtitle">Requiere un servidor Gameio</string>
 
     <string name="settings_saves_cache_limit_title">Caché local de guardados</string>
     <plurals name="settings_saves_cache_limit_value">
@@ -308,8 +308,8 @@
     <string name="settings_sync_cache_box_art_title">Almacenar en caché la carátula 3D</string>
     <string name="settings_sync_cache_box_art_subtitle">Descargar los escaneos del reverso y del lomo para las carátulas 3D</string>
     <string name="settings_sync_upload_screenshots_title">Subir capturas de pantalla</string>
-    <string name="settings_sync_upload_screenshots_subtitle">Enviar a RomM las capturas tomadas durante el juego</string>
-    <string name="settings_sync_upload_screenshots_subtitle_unsupported">Requiere RomM 5.0 o posterior</string>
+    <string name="settings_sync_upload_screenshots_subtitle">Enviar a Gameio las capturas tomadas durante el juego</string>
+    <string name="settings_sync_upload_screenshots_subtitle_unsupported">Requiere Gameio 5.0 o posterior</string>
     <string name="settings_sync_upload_screenshots_subtitle_needs_usage">Concede el acceso al uso para una coincidencia exacta de juegos</string>
 
     <string name="settings_sync_image_cache_title">Ubicación de la caché de imágenes</string>
@@ -377,7 +377,7 @@
 
     <string name="settings_bios_section_platforms">PLATAFORMAS</string>
     <string name="settings_bios_empty_notice">Aún no se ha sincronizado ningún archivo BIOS. Sincroniza tu biblioteca para descubrir el firmware disponible.</string>
-    <string name="settings_bios_footer_note">Los archivos BIOS se descargan de tu servidor RomM y se guardan localmente. Usa \'Distribuir\' para copiarlos a las carpetas de los emuladores.</string>
+    <string name="settings_bios_footer_note">Los archivos BIOS se descargan de tu servidor Gameio y se guardan localmente. Usa \'Distribuir\' para copiarlos a las carpetas de los emuladores.</string>
 
     <string name="settings_bios_firmware_downloaded">Descargado</string>
     <string name="settings_bios_firmware_downloading">Descargando...</string>
@@ -584,7 +584,7 @@
     </plurals>
 
     <string name="settings_music_browse_server_title">Explorar música del servidor</string>
-    <string name="settings_music_browse_server_subtitle">Escucha y descarga pistas desde RomM</string>
+    <string name="settings_music_browse_server_subtitle">Escucha y descarga pistas desde Gameio</string>
     <string name="settings_music_browse_local_title">Explorar música local</string>
     <string name="settings_music_browse_local_subtitle">Añadir archivos o carpetas a la lista</string>
     <string name="settings_music_location_title">Ubicación de la música</string>
@@ -1179,7 +1179,7 @@
     <string name="settings_romm_section_server">SERVIDOR</string>
     <string name="settings_romm_section_library">BIBLIOTECA</string>
 
-    <string name="settings_romm_server_title">Rom Manager</string>
+    <string name="settings_romm_server_title">Sign in</string>
     <string name="settings_romm_server_checking">Comprobando conexión...</string>
     <string name="settings_romm_server_connected">Conectado</string>
     <string name="settings_romm_server_offline">%1$s (sin conexión)</string>
@@ -1188,7 +1188,7 @@
     <string name="settings_romm_sign_out_title">Cerrar sesión</string>
     <string name="settings_romm_sign_out_title_busy">Cerrando sesión...</string>
     <string name="settings_romm_sign_out_signed_in_as">Conectado como %1$s</string>
-    <string name="settings_romm_sign_out_subtitle">Olvidar esta cuenta de RomM</string>
+    <string name="settings_romm_sign_out_subtitle">Olvidar esta cuenta de Gameio</string>
 
     <string name="settings_romm_accounts_title">Cuentas</string>
     <string name="settings_romm_accounts_empty">Ninguna cuenta vinculada</string>
@@ -1211,19 +1211,19 @@
     <string name="settings_accounts_active_badge">ACTIVA</string>
     <string name="settings_accounts_action_switch">Cambiar</string>
     <string name="settings_accounts_action_remove">Quitar</string>
-    <string name="settings_accounts_remove_blocked_only">Esta es la única cuenta en este dispositivo. Cierra sesión en RomM para salir de ella.</string>
+    <string name="settings_accounts_remove_blocked_only">Esta es la única cuenta en este dispositivo. Cierra sesión en Gameio para salir de ella.</string>
     <string name="settings_accounts_remove_blocked_active">Cambia a otra cuenta antes de quitar esta.</string>
 
     <string name="settings_accounts_add_title">Añadir cuenta</string>
     <string name="settings_accounts_add_subtitle">Vincular a otro usuario en %1$s</string>
-    <string name="settings_accounts_add_subtitle_locked">Inicia sesión primero en RomM</string>
+    <string name="settings_accounts_add_subtitle_locked">Inicia sesión primero en Gameio</string>
 
     <string name="settings_accounts_needs_sync_saves">GUARDADOS PENDIENTES DE SINCRONIZAR</string>
     <string name="settings_accounts_needs_sync_states">ESTADOS GUARDADOS PENDIENTES DE SINCRONIZAR</string>
     <string name="settings_accounts_needs_sync_message">Se dejaron vacíos porque se sabía que la copia de este dispositivo era más antigua que la del servidor. Sincroniza para completarlos.</string>
 
-    <string name="settings_accounts_empty_title">Aún no hay ninguna cuenta de RomM vinculada</string>
-    <string name="settings_accounts_empty_message">Inicia sesión en RomM. Una vez vinculada una cuenta, puedes añadir más aquí.</string>
+    <string name="settings_accounts_empty_title">Aún no hay ninguna cuenta de Gameio vinculada</string>
+    <string name="settings_accounts_empty_message">Inicia sesión en Gameio. Una vez vinculada una cuenta, puedes añadir más aquí.</string>
     <string name="settings_accounts_loading">Cargando cuentas...</string>
 
     <string name="settings_accounts_switch_title">Cambiando de cuenta</string>
@@ -1232,7 +1232,7 @@
     <string name="settings_accounts_switch_message">Los guardados se archivan y verifican antes de eliminar nada. Deja esta pantalla abierta.</string>
 
     <string name="settings_accounts_pairing_title">Escanea para añadir una cuenta</string>
-    <string name="settings_accounts_pairing_message">Inicia sesión en RomM en tu teléfono como el usuario que quieres añadir, escanea este código y luego aprueba este dispositivo. Gameio inicia sesión como ese usuario una vez aprobado.</string>
+    <string name="settings_accounts_pairing_message">Inicia sesión en Gameio en tu teléfono como el usuario que quieres añadir, escanea este código y luego aprueba este dispositivo. Gameio inicia sesión como ese usuario una vez aprobado.</string>
     <string name="settings_accounts_pairing_retry">Reintentar</string>
     <string name="settings_accounts_pairing_cancel">Cancelar</string>
 
@@ -1560,7 +1560,7 @@
     <string name="settings_platform_combine_content_subtitle">Todos los juegos en una sola carpeta, todas las actualizaciones y el DLC en extcontent</string>
     <string name="settings_platform_sync_now_title">Sincronizar ahora</string>
     <string name="settings_platform_sync_now_busy">Sincronización en curso...</string>
-    <string name="settings_platform_sync_now_subtitle">Sincronizar esta plataforma con RomM</string>
+    <string name="settings_platform_sync_now_subtitle">Sincronizar esta plataforma con Gameio</string>
 
     <string name="settings_platform_download_defaults_title">Descargas predeterminadas</string>
     <string name="settings_platform_download_defaults_subtitle">Tipos de archivo preseleccionados</string>
@@ -1802,20 +1802,20 @@
     <string name="settings_romm_config_auth_method_title">Método de autenticación</string>
     <string name="settings_romm_config_auth_method_device">Vinculación de dispositivo</string>
     <string name="settings_romm_config_auth_method_pairing_code">Código de vinculación</string>
-    <string name="settings_romm_config_device_instructions">Vincula este dispositivo escaneando un código QR con tu teléfono y luego apruébalo en RomM. Requiere RomM 5.0 o posterior.</string>
-    <string name="settings_romm_config_pairing_code_instructions">Crea un token de API en la interfaz web de RomM y luego pulsa Vincular dispositivo para obtener un código.</string>
+    <string name="settings_romm_config_device_instructions">Vincula este dispositivo escaneando un código QR con tu teléfono y luego apruébalo en Gameio. Requiere Gameio 5.0 o posterior.</string>
+    <string name="settings_romm_config_pairing_code_instructions">Crea un token de API en la interfaz web de Gameio y luego pulsa Vincular dispositivo para obtener un código.</string>
     <string name="settings_romm_config_connect_generating_title">Generando código...</string>
     <string name="settings_romm_config_connect_connecting_title">Conectando...</string>
     <string name="settings_romm_config_connect_pair_title">Vincular dispositivo</string>
     <string name="settings_romm_config_connect_title">Conectar</string>
     <string name="settings_romm_config_connect_device_subtitle">Generar un código QR de vinculación</string>
-    <string name="settings_romm_config_connect_subtitle">Conectar al servidor RomM</string>
+    <string name="settings_romm_config_connect_subtitle">Conectar al servidor Gameio</string>
     <string name="settings_romm_config_scan_title">Escanear código QR</string>
-    <string name="settings_romm_config_scan_subtitle">Escanea el QR de vinculación desde la interfaz web de RomM</string>
+    <string name="settings_romm_config_scan_subtitle">Escanea el QR de vinculación desde la interfaz web de Gameio</string>
     <string name="settings_romm_config_cancel_title">Cancelar</string>
     <string name="settings_romm_config_cancel_subtitle">Volver a los ajustes del servidor</string>
     <string name="settings_romm_device_pairing_title">Escanea para vincular</string>
-    <string name="settings_romm_device_pairing_subtitle">Escanea este código con tu teléfono y luego aprueba este dispositivo en RomM.</string>
+    <string name="settings_romm_device_pairing_subtitle">Escanea este código con tu teléfono y luego aprueba este dispositivo en Gameio.</string>
     <string name="settings_romm_device_pairing_cancel_title">Cancelar</string>
     <string name="settings_romm_device_pairing_cancel_subtitle">Detener la vinculación</string>
 
@@ -1970,7 +1970,7 @@
     <string name="settings_hard_reset_deletes_database">Toda la base de datos de la biblioteca: tiempo de juego, colecciones, historial de descargas, ajustes por juego</string>
     <string name="settings_hard_reset_deletes_caches">Todas las cachés: imágenes, guardados y estados, ROM extraídas, efectos de sonido, instaladores de emuladores, preparación de Steam, carátulas de presencia</string>
     <string name="settings_hard_reset_keeps_header">Conserva</string>
-    <string name="settings_hard_reset_keeps_sign_ins">Ajustes y sesiones iniciadas: RomM y Steam permanecen conectados</string>
+    <string name="settings_hard_reset_keeps_sign_ins">Ajustes y sesiones iniciadas: Gameio y Steam permanecen conectados</string>
     <string name="settings_hard_reset_keeps_synced_saves">Los guardados ya sincronizados con el servidor</string>
     <string name="settings_hard_reset_keeps_emulator_apps">Las apps de emuladores y sus propios datos de guardado</string>
     <string name="settings_hard_reset_keeps_music">Tu carpeta de música</string>
@@ -2038,8 +2038,8 @@
 
     <!-- ===== Accounts settings delegate (Settings > delegates > AccountsSettingsDelegate) ===== -->
 
-    <string name="settings_accounts_delegate_fallback_username">Usuario de RomM %1$d</string>
-    <string name="settings_accounts_delegate_notice_no_server">Inicia sesión primero en un servidor RomM, en RomM.</string>
+    <string name="settings_accounts_delegate_fallback_username">Usuario de Gameio %1$d</string>
+    <string name="settings_accounts_delegate_notice_no_server">Inicia sesión primero en un servidor Gameio, en Gameio.</string>
     <string name="settings_accounts_delegate_progress_preparing">Preparando</string>
     <string name="settings_accounts_delegate_progress_resuming">Reanudando</string>
     <string name="settings_accounts_delegate_progress_archiving">Archivando guardados %1$d de %2$d</string>
@@ -2060,7 +2060,7 @@
     <string name="settings_accounts_delegate_removal_removed">Cuenta eliminada.</string>
     <string name="settings_accounts_delegate_removal_archived">Se archivaron %1$d guardados antes de borrarlos.</string>
     <string name="settings_accounts_delegate_removal_aborted">%1$d guardados cambiaron durante el archivado y se dejaron en el disco.</string>
-    <string name="settings_accounts_delegate_removal_registered_note">El dispositivo sigue registrado en el servidor RomM; revócalo allí.</string>
+    <string name="settings_accounts_delegate_removal_registered_note">El dispositivo sigue registrado en el servidor Gameio; revócalo allí.</string>
     <string name="settings_accounts_delegate_completion_switched">Cuenta cambiada.</string>
     <string name="settings_accounts_delegate_completion_aborted">%1$d archivos cambiaron durante el archivado y se dejaron como estaban.</string>
     <string name="settings_accounts_delegate_completion_needs_sync">%1$d ranuras se dejaron vacías porque se sabía que la copia local estaba desactualizada respecto al servidor.</string>

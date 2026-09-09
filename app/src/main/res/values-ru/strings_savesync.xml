@@ -10,14 +10,14 @@
     <string name="savesync_footer_confirm_keep_server">Оставить серверное</string>
     <string name="savesync_footer_confirm_skip">Пропустить</string>
     <string name="savesync_footer_open_game">Открыть игру</string>
-    <string name="savesync_footer_scan_server">Сканировать RomM</string>
+    <string name="savesync_footer_scan_server">Сканировать Gameio</string>
     <string name="savesync_footer_back">Назад</string>
 
     <string name="savesync_device_this_label">Это устройство</string>
-    <string name="savesync_device_not_connected">Нет подключения к RomM</string>
+    <string name="savesync_device_not_connected">Нет подключения к Gameio</string>
     <string name="savesync_device_id_pill">…%1$s</string>
     <string name="savesync_device_client_versioned">%1$s v%2$s</string>
-    <string name="savesync_device_server_versioned">RomM v%1$s</string>
+    <string name="savesync_device_server_versioned">Gameio v%1$s</string>
     <string name="savesync_device_server_connected">Подключено</string>
     <string name="savesync_device_server_offline">Не в сети</string>
     <!-- Just the unit word: the count is rendered beside it, never inside it, so there is no
@@ -46,8 +46,8 @@
 
     <string name="savesync_empty_title_connected">Пока нет синхронизированных сохранений</string>
     <string name="savesync_empty_message_connected">Сохранения появятся здесь по мере игры</string>
-    <string name="savesync_empty_title_disconnected">Подключитесь к RomM, чтобы синхронизировать сохранения</string>
-    <string name="savesync_empty_message_disconnected">Откройте настройки, чтобы добавить сервер RomM</string>
+    <string name="savesync_empty_title_disconnected">Подключитесь к Gameio, чтобы синхронизировать сохранения</string>
+    <string name="savesync_empty_message_disconnected">Откройте настройки, чтобы добавить сервер Gameio</string>
 
     <string name="savesync_conflict_side_local">Локальное</string>
     <string name="savesync_conflict_side_server">Серверное</string>
@@ -71,8 +71,8 @@
     <string name="savesync_game_last_write_unknown">Последняя запись - неизвестное устройство</string>
     <string name="savesync_game_last_write_time">%1$s · %2$s</string>
 
-    <string name="savesync_force_check_title">Проверить RomM на пропущенные сохранения</string>
-    <string name="savesync_force_check_idle">Проверяет локальные игры и загружает из RomM последнее сохранение каждого канала.</string>
+    <string name="savesync_force_check_title">Проверить Gameio на пропущенные сохранения</string>
+    <string name="savesync_force_check_idle">Проверяет локальные игры и загружает из Gameio последнее сохранение каждого канала.</string>
     <string name="savesync_force_check_running">Проверка...</string>
     <plurals name="savesync_force_check_up_to_date">
         <item quantity="one">Всё актуально - проверена %d игра, ничего нового.</item>
