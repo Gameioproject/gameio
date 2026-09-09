@@ -191,7 +191,7 @@
     <string name="ui_changelog_title">%1$s版新功能</string>
     <string name="ui_changelog_footer_continue">繼續</string>
     <string name="ui_changelog_action_required">需要執行的動作：%1$s</string>
-    <string name="ui_changelog_action_relogin_romm">重新登入RomM</string>
+    <string name="ui_changelog_action_relogin_romm">重新登入Gameio</string>
     <string name="ui_changelog_action_resync_library">重新同步遊戲庫</string>
     <string name="ui_changelog_action_clear_cache">清除快取</string>
     <string name="ui_changelog_action_set_steam_path">設定Steam安裝路徑</string>
@@ -263,7 +263,7 @@
     <string name="ui_section_breadcrumb_next">下一個區段</string>
 
     <string name="ui_qr_code_description">%1$s的QR Code</string>
-    <string name="ui_qr_scanner_hint">將鏡頭對準RomM的配對QR Code</string>
+    <string name="ui_qr_scanner_hint">將鏡頭對準Gameio的配對QR Code</string>
 
     <string name="ui_custom_tile_menu_header">圖塊</string>
 
@@ -535,8 +535,8 @@
     <string name="ui_drawer_friend_favorite">最愛</string>
     <string name="ui_drawer_account_none">尚未登入帳號</string>
     <string name="ui_drawer_account_caption">帳號</string>
-    <string name="ui_drawer_server_connected">RomM已連線</string>
-    <string name="ui_drawer_server_offline">RomM已離線</string>
+    <string name="ui_drawer_server_connected">Gameio已連線</string>
+    <string name="ui_drawer_server_offline">Gameio已離線</string>
     <string name="ui_drawer_nav_home">首頁</string>
     <string name="ui_drawer_nav_social">社群</string>
     <string name="ui_drawer_nav_quaypass">打卡</string>

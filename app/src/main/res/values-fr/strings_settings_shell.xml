@@ -212,7 +212,7 @@
     <string name="settings_shell_modal_delete_game_plain_message">Supprime tous les fichiers téléchargés pour ce jeu.%1$s Cette action est irréversible.</string>
     <string name="settings_shell_modal_delete_game_plain_confirm">Supprimer le jeu</string>
 
-    <string name="settings_shell_modal_romm_signout_title">Se déconnecter de RomM ?</string>
+    <string name="settings_shell_modal_romm_signout_title">Se déconnecter de Gameio ?</string>
     <plurals name="settings_shell_romm_signout_pending_message">
         <item quantity="one">%1$d sauvegarde sera envoyée d\'abord. Une fois tout sur votre serveur, les sauvegardes, états et réglages en cache de ce compte sont supprimés de cet appareil. Vos jeux téléchargés restent.</item>
         <item quantity="many">%1$d sauvegardes seront envoyées d\'abord. Une fois tout sur votre serveur, les sauvegardes, états et réglages en cache de ce compte sont supprimés de cet appareil. Vos jeux téléchargés restent.</item>
@@ -260,8 +260,8 @@
     <string name="settings_shell_accounts_remove_fallback_name">compte</string>
     <string name="settings_shell_accounts_removal_message_base">Supprime de cet appareil les sauvegardes, états, tâches en attente, succès et la surcouche de bibliothèque de ce compte. Les jeux téléchargés sont conservés.</string>
     <string name="settings_shell_accounts_removal_pending_suffix"> Encore non envoyé : %1$s.</string>
-    <string name="settings_shell_accounts_removal_last_account_suffix"> C\'est le dernier compte, l\'appareil sera donc déconnecté de RomM.</string>
-    <string name="settings_shell_accounts_removal_revoke_suffix"> L\'appareil reste enregistré sur le serveur RomM ; révoquez-le là-bas.</string>
+    <string name="settings_shell_accounts_removal_last_account_suffix"> C\'est le dernier compte, l\'appareil sera donc déconnecté de Gameio.</string>
+    <string name="settings_shell_accounts_removal_revoke_suffix"> L\'appareil reste enregistré sur le serveur Gameio ; révoquez-le là-bas.</string>
     <string name="settings_shell_accounts_cancel">Annuler</string>
     <string name="settings_shell_accounts_keep_queued_work">Conserver les tâches en attente</string>
     <string name="settings_shell_accounts_discard_and_remove">Abandonner et supprimer</string>

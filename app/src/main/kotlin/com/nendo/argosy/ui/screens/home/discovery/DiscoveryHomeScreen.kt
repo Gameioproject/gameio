@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nendo.argosy.ui.util.clickableNoFocus
+import com.nendo.argosy.ui.theme.LocalUiScale
 import com.nendo.argosy.R
 import com.nendo.argosy.ui.components.FooterHints
 import com.nendo.argosy.ui.components.FooterSpacer
@@ -37,7 +38,13 @@ import com.nendo.argosy.ui.theme.generated.ComponentDefaults.DiscoveryHome as T
 fun DiscoveryHomeScreen(state: HomeUiState, viewModel: HomeViewModel, onGameSelect: (Long) -> Unit, onMenu: () -> Unit, useBackdrop: Boolean = false) {
     DiscoveryTheme {
         BoxWithConstraints(Modifier.fillMaxSize().then(if (useBackdrop) Modifier else Modifier.background(MaterialTheme.colorScheme.background))) {
-            val dimensions = DiscoveryDimensions((maxHeight / T.referenceHeightDp.dp).coerceIn(T.minScale, T.maxScale))
+            val dimensions = DiscoveryDimensions(
+                (maxHeight / T.referenceHeightDp.dp).coerceIn(T.minScale, T.maxScale) * LocalUiScale.current.scale,
+                bodyTextScale = MaterialTheme.typography.bodyMedium.fontSize.value /
+                    com.nendo.argosy.ui.theme.generated.TypographyTokens.bodyMedium.fontSize.value,
+                displayTextScale = MaterialTheme.typography.headlineMedium.fontSize.value /
+                    com.nendo.argosy.ui.theme.generated.TypographyTokens.headlineMedium.fontSize.value
+            )
             val sections = remember(state.platforms, state.currentRow, state.libraryFilter,
                 state.discoveryData, state.favoriteGames, state.recommendedGames,
                 state.explore, state.discoveryFocus.feed) { state.discoverySections }

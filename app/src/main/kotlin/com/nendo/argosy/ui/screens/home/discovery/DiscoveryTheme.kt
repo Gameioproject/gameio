@@ -4,13 +4,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nendo.argosy.ui.theme.generated.ComponentDefaults.DiscoveryHome as T
 
-data class DiscoveryDimensions(val scale: Float, val viewportHeight: Dp? = null) {
+data class DiscoveryDimensions(val scale: Float, val viewportHeight: Dp? = null,
+    val bodyTextScale: Float = 1f, val displayTextScale: Float = 1f) {
     val padding get() = T.pagePaddingDp.dp * scale
     val bar get() = T.barHeightDp.dp * scale
     val platformBar get() = T.platformHeightDp.dp * scale
@@ -22,26 +22,26 @@ data class DiscoveryDimensions(val scale: Float, val viewportHeight: Dp? = null)
     val rowCard get() = T.rowCardHeightDp.dp * scale
     val gap get() = T.cardGapDp.dp * scale
     val sectionGap get() = T.sectionGapDp.dp * scale
-    val control get() = T.controlHeightDp.dp * scale
+    val control get() = T.controlHeightDp.dp * scale * maxOf(1f, bodyTextScale)
     val radius get() = T.radiusDp.dp * scale
     val ring get() = T.ringWidthDp.dp * scale
     val ringPadding get() = T.ringPaddingDp.dp * scale
     val emptyHeight get() = T.emptyHeightDp.dp * scale
-    val headingHeight get() = T.rowHeadingHeightDp.dp * scale
-    val title get() = T.titleSp.sp * scale
-    val body get() = T.bodySp.sp * scale
-    val label get() = T.labelSp.sp * scale
-    val sectionTitle get() = T.sectionTitleSp.sp * scale
-    val brand get() = T.brandSp.sp * scale
+    val headingHeight get() = T.rowHeadingHeightDp.dp * scale * maxOf(1f, displayTextScale)
+    val title get() = T.titleSp.sp * scale * displayTextScale
+    val body get() = T.bodySp.sp * scale * bodyTextScale
+    val label get() = T.labelSp.sp * scale * bodyTextScale
+    val sectionTitle get() = T.sectionTitleSp.sp * scale * displayTextScale
+    val brand get() = T.brandSp.sp * scale * displayTextScale
 }
 
 @Composable
 fun DiscoveryTheme(content: @Composable () -> Unit) {
     val colors = MaterialTheme.colorScheme
     MaterialTheme(colorScheme = colors.copy(
-        primary = colors.onSurface,
-        onPrimary = colors.background
+        primary = com.nendo.argosy.ui.theme.LocalAccentColorOverride.current ?: colors.onSurface,
+        onPrimary = if (com.nendo.argosy.ui.theme.LocalAccentColorOverride.current != null) colors.onPrimary else colors.background
     )) {
-        CompositionLocalProvider(LocalTextStyle provides TextStyle.Default, content = content)
+        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyMedium.copy(lineHeight = androidx.compose.ui.unit.TextUnit.Unspecified), content = content)
     }
 }

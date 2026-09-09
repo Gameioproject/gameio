@@ -206,7 +206,7 @@
     <string name="ui_changelog_title">Nouveautés de %1$s</string>
     <string name="ui_changelog_footer_continue">Continuer</string>
     <string name="ui_changelog_action_required">Action requise : %1$s</string>
-    <string name="ui_changelog_action_relogin_romm">Se reconnecter à RomM</string>
+    <string name="ui_changelog_action_relogin_romm">Se reconnecter à Gameio</string>
     <string name="ui_changelog_action_resync_library">Resynchroniser la bibliothèque</string>
     <string name="ui_changelog_action_clear_cache">Vider le cache</string>
     <string name="ui_changelog_action_set_steam_path">Définir le chemin d\'installation Steam</string>
@@ -294,7 +294,7 @@
     <string name="ui_section_breadcrumb_next">Section suivante</string>
 
     <string name="ui_qr_code_description">Code QR pour %1$s</string>
-    <string name="ui_qr_scanner_hint">Visez le code QR d\'appairage RomM</string>
+    <string name="ui_qr_scanner_hint">Visez le code QR d\'appairage Gameio</string>
 
     <string name="ui_custom_tile_menu_header">TUILE</string>
 
@@ -570,8 +570,8 @@
     <string name="ui_drawer_friend_favorite">Favori</string>
     <string name="ui_drawer_account_none">Aucun compte</string>
     <string name="ui_drawer_account_caption">Compte</string>
-    <string name="ui_drawer_server_connected">RomM connecté</string>
-    <string name="ui_drawer_server_offline">RomM hors ligne</string>
+    <string name="ui_drawer_server_connected">Gameio connecté</string>
+    <string name="ui_drawer_server_offline">Gameio hors ligne</string>
     <string name="ui_drawer_nav_home">Accueil</string>
     <string name="ui_drawer_nav_social">Social</string>
     <string name="ui_drawer_nav_quaypass">Check-In</string>

@@ -82,9 +82,9 @@ class HomeSectionKindTest {
     }
 
     @Test
-    fun `the three runs account for every kind exactly once and in declared order`() {
+    fun `the fixed runs retain their order apart from dynamic catalog shelves`() {
         assertEquals(
-            HomeSectionKind.entries.toList(),
+            HomeSectionKind.entries.filter { it != HomeSectionKind.SHELF },
             HomeSectionKind.LEADING + HomeSectionKind.REPEATING + HomeSectionKind.TRAILING
         )
     }

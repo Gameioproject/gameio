@@ -248,13 +248,13 @@
     <string name="settings_saves_save_sync_title">Синхронизация сохранений</string>
     <string name="settings_saves_save_sync_subtitle">Синхронизировать сохранения игр с сервером</string>
     <string name="settings_saves_save_sync_locked_value">Недоступно</string>
-    <string name="settings_saves_save_sync_locked_subtitle">Требуется сервер RomM</string>
+    <string name="settings_saves_save_sync_locked_subtitle">Требуется сервер Gameio</string>
 
     <string name="settings_saves_secure_saves_title">Защищённые сохранения</string>
     <string name="settings_saves_secure_saves_subtitle_on">Gameio управляет файлами сохранений и следит за ними</string>
     <string name="settings_saves_secure_saves_subtitle_off">Gameio пытается синхронизировать сохранения, управляемые вне лаунчера</string>
     <string name="settings_saves_secure_saves_locked_value">Недоступно</string>
-    <string name="settings_saves_secure_saves_locked_subtitle">Требуется сервер RomM</string>
+    <string name="settings_saves_secure_saves_locked_subtitle">Требуется сервер Gameio</string>
 
     <string name="settings_saves_cache_limit_title">Локальный кэш сохранений</string>
     <plurals name="settings_saves_cache_limit_value">
@@ -305,8 +305,8 @@
     <string name="settings_sync_cache_box_art_title">Кэшировать 3D-обложки</string>
     <string name="settings_sync_cache_box_art_subtitle">Скачивать скан задней стороны и корешка для отображения 3D-обложек</string>
     <string name="settings_sync_upload_screenshots_title">Выгружать скриншоты</string>
-    <string name="settings_sync_upload_screenshots_subtitle">Отправлять скриншоты, сделанные во время игры, в RomM</string>
-    <string name="settings_sync_upload_screenshots_subtitle_unsupported">Требуется RomM 5.0 или новее</string>
+    <string name="settings_sync_upload_screenshots_subtitle">Отправлять скриншоты, сделанные во время игры, в Gameio</string>
+    <string name="settings_sync_upload_screenshots_subtitle_unsupported">Требуется Gameio 5.0 или новее</string>
     <string name="settings_sync_upload_screenshots_subtitle_needs_usage">Предоставьте доступ к статистике использования для точного сопоставления игр</string>
 
     <string name="settings_sync_image_cache_title">Расположение кэша изображений</string>
@@ -375,7 +375,7 @@
 
     <string name="settings_bios_section_platforms">ПЛАТФОРМЫ</string>
     <string name="settings_bios_empty_notice">Файлы BIOS ещё не синхронизированы. Синхронизируйте библиотеку, чтобы найти доступные прошивки.</string>
-    <string name="settings_bios_footer_note">Файлы BIOS скачиваются с вашего сервера RomM и хранятся локально. Используйте «Распределить», чтобы скопировать их в папки эмуляторов.</string>
+    <string name="settings_bios_footer_note">Файлы BIOS скачиваются с вашего сервера Gameio и хранятся локально. Используйте «Распределить», чтобы скопировать их в папки эмуляторов.</string>
 
     <string name="settings_bios_firmware_downloaded">Скачано</string>
     <string name="settings_bios_firmware_downloading">Загрузка...</string>
@@ -584,7 +584,7 @@
     </plurals>
 
     <string name="settings_music_browse_server_title">Музыка на сервере</string>
-    <string name="settings_music_browse_server_subtitle">Прослушать и скачать треки с RomM</string>
+    <string name="settings_music_browse_server_subtitle">Прослушать и скачать треки с Gameio</string>
     <string name="settings_music_browse_local_title">Локальная музыка</string>
     <string name="settings_music_browse_local_subtitle">Добавить файлы или папки в плейлист</string>
     <string name="settings_music_location_title">Расположение музыки</string>
@@ -1203,7 +1203,7 @@
     <string name="settings_romm_section_server">СЕРВЕР</string>
     <string name="settings_romm_section_library">БИБЛИОТЕКА</string>
 
-    <string name="settings_romm_server_title">Rom Manager</string>
+    <string name="settings_romm_server_title">Sign in</string>
     <string name="settings_romm_server_checking">Проверка подключения...</string>
     <string name="settings_romm_server_connected">Подключено</string>
     <string name="settings_romm_server_offline">%1$s (офлайн)</string>
@@ -1212,7 +1212,7 @@
     <string name="settings_romm_sign_out_title">Выйти</string>
     <string name="settings_romm_sign_out_title_busy">Выход...</string>
     <string name="settings_romm_sign_out_signed_in_as">Вход выполнен как %1$s</string>
-    <string name="settings_romm_sign_out_subtitle">Забыть этот аккаунт RomM</string>
+    <string name="settings_romm_sign_out_subtitle">Забыть этот аккаунт Gameio</string>
 
     <string name="settings_romm_accounts_title">Аккаунты</string>
     <string name="settings_romm_accounts_empty">Аккаунт не привязан</string>
@@ -1235,19 +1235,19 @@
     <string name="settings_accounts_active_badge">АКТИВНЫЙ</string>
     <string name="settings_accounts_action_switch">Сменить</string>
     <string name="settings_accounts_action_remove">Удалить</string>
-    <string name="settings_accounts_remove_blocked_only">Это единственный аккаунт на этом устройстве. Чтобы уйти из него, выйдите из RomM.</string>
+    <string name="settings_accounts_remove_blocked_only">Это единственный аккаунт на этом устройстве. Чтобы уйти из него, выйдите из Gameio.</string>
     <string name="settings_accounts_remove_blocked_active">Переключитесь на другой аккаунт перед удалением этого.</string>
 
     <string name="settings_accounts_add_title">Добавить аккаунт</string>
     <string name="settings_accounts_add_subtitle">Привязать другого пользователя на %1$s</string>
-    <string name="settings_accounts_add_subtitle_locked">Сначала войдите в разделе RomM</string>
+    <string name="settings_accounts_add_subtitle_locked">Сначала войдите в разделе Gameio</string>
 
     <string name="settings_accounts_needs_sync_saves">СОХРАНЕНИЯ ЖДУТ СИНХРОНИЗАЦИИ</string>
     <string name="settings_accounts_needs_sync_states">СОСТОЯНИЯ ЖДУТ СИНХРОНИЗАЦИИ</string>
     <string name="settings_accounts_needs_sync_message">Они остались пустыми, потому что копия на этом устройстве заведомо старее серверной. Синхронизируйте, чтобы заполнить их.</string>
 
-    <string name="settings_accounts_empty_title">Пока нет привязанного аккаунта RomM</string>
-    <string name="settings_accounts_empty_message">Войдите в разделе RomM. После привязки одного аккаунта здесь можно добавить ещё.</string>
+    <string name="settings_accounts_empty_title">Пока нет привязанного аккаунта Gameio</string>
+    <string name="settings_accounts_empty_message">Войдите в разделе Gameio. После привязки одного аккаунта здесь можно добавить ещё.</string>
     <string name="settings_accounts_loading">Загрузка аккаунтов...</string>
 
     <string name="settings_accounts_switch_title">Смена аккаунта</string>
@@ -1256,7 +1256,7 @@
     <string name="settings_accounts_switch_message">Сохранения архивируются и проверяются перед удалением. Не закрывайте этот экран.</string>
 
     <string name="settings_accounts_pairing_title">Отсканируйте, чтобы добавить аккаунт</string>
-    <string name="settings_accounts_pairing_message">Войдите в RomM на телефоне под пользователем, которого хотите добавить, отсканируйте этот код и подтвердите устройство. После подтверждения Gameio войдёт под этим пользователем.</string>
+    <string name="settings_accounts_pairing_message">Войдите в Gameio на телефоне под пользователем, которого хотите добавить, отсканируйте этот код и подтвердите устройство. После подтверждения Gameio войдёт под этим пользователем.</string>
     <string name="settings_accounts_pairing_retry">Повторить</string>
     <string name="settings_accounts_pairing_cancel">Отмена</string>
 
@@ -1588,7 +1588,7 @@
     <string name="settings_platform_combine_content_subtitle">Все игры в одной папке, все обновления и DLC в extcontent</string>
     <string name="settings_platform_sync_now_title">Синхронизировать сейчас</string>
     <string name="settings_platform_sync_now_busy">Синхронизация...</string>
-    <string name="settings_platform_sync_now_subtitle">Синхронизировать эту платформу с RomM</string>
+    <string name="settings_platform_sync_now_subtitle">Синхронизировать эту платформу с Gameio</string>
 
     <string name="settings_platform_download_defaults_title">Загрузки по умолчанию</string>
     <string name="settings_platform_download_defaults_subtitle">Предвыбранные типы файлов</string>
@@ -1836,20 +1836,20 @@
     <string name="settings_romm_config_auth_method_title">Способ входа</string>
     <string name="settings_romm_config_auth_method_device">Привязка устройства</string>
     <string name="settings_romm_config_auth_method_pairing_code">Код привязки</string>
-    <string name="settings_romm_config_device_instructions">Привяжите это устройство, отсканировав QR-код телефоном, затем подтвердите его в RomM. Требуется RomM 5.0 или новее.</string>
-    <string name="settings_romm_config_pairing_code_instructions">Создайте токен API в веб-интерфейсе RomM, затем нажмите «Привязать устройство», чтобы получить код.</string>
+    <string name="settings_romm_config_device_instructions">Привяжите это устройство, отсканировав QR-код телефоном, затем подтвердите его в Gameio. Требуется Gameio 5.0 или новее.</string>
+    <string name="settings_romm_config_pairing_code_instructions">Создайте токен API в веб-интерфейсе Gameio, затем нажмите «Привязать устройство», чтобы получить код.</string>
     <string name="settings_romm_config_connect_generating_title">Создание кода...</string>
     <string name="settings_romm_config_connect_connecting_title">Подключение...</string>
     <string name="settings_romm_config_connect_pair_title">Привязать устройство</string>
     <string name="settings_romm_config_connect_title">Подключить</string>
     <string name="settings_romm_config_connect_device_subtitle">Создать QR-код для привязки</string>
-    <string name="settings_romm_config_connect_subtitle">Подключиться к серверу RomM</string>
+    <string name="settings_romm_config_connect_subtitle">Подключиться к серверу Gameio</string>
     <string name="settings_romm_config_scan_title">Сканировать QR-код</string>
-    <string name="settings_romm_config_scan_subtitle">Отсканируйте QR-код привязки из веб-интерфейса RomM</string>
+    <string name="settings_romm_config_scan_subtitle">Отсканируйте QR-код привязки из веб-интерфейса Gameio</string>
     <string name="settings_romm_config_cancel_title">Отмена</string>
     <string name="settings_romm_config_cancel_subtitle">Вернуться к настройкам сервера</string>
     <string name="settings_romm_device_pairing_title">Отсканируйте для привязки</string>
-    <string name="settings_romm_device_pairing_subtitle">Отсканируйте этот код телефоном, затем подтвердите устройство в RomM.</string>
+    <string name="settings_romm_device_pairing_subtitle">Отсканируйте этот код телефоном, затем подтвердите устройство в Gameio.</string>
     <string name="settings_romm_device_pairing_cancel_title">Отмена</string>
     <string name="settings_romm_device_pairing_cancel_subtitle">Остановить привязку</string>
 
@@ -2006,7 +2006,7 @@
     <string name="settings_hard_reset_deletes_database">Всю базу данных библиотеки - время игры, коллекции, историю загрузок, настройки отдельных игр</string>
     <string name="settings_hard_reset_deletes_caches">Все кэши - изображения, сохранения и состояния, извлечённые ROM, звуковые эффекты, установщики эмуляторов, временные файлы Steam, обложки статусов</string>
     <string name="settings_hard_reset_keeps_header">Сохраняет</string>
-    <string name="settings_hard_reset_keeps_sign_ins">Настройки и входы в аккаунты - RomM и Steam остаются подключены</string>
+    <string name="settings_hard_reset_keeps_sign_ins">Настройки и входы в аккаунты - Gameio и Steam остаются подключены</string>
     <string name="settings_hard_reset_keeps_synced_saves">Сохранения, уже синхронизированные с сервером</string>
     <string name="settings_hard_reset_keeps_emulator_apps">Приложения эмуляторов и их собственные данные сохранений</string>
     <string name="settings_hard_reset_keeps_music">Вашу папку с музыкой</string>
@@ -2074,8 +2074,8 @@
 
     <!-- ===== Accounts settings delegate ===== -->
 
-    <string name="settings_accounts_delegate_fallback_username">Пользователь RomM %1$d</string>
-    <string name="settings_accounts_delegate_notice_no_server">Сначала войдите на сервер RomM, в разделе RomM.</string>
+    <string name="settings_accounts_delegate_fallback_username">Пользователь Gameio %1$d</string>
+    <string name="settings_accounts_delegate_notice_no_server">Сначала войдите на сервер Gameio, в разделе Gameio.</string>
     <string name="settings_accounts_delegate_progress_preparing">Подготовка</string>
     <string name="settings_accounts_delegate_progress_resuming">Возобновление</string>
     <string name="settings_accounts_delegate_progress_archiving">Архивирование сохранений %1$d из %2$d</string>
@@ -2096,7 +2096,7 @@
     <string name="settings_accounts_delegate_removal_removed">Аккаунт удалён.</string>
     <string name="settings_accounts_delegate_removal_archived">Заархивировано %1$d сохранений перед их удалением.</string>
     <string name="settings_accounts_delegate_removal_aborted">%1$d сохранений изменились во время архивирования и остались на диске.</string>
-    <string name="settings_accounts_delegate_removal_registered_note">Устройство всё ещё зарегистрировано на сервере RomM; отзовите его там.</string>
+    <string name="settings_accounts_delegate_removal_registered_note">Устройство всё ещё зарегистрировано на сервере Gameio; отзовите его там.</string>
     <string name="settings_accounts_delegate_completion_switched">Аккаунт переключён.</string>
     <string name="settings_accounts_delegate_completion_aborted">%1$d файлов изменились во время архивирования и остались без изменений.</string>
     <string name="settings_accounts_delegate_completion_needs_sync">%1$d слотов остались пустыми, потому что локальная копия заведомо отставала от сервера.</string>

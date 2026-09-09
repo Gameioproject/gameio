@@ -20,7 +20,6 @@ import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.foundation.clickable
+import com.nendo.argosy.ui.util.clickableNoFocus
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -69,6 +68,7 @@ internal sealed class AboutItem(
 
     class Header(key: String, section: String, val titleRes: Int) : AboutItem(key, section)
     data object VersionInfo : AboutItem("versionInfo", "version")
+    data object Licenses : AboutItem("licenses", "version")
     data object CheckUpdates : AboutItem("checkUpdates", "version")
     data object ChangelogPreview : AboutItem(
         key = "changelogPreview",
@@ -104,7 +104,7 @@ internal sealed class AboutItem(
 
         val ALL: List<AboutItem>
             get() = listOf(
-                VersionHeader, VersionInfo, CheckUpdates, ChangelogPreview, BetaUpdates,
+                VersionHeader, VersionInfo, Licenses, CheckUpdates, ChangelogPreview, BetaUpdates,
                 BackupSpacer, BackupHeader, ExportSettings, ImportSettings,
                 SystemSpacer, SystemHeader, SystemizeHelper, RestartApp,
                 SectionSpacer, DebugHeader, FileLogging, LogLevel, SaveDebugLogging
@@ -148,7 +148,6 @@ fun AboutSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
     val context = LocalContext.current
     val hasLogPath = uiState.fileLoggingPath != null
     val hasChangelog = aboutHasChangelog(updateCheck)
-    var showLicensesDialog by remember { mutableStateOf(false) }
 
     val layoutState = remember(hasLogPath, hasChangelog) { AboutLayoutState(hasLogPath, hasChangelog) }
     val visibleItems = remember(hasLogPath, hasChangelog) { aboutLayout.visibleItems(layoutState) }
@@ -168,8 +167,8 @@ fun AboutSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
     fun pickerToken(item: AboutItem): Int =
         if (uiState.enumPickerKey == item.key) uiState.enumPickerToken else 0
 
-    if (showLicensesDialog) {
-        LicensesDialog(onDismiss = { showLicensesDialog = false })
+    if (uiState.showLicensesDialog) {
+        LicensesDialog(onDismiss = viewModel::hideLicenses)
     }
 
 
@@ -189,9 +188,15 @@ fun AboutSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
                 is AboutItem.Header -> SectionHeader(stringResource(item.titleRes))
 
                 AboutItem.VersionInfo -> VersionInfoRow(
-                    argosyVersion = uiState.appVersion,
-                    rommVersion = uiState.server.rommVersion,
-                    onLicensesClick = { showLicensesDialog = true }
+                    argosyVersion = uiState.appVersion
+                )
+
+                AboutItem.Licenses -> ActionPreference(
+                    title = stringResource(R.string.settings_about_licenses_label),
+                    subtitle = "",
+                    icon = Icons.Outlined.Article,
+                    isFocused = isFocused(item),
+                    onClick = viewModel::showLicenses
                 )
 
                 AboutItem.CheckUpdates -> {
@@ -442,67 +447,18 @@ private fun ChangelogPreviewRow(
 }
 
 @Composable
-private fun VersionInfoRow(
-    argosyVersion: String,
-    rommVersion: String?,
-    onLicensesClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = Dimens.spacingXs),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(Dimens.spacingXl)
-        ) {
-            Column {
-                Text(
-                    text = stringResource(R.string.settings_about_version_argosy_label),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = argosyVersion,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-            if (rommVersion != null) {
-                Column {
-                    Text(
-                        text = stringResource(R.string.settings_about_version_romm_label),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = stringResource(R.string.settings_about_version_romm_value, rommVersion),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier
-                .clickable(onClick = onLicensesClick)
-                .padding(horizontal = 8.dp, vertical = 4.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.settings_about_licenses_label),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Icon(
-                imageVector = Icons.Outlined.Article,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(18.dp)
-            )
-        }
+private fun VersionInfoRow(argosyVersion: String) {
+    Column(Modifier.fillMaxWidth().padding(vertical = Dimens.spacingXs)) {
+        Text(
+            text = stringResource(R.string.settings_about_version_argosy_label),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = argosyVersion,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
     }
 }
 

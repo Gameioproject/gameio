@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="error_sync_library_not_connected">RomM non connecté</string>
+    <string name="error_sync_library_not_connected">Gameio non connecté</string>
     <string name="error_sync_library_unexpected">Échec de la synchronisation</string>
 
-    <string name="error_sync_platform_not_connected">RomM non connecté</string>
+    <string name="error_sync_platform_not_connected">Gameio non connecté</string>
     <string name="error_sync_platform_not_found">Plateforme introuvable</string>
     <string name="error_sync_platform_unexpected">Échec de la synchronisation</string>
 
@@ -27,7 +27,7 @@
     <string name="error_restore_cached_save_restore_failed">Échec de la restauration de la sauvegarde</string>
 
     <string name="error_download_game_not_found">Jeu introuvable</string>
-    <string name="error_download_game_not_synced">Le jeu n\'est pas synchronisé depuis RomM</string>
+    <string name="error_download_game_not_synced">Le jeu n\'est pas synchronisé depuis Gameio</string>
     <string name="error_download_invalid_file_type">Type de fichier invalide : .%1$s</string>
     <string name="error_download_rom_info_fetch_failed">Échec de la récupération des informations de la ROM : %1$s</string>
     <string name="error_download_no_discs_found">Aucun disque trouvé pour ce jeu multi-disques</string>

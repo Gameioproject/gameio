@@ -262,6 +262,9 @@ class SettingsViewModel @Inject constructor(
         loadSettings()
     }
 
+    fun showLicenses() { _uiState.update { it.copy(showLicensesDialog = true) } }
+    fun hideLicenses() { _uiState.update { it.copy(showLicensesDialog = false) } }
+
     fun checkStoragePermission() = storageDelegate.checkAllFilesAccess()
     fun requestStoragePermission() = storageDelegate.requestAllFilesAccess(viewModelScope)
 
@@ -281,6 +284,8 @@ class SettingsViewModel @Inject constructor(
     fun confirmAccountRemoval(policy: com.nendo.argosy.data.sync.UnflushedQueuePolicy) =
         accountsDelegate.confirmRemoval(viewModelScope, policy)
     fun startAddAccount() = accountsDelegate.requestAddAccount()
+    fun setAddAccountKeyboardField(field: Int?) = accountsDelegate.setKeyboardField(field)
+    fun openRommKeyboard(field: Int) = serverDelegate.setRommFocusField(field)
     fun submitAddAccount() = accountsDelegate.submitSignIn(viewModelScope)
     fun setAddAccountUsername(username: String) = accountsDelegate.setSignInUsername(username)
     fun setAddAccountPassword(password: String) = accountsDelegate.setSignInPassword(password)

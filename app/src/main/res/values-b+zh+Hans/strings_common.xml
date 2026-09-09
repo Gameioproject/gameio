@@ -187,7 +187,7 @@
     <string name="ui_changelog_title">%1$s版新功能</string>
     <string name="ui_changelog_footer_continue">继续</string>
     <string name="ui_changelog_action_required">需要操作：%1$s</string>
-    <string name="ui_changelog_action_relogin_romm">重新登录RomM</string>
+    <string name="ui_changelog_action_relogin_romm">重新登录Gameio</string>
     <string name="ui_changelog_action_resync_library">重新同步游戏库</string>
     <string name="ui_changelog_action_clear_cache">清除缓存</string>
     <string name="ui_changelog_action_set_steam_path">设置Steam安装路径</string>
@@ -259,7 +259,7 @@
     <string name="ui_section_breadcrumb_next">下一个分区</string>
 
     <string name="ui_qr_code_description">%1$s的二维码</string>
-    <string name="ui_qr_scanner_hint">对准RomM配对二维码</string>
+    <string name="ui_qr_scanner_hint">对准Gameio配对二维码</string>
 
     <string name="ui_custom_tile_menu_header">磁贴</string>
 
@@ -523,8 +523,8 @@
     <string name="ui_drawer_friend_favorite">收藏</string>
     <string name="ui_drawer_account_none">无账号</string>
     <string name="ui_drawer_account_caption">账号</string>
-    <string name="ui_drawer_server_connected">RomM已连接</string>
-    <string name="ui_drawer_server_offline">RomM离线</string>
+    <string name="ui_drawer_server_connected">Gameio已连接</string>
+    <string name="ui_drawer_server_offline">Gameio离线</string>
     <string name="ui_drawer_nav_home">首页</string>
     <string name="ui_drawer_nav_social">社交</string>
     <string name="ui_drawer_nav_quaypass">签到</string>

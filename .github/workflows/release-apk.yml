@@ -26,18 +26,48 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # QuayPass server keys are not part of this fork; the feature stays dark.
+      - name: Configure release signing
+        env:
+          GAMEIO_KEYSTORE_BASE64: ${{ secrets.GAMEIO_KEYSTORE_BASE64 }}
+          GAMEIO_STORE_PASSWORD: ${{ secrets.GAMEIO_STORE_PASSWORD }}
+          GAMEIO_KEY_PASSWORD: ${{ secrets.GAMEIO_KEY_PASSWORD }}
+          GAMEIO_KEY_ALIAS: ${{ secrets.GAMEIO_KEY_ALIAS }}
+        run: |
+          python3 - <<'PYTHON'
+          import base64
+          import os
+          from pathlib import Path
+
+          required = ("GAMEIO_KEYSTORE_BASE64", "GAMEIO_STORE_PASSWORD", "GAMEIO_KEY_PASSWORD", "GAMEIO_KEY_ALIAS")
+          if any(not os.environ.get(key) for key in required):
+              raise SystemExit("Configure the Gameio release signing secrets before building a release.")
+          keystore = Path(os.environ["RUNNER_TEMP"]) / "gameio-release.jks"
+          keystore.write_bytes(base64.b64decode(os.environ["GAMEIO_KEYSTORE_BASE64"], validate=True))
+          keystore.chmod(0o600)
+          values = {
+              "storeFile": str(keystore),
+              "storePassword": os.environ["GAMEIO_STORE_PASSWORD"],
+              "keyAlias": os.environ["GAMEIO_KEY_ALIAS"],
+              "keyPassword": os.environ["GAMEIO_KEY_PASSWORD"],
+          }
+          def escape(value):
+              return value.replace("\\", "\\\\").replace("\n", "\\n").replace("\r", "\\r").replace(" ", "\\ ")
+          properties = Path("keystore.properties")
+          properties.write_text("".join(key + "=" + escape(value) + "\n" for key, value in values.items()))
+          properties.chmod(0o600)
+          PYTHON
+
       - name: Build release APKs (arm64 + armv7 splits)
-        run: ./gradlew :app:assembleRelease -PallAbis -x verifyQuayPassReleaseConfig --no-daemon
+        run: ./gradlew :app:assembleRelease -PallAbis --no-daemon
 
       - name: Upload arm64 APK
         uses: actions/upload-artifact@v4
         with:
-          name: argosy-catalog-arm64
+          name: gameio-arm64
           path: app/build/outputs/apk/release/*arm64*.apk
 
       - name: Upload all release APKs
         uses: actions/upload-artifact@v4
         with:
-          name: argosy-catalog-all
+          name: gameio-all
           path: app/build/outputs/apk/release/*.apk

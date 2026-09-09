@@ -193,7 +193,7 @@
     <string name="ui_changelog_title">Neu in %1$s</string>
     <string name="ui_changelog_footer_continue">Weiter</string>
     <string name="ui_changelog_action_required">Aktion erforderlich: %1$s</string>
-    <string name="ui_changelog_action_relogin_romm">Erneut bei RomM anmelden</string>
+    <string name="ui_changelog_action_relogin_romm">Erneut bei Gameio anmelden</string>
     <string name="ui_changelog_action_resync_library">Bibliothek neu synchronisieren</string>
     <string name="ui_changelog_action_clear_cache">Cache leeren</string>
     <string name="ui_changelog_action_set_steam_path">Steam-Installationspfad festlegen</string>
@@ -273,7 +273,7 @@
     <string name="ui_section_breadcrumb_next">Nächster Abschnitt</string>
 
     <string name="ui_qr_code_description">QR-Code für %1$s</string>
-    <string name="ui_qr_scanner_hint">Richten Sie die Kamera auf den RomM-Pairing-QR-Code</string>
+    <string name="ui_qr_scanner_hint">Richten Sie die Kamera auf den Gameio-Pairing-QR-Code</string>
 
     <string name="ui_custom_tile_menu_header">KACHEL</string>
 
@@ -547,8 +547,8 @@
     <string name="ui_drawer_friend_favorite">Favorit</string>
     <string name="ui_drawer_account_none">Kein Konto</string>
     <string name="ui_drawer_account_caption">Konto</string>
-    <string name="ui_drawer_server_connected">RomM verbunden</string>
-    <string name="ui_drawer_server_offline">RomM offline</string>
+    <string name="ui_drawer_server_connected">Gameio verbunden</string>
+    <string name="ui_drawer_server_offline">Gameio offline</string>
     <string name="ui_drawer_nav_home">Start</string>
     <string name="ui_drawer_nav_social">Community</string>
     <string name="ui_drawer_nav_quaypass">Check-In</string>

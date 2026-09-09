@@ -421,7 +421,7 @@
     <string name="ui_changelog_action_required">Action required: %1$s</string>
     <!-- One of those things. Verb phrase: sign in to the game server again. "RomM" is the name
          of the server software; leave it untranslated. -->
-    <string name="ui_changelog_action_relogin_romm">Re-login to RomM</string>
+    <string name="ui_changelog_action_relogin_romm">Re-login to Gameio</string>
     <!-- One of those things. Verb phrase: fetch the whole library again. -->
     <string name="ui_changelog_action_resync_library">Resync Library</string>
     <!-- One of those things. Verb phrase: empty Gameio's cached files. -->
@@ -556,7 +556,7 @@
     <string name="ui_qr_code_description">QR Code for %1$s</string>
     <!-- Instruction over the camera view while scanning a pairing code. "RomM" is the name of
          the server software; leave it untranslated. -->
-    <string name="ui_qr_scanner_hint">Point at the RomM pairing QR code</string>
+    <string name="ui_qr_scanner_hint">Point at the Gameio pairing QR code</string>
 
     <!-- Heading of the menu that opens over a tile on the curated home grid. Noun, singular,
          rendered in caps in English. -->
@@ -1109,9 +1109,9 @@
     <string name="ui_drawer_account_caption">Account</string>
     <!-- Icon description in the drawer's footer when the game server is reachable. "RomM" is
          the name of the server software; leave it untranslated. -->
-    <string name="ui_drawer_server_connected">RomM Connected</string>
+    <string name="ui_drawer_server_connected">Gameio Connected</string>
     <!-- Icon description in the drawer's footer when it is not. -->
-    <string name="ui_drawer_server_offline">RomM Offline</string>
+    <string name="ui_drawer_server_offline">Gameio Offline</string>
     <!-- Drawer row leading to the home screen. -->
     <string name="ui_drawer_nav_home">Home</string>
     <!-- Drawer row leading to friends and activity. Adjective used as a noun. -->

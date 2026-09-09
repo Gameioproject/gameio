@@ -290,8 +290,8 @@
     <string name="media_music_facet_all_albums">सभी एल्बम</string>
     <string name="media_music_facet_all_genres">सभी जॉनर</string>
 
-    <string name="media_music_offline_message">आपके RomM सर्वर से कनेक्ट नहीं है</string>
-    <string name="media_music_unsupported_message">यह RomM सर्वर अभी म्यूज़िक ब्राउज़िंग समर्थित नहीं करता</string>
+    <string name="media_music_offline_message">आपके Gameio सर्वर से कनेक्ट नहीं है</string>
+    <string name="media_music_unsupported_message">यह Gameio सर्वर अभी म्यूज़िक ब्राउज़िंग समर्थित नहीं करता</string>
     <string name="media_music_error_fallback">कुछ गलत हो गया</string>
     <string name="media_music_error_retry">फिर कोशिश करें</string>
     <string name="media_music_empty_message">कोई ट्रैक नहीं मिला</string>

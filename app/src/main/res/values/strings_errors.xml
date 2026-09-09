@@ -9,11 +9,11 @@
     -->
 
     <!-- SyncLibraryUseCase / SyncLibraryFailureReason -->
-    <string name="error_sync_library_not_connected">RomM not connected</string>
+    <string name="error_sync_library_not_connected">Gameio not connected</string>
     <string name="error_sync_library_unexpected">Sync failed</string>
 
     <!-- SyncPlatformUseCase / SyncPlatformFailureReason -->
-    <string name="error_sync_platform_not_connected">RomM not connected</string>
+    <string name="error_sync_platform_not_connected">Gameio not connected</string>
     <string name="error_sync_platform_not_found">Platform not found</string>
     <string name="error_sync_platform_unexpected">Sync failed</string>
 
@@ -47,7 +47,7 @@
 
     <!-- DownloadGameUseCase / DownloadGameFailureReason -->
     <string name="error_download_game_not_found">Game not found</string>
-    <string name="error_download_game_not_synced">Game is not synced from RomM</string>
+    <string name="error_download_game_not_synced">Game is not synced from Gameio</string>
     <!-- %1$s is a file extension such as "png", shown without a leading dot in the arg. -->
     <string name="error_download_invalid_file_type">Invalid file type: .%1$s</string>
     <!-- %1$s is the server's own error message, not authored by this app. -->

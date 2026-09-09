@@ -180,21 +180,15 @@ fun FirstRunScreen(
                     onGetStarted = { viewModel.nextStep() }
                 )
                 FirstRunStep.ROMM_LOGIN -> RommLoginStep(
-                    url = uiState.rommUrl,
-                    urlCommitted = uiState.rommUrlCommitted,
                     username = uiState.rommUsername,
                     password = uiState.rommPassword,
                     isConnecting = uiState.isConnecting,
                     error = firstRunErrorText(uiState.connectionError),
                     focusedIndex = uiState.focusedIndex,
                     rommFocusField = uiState.rommFocusField,
-                    onUrlChange = { viewModel.setRommUrl(it) },
                     onUsernameChange = { viewModel.setRommUsername(it) },
                     onPasswordChange = { viewModel.setRommPassword(it) },
-                    onCommitUrl = { viewModel.commitUrl() },
-                    onEditUrl = { viewModel.editUrl() },
                     onConnect = { viewModel.connectToRomm() },
-                    onBack = { viewModel.previousStep() },
                     onClearFocusField = { viewModel.clearRommFocusField() },
                     keyboardField = uiState.keyboardField,
                     keyboardText = viewModel.keyboardText(),
@@ -202,7 +196,6 @@ fun FirstRunScreen(
                     onKeyboardDismiss = { viewModel.closeKeyboard() }
                 )
                 FirstRunStep.ROMM_SUCCESS -> RommSuccessStep(
-                    serverName = uiState.rommUrl,
                     gameCount = uiState.rommGameCount,
                     platformCount = uiState.rommPlatformCount,
                     isFocused = true,

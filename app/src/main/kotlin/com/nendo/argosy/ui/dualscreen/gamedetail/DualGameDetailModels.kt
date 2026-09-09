@@ -11,8 +11,6 @@ import com.nendo.argosy.data.platform.PlatformDefinitions
 import com.nendo.argosy.domain.model.UnifiedSaveEntry
 import com.nendo.argosy.domain.model.UnifiedStateEntry
 import com.nendo.argosy.ui.common.savechannel.SaveFocusColumn
-import com.nendo.argosy.ui.common.savechannel.SaveHistoryItem
-import com.nendo.argosy.ui.common.savechannel.SaveSlotItem
 import com.nendo.argosy.ui.screens.gamedetail.UpdateFileUi
 import org.json.JSONArray
 import org.json.JSONObject
@@ -139,7 +137,6 @@ fun DualGameDetailUiState.visibleOptions(): List<GameDetailOption> {
         if (isMultiDisc && isEmulated) add(GameDetailOption.SELECT_DISC)
         if (usesTitleId && isEmulated) add(GameDetailOption.TITLE_ID)
         if (isDownloaded && !isDeleting) add(GameDetailOption.FILES)
-        add(GameDetailOption.ADD_TO_COLLECTION)
         if (isRommGame || isAndroidApp) add(GameDetailOption.REFRESH_METADATA)
         if ((isDownloaded || isAndroidApp) && !isDeleting) add(GameDetailOption.DELETE)
         add(GameDetailOption.HIDE)

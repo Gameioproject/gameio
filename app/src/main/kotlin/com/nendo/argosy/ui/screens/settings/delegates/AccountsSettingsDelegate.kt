@@ -1,9 +1,10 @@
 package com.nendo.argosy.ui.screens.settings.delegates
 
 import android.content.Context
+import com.nendo.argosy.ui.common.messageRes
 import com.nendo.argosy.R
+import com.nendo.argosy.data.remote.romm.DEFAULT_SERVER_URL
 import com.nendo.argosy.data.remote.romm.SignInResult
-import com.nendo.argosy.data.remote.romm.RomMResult
 import com.nendo.argosy.data.remote.romm.RomMRepository
 import com.nendo.argosy.data.repository.GameRepository
 import com.nendo.argosy.data.repository.RomMAccountRepository
@@ -64,7 +65,7 @@ class AccountsSettingsDelegate @Inject constructor(
                             username = row.username.ifBlank {
                                 context.getString(R.string.settings_accounts_delegate_fallback_username, row.rommUserId)
                             },
-                            serverLabel = serverLabel(row.baseUrl),
+                            serverLabel = context.getString(R.string.app_name),
                             isActive = row.isActive
                         )
                     }
@@ -131,9 +132,7 @@ class AccountsSettingsDelegate @Inject constructor(
     fun requestAddAccount() {
         val active = _state.value.activeAccount
         if (active == null) {
-            _state.update {
-                it.copy(notice = context.getString(R.string.settings_accounts_delegate_notice_no_server))
-            }
+            startSignIn()
             return
         }
         _state.update {
@@ -333,6 +332,10 @@ class AccountsSettingsDelegate @Inject constructor(
         _state.update { it.copy(signIn = AccountSignInState(active = true), notice = null) }
     }
 
+    fun setKeyboardField(field: Int?) {
+        _state.update { it.copy(signIn = it.signIn.copy(keyboardField = field)) }
+    }
+
     fun setSignInUsername(username: String) {
         _state.update { it.copy(signIn = it.signIn.copy(username = username, error = null)) }
     }
@@ -347,11 +350,6 @@ class AccountsSettingsDelegate @Inject constructor(
 
         signInJob?.cancel()
         signInJob = scope.launch {
-            val baseUrl = accountRepository.activeAccount()?.baseUrl
-            if (baseUrl.isNullOrBlank()) {
-                failSignIn(context.getString(R.string.settings_accounts_delegate_pairing_error_no_server))
-                return@launch
-            }
             if (form.username.isBlank() || form.password.isBlank()) {
                 failSignIn(context.getString(R.string.settings_romm_config_credentials_required))
                 return@launch
@@ -363,7 +361,7 @@ class AccountsSettingsDelegate @Inject constructor(
             // alongside so the session in progress is not yanked out from under the user.
             val activate = accountRepository.accountCount() == 0
             val result = romMRepository.connectWithPassword(
-                url = baseUrl,
+                url = DEFAULT_SERVER_URL,
                 username = form.username,
                 password = form.password,
                 activate = activate
@@ -405,7 +403,7 @@ class AccountsSettingsDelegate @Inject constructor(
                         )
                     }
                 }
-                is SignInResult.Failed -> failSignIn(result.message)
+                is SignInResult.Failed -> failSignIn(context.getString(result.messageRes))
             }
         }
     }
@@ -431,11 +429,6 @@ class AccountsSettingsDelegate @Inject constructor(
         if (ids.isEmpty()) return emptyList()
         return gameRepository.getByIds(ids).map { it.title }.sorted()
     }
-
-    private fun serverLabel(baseUrl: String): String = baseUrl
-        .removePrefix("https://")
-        .removePrefix("http://")
-        .trimEnd('/')
 
     private fun pendingSummary(work: AccountPendingWork): String? = work.describe()
 

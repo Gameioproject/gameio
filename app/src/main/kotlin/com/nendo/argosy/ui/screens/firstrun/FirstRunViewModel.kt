@@ -8,6 +8,7 @@ import android.provider.Settings
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
+import com.nendo.argosy.ui.common.messageRes
 import com.nendo.argosy.R
 import androidx.lifecycle.viewModelScope
 import android.app.Application
@@ -16,12 +17,8 @@ import com.nendo.argosy.data.local.entity.PlatformEntity
 import com.nendo.argosy.data.preferences.UserPreferencesRepository
 import com.nendo.argosy.data.remote.romm.SignInResult
 import com.nendo.argosy.data.remote.romm.DEFAULT_SERVER_URL
-import com.nendo.argosy.data.remote.romm.RomMCapabilities
 import com.nendo.argosy.data.remote.romm.RomMRepository
 import com.nendo.argosy.data.remote.romm.RomMResult
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.isActive
 import com.nendo.argosy.libretro.LibretroCoreManager
 import com.nendo.argosy.libretro.formatCoreDownloadError
 import com.nendo.argosy.ui.input.GamepadInputHandler
@@ -80,8 +77,6 @@ data class FirstRunError(
 data class FirstRunUiState(
     val currentStep: FirstRunStep = FirstRunStep.WELCOME,
     val focusedIndex: Int = 0,
-    val rommUrl: String = "",
-    val rommUrlCommitted: Boolean = false,
     val rommUsername: String = "",
     val rommPassword: String = "",
     val isConnecting: Boolean = false,
@@ -130,13 +125,9 @@ class FirstRunViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
-        // Ships pointed at the Gameio server, so the address step is already
-        // satisfied and the username field takes focus on launch.
         FirstRunUiState(
             currentStep = FirstRunStep.ROMM_LOGIN,
-            rommUrl = DEFAULT_SERVER_URL,
-            rommUrlCommitted = true,
-            focusedIndex = 1
+            focusedIndex = 0
         )
     )
     val uiState: StateFlow<FirstRunUiState> = _uiState.asStateFlow()
@@ -185,7 +176,7 @@ class FirstRunViewModel @Inject constructor(
             if (prevStep == state.currentStep) {
                 state
             } else {
-                state.copy(currentStep = prevStep, focusedIndex = initialFocus, rommUrlCommitted = false)
+                state.copy(currentStep = prevStep, focusedIndex = initialFocus)
             }
         }
     }
@@ -425,7 +416,7 @@ class FirstRunViewModel @Inject constructor(
         val state = _uiState.value
         return when (state.currentStep) {
             FirstRunStep.WELCOME -> 0
-            FirstRunStep.ROMM_LOGIN -> if (state.rommUrlCommitted) 4 else 1
+            FirstRunStep.ROMM_LOGIN -> 2
             FirstRunStep.ROMM_SUCCESS -> 0
             FirstRunStep.PERMISSIONS -> 4
             FirstRunStep.ROM_PATH -> if (state.folderSelected) 1 else 0
@@ -497,10 +488,6 @@ class FirstRunViewModel @Inject constructor(
         _uiState.update { it.copy(rommFocusField = null) }
     }
 
-    fun setRommUrl(url: String) {
-        _uiState.update { it.copy(rommUrl = url, connectionError = null) }
-    }
-
     fun setRommUsername(username: String) {
         _uiState.update { it.copy(rommUsername = username, connectionError = null) }
     }
@@ -521,25 +508,22 @@ class FirstRunViewModel @Inject constructor(
     fun keyboardText(): String {
         val state = _uiState.value
         return when (state.keyboardField) {
-            0 -> state.rommUrl
-            1 -> state.rommUsername
-            2 -> state.rommPassword
+            0 -> state.rommUsername
+            1 -> state.rommPassword
             else -> ""
         }
     }
 
     fun onKeyboardTextChange(value: String) {
         when (_uiState.value.keyboardField) {
-            0 -> setRommUrl(value)
-            1 -> setRommUsername(value)
-            2 -> setRommPassword(value)
+            0 -> setRommUsername(value)
+            1 -> setRommPassword(value)
         }
     }
 
     fun connectToRomm() {
         val state = _uiState.value
         if (state.isConnecting) return
-        if (state.rommUrl.isBlank()) return
         if (state.rommUsername.isBlank() || state.rommPassword.isBlank()) {
             _uiState.update {
                 it.copy(connectionError = FirstRunError(textRes = R.string.firstrun_romm_credentials_required))
@@ -549,7 +533,7 @@ class FirstRunViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isConnecting = true, connectionError = null) }
             val result = romMRepository.connectWithPassword(
-                url = state.rommUrl,
+                url = DEFAULT_SERVER_URL,
                 username = state.rommUsername,
                 password = state.rommPassword
             )
@@ -562,47 +546,10 @@ class FirstRunViewModel @Inject constructor(
                 is SignInResult.Failed -> _uiState.update {
                     it.copy(
                         isConnecting = false,
-                        connectionError = FirstRunError(serverMessage = result.message)
+                        connectionError = FirstRunError(textRes = result.messageRes)
                     )
                 }
             }
-        }
-    }
-
-    fun commitUrl() {
-        val state = _uiState.value
-        if (state.isConnecting || state.rommUrlCommitted) return
-        val url = state.rommUrl
-        if (url.isBlank()) return
-        _uiState.update { it.copy(isConnecting = true, connectionError = null) }
-        viewModelScope.launch {
-            when (val result = romMRepository.probeServerVersion(url)) {
-                is RomMResult.Success -> _uiState.update {
-                    it.copy(
-                        isConnecting = false,
-                        rommUrlCommitted = true,
-                        connectionError = null,
-                        focusedIndex = 1
-                    )
-                }
-                is RomMResult.Error -> _uiState.update {
-                    it.copy(
-                        isConnecting = false,
-                        connectionError = FirstRunError(serverMessage = result.message)
-                    )
-                }
-            }
-        }
-    }
-
-    fun editUrl() {
-        _uiState.update {
-            it.copy(
-                rommUrlCommitted = false,
-                isConnecting = false,
-                connectionError = null,
-                focusedIndex = 0
-            )
         }
     }
 
@@ -752,18 +699,9 @@ class FirstRunViewModel @Inject constructor(
         when (state.currentStep) {
             FirstRunStep.WELCOME -> nextStep()
             FirstRunStep.ROMM_LOGIN -> {
-                if (!state.rommUrlCommitted) {
-                    when (state.focusedIndex) {
-                        0 -> openKeyboard(0)
-                        1 -> if (!state.isConnecting && state.rommUrl.isNotBlank()) commitUrl()
-                    }
-                } else {
-                    when (state.focusedIndex) {
-                        // A field row opens the console keyboard over it.
-                        0, 1, 2 -> openKeyboard(state.focusedIndex)
-                        3 -> if (!state.isConnecting && canConnect(state)) connectToRomm()
-                        4 -> editUrl()
-                    }
+                when (state.focusedIndex) {
+                    0, 1 -> openKeyboard(state.focusedIndex)
+                    2 -> if (!state.isConnecting && canConnect(state)) connectToRomm()
                 }
             }
             FirstRunStep.ROMM_SUCCESS -> nextStep()
@@ -833,7 +771,6 @@ class FirstRunViewModel @Inject constructor(
     }
 
     private fun canConnect(state: FirstRunUiState): Boolean =
-        state.rommUrl.isNotBlank() &&
             state.rommUsername.isNotBlank() &&
             state.rommPassword.isNotBlank()
 

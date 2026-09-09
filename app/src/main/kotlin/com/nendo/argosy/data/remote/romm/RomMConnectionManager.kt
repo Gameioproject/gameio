@@ -27,20 +27,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import com.nendo.argosy.data.remote.ssl.UserCertTrustManager.withUserCertTrust
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val TAG = "RomMConnectionManager"
 
-// The server this build ships pointed at, so sign-in needs no address typed.
-// "Change server" on the sign-in screen still overrides it.
 const val DEFAULT_SERVER_URL = "https://playgameio.com"
 private const val MIN_DEVICE_API_VERSION = "4.7.0"
 private const val DOWNLOAD_STALL_TIMEOUT_SECONDS = 300
@@ -68,6 +59,8 @@ sealed class ConnectionState {
     data class Failed(val reason: String) : ConnectionState()
 }
 
+enum class SignInFailureReason { INVALID_CREDENTIALS, ACCOUNT_UNAVAILABLE, UNAVAILABLE }
+
 /** What a username-and-password sign-in produced. */
 sealed class SignInResult {
     /** Signed in and this connection is now the live one. */
@@ -76,7 +69,10 @@ sealed class SignInResult {
     /** Credentials were good, but the account was stored alongside the live one, not activated. */
     data class AddedAccount(val accountId: Long) : SignInResult()
 
-    data class Failed(val message: String) : SignInResult()
+    data class Failed(
+        val message: String,
+        val reason: SignInFailureReason = SignInFailureReason.UNAVAILABLE
+    ) : SignInResult()
 }
 
 @Singleton
@@ -402,6 +398,11 @@ class RomMConnectionManager @Inject constructor(
                             400 -> parseDetail(response.errorBody()?.string())
                                 ?: "Too many sign-ins on this account. Remove one in the web app."
                             else -> "Sign-in failed (${response.code()})"
+                        },
+                        when (response.code()) {
+                            401 -> SignInFailureReason.INVALID_CREDENTIALS
+                            403 -> SignInFailureReason.ACCOUNT_UNAVAILABLE
+                            else -> SignInFailureReason.UNAVAILABLE
                         }
                     )
                 }

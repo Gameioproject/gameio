@@ -193,7 +193,7 @@
     <string name="ui_changelog_title">%1$s में नया क्या है</string>
     <string name="ui_changelog_footer_continue">जारी रखें</string>
     <string name="ui_changelog_action_required">आवश्यक कार्रवाई: %1$s</string>
-    <string name="ui_changelog_action_relogin_romm">RomM में फिर से लॉगिन करें</string>
+    <string name="ui_changelog_action_relogin_romm">Gameio में फिर से लॉगिन करें</string>
     <string name="ui_changelog_action_resync_library">लाइब्रेरी फिर सिंक करें</string>
     <string name="ui_changelog_action_clear_cache">कैश साफ़ करें</string>
     <string name="ui_changelog_action_set_steam_path">Steam इंस्टॉल पाथ सेट करें</string>
@@ -273,7 +273,7 @@
     <string name="ui_section_breadcrumb_next">अगला सेक्शन</string>
 
     <string name="ui_qr_code_description">%1$s के लिए QR कोड</string>
-    <string name="ui_qr_scanner_hint">RomM पेयरिंग QR कोड पर पॉइंट करें</string>
+    <string name="ui_qr_scanner_hint">Gameio पेयरिंग QR कोड पर पॉइंट करें</string>
 
     <string name="ui_custom_tile_menu_header">टाइल</string>
 
@@ -547,8 +547,8 @@
     <string name="ui_drawer_friend_favorite">पसंदीदा</string>
     <string name="ui_drawer_account_none">कोई खाता नहीं</string>
     <string name="ui_drawer_account_caption">खाता</string>
-    <string name="ui_drawer_server_connected">RomM कनेक्टेड</string>
-    <string name="ui_drawer_server_offline">RomM ऑफ़लाइन</string>
+    <string name="ui_drawer_server_connected">Gameio कनेक्टेड</string>
+    <string name="ui_drawer_server_offline">Gameio ऑफ़लाइन</string>
     <string name="ui_drawer_nav_home">होम</string>
     <string name="ui_drawer_nav_social">सोशल</string>
     <string name="ui_drawer_nav_quaypass">चेक-इन</string>

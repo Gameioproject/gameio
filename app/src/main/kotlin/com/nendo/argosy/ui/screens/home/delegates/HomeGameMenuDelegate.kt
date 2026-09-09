@@ -2,7 +2,6 @@ package com.nendo.argosy.ui.screens.home.delegates
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import com.nendo.argosy.R
 import com.nendo.argosy.data.model.GameSource
 import com.nendo.argosy.data.repository.GameRepository
@@ -28,8 +27,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val MENU_INDEX_MAX_DOWNLOADED = 5
-private const val MENU_INDEX_MAX_REMOTE = 4
+private const val MENU_INDEX_MAX_DOWNLOADED = 4
+private const val MENU_INDEX_MAX_REMOTE = 3
 
 sealed class GameMenuAction {
     data class Play(val gameId: Long, val needsInstall: Boolean, val isDownloaded: Boolean) : GameMenuAction()
@@ -98,7 +97,6 @@ class HomeGameMenuDelegate @Inject constructor(
         val playIdx = currentIdx++
         val favoriteIdx = currentIdx++
         val detailsIdx = currentIdx++
-        val addToCollectionIdx = currentIdx++
         val refreshIdx = if (game.isRommGame || game.isAndroidApp) currentIdx++ else -1
         val resyncIdx = if (isPlatformRow && game.platformId > 0) currentIdx++ else -1
         val deleteIdx = if (game.isDownloaded || game.needsInstall) currentIdx++ else -1
@@ -109,7 +107,6 @@ class HomeGameMenuDelegate @Inject constructor(
             playIdx -> GameMenuAction.Play(game.id, game.needsInstall, game.isDownloaded)
             favoriteIdx -> GameMenuAction.ToggleFavorite(game.id)
             detailsIdx -> GameMenuAction.ViewDetails(game.id)
-            addToCollectionIdx -> GameMenuAction.AddToCollection(game.id)
             refreshIdx -> GameMenuAction.Refresh(game.id, game.isAndroidApp)
             resyncIdx -> GameMenuAction.ResyncPlatform(game.platformId, game.platformDisplayName)
             deleteIdx -> GameMenuAction.Delete(game.id)

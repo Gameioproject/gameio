@@ -204,7 +204,7 @@
     <string name="settings_shell_modal_delete_game_plain_message">यह गेम के लिए डाउनलोड की गई सभी फ़ाइलें हटा देगा।%1$s यह पूर्ववत नहीं किया जा सकता।</string>
     <string name="settings_shell_modal_delete_game_plain_confirm">गेम हटाएँ</string>
 
-    <string name="settings_shell_modal_romm_signout_title">RomM से साइन आउट करें?</string>
+    <string name="settings_shell_modal_romm_signout_title">Gameio से साइन आउट करें?</string>
     <plurals name="settings_shell_romm_signout_pending_message">
         <item quantity="one">पहले %1$d सेव अपलोड होगा। जब सब कुछ आपके सर्वर पर हो जाए, तब इस अकाउंट के कैश किए गए सेव, स्टेट और सेटिंग्स इस डिवाइस से हटा दी जाएँगी। आपके डाउनलोड किए गए गेम बने रहेंगे।</item>
         <item quantity="other">पहले %1$d सेव अपलोड होंगे। जब सब कुछ आपके सर्वर पर हो जाए, तब इस अकाउंट के कैश किए गए सेव, स्टेट और सेटिंग्स इस डिवाइस से हटा दी जाएँगी। आपके डाउनलोड किए गए गेम बने रहेंगे।</item>
@@ -251,8 +251,8 @@
     <string name="settings_shell_accounts_remove_fallback_name">अकाउंट</string>
     <string name="settings_shell_accounts_removal_message_base">यह इस अकाउंट के सेव, स्टेट, लंबित काम, उपलब्धियाँ और लाइब्रेरी ओवरले इस डिवाइस से हटा देगा। डाउनलोड किए गए गेम बने रहेंगे।</string>
     <string name="settings_shell_accounts_removal_pending_suffix"> अभी भी न भेजा गया: %1$s।</string>
-    <string name="settings_shell_accounts_removal_last_account_suffix"> यह आखिरी अकाउंट है, इसलिए डिवाइस RomM से साइन आउट हो जाएगा।</string>
-    <string name="settings_shell_accounts_removal_revoke_suffix"> डिवाइस RomM सर्वर पर रजिस्टर्ड रहेगा; उसे वहाँ रद्द करें।</string>
+    <string name="settings_shell_accounts_removal_last_account_suffix"> यह आखिरी अकाउंट है, इसलिए डिवाइस Gameio से साइन आउट हो जाएगा।</string>
+    <string name="settings_shell_accounts_removal_revoke_suffix"> डिवाइस Gameio सर्वर पर रजिस्टर्ड रहेगा; उसे वहाँ रद्द करें।</string>
     <string name="settings_shell_accounts_cancel">रद्द करें</string>
     <string name="settings_shell_accounts_keep_queued_work">लंबित काम रखें</string>
     <string name="settings_shell_accounts_discard_and_remove">छोड़ें और हटाएँ</string>

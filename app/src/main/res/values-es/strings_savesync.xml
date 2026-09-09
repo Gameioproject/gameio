@@ -10,14 +10,14 @@
     <string name="savesync_footer_confirm_keep_server">Mantener la del servidor</string>
     <string name="savesync_footer_confirm_skip">Omitir</string>
     <string name="savesync_footer_open_game">Abrir juego</string>
-    <string name="savesync_footer_scan_server">Analizar RomM</string>
+    <string name="savesync_footer_scan_server">Analizar Gameio</string>
     <string name="savesync_footer_back">Atrás</string>
 
     <string name="savesync_device_this_label">Este dispositivo</string>
-    <string name="savesync_device_not_connected">No conectado a RomM</string>
+    <string name="savesync_device_not_connected">No conectado a Gameio</string>
     <string name="savesync_device_id_pill">…%1$s</string>
     <string name="savesync_device_client_versioned">%1$s v%2$s</string>
-    <string name="savesync_device_server_versioned">RomM v%1$s</string>
+    <string name="savesync_device_server_versioned">Gameio v%1$s</string>
     <string name="savesync_device_server_connected">Conectado</string>
     <string name="savesync_device_server_offline">Sin conexión</string>
     <!-- Just the unit word: the count is rendered beside it, never inside it, so there is no
@@ -43,8 +43,8 @@
 
     <string name="savesync_empty_title_connected">Aún no se ha sincronizado ninguna partida guardada</string>
     <string name="savesync_empty_message_connected">Las partidas guardadas aparecerán aquí a medida que juegues</string>
-    <string name="savesync_empty_title_disconnected">Conéctate a RomM para sincronizar partidas guardadas</string>
-    <string name="savesync_empty_message_disconnected">Abre Ajustes para agregar tu servidor RomM</string>
+    <string name="savesync_empty_title_disconnected">Conéctate a Gameio para sincronizar partidas guardadas</string>
+    <string name="savesync_empty_message_disconnected">Abre Ajustes para agregar tu servidor Gameio</string>
 
     <string name="savesync_conflict_side_local">Local</string>
     <string name="savesync_conflict_side_server">Servidor</string>
@@ -68,8 +68,8 @@
     <string name="savesync_game_last_write_unknown">Última escritura - dispositivo desconocido</string>
     <string name="savesync_game_last_write_time">%1$s · %2$s</string>
 
-    <string name="savesync_force_check_title">Buscar partidas guardadas faltantes en RomM</string>
-    <string name="savesync_force_check_idle">Recorre los juegos locales y obtiene la última partida guardada de cada canal desde RomM.</string>
+    <string name="savesync_force_check_title">Buscar partidas guardadas faltantes en Gameio</string>
+    <string name="savesync_force_check_idle">Recorre los juegos locales y obtiene la última partida guardada de cada canal desde Gameio.</string>
     <string name="savesync_force_check_running">Analizando...</string>
     <plurals name="savesync_force_check_up_to_date">
         <item quantity="one">Al día - se inspeccionó %d juego, nada nuevo.</item>

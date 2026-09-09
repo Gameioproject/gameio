@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="error_sync_library_not_connected">RomM не подключен</string>
+    <string name="error_sync_library_not_connected">Gameio не подключен</string>
     <string name="error_sync_library_unexpected">Ошибка синхронизации</string>
 
-    <string name="error_sync_platform_not_connected">RomM не подключен</string>
+    <string name="error_sync_platform_not_connected">Gameio не подключен</string>
     <string name="error_sync_platform_not_found">Платформа не найдена</string>
     <string name="error_sync_platform_unexpected">Ошибка синхронизации</string>
 
@@ -27,7 +27,7 @@
     <string name="error_restore_cached_save_restore_failed">Не удалось восстановить сохранение</string>
 
     <string name="error_download_game_not_found">Игра не найдена</string>
-    <string name="error_download_game_not_synced">Игра не синхронизирована из RomM</string>
+    <string name="error_download_game_not_synced">Игра не синхронизирована из Gameio</string>
     <string name="error_download_invalid_file_type">Недопустимый тип файла: .%1$s</string>
     <string name="error_download_rom_info_fetch_failed">Не удалось получить сведения о ROM: %1$s</string>
     <string name="error_download_no_discs_found">Не найдены диски для игры с несколькими дисками</string>

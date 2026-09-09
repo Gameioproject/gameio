@@ -306,9 +306,7 @@ data class HomeUiState(
             if (layoutKind == HomeLayoutKind.CAROUSEL) {
                 add(HomeRow.Continue)
                 addAll(platforms.indices.map { HomeRow.Platform(it) })
-                addAll(pinnedRows)
                 HomeSectionKind.TRAILING.forEach { kind -> fixedRow(kind)?.let { add(it) } }
-                addAll(repeatingRows(HomeSectionKind.MEDIA_LIBRARY))
                 return@buildList
             }
             HomeSectionKind.LEADING.forEach { kind ->
@@ -329,8 +327,8 @@ data class HomeUiState(
         HomeSectionKind.ANDROID -> HomeRow.Android.takeIf { androidGames.isNotEmpty() }
         HomeSectionKind.STEAM -> HomeRow.Steam.takeIf { steamGames.isNotEmpty() }
         HomeSectionKind.CONTINUE_WATCHING ->
-            HomeRow.ContinueWatching.takeIf { showsMediaRow(showContinueWatchingRow) }
-        HomeSectionKind.NEXT_UP -> HomeRow.NextUp.takeIf { showsMediaRow(showNextUpRow) }
+            null
+        HomeSectionKind.NEXT_UP -> null
         else -> null
     }
 

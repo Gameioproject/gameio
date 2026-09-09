@@ -159,7 +159,7 @@ internal sealed class MainSettingsItem(
                 Header("libraryHeader", "library", R.string.settings_main_section_library),
                 Platforms, Storage,
                 Header("connectionsHeader", "connections", R.string.settings_main_section_connections),
-                RomM, Steam, Jellyfin, Social,
+                RomM, Steam,
                 Header("systemHeader", "system", R.string.settings_main_section_system),
                 Permissions, DeviceSettings, About
             )

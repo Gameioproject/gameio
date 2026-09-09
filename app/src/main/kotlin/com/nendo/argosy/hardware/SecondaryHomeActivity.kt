@@ -1184,15 +1184,7 @@ class SecondaryHomeActivity :
      * would be promising something the device cannot give.
      */
     private fun refreshMediaToggle() {
-        val playback = dsm.mediaPlayback.value
-        mediaToggle = if (playback == null && !dsm.mediaSignedIn.value) {
-            null
-        } else {
-            CompanionMediaToggle(
-                showingMedia = isMediaPanelVisible,
-                isPlaying = playback?.isPlaying == true
-            )
-        }
+        mediaToggle = null
     }
 
     /**

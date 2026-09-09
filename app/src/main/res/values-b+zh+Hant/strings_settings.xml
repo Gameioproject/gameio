@@ -215,13 +215,13 @@
     <string name="settings_saves_save_sync_title">存檔同步</string>
     <string name="settings_saves_save_sync_subtitle">與伺服器同步遊戲存檔</string>
     <string name="settings_saves_save_sync_locked_value">無法使用</string>
-    <string name="settings_saves_save_sync_locked_subtitle">需要RomM伺服器</string>
+    <string name="settings_saves_save_sync_locked_subtitle">需要Gameio伺服器</string>
 
     <string name="settings_saves_secure_saves_title">安全存檔</string>
     <string name="settings_saves_secure_saves_subtitle_on">Gameio會管理並強制執行存檔規則</string>
     <string name="settings_saves_secure_saves_subtitle_off">Gameio會嘗試同步由啟動器以外管理的存檔</string>
     <string name="settings_saves_secure_saves_locked_value">無法使用</string>
-    <string name="settings_saves_secure_saves_locked_subtitle">需要RomM伺服器</string>
+    <string name="settings_saves_secure_saves_locked_subtitle">需要Gameio伺服器</string>
 
     <string name="settings_saves_cache_limit_title">本機存檔快取</string>
     <plurals name="settings_saves_cache_limit_value">
@@ -261,8 +261,8 @@
     <string name="settings_sync_cache_box_art_title">快取3D封面</string>
     <string name="settings_sync_cache_box_art_subtitle">下載封底與書背掃描圖，用於3D封面顯示</string>
     <string name="settings_sync_upload_screenshots_title">上傳螢幕截圖</string>
-    <string name="settings_sync_upload_screenshots_subtitle">將遊玩時拍攝的螢幕截圖傳送至RomM</string>
-    <string name="settings_sync_upload_screenshots_subtitle_unsupported">需要RomM 5.0以上版本</string>
+    <string name="settings_sync_upload_screenshots_subtitle">將遊玩時拍攝的螢幕截圖傳送至Gameio</string>
+    <string name="settings_sync_upload_screenshots_subtitle_unsupported">需要Gameio 5.0以上版本</string>
     <string name="settings_sync_upload_screenshots_subtitle_needs_usage">授予使用狀況存取權限以精確比對遊戲</string>
 
     <string name="settings_sync_image_cache_title">圖片快取位置</string>
@@ -324,7 +324,7 @@
 
     <string name="settings_bios_section_platforms">平台</string>
     <string name="settings_bios_empty_notice">尚未同步任何BIOS檔案。同步收藏庫即可探索可用的韌體。</string>
-    <string name="settings_bios_footer_note">BIOS檔案會從您的RomM伺服器下載並儲存在本機。使用「分發」即可將其複製到各模擬器目錄。</string>
+    <string name="settings_bios_footer_note">BIOS檔案會從您的Gameio伺服器下載並儲存在本機。使用「分發」即可將其複製到各模擬器目錄。</string>
 
     <string name="settings_bios_firmware_downloaded">已下載</string>
     <string name="settings_bios_firmware_downloading">下載中&#8230;</string>
@@ -512,7 +512,7 @@
     </plurals>
 
     <string name="settings_music_browse_server_title">瀏覽伺服器音樂</string>
-    <string name="settings_music_browse_server_subtitle">從RomM預覽並下載曲目</string>
+    <string name="settings_music_browse_server_subtitle">從Gameio預覽並下載曲目</string>
     <string name="settings_music_browse_local_title">瀏覽本機音樂</string>
     <string name="settings_music_browse_local_subtitle">將檔案或資料夾新增至播放清單</string>
     <string name="settings_music_location_title">音樂位置</string>
@@ -1037,7 +1037,7 @@
     <string name="settings_romm_section_server">伺服器</string>
     <string name="settings_romm_section_library">收藏庫</string>
 
-    <string name="settings_romm_server_title">Rom Manager</string>
+    <string name="settings_romm_server_title">Sign in</string>
     <string name="settings_romm_server_checking">正在檢查連線&#8230;</string>
     <string name="settings_romm_server_connected">已連線</string>
     <string name="settings_romm_server_offline">%1$s（離線）</string>
@@ -1046,7 +1046,7 @@
     <string name="settings_romm_sign_out_title">登出</string>
     <string name="settings_romm_sign_out_title_busy">登出中&#8230;</string>
     <string name="settings_romm_sign_out_signed_in_as">以%1$s身分登入</string>
-    <string name="settings_romm_sign_out_subtitle">忘記此RomM帳號</string>
+    <string name="settings_romm_sign_out_subtitle">忘記此Gameio帳號</string>
 
     <string name="settings_romm_accounts_title">帳號</string>
     <string name="settings_romm_accounts_empty">沒有已配對的帳號</string>
@@ -1067,19 +1067,19 @@
     <string name="settings_accounts_active_badge">使用中</string>
     <string name="settings_accounts_action_switch">切換</string>
     <string name="settings_accounts_action_remove">移除</string>
-    <string name="settings_accounts_remove_blocked_only">這是此裝置上唯一的帳號，請從RomM登出以移除。</string>
+    <string name="settings_accounts_remove_blocked_only">這是此裝置上唯一的帳號，請從Gameio登出以移除。</string>
     <string name="settings_accounts_remove_blocked_active">請先切換到其他帳號，才能移除這個帳號。</string>
 
     <string name="settings_accounts_add_title">新增帳號</string>
     <string name="settings_accounts_add_subtitle">在%1$s上配對其他使用者</string>
-    <string name="settings_accounts_add_subtitle_locked">請先在RomM底下登入</string>
+    <string name="settings_accounts_add_subtitle_locked">請先在Gameio底下登入</string>
 
     <string name="settings_accounts_needs_sync_saves">等待同步的存檔</string>
     <string name="settings_accounts_needs_sync_states">等待同步的即時存檔</string>
     <string name="settings_accounts_needs_sync_message">這些項目為空白，因為此裝置上的版本已知比伺服器上的舊。同步即可補齊。</string>
 
-    <string name="settings_accounts_empty_title">尚未配對任何RomM帳號</string>
-    <string name="settings_accounts_empty_message">請在RomM底下登入。配對一個帳號後，即可在此新增更多帳號。</string>
+    <string name="settings_accounts_empty_title">尚未配對任何Gameio帳號</string>
+    <string name="settings_accounts_empty_message">請在Gameio底下登入。配對一個帳號後，即可在此新增更多帳號。</string>
     <string name="settings_accounts_loading">正在載入帳號&#8230;</string>
 
     <string name="settings_accounts_switch_title">正在切換帳號</string>
@@ -1088,7 +1088,7 @@
     <string name="settings_accounts_switch_message">存檔會先封存並驗證，才會移除任何內容，請保持此畫面開啟。</string>
 
     <string name="settings_accounts_pairing_title">掃描以新增帳號</string>
-    <string name="settings_accounts_pairing_message">在手機上以要新增的使用者身分登入RomM，掃描此代碼，然後核准此裝置。核准後Gameio會以該使用者身分登入。</string>
+    <string name="settings_accounts_pairing_message">在手機上以要新增的使用者身分登入Gameio，掃描此代碼，然後核准此裝置。核准後Gameio會以該使用者身分登入。</string>
     <string name="settings_accounts_pairing_retry">重試</string>
     <string name="settings_accounts_pairing_cancel">取消</string>
 
@@ -1398,7 +1398,7 @@
     <string name="settings_platform_combine_content_subtitle">所有遊戲放在同一資料夾，所有更新與DLC放在extcontent</string>
     <string name="settings_platform_sync_now_title">立即同步</string>
     <string name="settings_platform_sync_now_busy">同步進行中&#8230;</string>
-    <string name="settings_platform_sync_now_subtitle">將此平台與RomM同步</string>
+    <string name="settings_platform_sync_now_subtitle">將此平台與Gameio同步</string>
 
     <string name="settings_platform_download_defaults_title">下載預設值</string>
     <string name="settings_platform_download_defaults_subtitle">預先選取的檔案類型</string>
@@ -1610,20 +1610,20 @@
     <string name="settings_romm_config_auth_method_title">驗證方式</string>
     <string name="settings_romm_config_auth_method_device">裝置配對</string>
     <string name="settings_romm_config_auth_method_pairing_code">配對代碼</string>
-    <string name="settings_romm_config_device_instructions">使用手機掃描QR Code即可配對此裝置，然後在RomM中核准。需要RomM 5.0以上版本。</string>
-    <string name="settings_romm_config_pairing_code_instructions">在RomM網頁介面中建立API權杖，然後點選「配對裝置」以取得代碼。</string>
+    <string name="settings_romm_config_device_instructions">使用手機掃描QR Code即可配對此裝置，然後在Gameio中核准。需要Gameio 5.0以上版本。</string>
+    <string name="settings_romm_config_pairing_code_instructions">在Gameio網頁介面中建立API權杖，然後點選「配對裝置」以取得代碼。</string>
     <string name="settings_romm_config_connect_generating_title">正在產生代碼&#8230;</string>
     <string name="settings_romm_config_connect_connecting_title">連線中&#8230;</string>
     <string name="settings_romm_config_connect_pair_title">配對裝置</string>
     <string name="settings_romm_config_connect_title">連線</string>
     <string name="settings_romm_config_connect_device_subtitle">產生配對用QR Code</string>
-    <string name="settings_romm_config_connect_subtitle">連線至RomM伺服器</string>
+    <string name="settings_romm_config_connect_subtitle">連線至Gameio伺服器</string>
     <string name="settings_romm_config_scan_title">掃描QR Code</string>
-    <string name="settings_romm_config_scan_subtitle">掃描RomM網頁介面上的配對QR Code</string>
+    <string name="settings_romm_config_scan_subtitle">掃描Gameio網頁介面上的配對QR Code</string>
     <string name="settings_romm_config_cancel_title">取消</string>
     <string name="settings_romm_config_cancel_subtitle">返回伺服器設定</string>
     <string name="settings_romm_device_pairing_title">掃描以配對</string>
-    <string name="settings_romm_device_pairing_subtitle">使用手機掃描此代碼，然後在RomM中核准此裝置。</string>
+    <string name="settings_romm_device_pairing_subtitle">使用手機掃描此代碼，然後在Gameio中核准此裝置。</string>
     <string name="settings_romm_device_pairing_cancel_title">取消</string>
     <string name="settings_romm_device_pairing_cancel_subtitle">停止配對</string>
 
@@ -1748,7 +1748,7 @@
     <string name="settings_hard_reset_deletes_database">整個收藏庫資料庫，包含遊玩時間、合輯、下載紀錄、各遊戲的個別設定</string>
     <string name="settings_hard_reset_deletes_caches">所有快取，包含圖片、存檔與即時存檔、已解壓縮的ROM、音效、模擬器安裝檔、Steam暫存、狀態封面</string>
     <string name="settings_hard_reset_keeps_header">將保留</string>
-    <string name="settings_hard_reset_keeps_sign_ins">設定與登入狀態，RomM與Steam會保持連線</string>
+    <string name="settings_hard_reset_keeps_sign_ins">設定與登入狀態，Gameio與Steam會保持連線</string>
     <string name="settings_hard_reset_keeps_synced_saves">已同步至伺服器的存檔</string>
     <string name="settings_hard_reset_keeps_emulator_apps">模擬器應用程式及其自身的存檔資料</string>
     <string name="settings_hard_reset_keeps_music">您的音樂資料夾</string>
@@ -1799,8 +1799,8 @@
 
     <string name="settings_steam_launcher_pref_add_button">新增</string>
 
-    <string name="settings_accounts_delegate_fallback_username">RomM使用者%1$d</string>
-    <string name="settings_accounts_delegate_notice_no_server">請先在RomM底下登入RomM伺服器。</string>
+    <string name="settings_accounts_delegate_fallback_username">Gameio使用者%1$d</string>
+    <string name="settings_accounts_delegate_notice_no_server">請先在Gameio底下登入Gameio伺服器。</string>
     <string name="settings_accounts_delegate_progress_preparing">準備中</string>
     <string name="settings_accounts_delegate_progress_resuming">恢復中</string>
     <string name="settings_accounts_delegate_progress_archiving">正在封存存檔%1$d／%2$d</string>
@@ -1821,7 +1821,7 @@
     <string name="settings_accounts_delegate_removal_removed">帳號已移除。</string>
     <string name="settings_accounts_delegate_removal_archived">清除前已封存%1$d個存檔。</string>
     <string name="settings_accounts_delegate_removal_aborted">有%1$d個存檔在封存過程中發生變更，已保留在磁碟上。</string>
-    <string name="settings_accounts_delegate_removal_registered_note">此裝置仍在RomM伺服器上保持註冊狀態，請至伺服器端撤銷。</string>
+    <string name="settings_accounts_delegate_removal_registered_note">此裝置仍在Gameio伺服器上保持註冊狀態，請至伺服器端撤銷。</string>
     <string name="settings_accounts_delegate_completion_switched">已切換帳號。</string>
     <string name="settings_accounts_delegate_completion_aborted">有%1$d個檔案在封存過程中發生變更，已維持原狀。</string>
     <string name="settings_accounts_delegate_completion_needs_sync">有%1$d個位置留空，因為已知本機版本落後於伺服器。</string>

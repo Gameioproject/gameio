@@ -239,13 +239,13 @@
     <string name="settings_saves_save_sync_title">सेव सिंक</string>
     <string name="settings_saves_save_sync_subtitle">सर्वर के साथ गेम सेव सिंक करें</string>
     <string name="settings_saves_save_sync_locked_value">अनुपलब्ध</string>
-    <string name="settings_saves_save_sync_locked_subtitle">RomM सर्वर आवश्यक है</string>
+    <string name="settings_saves_save_sync_locked_subtitle">Gameio सर्वर आवश्यक है</string>
 
     <string name="settings_saves_secure_saves_title">सिक्योर सेव</string>
     <string name="settings_saves_secure_saves_subtitle_on">Gameio सेव फ़ाइलों को मैनेज और लागू करता है</string>
     <string name="settings_saves_secure_saves_subtitle_off">Gameio लॉन्चर के बाहर मैनेज किए गए सेव सिंक करने की कोशिश करता है</string>
     <string name="settings_saves_secure_saves_locked_value">अनुपलब्ध</string>
-    <string name="settings_saves_secure_saves_locked_subtitle">RomM सर्वर आवश्यक है</string>
+    <string name="settings_saves_secure_saves_locked_subtitle">Gameio सर्वर आवश्यक है</string>
 
     <string name="settings_saves_cache_limit_title">लोकल सेव कैश</string>
     <plurals name="settings_saves_cache_limit_value">
@@ -290,8 +290,8 @@
     <string name="settings_sync_cache_box_art_title">3D बॉक्स आर्ट कैश करें</string>
     <string name="settings_sync_cache_box_art_subtitle">3D बॉक्स डिस्प्ले के लिए बॉक्स के पीछे और स्पाइन स्कैन डाउनलोड करें</string>
     <string name="settings_sync_upload_screenshots_title">स्क्रीनशॉट अपलोड करें</string>
-    <string name="settings_sync_upload_screenshots_subtitle">खेलते समय लिए गए स्क्रीनशॉट RomM पर भेजें</string>
-    <string name="settings_sync_upload_screenshots_subtitle_unsupported">RomM 5.0 या नया वर्शन आवश्यक है</string>
+    <string name="settings_sync_upload_screenshots_subtitle">खेलते समय लिए गए स्क्रीनशॉट Gameio पर भेजें</string>
+    <string name="settings_sync_upload_screenshots_subtitle_unsupported">Gameio 5.0 या नया वर्शन आवश्यक है</string>
     <string name="settings_sync_upload_screenshots_subtitle_needs_usage">सटीक गेम मिलान के लिए यूसेज एक्सेस दें</string>
 
     <string name="settings_sync_image_cache_title">इमेज कैश लोकेशन</string>
@@ -358,7 +358,7 @@
 
     <string name="settings_bios_section_platforms">प्लेटफ़ॉर्म</string>
     <string name="settings_bios_empty_notice">अभी तक कोई BIOS फ़ाइल सिंक नहीं हुई। उपलब्ध फ़र्मवेयर जानने के लिए अपनी लाइब्रेरी सिंक करें।</string>
-    <string name="settings_bios_footer_note">BIOS फ़ाइलें आपके RomM सर्वर से डाउनलोड होकर लोकल स्टोर होती हैं। इन्हें एमुलेटर डायरेक्टरी में कॉपी करने के लिए \'Distribute\' का उपयोग करें।</string>
+    <string name="settings_bios_footer_note">BIOS फ़ाइलें आपके Gameio सर्वर से डाउनलोड होकर लोकल स्टोर होती हैं। इन्हें एमुलेटर डायरेक्टरी में कॉपी करने के लिए \'Distribute\' का उपयोग करें।</string>
 
     <string name="settings_bios_firmware_downloaded">डाउनलोड हो गया</string>
     <string name="settings_bios_firmware_downloading">डाउनलोड हो रहा है...</string>
@@ -561,7 +561,7 @@
     </plurals>
 
     <string name="settings_music_browse_server_title">सर्वर संगीत ब्राउज़ करें</string>
-    <string name="settings_music_browse_server_subtitle">RomM से ट्रैक प्रीव्यू और डाउनलोड करें</string>
+    <string name="settings_music_browse_server_subtitle">Gameio से ट्रैक प्रीव्यू और डाउनलोड करें</string>
     <string name="settings_music_browse_local_title">लोकल संगीत ब्राउज़ करें</string>
     <string name="settings_music_browse_local_subtitle">प्लेलिस्ट में फ़ाइलें या फ़ोल्डर जोड़ें</string>
     <string name="settings_music_location_title">संगीत लोकेशन</string>
@@ -1132,7 +1132,7 @@
     <string name="settings_romm_section_server">सर्वर</string>
     <string name="settings_romm_section_library">लाइब्रेरी</string>
 
-    <string name="settings_romm_server_title">Rom Manager</string>
+    <string name="settings_romm_server_title">Sign in</string>
     <string name="settings_romm_server_checking">कनेक्शन जाँचा जा रहा है...</string>
     <string name="settings_romm_server_connected">कनेक्टेड</string>
     <string name="settings_romm_server_offline">%1$s (ऑफ़लाइन)</string>
@@ -1141,7 +1141,7 @@
     <string name="settings_romm_sign_out_title">साइन आउट करें</string>
     <string name="settings_romm_sign_out_title_busy">साइन आउट हो रहा है...</string>
     <string name="settings_romm_sign_out_signed_in_as">%1$s के रूप में साइन इन</string>
-    <string name="settings_romm_sign_out_subtitle">इस RomM अकाउंट को भूल जाएँ</string>
+    <string name="settings_romm_sign_out_subtitle">इस Gameio अकाउंट को भूल जाएँ</string>
 
     <string name="settings_romm_accounts_title">अकाउंट</string>
     <string name="settings_romm_accounts_empty">कोई अकाउंट पेयर नहीं है</string>
@@ -1164,19 +1164,19 @@
     <string name="settings_accounts_active_badge">सक्रिय</string>
     <string name="settings_accounts_action_switch">स्विच करें</string>
     <string name="settings_accounts_action_remove">हटाएँ</string>
-    <string name="settings_accounts_remove_blocked_only">इस डिवाइस पर यही एकमात्र अकाउंट है। इसे छोड़ने के लिए RomM से साइन आउट करें।</string>
+    <string name="settings_accounts_remove_blocked_only">इस डिवाइस पर यही एकमात्र अकाउंट है। इसे छोड़ने के लिए Gameio से साइन आउट करें।</string>
     <string name="settings_accounts_remove_blocked_active">इसे हटाने से पहले किसी दूसरे अकाउंट पर स्विच करें।</string>
 
     <string name="settings_accounts_add_title">अकाउंट जोड़ें</string>
     <string name="settings_accounts_add_subtitle">%1$s पर एक और यूज़र जोड़ें</string>
-    <string name="settings_accounts_add_subtitle_locked">पहले RomM में साइन इन करें</string>
+    <string name="settings_accounts_add_subtitle_locked">पहले Gameio में साइन इन करें</string>
 
     <string name="settings_accounts_needs_sync_saves">सिंक की प्रतीक्षा में सेव</string>
     <string name="settings_accounts_needs_sync_states">सिंक की प्रतीक्षा में सेव स्टेट</string>
     <string name="settings_accounts_needs_sync_message">इन्हें खाली छोड़ा गया क्योंकि इस डिवाइस पर मौजूद कॉपी सर्वर से पुरानी होना ज्ञात था। इन्हें भरने के लिए सिंक करें।</string>
 
-    <string name="settings_accounts_empty_title">अभी तक कोई RomM अकाउंट पेयर नहीं है</string>
-    <string name="settings_accounts_empty_message">RomM में साइन इन करें। एक अकाउंट पेयर होने के बाद आप यहाँ और जोड़ सकते हैं।</string>
+    <string name="settings_accounts_empty_title">अभी तक कोई Gameio अकाउंट पेयर नहीं है</string>
+    <string name="settings_accounts_empty_message">Gameio में साइन इन करें। एक अकाउंट पेयर होने के बाद आप यहाँ और जोड़ सकते हैं।</string>
     <string name="settings_accounts_loading">अकाउंट लोड हो रहे हैं...</string>
 
     <string name="settings_accounts_switch_title">अकाउंट स्विच हो रहा है</string>
@@ -1185,7 +1185,7 @@
     <string name="settings_accounts_switch_message">कुछ भी हटाए जाने से पहले सेव आर्काइव और सत्यापित किए जाते हैं। यह स्क्रीन खुली रहने दें।</string>
 
     <string name="settings_accounts_pairing_title">अकाउंट जोड़ने के लिए स्कैन करें</string>
-    <string name="settings_accounts_pairing_message">अपने फ़ोन पर जिस यूज़र को जोड़ना है उसके तौर पर RomM में साइन इन करें, यह कोड स्कैन करें, फिर इस डिवाइस को मंज़ूर करें। मंज़ूरी मिलते ही Gameio उनके तौर पर साइन इन हो जाता है।</string>
+    <string name="settings_accounts_pairing_message">अपने फ़ोन पर जिस यूज़र को जोड़ना है उसके तौर पर Gameio में साइन इन करें, यह कोड स्कैन करें, फिर इस डिवाइस को मंज़ूर करें। मंज़ूरी मिलते ही Gameio उनके तौर पर साइन इन हो जाता है।</string>
     <string name="settings_accounts_pairing_retry">फिर कोशिश करें</string>
     <string name="settings_accounts_pairing_cancel">रद्द करें</string>
 
@@ -1509,7 +1509,7 @@
     <string name="settings_platform_combine_content_subtitle">सभी गेम एक फ़ोल्डर में, सभी अपडेट और DLC extcontent में</string>
     <string name="settings_platform_sync_now_title">अभी सिंक करें</string>
     <string name="settings_platform_sync_now_busy">सिंक चल रही है...</string>
-    <string name="settings_platform_sync_now_subtitle">इस प्लेटफ़ॉर्म को RomM के साथ सिंक करें</string>
+    <string name="settings_platform_sync_now_subtitle">इस प्लेटफ़ॉर्म को Gameio के साथ सिंक करें</string>
 
     <string name="settings_platform_download_defaults_title">डाउनलोड डिफ़ॉल्ट</string>
     <string name="settings_platform_download_defaults_subtitle">पहले से चुनी गई फ़ाइल टाइप</string>
@@ -1745,20 +1745,20 @@
     <string name="settings_romm_config_auth_method_title">ऑथ तरीका</string>
     <string name="settings_romm_config_auth_method_device">डिवाइस पेयरिंग</string>
     <string name="settings_romm_config_auth_method_pairing_code">पेयरिंग कोड</string>
-    <string name="settings_romm_config_device_instructions">अपने फ़ोन से QR कोड स्कैन करके इस डिवाइस को पेयर करें, फिर इसे RomM में मंज़ूर करें। RomM 5.0 या नया वर्शन आवश्यक है।</string>
-    <string name="settings_romm_config_pairing_code_instructions">RomM वेब UI में एक API टोकन बनाएँ, फिर कोड पाने के लिए Pair Device पर क्लिक करें।</string>
+    <string name="settings_romm_config_device_instructions">अपने फ़ोन से QR कोड स्कैन करके इस डिवाइस को पेयर करें, फिर इसे Gameio में मंज़ूर करें। Gameio 5.0 या नया वर्शन आवश्यक है।</string>
+    <string name="settings_romm_config_pairing_code_instructions">Gameio वेब UI में एक API टोकन बनाएँ, फिर कोड पाने के लिए Pair Device पर क्लिक करें।</string>
     <string name="settings_romm_config_connect_generating_title">कोड बन रहा है...</string>
     <string name="settings_romm_config_connect_connecting_title">कनेक्ट हो रहा है...</string>
     <string name="settings_romm_config_connect_pair_title">डिवाइस पेयर करें</string>
     <string name="settings_romm_config_connect_title">कनेक्ट करें</string>
     <string name="settings_romm_config_connect_device_subtitle">पेयरिंग QR कोड बनाएँ</string>
-    <string name="settings_romm_config_connect_subtitle">RomM सर्वर से कनेक्ट करें</string>
+    <string name="settings_romm_config_connect_subtitle">Gameio सर्वर से कनेक्ट करें</string>
     <string name="settings_romm_config_scan_title">QR कोड स्कैन करें</string>
-    <string name="settings_romm_config_scan_subtitle">RomM वेब UI से पेयरिंग QR स्कैन करें</string>
+    <string name="settings_romm_config_scan_subtitle">Gameio वेब UI से पेयरिंग QR स्कैन करें</string>
     <string name="settings_romm_config_cancel_title">रद्द करें</string>
     <string name="settings_romm_config_cancel_subtitle">सर्वर सेटिंग्स पर वापस जाएँ</string>
     <string name="settings_romm_device_pairing_title">पेयर करने के लिए स्कैन करें</string>
-    <string name="settings_romm_device_pairing_subtitle">अपने फ़ोन से यह कोड स्कैन करें, फिर इस डिवाइस को RomM में मंज़ूर करें।</string>
+    <string name="settings_romm_device_pairing_subtitle">अपने फ़ोन से यह कोड स्कैन करें, फिर इस डिवाइस को Gameio में मंज़ूर करें।</string>
     <string name="settings_romm_device_pairing_cancel_title">रद्द करें</string>
     <string name="settings_romm_device_pairing_cancel_subtitle">पेयरिंग रोकें</string>
 
@@ -1911,7 +1911,7 @@
     <string name="settings_hard_reset_deletes_database">पूरा लाइब्रेरी डेटाबेस - खेलने का समय, कलेक्शन, डाउनलोड हिस्ट्री, प्रति-गेम सेटिंग्स</string>
     <string name="settings_hard_reset_deletes_caches">हर कैश - इमेज, सेव और स्टेट, एक्सट्रैक्ट किए गए ROM, साउंड इफ़ेक्ट, एमुलेटर इंस्टॉलर, Steam स्टेजिंग, प्रेज़ेंस कवर</string>
     <string name="settings_hard_reset_keeps_header">बनाए रखता है</string>
-    <string name="settings_hard_reset_keeps_sign_ins">सेटिंग्स और साइन-इन - RomM और Steam जुड़े रहते हैं</string>
+    <string name="settings_hard_reset_keeps_sign_ins">सेटिंग्स और साइन-इन - Gameio और Steam जुड़े रहते हैं</string>
     <string name="settings_hard_reset_keeps_synced_saves">सर्वर पर पहले से सिंक हो चुके सेव</string>
     <string name="settings_hard_reset_keeps_emulator_apps">एमुलेटर ऐप्स और उनका अपना सेव डेटा</string>
     <string name="settings_hard_reset_keeps_music">आपका संगीत फ़ोल्डर</string>
@@ -1978,8 +1978,8 @@
 
     <!-- ===== Accounts settings delegate (Settings > delegates > AccountsSettingsDelegate) ===== -->
 
-    <string name="settings_accounts_delegate_fallback_username">RomM यूज़र %1$d</string>
-    <string name="settings_accounts_delegate_notice_no_server">पहले RomM के तहत किसी RomM सर्वर में साइन इन करें।</string>
+    <string name="settings_accounts_delegate_fallback_username">Gameio यूज़र %1$d</string>
+    <string name="settings_accounts_delegate_notice_no_server">पहले Gameio के तहत किसी Gameio सर्वर में साइन इन करें।</string>
     <string name="settings_accounts_delegate_progress_preparing">तैयारी हो रही है</string>
     <string name="settings_accounts_delegate_progress_resuming">फिर से शुरू हो रहा है</string>
     <string name="settings_accounts_delegate_progress_archiving">%2$d में से %1$d सेव आर्काइव हो रहे हैं</string>
@@ -2000,7 +2000,7 @@
     <string name="settings_accounts_delegate_removal_removed">अकाउंट हटा दिया गया।</string>
     <string name="settings_accounts_delegate_removal_archived">साफ़ करने से पहले %1$d सेव आर्काइव किए गए।</string>
     <string name="settings_accounts_delegate_removal_aborted">आर्काइव करते समय %1$d सेव बदल गए और डिस्क पर छोड़ दिए गए।</string>
-    <string name="settings_accounts_delegate_removal_registered_note">डिवाइस अभी भी RomM सर्वर पर रजिस्टर्ड है; उसे वहाँ रद्द करें।</string>
+    <string name="settings_accounts_delegate_removal_registered_note">डिवाइस अभी भी Gameio सर्वर पर रजिस्टर्ड है; उसे वहाँ रद्द करें।</string>
     <string name="settings_accounts_delegate_completion_switched">अकाउंट स्विच हो गया।</string>
     <string name="settings_accounts_delegate_completion_aborted">आर्काइव के बीच में %1$d फ़ाइलें बदल गईं और जैसी थीं वैसी ही छोड़ दी गईं।</string>
     <string name="settings_accounts_delegate_completion_needs_sync">%1$d स्लॉट खाली छोड़े गए क्योंकि लोकल कॉपी सर्वर से पुरानी होना ज्ञात था।</string>

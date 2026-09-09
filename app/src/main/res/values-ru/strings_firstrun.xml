@@ -12,7 +12,7 @@
     <string name="firstrun_romm_url_error_blank">Введите URL сервера</string>
 
     <string name="firstrun_pairing_code_title">Введите код сопряжения</string>
-    <string name="firstrun_pairing_code_hint">Создайте API-токен в веб-интерфейсе RomM, затем введите 8-значный код.</string>
+    <string name="firstrun_pairing_code_hint">Создайте API-токен в веб-интерфейсе Gameio, затем введите 8-значный код.</string>
     <string name="firstrun_pairing_code_clear_description">Очистить код</string>
     <string name="firstrun_pairing_code_button_connect">Подключиться</string>
     <string name="firstrun_pairing_code_button_connecting">Подключение...</string>
@@ -22,7 +22,7 @@
     <string name="firstrun_pairing_code_error_incomplete">Введите полный 8-значный код сопряжения</string>
 
     <string name="firstrun_device_pairing_title">Сканируйте для сопряжения</string>
-    <string name="firstrun_device_pairing_hint">Отсканируйте этот код телефоном или войдите здесь, на этом устройстве, а затем подтвердите его в RomM.</string>
+    <string name="firstrun_device_pairing_hint">Отсканируйте этот код телефоном или войдите здесь, на этом устройстве, а затем подтвердите его в Gameio.</string>
     <string name="firstrun_device_pairing_no_browser">На этом устройстве нет браузера. Отсканируйте код или используйте код сопряжения.</string>
     <string name="firstrun_device_pairing_button_sign_in">Войти на этом устройстве</string>
     <string name="firstrun_device_pairing_button_manual_code">Использовать код сопряжения</string>
@@ -150,7 +150,7 @@
     </plurals>
     <string name="firstrun_complete_hint">Синхронизируйте библиотеку в настройках коллекций, чтобы начать.</string>
     <string name="firstrun_complete_button_start">Начать игру</string>
-    <string name="firstrun_romm_sign_in_hint">Используйте имя пользователя и пароль, которые вам выдал владелец сервера.</string>
+    <string name="firstrun_romm_sign_in_hint">Войдите в свою учётную запись Gameio.</string>
     <string name="firstrun_romm_sign_in_button">Войти</string>
     <string name="firstrun_romm_sign_in_connecting">Вход\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">Сменить сервер</string>

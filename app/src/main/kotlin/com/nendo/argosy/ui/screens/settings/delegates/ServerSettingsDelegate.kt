@@ -2,21 +2,20 @@ package com.nendo.argosy.ui.screens.settings.delegates
 
 import android.content.Context
 import android.util.Log
+import com.nendo.argosy.ui.common.messageRes
 import com.nendo.argosy.R
 import com.nendo.argosy.data.sync.AccountRemovalResult
+import com.nendo.argosy.data.remote.romm.DEFAULT_SERVER_URL
 import com.nendo.argosy.data.remote.romm.SignInResult
-import com.nendo.argosy.data.remote.romm.RomMCapabilities
 import com.nendo.argosy.data.remote.romm.RomMRepository
 import com.nendo.argosy.data.remote.romm.RomMResult
 import com.nendo.argosy.ui.screens.settings.ConnectionStatus
 import com.nendo.argosy.ui.screens.settings.ServerState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -63,7 +62,7 @@ class ServerSettingsDelegate @Inject constructor(
         _state.update {
             it.copy(
                 rommConfiguring = true,
-                rommConfigUrl = it.rommUrl,
+                rommConfigUrl = DEFAULT_SERVER_URL,
                 rommConfigUsername = "",
                 rommConfigPassword = "",
                 rommConfigError = null
@@ -194,7 +193,7 @@ class ServerSettingsDelegate @Inject constructor(
         scope.launch {
             _state.update { it.copy(rommConnecting = true, rommConfigError = null) }
             val result = romMRepository.connectWithPassword(
-                url = state.rommConfigUrl,
+                url = DEFAULT_SERVER_URL,
                 username = state.rommConfigUsername,
                 password = state.rommConfigPassword
             )
@@ -205,7 +204,7 @@ class ServerSettingsDelegate @Inject constructor(
                             rommConnecting = false,
                             rommConfiguring = false,
                             connectionStatus = ConnectionStatus.ONLINE,
-                            rommUrl = state.rommConfigUrl,
+                            rommUrl = DEFAULT_SERVER_URL,
                             rommUsername = state.rommConfigUsername,
                             // The password only ever existed to mint the token.
                             rommConfigUsername = "",
@@ -217,7 +216,7 @@ class ServerSettingsDelegate @Inject constructor(
                 is SignInResult.AddedAccount ->
                     _state.update { it.copy(rommConnecting = false, rommConfiguring = false) }
                 is SignInResult.Failed ->
-                    _state.update { it.copy(rommConnecting = false, rommConfigError = result.message) }
+                    _state.update { it.copy(rommConnecting = false, rommConfigError = context.getString(result.messageRes)) }
             }
         }
     }

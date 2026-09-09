@@ -31,16 +31,14 @@ class LibretroStateSlotsTest {
     }
 
     @Test
-    fun `parseSlotNumber ignores the live-only resume and quick-ring states`() {
+    fun `resume remains live only while every quick ring slot can be synced`() {
         val rom = "Sonic Advance"
         assertNull(LibretroStateSlots.parseSlotNumber(rom, LibretroStateSlots.fileName(rom, LibretroStateSlots.RESUME_SLOT)))
-        assertNull(LibretroStateSlots.parseSlotNumber(rom, LibretroStateSlots.fileName(rom, LibretroStateSlots.QUICK_SLOT_BASE)))
-        assertNull(
-            LibretroStateSlots.parseSlotNumber(
-                rom,
-                LibretroStateSlots.fileName(rom, LibretroStateSlots.QUICK_SLOT_BASE + LibretroStateSlots.QUICK_RING_SIZE - 1)
-            )
-        )
+        for (slot in LibretroStateSlots.QUICK_SLOT_BASE until
+            LibretroStateSlots.QUICK_SLOT_BASE + LibretroStateSlots.QUICK_RING_SIZE) {
+            assertEquals(slot, LibretroStateSlots.parseSlotNumber(rom, LibretroStateSlots.fileName(rom, slot)))
+        }
+        assertNull(LibretroStateSlots.parseSlotNumber(rom, "$rom.state.q10"))
     }
 
     @Test

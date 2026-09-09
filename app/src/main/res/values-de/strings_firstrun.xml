@@ -12,7 +12,7 @@
     <string name="firstrun_romm_url_error_blank">Geben Sie eine Server-URL ein</string>
 
     <string name="firstrun_pairing_code_title">Kopplungscode eingeben</string>
-    <string name="firstrun_pairing_code_hint">Erstellen Sie einen API-Token in der RomM-Weboberfläche und geben Sie dann den 8-stelligen Code ein.</string>
+    <string name="firstrun_pairing_code_hint">Erstellen Sie einen API-Token in der Gameio-Weboberfläche und geben Sie dann den 8-stelligen Code ein.</string>
     <string name="firstrun_pairing_code_clear_description">Code löschen</string>
     <string name="firstrun_pairing_code_button_connect">Verbinden</string>
     <string name="firstrun_pairing_code_button_connecting">Wird verbunden...</string>
@@ -22,7 +22,7 @@
     <string name="firstrun_pairing_code_error_incomplete">Geben Sie den vollständigen 8-stelligen Kopplungscode ein</string>
 
     <string name="firstrun_device_pairing_title">Zum Koppeln scannen</string>
-    <string name="firstrun_device_pairing_hint">Scannen Sie diesen Code mit Ihrem Smartphone oder melden Sie sich hier auf diesem Gerät an, und bestätigen Sie es dann in RomM.</string>
+    <string name="firstrun_device_pairing_hint">Scannen Sie diesen Code mit Ihrem Smartphone oder melden Sie sich hier auf diesem Gerät an, und bestätigen Sie es dann in Gameio.</string>
     <string name="firstrun_device_pairing_no_browser">Kein Browser auf diesem Gerät. Scannen Sie den Code oder verwenden Sie stattdessen einen Kopplungscode.</string>
     <string name="firstrun_device_pairing_button_sign_in">Auf diesem Gerät anmelden</string>
     <string name="firstrun_device_pairing_button_manual_code">Kopplungscode verwenden</string>
@@ -132,7 +132,7 @@
     </plurals>
     <string name="firstrun_complete_hint">Synchronisieren Sie Ihre Bibliothek über die Sammlungseinstellungen, um zu beginnen.</string>
     <string name="firstrun_complete_button_start">Los geht\'s</string>
-    <string name="firstrun_romm_sign_in_hint">Verwende den Benutzernamen und das Passwort, die dir der Serverbetreiber gegeben hat.</string>
+    <string name="firstrun_romm_sign_in_hint">Melde dich mit deinem Gameio-Konto an.</string>
     <string name="firstrun_romm_sign_in_button">Anmelden</string>
     <string name="firstrun_romm_sign_in_connecting">Anmeldung\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">Server wechseln</string>

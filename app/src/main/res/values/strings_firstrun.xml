@@ -52,7 +52,7 @@
     <!-- Instructions above the code field. An "API token" is created by the user in the RomM
          web interface and becomes the pairing code. The code is always 8 characters, which is
          fixed by the server protocol, so the number stays 8 in every language. -->
-    <string name="firstrun_pairing_code_hint">Create an API token in the RomM web UI, then enter the 8-character code.</string>
+    <string name="firstrun_pairing_code_hint">Create an API token in the Gameio web UI, then enter the 8-character code.</string>
     <!-- Screen reader description of the button that empties the pairing code field.
          Verb phrase, an action. -->
     <string name="firstrun_pairing_code_clear_description">Clear code</string>
@@ -80,7 +80,7 @@
     <!-- Instructions under that heading. Two routes are offered in one sentence: scan the code
          with a phone, or open the sign-in page on this device. "approve it in RomM" means
          confirming this device in the RomM web interface. RomM is not translated. -->
-    <string name="firstrun_device_pairing_hint">Scan this code with your phone, or sign in here on this device, then approve it in RomM.</string>
+    <string name="firstrun_device_pairing_hint">Scan this code with your phone, or sign in here on this device, then approve it in Gameio.</string>
     <!-- Error shown when this device has no web browser installed, so the sign-in page cannot
          be opened here. Two sentences telling the user what to do instead. -->
     <string name="firstrun_device_pairing_no_browser">No browser on this device. Scan the code or use a pairing code instead.</string>
@@ -345,7 +345,7 @@
     <!-- Button that closes the wizard and opens the app. Verb phrase, imperative. -->
     <string name="firstrun_complete_button_start">Start Playing</string>
     <!-- Line under that heading. "Gameio" is this app. -->
-    <string name="firstrun_romm_sign_in_hint">Use the username and password whoever runs the server gave you.</string>
+    <string name="firstrun_romm_sign_in_hint">Sign in with your Gameio account.</string>
     <!-- Button that signs in. -->
     <string name="firstrun_romm_sign_in_button">Sign in</string>
     <!-- Label on the sign-in button while the request is in flight. -->

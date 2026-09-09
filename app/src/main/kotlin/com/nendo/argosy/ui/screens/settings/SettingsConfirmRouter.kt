@@ -129,11 +129,9 @@ import com.nendo.argosy.ui.screens.settings.sections.libraryItemAtFocusIndex
 import com.nendo.argosy.ui.screens.settings.sections.LibraryItem
 import com.nendo.argosy.ui.screens.settings.sections.LibraryLayoutState
 
-// url, username, password, sign in, cancel
-private const val ROMM_CONFIG_SIGN_IN_INDEX = 3
-private const val ROMM_CONFIG_CANCEL_INDEX = 4
+private const val ROMM_CONFIG_SIGN_IN_INDEX = 2
 
-private fun rommConfigMaxIndex(server: ServerState): Int = ROMM_CONFIG_CANCEL_INDEX
+private fun rommConfigMaxIndex(): Int = ROMM_CONFIG_SIGN_IN_INDEX
 
 internal fun routeConfirm(vm: SettingsViewModel): InputResult {
     val state = vm._uiState.value
@@ -279,10 +277,9 @@ internal fun routeConfirm(vm: SettingsViewModel): InputResult {
 private fun routeAccountsConfirm(vm: SettingsViewModel, state: SettingsUiState): InputResult {
     val accounts = state.accounts
     if (accounts.signIn.active) {
-        if (accounts.signIn.error != null) {
-            vm.submitAddAccount()
-        } else {
-            vm.cancelAddAccount()
+        when (state.focusedIndex) {
+            0, 1 -> vm.setAddAccountKeyboardField(state.focusedIndex)
+            2 -> vm.submitAddAccount()
         }
         return InputResult.HANDLED
     }
@@ -314,9 +311,8 @@ private fun routeRomMConfirm(vm: SettingsViewModel, state: SettingsUiState): Inp
     if (state.server.rommConfiguring) {
         when (state.focusedIndex) {
             ROMM_CONFIG_SIGN_IN_INDEX -> vm.connectToRomm()
-            ROMM_CONFIG_CANCEL_INDEX -> vm.cancelRommConfig()
             // A text row hands focus to the field itself so the on-screen keyboard opens.
-            else -> vm._uiState.update { it.copy(server = it.server.copy(rommFocusField = state.focusedIndex)) }
+            else -> vm.openRommKeyboard(state.focusedIndex)
         }
         return InputResult.HANDLED
     }
@@ -992,6 +988,7 @@ private fun routeAboutConfirm(vm: SettingsViewModel, state: SettingsUiState): In
     val hasLogPath = state.fileLoggingPath != null
     val hasChangelog = aboutHasChangelog(state.updateCheck)
     when (aboutItemAtFocusIndex(state.focusedIndex, hasLogPath, hasChangelog)) {
+        AboutItem.Licenses -> vm.showLicenses()
         AboutItem.CheckUpdates -> {
             if (state.aboutUpdateActionIndex == 1) {
                 vm.openChangelog()
@@ -1168,13 +1165,15 @@ private fun computeMaxFocusIndex(
     isConnected: Boolean
 ): Int = when (state.currentSection) {
     SettingsSection.MAIN -> mainSettingsMaxFocusIndex()
-    SettingsSection.ACCOUNTS -> if (state.accounts.signIn.active || state.accounts.switchInProgress) {
+    SettingsSection.ACCOUNTS -> if (state.accounts.signIn.active) {
+        2
+    } else if (state.accounts.switchInProgress) {
         0
     } else {
         accountsMaxFocusIndex(state.accounts)
     }
     SettingsSection.ROMM -> if (state.server.rommConfiguring) {
-        rommConfigMaxIndex(state.server)
+        rommConfigMaxIndex()
     } else {
         rommMaxFocusIndex(buildRomMItemsFromState(state))
     }

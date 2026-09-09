@@ -43,6 +43,9 @@ private data class LicenseEntry(
 )
 
 private val licenses = listOf(
+    LicenseEntry("Gameio", "GPL 3.0", "github.com/naifqarni/gameio"),
+    LicenseEntry("Argosy Launcher", "GPL 3.0", "github.com/rommapp/argosy-launcher"),
+    LicenseEntry("RomM", "AGPL 3.0", "github.com/rommapp/romm"),
     LicenseEntry("rcheevos", "MIT", "github.com/RetroAchievements/rcheevos"),
     LicenseEntry("Oboe", "Apache 2.0", "github.com/google/oboe"),
     LicenseEntry("libretro-common", "MIT", "github.com/libretro/libretro-common"),

@@ -135,7 +135,7 @@ internal sealed class StorageItem(
 
         val ALL: List<StorageItem>
             get() = listOf(
-                VolumeHero, RecomputeRow, GamesTile, MediaTile, MusicTile, CachesTile, SteamTile,
+                VolumeHero, RecomputeRow, GamesTile, MusicTile, CachesTile, SteamTile,
                 LocationsSpacer, LocationsHeader,
                 GlobalRomPath, ImageCache, MusicLocation, BiosFolder, BuiltinSavePath, BuiltinStatePath,
                 DownloadsSpacer, DownloadsHeader, MaxDownloads, Threshold, InternalStaging,

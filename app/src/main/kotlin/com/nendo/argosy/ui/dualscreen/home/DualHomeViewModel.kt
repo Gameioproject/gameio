@@ -30,11 +30,9 @@ import com.nendo.argosy.domain.usecase.collection.GetPinnedCollectionsUseCase
 import com.nendo.argosy.data.local.entity.GameEntity
 import com.nendo.argosy.data.local.entity.getDisplayName
 import com.nendo.argosy.data.model.ActiveSort
-import com.nendo.argosy.data.model.GameSource
 import com.nendo.argosy.data.model.Section
 import com.nendo.argosy.data.model.SortOption
 import com.nendo.argosy.data.model.SortableProps
-import com.nendo.argosy.data.model.computeGenericSections
 import com.nendo.argosy.domain.usecase.cache.RepairImageCacheUseCase
 import com.nendo.argosy.ui.common.GridDirection
 import com.nendo.argosy.ui.common.GridFocusNavigator
@@ -932,8 +930,6 @@ class DualHomeViewModel(
         }
 
         sections.addAll(platformSections(platformRepository.getPlatformsWithGames()))
-        sections.addAll(pinnedSections())
-        sections.addAll(mediaLibrarySections())
 
         return sections
     }

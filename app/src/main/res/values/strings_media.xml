@@ -596,10 +596,10 @@
 
     <!-- Shown in place of the track list when the game server cannot be reached. "RomM" is the
          name of the game server software; leave it untranslated. -->
-    <string name="media_music_offline_message">Not connected to your RomM server</string>
+    <string name="media_music_offline_message">Not connected to your Gameio server</string>
     <!-- Shown in place of the track list when the game server is too old to serve music. "RomM" is
          the name of the game server software; leave it untranslated. -->
-    <string name="media_music_unsupported_message">This RomM server does not support music browsing yet</string>
+    <string name="media_music_unsupported_message">This Gameio server does not support music browsing yet</string>
     <!-- Shown in place of the track list when the request failed and the server gave no message of
          its own. -->
     <string name="media_music_error_fallback">Something went wrong</string>

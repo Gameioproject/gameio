@@ -30,29 +30,20 @@ import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.MusicOff
 import androidx.compose.material.icons.filled.SettingsBrightness
 import androidx.compose.material.icons.filled.Speed
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.Toys
 import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderDefaults
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import androidx.annotation.StringRes
 import androidx.compose.ui.res.stringResource
 import com.nendo.argosy.R
@@ -160,9 +151,7 @@ sealed class QuickSettingsItem(
                 Performance, Fan, FanSpeed,
                 DeviceDivider,
                 Theme, SystemVolume, ScreenBrightness,
-                Haptic, VibrationStrength, UISounds, BGM, SwapDisplays,
-                SocialDivider,
-                QuayPass
+                Haptic, VibrationStrength, UISounds, BGM, SwapDisplays
             )
     }
 }
