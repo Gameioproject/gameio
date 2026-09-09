@@ -44,7 +44,7 @@
     <string name="savesync_empty_title_connected">Aucune sauvegarde de jeu synchronisée pour l\'instant</string>
     <string name="savesync_empty_message_connected">Les sauvegardes apparaîtront ici au fil du jeu</string>
     <string name="savesync_empty_title_disconnected">Connectez-vous à Gameio pour synchroniser les sauvegardes</string>
-    <string name="savesync_empty_message_disconnected">Ouvrez les paramètres pour ajouter votre serveur Gameio</string>
+    <string name="savesync_empty_message_disconnected">Vérifiez votre connexion. Vous pouvez vous connecter depuis les paramètres Gameio.</string>
 
     <string name="savesync_conflict_side_local">Locale</string>
     <string name="savesync_conflict_side_server">Serveur</string>

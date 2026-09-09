@@ -214,9 +214,9 @@
 
     <string name="settings_shell_modal_romm_signout_title">¿Cerrar sesión en Gameio?</string>
     <plurals name="settings_shell_romm_signout_pending_message">
-        <item quantity="one">%1$d partida guardada se subirá primero. Una vez que todo esté en tu servidor, las partidas guardadas, estados y ajustes en caché de esta cuenta se eliminan de este dispositivo. Tus juegos descargados permanecen.</item>
-        <item quantity="many">%1$d partidas guardadas se subirán primero. Una vez que todo esté en tu servidor, las partidas guardadas, estados y ajustes en caché de esta cuenta se eliminan de este dispositivo. Tus juegos descargados permanecen.</item>
-        <item quantity="other">%1$d partidas guardadas se subirán primero. Una vez que todo esté en tu servidor, las partidas guardadas, estados y ajustes en caché de esta cuenta se eliminan de este dispositivo. Tus juegos descargados permanecen.</item>
+        <item quantity="one">%1$d partida guardada se subirá primero. Una vez que todo esté en Gameio, las partidas guardadas, estados y ajustes en caché de esta cuenta se eliminan de este dispositivo. Tus juegos descargados permanecen.</item>
+        <item quantity="many">%1$d partidas guardadas se subirán primero. Una vez que todo esté en Gameio, las partidas guardadas, estados y ajustes en caché de esta cuenta se eliminan de este dispositivo. Tus juegos descargados permanecen.</item>
+        <item quantity="other">%1$d partidas guardadas se subirán primero. Una vez que todo esté en Gameio, las partidas guardadas, estados y ajustes en caché de esta cuenta se eliminan de este dispositivo. Tus juegos descargados permanecen.</item>
     </plurals>
     <string name="settings_shell_romm_signout_message">Las partidas guardadas, estados y ajustes en caché de esta cuenta se eliminan de este dispositivo, y todo lo que ya se subió permanece en tu servidor. Tus juegos descargados permanecen.</string>
     <string name="settings_shell_modal_romm_signout_confirm">Cerrar sesión</string>

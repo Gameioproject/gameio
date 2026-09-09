@@ -41,7 +41,7 @@
     <string name="savesync_empty_title_connected">अभी तक कोई गेम सेव सिंक नहीं हुआ</string>
     <string name="savesync_empty_message_connected">जैसे ही आप खेलेंगे, सेव यहां दिखने लगेंगे</string>
     <string name="savesync_empty_title_disconnected">सेव सिंक करने के लिए Gameio से कनेक्ट करें</string>
-    <string name="savesync_empty_message_disconnected">अपना Gameio सर्वर जोड़ने के लिए सेटिंग्स खोलें</string>
+    <string name="savesync_empty_message_disconnected">अपना कनेक्शन जाँचें। आप Gameio सेटिंग्स से साइन इन कर सकते हैं।</string>
 
     <string name="savesync_conflict_side_local">लोकल</string>
     <string name="savesync_conflict_side_server">सर्वर</string>

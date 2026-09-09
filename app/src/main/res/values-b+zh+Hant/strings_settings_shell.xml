@@ -212,7 +212,7 @@
 
     <string name="settings_shell_modal_romm_signout_title">要登出Gameio嗎？</string>
     <plurals name="settings_shell_romm_signout_pending_message">
-        <item quantity="other">%1$d個存檔會先上傳。全部同步到伺服器後，此帳號在此裝置上快取的存檔、即時存檔與設定會被移除，已下載的遊戲則會保留。</item>
+        <item quantity="other">%1$d個存檔會先上傳。全部同步到 Gameio 後，此帳號在此裝置上快取的存檔、即時存檔與設定會被移除，已下載的遊戲則會保留。</item>
     </plurals>
     <string name="settings_shell_romm_signout_message">此帳號在此裝置上快取的存檔、即時存檔與設定會被移除，已上傳的內容會保留在伺服器上，已下載的遊戲則會保留。</string>
     <string name="settings_shell_modal_romm_signout_confirm">登出</string>

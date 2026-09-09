@@ -275,8 +275,8 @@
     <string name="settings_shell_modal_romm_signout_title">Sign Out of Gameio?</string>
     <!-- Shown when saves are still queued to upload before sign-out. "save" here is a noun. -->
     <plurals name="settings_shell_romm_signout_pending_message">
-        <item quantity="one">%1$d save will be uploaded first. Once everything is on your server, this account\'s cached saves, states and settings are removed from this device. Your downloaded games stay.</item>
-        <item quantity="other">%1$d saves will be uploaded first. Once everything is on your server, this account\'s cached saves, states and settings are removed from this device. Your downloaded games stay.</item>
+        <item quantity="one">%1$d save will be uploaded first. Once everything is in Gameio, this account\'s cached saves, states and settings are removed from this device. Your downloaded games stay.</item>
+        <item quantity="other">%1$d saves will be uploaded first. Once everything is in Gameio, this account\'s cached saves, states and settings are removed from this device. Your downloaded games stay.</item>
     </plurals>
     <string name="settings_shell_romm_signout_message">This account\'s cached saves, states and settings are removed from this device. Everything already synced stays in Gameio. Your downloaded games stay.</string>
     <string name="settings_shell_modal_romm_signout_confirm">Sign Out</string>

@@ -205,7 +205,7 @@
 
     <string name="settings_shell_modal_romm_signout_title">退出Gameio登录？</string>
     <plurals name="settings_shell_romm_signout_pending_message">
-        <item quantity="other">将先上传%1$d个存档。全部同步到服务器后，此账户在本设备上缓存的存档、即时存档和设置会被移除，已下载的游戏会保留。</item>
+        <item quantity="other">将先上传%1$d个存档。全部同步到 Gameio 后，此账户在本设备上缓存的存档、即时存档和设置会被移除，已下载的游戏会保留。</item>
     </plurals>
     <string name="settings_shell_romm_signout_message">此账户在本设备上缓存的存档、即时存档和设置会被移除，已上传的内容会保留在服务器上，已下载的游戏会保留。</string>
     <string name="settings_shell_modal_romm_signout_confirm">退出登录</string>

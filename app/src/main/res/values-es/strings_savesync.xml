@@ -44,7 +44,7 @@
     <string name="savesync_empty_title_connected">Aún no se ha sincronizado ninguna partida guardada</string>
     <string name="savesync_empty_message_connected">Las partidas guardadas aparecerán aquí a medida que juegues</string>
     <string name="savesync_empty_title_disconnected">Conéctate a Gameio para sincronizar partidas guardadas</string>
-    <string name="savesync_empty_message_disconnected">Abre Ajustes para agregar tu servidor Gameio</string>
+    <string name="savesync_empty_message_disconnected">Comprueba tu conexión. Puedes iniciar sesión desde los ajustes de Gameio.</string>
 
     <string name="savesync_conflict_side_local">Local</string>
     <string name="savesync_conflict_side_server">Servidor</string>
