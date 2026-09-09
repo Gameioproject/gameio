@@ -13,8 +13,8 @@ Client fork includes catalog-on-demand browsing, ranked/genre discovery, owned/a
 - [x] Audit every settings section and retain only controls with meaningful consumption sites in this client.
 - [x] Home settings describe discovery, not upstream carousel/grid layouts. Preserve platform following, preview enable/delay/mute and useful artwork controls.
 - [x] Theme and Interface controls affect current screens consistently. Verify scale, colors, typography, guide and covers; hide unused controls.
-- [x] Remove RomM product/version/configuration wording from ordinary UI. Preserve open-source attribution and licenses.
-- [ ] Version 1.0.0 with increasing Android version code, release signing, updater compatibility and release artifact.
+- [ ] Remove RomM product/version/configuration wording from ordinary UI. Preserve open-source attribution and licenses.
+- [x] Version 1.0.0 with increasing Android version code, release signing, updater compatibility and release artifact.
 - [ ] Debug and release builds, lint, unit tests, controller/touch device verification, fresh login and existing-account upgrade, library/download/sync smoke tests.
 - [ ] Final requirement-by-requirement audit against source, test output and installed release APK.
 
@@ -89,3 +89,19 @@ Version name is `1.0.0`; base Android version code is 329 (universal APK code 30
 - Debug upgrade retained the existing 296,960-byte save and quick state; its save hash still matched the local database and live Gameio account.
 - Stability sweep hits are existing ViewModel/delegate lifecycle fields and controller callbacks, not mutable properties on composable state data classes. No native or save-format files changed for the hosted-client audit.
 - Physical handheld gameplay, LEDs and companion-display hardware were unavailable. The x86 emulator verifies frontend flows; native ARM execution remains a hardware validation limitation.
+
+## Published release
+
+- Source: `86af1b968e5c02505c4f22b5beb2723f506b4413`.
+- APK: [https://playgameio.com/apk/gameio-3b5e03cb.apk](https://playgameio.com/apk/gameio-3b5e03cb.apk); 29,731,860 bytes.
+- Version: 1.0.0, Android code 3000329. Production package `com.playgameio.app`, non-debuggable, signed by the persistent Gameio release certificate.
+- SHA-256: `14a2732df05211a608b363b80eaf9557c0741e8dedc99622f82ddc8c1cd41edf`. The public download was fetched in full and matched this digest and size.
+- The universal package contains both ARM64 and ARMv7 emulator libraries. Both ABI-specific APKs were also built.
+- Published at `2026-09-09T02:49:59Z` using the existing atomic APK publisher. The landing-page download buttons consume `/apk/latest.json`, which now points at this immutable file.
+- Final release unit tests: 1,382 passed, zero failures/errors/skips. Release lint: zero errors, 1,353 warnings.
+- The final screen check caught the license overlay below the settings content. It now renders at the settings root, above the page. Touch open/close and controller open/back/scroll were verified in the signed APK, including scrolling to Emulator Cores. Upstream attribution remains visible.
+
+## Remaining closeout
+
+- The final debug build, unit suite and lint are running against source `86af1b96`; the published release build, release tests, release lint and native license-overlay checks already passed.
+- A final drawer screenshot exposed the upstream purple connection-status logo. Replace that normal-navigation branding with a neutral connection indicator while keeping the connection state and licenses intact, then verify and refresh the APK before closing the full hosted-client audit.
