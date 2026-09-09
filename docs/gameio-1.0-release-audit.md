@@ -13,10 +13,10 @@ Client fork includes catalog-on-demand browsing, ranked/genre discovery, owned/a
 - [x] Audit every settings section and retain only controls with meaningful consumption sites in this client.
 - [x] Home settings describe discovery, not upstream carousel/grid layouts. Preserve platform following, preview enable/delay/mute and useful artwork controls.
 - [x] Theme and Interface controls affect current screens consistently. Verify scale, colors, typography, guide and covers; hide unused controls.
-- [ ] Remove RomM product/version/configuration wording from ordinary UI. Preserve open-source attribution and licenses.
+- [x] Remove RomM product/version/configuration wording from ordinary UI. Preserve open-source attribution and licenses.
 - [x] Version 1.0.0 with increasing Android version code, release signing, updater compatibility and release artifact.
-- [ ] Debug and release builds, lint, unit tests, controller/touch device verification, fresh login and existing-account upgrade, library/download/sync smoke tests.
-- [ ] Final requirement-by-requirement audit against source, test output and installed release APK.
+- [x] Debug and release builds, lint, unit tests, controller/touch device verification, fresh login and existing-account upgrade, library/download/sync smoke tests.
+- [x] Final requirement-by-requirement audit against source, test output and installed release APK.
 
 ## Settings inventory and decisions
 
@@ -27,7 +27,7 @@ Client fork includes catalog-on-demand browsing, ranked/genre discovery, owned/a
 - Audio: retain working local audio controls; review service-only music navigation without modifying playback internals.
 - System: retain permissions, device settings, restart, credential-free settings backup, diagnostics and licenses. Audit update channel and release identity.
 
-Current audit is in progress; unchecked items are not release-ready claims.
+Client audit and APK publication are complete. Physical ARM gameplay, companion displays and LEDs remain hardware-validation limitations; emulator/native behavior was preserved.
 
 ## Settings audit, September 9
 
@@ -54,7 +54,7 @@ Current audit is in progress; unchecked items are not release-ready claims.
 | About and diagnostics | Gameio version, controller-accessible licenses, update channels, settings backup, restart and diagnostics retained. New backups use a Gameio filename while the importer accepts existing backup contents. Errors shown for update checks are user-facing, with technical detail retained internally. |
 | Social, Jellyfin, check-in, collections | Hidden from normal drawer, quick settings, settings and game menus, including companion entry points. Collections/social/media repositories, tables and preferences remain intact. |
 
-Native audit captured the root pages for Theme, Interface, Navigation, Audio, Displays, Built-in Emulator, RetroAchievements, BIOS, GPU Drivers, Platforms, Storage, Gameio, Steam, Permissions and About. The audit uses the existing emulator account and does not reset its data. The signed release completed first-run setup and loaded the live catalog. Its drawer, Gameio settings, About, game details and full library were also inspected.
+Native audit captured the root pages for Theme, Interface, Navigation, Audio, Displays, Built-in Emulator, RetroAchievements, BIOS, GPU Drivers, Platforms, Storage, Gameio, Steam, Permissions and About. The audit uses the existing emulator account and does not reset its data. The signed release completed first-run setup through Start Playing and loaded the live catalog. Its drawer, Gameio settings, About, game details and full library were also inspected.
 
 ## Live service and local-data proof
 
@@ -63,13 +63,13 @@ Native audit captured the root pages for Theme, Interface, Navigation, Audio, Di
 - `POST /api/sync/reconcile` twice with the current hashes: two operations, both `no_op`, on both runs. This is the catalog server's equivalent of save negotiation.
 - The save at the database's `localSavePath` is 296,960 bytes; its SHA-256 matches both `lastUploadedHash` and Gameio's `content_hash`.
 - The cached quick-state slot 100 exists at the path resolved through `AppPaths.stateCacheDir` and the database's relative cache path.
-- The coupling sweep from upstream baseline `23e3bba3` flags settings, sync and API axes. The inventory and live proofs above address those axes; final APK verification is still required.
+- The coupling sweep from upstream baseline `23e3bba3` flags settings, sync and API axes. The inventory, model checks, live proofs and signed-APK verification address those axes. Save-path resolver tests also cover identical discover/construct results; no save-format or emulator-path behavior changed in the hosted-settings audit.
 
 ## Release identity and upgrade boundary
 
 The production application ID is `com.playgameio.app`; published development previews used `com.playgameio.app.debug`. Production installs alongside the preview and requires sign-in. Keep the preview installed until any unsynced saves have been synced or backed up. Existing production installations retain their data when updated with the same release key.
 
-Version name is `1.0.0`; base Android version code is 329 (universal APK code 3000329). The release must be signed with the persistent Gameio release key. The key and local keystore properties are deliberately excluded from Git. GitHub release builds require the four `GAMEIO_*` signing secrets documented by the workflow; the local signed APK can be built independently of those CI secrets.
+Version name is `1.0.0`; base Android version code is 331 (universal APK code 3000331). This increases the code over the initial published 1.0.0 candidate. The release must be signed with the persistent Gameio release key. The key and local keystore properties are deliberately excluded from Git. GitHub release builds require the four `GAMEIO_*` signing secrets documented by the workflow; the local signed APK can be built independently of those CI secrets.
 
 ## Additional verification
 
@@ -85,23 +85,33 @@ Version name is `1.0.0`; base Android version code is 329 (universal APK code 30
 - Source commit `e2e77d82`: signed production update installed over the first 1.0 candidate without clearing data. The existing account remained signed in and the downloaded game still displayed Play.
 - A game with an available source downloaded through the app: Ocarina of Time, 33,554,432 bytes, N64 header `80371240`, SHA-256 `49acd3885f13b0730119b78fb970911cc8aba614fe383368015c21565983368d`. A title without a source correctly failed without crashing.
 - The full library loaded 144 Nintendo 64 catalog entries; game details retained platform, artwork/description, rating and download/play controls. No collection action appeared in the audited drawer or game menus.
-- All 11 targeted UI tests passed on the final debug APK: four sign-in/keyboard/system-selection, two guide, three cover-transition and two slider tests. Earlier light/portrait variants passed four each.
+- All 11 targeted UI tests passed on the hosted-settings debug APK before the final label-only pass: four sign-in/keyboard/system-selection, two guide, three cover-transition and two slider tests. Earlier light/portrait variants passed four each.
 - Debug upgrade retained the existing 296,960-byte save and quick state; its save hash still matched the local database and live Gameio account.
 - Stability sweep hits are existing ViewModel/delegate lifecycle fields and controller callbacks, not mutable properties on composable state data classes. No native or save-format files changed for the hosted-client audit.
 - Physical handheld gameplay, LEDs and companion-display hardware were unavailable. The x86 emulator verifies frontend flows; native ARM execution remains a hardware validation limitation.
 
 ## Published release
 
-- Source: `86af1b968e5c02505c4f22b5beb2723f506b4413`.
-- APK: [https://playgameio.com/apk/gameio-3b5e03cb.apk](https://playgameio.com/apk/gameio-3b5e03cb.apk); 29,731,860 bytes.
-- Version: 1.0.0, Android code 3000329. Production package `com.playgameio.app`, non-debuggable, signed by the persistent Gameio release certificate.
-- SHA-256: `14a2732df05211a608b363b80eaf9557c0741e8dedc99622f82ddc8c1cd41edf`. The public download was fetched in full and matched this digest and size.
+- Source: `af17dc1a2646ec910214d39a2dab1567f5dc291f`.
+- APK: [Gameio 1.0.0 universal APK](https://playgameio.com/apk/gameio-b0dcd388.apk); 29,725,587 bytes.
+- Version: 1.0.0, Android code 3000331. Production package `com.playgameio.app`, non-debuggable, signed by the persistent Gameio release certificate.
+- SHA-256: `787149b455e41ef62a006934616791e210aac1039fe44ad910a75f54f8baf43d`. The public download was fetched in full and matched this digest and size.
 - The universal package contains both ARM64 and ARMv7 emulator libraries. Both ABI-specific APKs were also built.
-- Published at `2026-09-09T02:49:59Z` using the existing atomic APK publisher. The landing-page download buttons consume `/apk/latest.json`, which now points at this immutable file.
-- Final release unit tests: 1,382 passed, zero failures/errors/skips. Release lint: zero errors, 1,353 warnings.
-- The final screen check caught the license overlay below the settings content. It now renders at the settings root, above the page. Touch open/close and controller open/back/scroll were verified in the signed APK, including scrolling to Emulator Cores. Upstream attribution remains visible.
+- Published at `2026-09-09T03:56:27Z` using the existing atomic APK publisher. The landing-page download buttons consume `/apk/latest.json`, which points at this immutable file.
+- Final signed release assembly and lint passed; lint reported zero errors and 1,356 warnings. Debug and release suites each passed 1,382 tests before the final display-only label corrections. Those corrections received release compilation/lint, XML/plural validation, packaged-resource checks and native signed-APK verification.
+- Production code 3000330 updated to 3000331 without losing the account, chosen ROM folder or downloaded game. Its file hash remained unchanged. The older preview uses a separate debug package and is preserved.
+- The license overlay renders above the settings page. Touch open/close and controller open/back/scroll were verified in the signed release candidate, including scrolling to Emulator Cores. Upstream attribution remains visible.
+- Drawer connection status uses accent-colored CloudDone and muted CloudOff icons. Both were visually inspected. Offline Home and full Library remained accessible with the account retained; reconnection needed no additional sign-in. Final Save Sync labels show Gameio 1.0.0 and Connected/Offline without the backend version. Test Wi-Fi and mobile-data settings were restored.
+- The final source smell check is clean. The coupling sweep flags settings, saves and API work; the inventory and live proofs above cover those checks. A live ROM response confirmed correctly typed user properties, file/multiple-file flags and sibling-list fallback, with cover metadata populated.
 
-## Remaining closeout
+## Final setup and display checks
 
-- The final debug build, unit suite and lint are running against source `86af1b96`; the published release build, release tests, release lint and native license-overlay checks already passed.
-- A final drawer screenshot exposed the upstream purple connection-status logo. Replace that normal-navigation branding with a neutral connection indicator while keeping the connection state and licenses intact, then verify and refresh the APK before closing the full hosted-client audit.
+- Code 3000330 completed the actual Start Playing action after selecting an external games folder and the default image cache. Storage showed `Internal/Download/GameioReleaseAudit`; the selection survived process restart. Ocarina of Time then downloaded into that folder with the expected 33,554,432-byte size, N64 header and SHA-256 listed above. Save Sync opened without the disabled-sync notice. An earlier test had interrupted the wizard before Start Playing; it was not evidence that folder preferences had been committed.
+- Both debug and release build/unit/lint checks completed successfully for source `0c37bae4`: 1,382 tests per variant, no failures/errors/skips, debug lint had zero errors and 1,389 warnings, and release lint had zero errors and 1,355 warnings.
+- Source `bfc9bab4` makes two final display-only corrections: onboarding points to Gameio settings in all eight resource locales, and This device in Save Sync shows the installed Gameio version plus connection status. Device registration identifiers, account data, server models and sync behavior are unchanged.
+
+- The first final-label APK passed signed upgrade and online/offline device checks, which exposed a remaining server-setup instruction in the disconnected Save Sync screen. Source `af17dc1a` replaces that instruction with connection/sign-in guidance and names Gameio in the pending-save sign-out confirmation, in all eight locales. Plural counts and sign-out safety behavior remain unchanged.
+
+## Completion
+
+All requested client changes and website publication are complete. The final requirement review covers fixed-endpoint login, hidden unsupported entry points, settings consumption in discovery, preserved attribution, account/upgrade/download/save proofs, release identity and the verified public APK. Server source and save/emulator formats were not changed. CI signing secrets and physical-device execution are not claimed as configured or tested.
