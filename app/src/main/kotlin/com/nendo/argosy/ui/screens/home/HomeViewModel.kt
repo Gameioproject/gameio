@@ -350,7 +350,7 @@ class HomeViewModel @Inject constructor(
                         },
                         pinnedGamesLoading = lib.pinnedGamesLoading,
                         repairedCoverPaths = lib.repairedCoverPaths
-                    )
+                    ).let { updated -> DiscoveryNavigation.reconcileSections(it, updated) }
                 }
             }
         }
@@ -496,7 +496,7 @@ class HomeViewModel @Inject constructor(
                 },
                 pinnedGamesLoading = lib.pinnedGamesLoading,
                 repairedCoverPaths = lib.repairedCoverPaths
-            )
+            ).let { updated -> DiscoveryNavigation.reconcileSections(it, updated) }
         }
     }
 

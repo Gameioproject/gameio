@@ -34,13 +34,15 @@ fun DiscoveryGameRail(
     games: List<HomeGameUi>, zone: Int, state: HomeUiState, viewModel: HomeViewModel,
     dimensions: DiscoveryDimensions, cardHeight: Dp, modifier: Modifier = Modifier
 ) {
-    val list = rememberLazyListState()
     val selected = if (zone == DiscoveryFocus.HERO && state.discoveryFocus.zone != zone) {
         state.discoveryFocus.heroIndex
     } else if (state.discoveryFocus.zone == zone) state.focusedGameIndex
     else state.discoveryFocus.rowIndexes[zone] ?: 0
-    LaunchedEffect(selected, games.size) {
-        if (games.isNotEmpty()) list.animateScrollToItem(selected.coerceIn(0, games.lastIndex))
+    val list = rememberLazyListState(initialFirstVisibleItemIndex = selected.coerceIn(0, games.lastIndex.coerceAtLeast(0)))
+    LaunchedEffect(selected, state.discoveryFocus.zone == zone) {
+        if (state.discoveryFocus.zone == zone && games.isNotEmpty()) {
+            list.scrollDiscoverySelection(selected.coerceIn(0, games.lastIndex))
+        }
     }
     BoxWithConstraints(modifier) {
     val availableWidth = maxWidth - dimensions.ringPadding * 2
@@ -49,7 +51,7 @@ fun DiscoveryGameRail(
         horizontalArrangement = Arrangement.spacedBy(dimensions.gap),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        itemsIndexed(games, key = { _, game -> game.id }) { index, game ->
+        itemsIndexed(games, key = { _, game -> game.id }, contentType = { _, _ -> "game" }) { index, game ->
             val focused = state.discoveryFocus.zone == zone && state.focusedGameIndex == index
             val request = state.videoPreviewRequest?.takeIf {
                 focused && it.gameId == game.id && it.videoId == game.youtubeVideoId
@@ -104,7 +106,7 @@ fun DiscoveryHero(
     onGameSelect: (Long) -> Unit
 ) {
     val game = state.discoveryHeroGame
-    Row(Modifier.fillMaxWidth().height(dimensions.heroHeight),
+    Row(Modifier.fillMaxWidth().height(dimensions.heroHeight).padding(horizontal = dimensions.padding),
         horizontalArrangement = Arrangement.spacedBy(dimensions.sectionGap),
         verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.fillMaxWidth(T.heroWidthRatio), verticalArrangement = Arrangement.Center) {
@@ -157,8 +159,12 @@ fun DiscoveryHero(
                     modifier = Modifier.padding(vertical = dimensions.gap))
             }
         }
-        DiscoveryGameRail(state.discoveryHero, DiscoveryFocus.HERO, state, viewModel,
-            dimensions, dimensions.heroCard, Modifier.weight(1f))
+        BoxWithConstraints(Modifier.weight(1f)) {
+            val cardHeight = minOf(dimensions.heroCard,
+                (maxWidth - dimensions.ringPadding * 4) / T.cardAspectRatio)
+            DiscoveryGameRail(state.discoveryHero, DiscoveryFocus.HERO, state, viewModel,
+                dimensions, cardHeight, Modifier.fillMaxWidth())
+        }
     }
 }
 

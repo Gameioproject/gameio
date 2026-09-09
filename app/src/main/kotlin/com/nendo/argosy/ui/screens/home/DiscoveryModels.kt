@@ -104,7 +104,7 @@ val HomeUiState.discoverySections: List<DiscoverySection>
                 DiscoverySection("recommended", R.string.discovery_recommended,
                     discoveryGames(recommendedGames), R.string.discovery_empty_recommended),
                 favorites
-            ) + explore.rows.map { it.copy(games = discoveryGames(it.games)) } + DiscoverySection(
+            ).filter { it.key == "top-rated" || it.games.isNotEmpty() } + explore.rows.map { it.copy(games = discoveryGames(it.games)) } + DiscoverySection(
                 "explore-tail", R.string.explore_keep_going, emptyList(),
                 if (explore.exhausted) R.string.explore_end else R.string.explore_more,
                 loading = explore.loading, failed = explore.failed
@@ -133,6 +133,37 @@ object DiscoveryNavigation {
         ))
         return updated.copy(focusedGameIndex = (indexes[zone] ?: 0)
             .coerceIn(0, updated.currentItems.lastIndex.coerceAtLeast(0)))
+    }
+
+    fun reconcileSections(previous: HomeUiState, updated: HomeUiState): HomeUiState {
+        if (!previous.isDiscoveryHome || !updated.isDiscoveryHome ||
+            previous.currentRow != updated.currentRow ||
+            previous.discoveryFocus.feed != updated.discoveryFocus.feed) return updated
+        val oldSections = previous.discoverySections
+        val newSections = updated.discoverySections
+        if (oldSections.map { it.key } == newSections.map { it.key }) return updated
+        val oldIndex = previous.discoveryFocus.zone - DiscoveryFocus.FIRST_ROW
+        val selectedKey = oldSections.getOrNull(oldIndex)?.key
+        val newIndex = newSections.indexOfFirst { it.key == selectedKey }.takeIf { it >= 0 }
+            ?: oldIndex.coerceIn(0, newSections.lastIndex.coerceAtLeast(0))
+        val indexes = buildMap {
+            previous.discoveryFocus.rowIndexes.forEach { (zone, index) ->
+                val key = oldSections.getOrNull(zone - DiscoveryFocus.FIRST_ROW)?.key
+                val replacement = newSections.indexOfFirst { it.key == key }
+                if (zone < DiscoveryFocus.FIRST_ROW) put(zone, index)
+                else if (replacement >= 0) put(DiscoveryFocus.FIRST_ROW + replacement, index)
+            }
+        }
+        val reconciled = updated.copy(discoveryFocus = updated.discoveryFocus.copy(
+            zone = if (oldIndex >= 0) DiscoveryFocus.FIRST_ROW + newIndex else updated.discoveryFocus.zone,
+            rowIndexes = indexes
+        ))
+        return if (oldIndex < 0) reconciled else reconciled.copy(
+            focusedGameIndex = (reconciled.currentItems.indexOfFirst {
+                (it as? HomeRowItem.Game)?.game?.id == previous.focusedGame?.id
+            }.takeIf { it >= 0 } ?: previous.focusedGameIndex)
+                .coerceIn(0, reconciled.currentItems.lastIndex.coerceAtLeast(0))
+        )
     }
 
     fun horizontal(state: HomeUiState, delta: Int): HomeUiState {

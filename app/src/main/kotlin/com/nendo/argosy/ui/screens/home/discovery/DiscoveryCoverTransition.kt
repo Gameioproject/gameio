@@ -9,11 +9,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import com.nendo.argosy.ui.theme.generated.ComponentDefaults.DiscoveryHome as T
@@ -36,26 +34,31 @@ fun DiscoveryCoverTransition(
 ) {
     val portraitWidth = cardHeight * T.cardAspectRatio
     val targetWidth = if (playing) cardHeight * T.trailerAspectRatio else portraitWidth
-    val width by animateDpAsState(
+    val animated = focused || playing
+    val width = if (animated) animateDpAsState(
         targetValue = minOf(targetWidth, maxWidth),
         animationSpec = tween(MotionTokens.Tween.mediumMs), label = "trailerWidth"
-    )
-    val coverAlpha by animateFloatAsState(
+    ).value else minOf(portraitWidth, maxWidth)
+    val coverAlpha = if (animated) animateFloatAsState(
         targetValue = if (playing) 0f else 1f,
         animationSpec = MotionTokens.Tween.medium, label = "trailerCoverAlpha"
-    )
+    ).value else 1f
     val shape = RoundedCornerShape(dimensions.radius)
     Column(modifier.width(width)
-        .border(dimensions.ring, if (focused) MaterialTheme.colorScheme.primary else Color.Transparent, shape)
+        .then(if (focused) Modifier.border(dimensions.ring, MaterialTheme.colorScheme.primary, shape) else Modifier)
         .padding(dimensions.ringPadding)
         .clickableNoFocus(onClick = onClick, onLongClick = onLongClick)) {
-        Box(Modifier.fillMaxWidth().height(cardHeight).clip(shape)
-            .background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
-            video(Modifier.fillMaxWidth().aspectRatio(T.trailerAspectRatio)
-                .graphicsLayer { alpha = 1f - coverAlpha })
-            cover(Modifier.width(portraitWidth).fillMaxHeight()
-                .graphicsLayer { alpha = coverAlpha })
-            Box(Modifier.matchParentSize().clickableNoFocus(onClick = onClick, onLongClick = onLongClick))
+        if (animated) {
+            Box(Modifier.fillMaxWidth().height(cardHeight).clip(shape)
+                .background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
+                video(Modifier.fillMaxWidth().aspectRatio(T.trailerAspectRatio)
+                    .graphicsLayer { alpha = 1f - coverAlpha })
+                cover(Modifier.width(portraitWidth).fillMaxHeight()
+                    .graphicsLayer { alpha = coverAlpha })
+                Box(Modifier.matchParentSize().clickableNoFocus(onClick = onClick, onLongClick = onLongClick))
+            }
+        } else {
+            cover(Modifier.fillMaxWidth().height(cardHeight))
         }
         caption()
     }

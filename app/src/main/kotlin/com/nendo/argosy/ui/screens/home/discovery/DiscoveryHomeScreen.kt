@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import androidx.compose.ui.Alignment
@@ -37,15 +38,17 @@ fun DiscoveryHomeScreen(state: HomeUiState, viewModel: HomeViewModel, onGameSele
     DiscoveryTheme {
         BoxWithConstraints(Modifier.fillMaxSize().then(if (useBackdrop) Modifier else Modifier.background(MaterialTheme.colorScheme.background))) {
             val dimensions = DiscoveryDimensions((maxHeight / T.referenceHeightDp.dp).coerceIn(T.minScale, T.maxScale))
+            val sections = remember(state.platforms, state.currentRow, state.libraryFilter,
+                state.discoveryData, state.favoriteGames, state.recommendedGames,
+                state.explore, state.discoveryFocus.feed) { state.discoverySections }
             val vertical = rememberLazyListState()
             val zone = state.discoveryFocus.zone
             LaunchedEffect(zone, state.currentRow, state.discoveryFocus.feed) {
                 val index = when {
                     zone <= DiscoveryFocus.HERO -> 0
-                    zone == DiscoveryFocus.FEEDS -> 1
-                    else -> zone
+                    else -> zone + 1
                 }
-                if (index < vertical.layoutInfo.totalItemsCount) vertical.animateScrollToItem(index)
+                if (index < vertical.layoutInfo.totalItemsCount) vertical.scrollDiscoverySelection(index)
             }
             LaunchedEffect(state.currentRow, state.libraryFilter, state.discoveryFocus.feed,
                 state.discoveryData.loading, state.explore.cursor, state.explore.loading) {
@@ -60,13 +63,15 @@ fun DiscoveryHomeScreen(state: HomeUiState, viewModel: HomeViewModel, onGameSele
             }
             Column(Modifier.fillMaxSize()) {
                 DiscoveryHeader(state, viewModel, dimensions, onGameSelect, onMenu)
-                DiscoveryPlatforms(state, viewModel, dimensions)
-                LazyColumn(state = vertical, modifier = Modifier.weight(1f).fillMaxWidth(),
-                    contentPadding = PaddingValues(horizontal = dimensions.padding)) {
-                    item(key = "hero") { DiscoveryHero(state, viewModel, dimensions, onGameSelect) }
-                    item(key = "feeds") { DiscoveryFeeds(state, viewModel, dimensions) }
-                    itemsIndexed(state.discoverySections, key = { _, section -> section.key }) { index, section ->
-                        Column(Modifier.padding(bottom = dimensions.sectionGap)) {
+                BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
+                val heroDimensions = dimensions.copy(viewportHeight = maxHeight - dimensions.platformBar)
+                LazyColumn(state = vertical, modifier = Modifier.fillMaxSize()) {
+                    item(key = "platforms", contentType = "platforms") { DiscoveryPlatforms(state, viewModel, dimensions) }
+                    item(key = "hero", contentType = "hero") { DiscoveryHero(state, viewModel, heroDimensions, onGameSelect) }
+                    item(key = "feeds", contentType = "feeds") { DiscoveryFeeds(state, viewModel, dimensions) }
+                    itemsIndexed(sections, key = { _, section -> section.key },
+                        contentType = { _, section -> if (section.games.isEmpty()) "empty-section" else "game-section" }) { index, section ->
+                        Column(Modifier.padding(horizontal = dimensions.padding).padding(bottom = dimensions.sectionGap)) {
                             Row(Modifier.height(dimensions.headingHeight).fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically) {
                                 Text(stringResource(section.titleRes), fontSize = dimensions.sectionTitle,
@@ -105,6 +110,7 @@ fun DiscoveryHomeScreen(state: HomeUiState, viewModel: HomeViewModel, onGameSele
                             }
                         }
                     }
+                }
                 }
                 FooterSpacer()
             }
@@ -182,7 +188,7 @@ private fun DiscoveryPlatforms(state: HomeUiState, viewModel: HomeViewModel, d: 
 
 @Composable
 private fun DiscoveryFeeds(state: HomeUiState, viewModel: HomeViewModel, d: DiscoveryDimensions) {
-    Row(Modifier.fillMaxWidth().height(d.control + d.sectionGap),
+    Row(Modifier.fillMaxWidth().height(d.control + d.sectionGap).padding(horizontal = d.padding),
         horizontalArrangement = Arrangement.spacedBy(d.gap, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically) {
         DiscoveryFeed.entries.forEachIndexed { index, feed ->
