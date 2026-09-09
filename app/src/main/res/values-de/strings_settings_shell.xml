@@ -213,8 +213,8 @@
 
     <string name="settings_shell_modal_romm_signout_title">Von Gameio abmelden?</string>
     <plurals name="settings_shell_romm_signout_pending_message">
-        <item quantity="one">%1$d Spielstand wird zuerst hochgeladen. Sobald alles auf Ihrem Server ist, werden die zwischengespeicherten Spielstände, Savestates und Einstellungen dieses Kontos von diesem Gerät entfernt. Ihre heruntergeladenen Spiele bleiben erhalten.</item>
-        <item quantity="other">%1$d Spielstände werden zuerst hochgeladen. Sobald alles auf Ihrem Server ist, werden die zwischengespeicherten Spielstände, Savestates und Einstellungen dieses Kontos von diesem Gerät entfernt. Ihre heruntergeladenen Spiele bleiben erhalten.</item>
+        <item quantity="one">%1$d Spielstand wird zuerst hochgeladen. Sobald alles in Gameio ist, werden die zwischengespeicherten Spielstände, Savestates und Einstellungen dieses Kontos von diesem Gerät entfernt. Ihre heruntergeladenen Spiele bleiben erhalten.</item>
+        <item quantity="other">%1$d Spielstände werden zuerst hochgeladen. Sobald alles in Gameio ist, werden die zwischengespeicherten Spielstände, Savestates und Einstellungen dieses Kontos von diesem Gerät entfernt. Ihre heruntergeladenen Spiele bleiben erhalten.</item>
     </plurals>
     <string name="settings_shell_romm_signout_message">Die zwischengespeicherten Spielstände, Savestates und Einstellungen dieses Kontos werden von diesem Gerät entfernt, und alles bereits Hochgeladene bleibt auf Ihrem Server. Ihre heruntergeladenen Spiele bleiben erhalten.</string>
     <string name="settings_shell_modal_romm_signout_confirm">Abmelden</string>

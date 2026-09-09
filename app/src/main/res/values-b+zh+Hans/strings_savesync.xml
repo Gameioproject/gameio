@@ -36,7 +36,7 @@
     <string name="savesync_empty_title_connected">还没有同步任何存档</string>
     <string name="savesync_empty_message_connected">存档会在你游玩时显示在这里</string>
     <string name="savesync_empty_title_disconnected">连接到Gameio以同步存档</string>
-    <string name="savesync_empty_message_disconnected">打开设置以添加你的Gameio服务器</string>
+    <string name="savesync_empty_message_disconnected">检查网络连接。你可以在 Gameio 设置中登录。</string>
 
     <string name="savesync_conflict_side_local">本地</string>
     <string name="savesync_conflict_side_server">服务器</string>

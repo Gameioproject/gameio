@@ -47,7 +47,7 @@
     <string name="savesync_empty_title_connected">Пока нет синхронизированных сохранений</string>
     <string name="savesync_empty_message_connected">Сохранения появятся здесь по мере игры</string>
     <string name="savesync_empty_title_disconnected">Подключитесь к Gameio, чтобы синхронизировать сохранения</string>
-    <string name="savesync_empty_message_disconnected">Откройте настройки, чтобы добавить сервер Gameio</string>
+    <string name="savesync_empty_message_disconnected">Проверьте подключение. Войти в аккаунт можно в настройках Gameio.</string>
 
     <string name="savesync_conflict_side_local">Локальное</string>
     <string name="savesync_conflict_side_server">Серверное</string>

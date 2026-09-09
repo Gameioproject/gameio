@@ -104,7 +104,7 @@
     <string name="savesync_empty_title_disconnected">Connect to Gameio to sync saves</string>
     <!-- Body under that heading. Verb phrase addressed to the user. "Settings" names Gameio's own
          settings screen. -->
-    <string name="savesync_empty_message_disconnected">Open Settings to add your Gameio server</string>
+    <string name="savesync_empty_message_disconnected">Check your connection. You can sign in from Gameio settings.</string>
 
     <!-- Names the copy of a disagreeing save that is on this handheld, on the line describing it.
          Adjective used as a noun, "the local one". -->
