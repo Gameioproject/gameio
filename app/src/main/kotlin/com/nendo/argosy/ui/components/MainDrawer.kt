@@ -24,6 +24,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.CloudSync
+import androidx.compose.material.icons.filled.CloudDone
+import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.FeaturedPlayList
 import androidx.compose.material.icons.filled.Groups
@@ -47,7 +49,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -687,16 +688,13 @@ private fun DrawerDeviceStatus(isRommConnected: Boolean) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Icon(
-            painter = painterResource(
-                if (isRommConnected) R.drawable.ic_romm_connected
-                else R.drawable.ic_romm_disconnected
-            ),
+            imageVector = if (isRommConnected) Icons.Default.CloudDone else Icons.Default.CloudOff,
             contentDescription = if (isRommConnected) {
                 stringResource(R.string.ui_drawer_server_connected)
             } else {
                 stringResource(R.string.ui_drawer_server_offline)
             },
-            tint = if (isRommConnected) Color.Unspecified else mutedColor,
+            tint = if (isRommConnected) MaterialTheme.colorScheme.primary else mutedColor,
             modifier = Modifier.size(Dimens.iconMd)
         )
         SystemStatusBar(
