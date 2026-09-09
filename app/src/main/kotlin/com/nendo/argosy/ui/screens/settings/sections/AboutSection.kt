@@ -15,7 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.Sync
-import androidx.compose.material.icons.outlined.Article
+import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.RestartAlt
 import androidx.compose.material.icons.outlined.Upload
@@ -194,7 +194,7 @@ fun AboutSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
                 AboutItem.Licenses -> ActionPreference(
                     title = stringResource(R.string.settings_about_licenses_label),
                     subtitle = "",
-                    icon = Icons.Outlined.Article,
+                    icon = Icons.AutoMirrored.Outlined.Article,
                     isFocused = isFocused(item),
                     onClick = viewModel::showLicenses
                 )
@@ -213,7 +213,7 @@ fun AboutSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
                         updateCheck.isChecking -> checkTitle to
                             stringResource(R.string.settings_about_update_subtitle_checking)
                         updateCheck.error != null -> checkTitle to
-                            stringResource(R.string.settings_about_update_subtitle_error, updateCheck.error)
+                            stringResource(R.string.gameio_update_unavailable)
                         updateCheck.updateAvailable ->
                             stringResource(R.string.settings_about_update_title_available) to
                                 stringResource(

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="source_filter_available">Disponibles</string>
+    <string name="home_library_downloadable">Disponibles</string>
+    <string name="home_search_label">Rechercher</string>
+    <string name="home_footer_search">Rechercher</string>
+    <string name="home_surprise_label">Au hasard</string>
+    <string name="home_empty_filtered">Aucun jeu avec ce filtre</string>
+    <string name="home_empty_filtered_cta">Afficher tous les jeux</string>
+    <string name="search_footer_scope">Portée de la recherche</string>
+    <string name="search_kb_space">Espace</string>
+    <string name="search_kb_delete">Supprimer</string>
+    <string name="search_kb_clear">Effacer</string>
+    <string name="search_kb_done">Terminé</string>
+    <string name="library_search_type_new">Saisir une recherche…</string>
+    <string name="search_scope_local">Cet appareil</string>
+    <string name="search_scope_platform">Cette plateforme</string>
+    <string name="search_scope_server">Toutes les plateformes</string>
+    <string name="settings_home_screen_wallpaper_title">Fond de console</string>
+    <string name="settings_home_screen_wallpaper_subtitle">Fonds inspirés des consoles</string>
+    <string name="settings_home_screen_wallpaper_none">Aucun</string>
+    <string name="settings_home_screen_wallpaper_playstation">PlayStation</string>
+    <string name="settings_home_screen_wallpaper_switch">Switch</string>
+    <string name="settings_home_screen_wallpaper_xbox">Xbox</string>
+    <string name="settings_home_screen_wallpaper_custom">Votre image</string>
+</resources>

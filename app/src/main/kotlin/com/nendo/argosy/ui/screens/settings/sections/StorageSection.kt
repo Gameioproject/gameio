@@ -509,7 +509,8 @@ fun StorageSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
             StorageItem.MusicLocation -> ActionPreference(
                 icon = Icons.Outlined.LibraryMusic,
                 title = stringResource(R.string.settings_storage_music_location_title),
-                subtitle = uiState.ambientAudio.musicDirPath?.let { formatStoragePath(it) }
+                subtitle = uiState.ambientAudio.musicDirPath?.takeUnless { uiState.ambientAudio.musicDirIsDefault }
+                    ?.let { formatStoragePath(it) }
                     ?: stringResource(R.string.settings_storage_music_location_default),
                 isFocused = isFocused(item),
                 onClick = { viewModel.openMusicLocationPicker() }

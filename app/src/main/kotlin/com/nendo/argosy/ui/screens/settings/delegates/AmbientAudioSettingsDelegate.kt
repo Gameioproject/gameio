@@ -133,7 +133,8 @@ class AmbientAudioSettingsDelegate @Inject constructor(
     fun refreshMusicDirPath(scope: CoroutineScope) {
         scope.launch {
             val path = musicDirectoryManager.resolveMusicDir().absolutePath
-            _state.update { it.copy(musicDirPath = path) }
+            val isDefault = musicDirectoryManager.usesDefaultLocation()
+            _state.update { it.copy(musicDirPath = path, musicDirIsDefault = isDefault) }
         }
     }
 
@@ -177,7 +178,7 @@ class AmbientAudioSettingsDelegate @Inject constructor(
         scope.launch {
             relocateMusicLibrary(oldPath, newPath, moveFiles)
             playlistCoordinator.refresh()
-            _state.update { it.copy(musicDirPath = newPath) }
+            _state.update { it.copy(musicDirPath = newPath, musicDirIsDefault = false) }
         }
     }
 }

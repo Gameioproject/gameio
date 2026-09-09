@@ -39,8 +39,8 @@ android {
         applicationId = "com.playgameio.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 328
-        versionName = "2.10.0-catalog"
+        versionCode = 329
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

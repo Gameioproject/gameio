@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="source_filter_available">Доступные</string>
+    <string name="home_library_downloadable">Доступные</string>
+    <string name="home_search_label">Поиск</string>
+    <string name="home_footer_search">Поиск</string>
+    <string name="home_surprise_label">Случайная игра</string>
+    <string name="home_empty_filtered">Нет игр с этим фильтром</string>
+    <string name="home_empty_filtered_cta">Показать все игры</string>
+    <string name="search_footer_scope">Область поиска</string>
+    <string name="search_kb_space">Пробел</string>
+    <string name="search_kb_delete">Удалить</string>
+    <string name="search_kb_clear">Очистить</string>
+    <string name="search_kb_done">Готово</string>
+    <string name="library_search_type_new">Введите запрос…</string>
+    <string name="search_scope_local">Это устройство</string>
+    <string name="search_scope_platform">Эта платформа</string>
+    <string name="search_scope_server">Все платформы</string>
+    <string name="settings_home_screen_wallpaper_title">Обои консоли</string>
+    <string name="settings_home_screen_wallpaper_subtitle">Фоны в стиле игровых консолей</string>
+    <string name="settings_home_screen_wallpaper_none">Нет</string>
+    <string name="settings_home_screen_wallpaper_playstation">PlayStation</string>
+    <string name="settings_home_screen_wallpaper_switch">Switch</string>
+    <string name="settings_home_screen_wallpaper_xbox">Xbox</string>
+    <string name="settings_home_screen_wallpaper_custom">Ваше изображение</string>
+</resources>

@@ -4,4 +4,5 @@
     <string name="gameio_login_invalid_credentials">Comprueba tu nombre de usuario y contraseña e inténtalo de nuevo.</string>
     <string name="gameio_login_account_unavailable">Esta cuenta no puede iniciar sesión. Contacta con el soporte de Gameio.</string>
     <string name="gameio_login_unavailable">Gameio no está disponible ahora. Comprueba tu conexión e inténtalo de nuevo.</string>
+    <string name="gameio_update_unavailable">No se pudieron buscar actualizaciones. Inténtalo de nuevo.</string>
 </resources>

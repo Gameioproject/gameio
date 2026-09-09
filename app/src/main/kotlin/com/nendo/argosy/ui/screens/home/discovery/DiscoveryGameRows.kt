@@ -34,6 +34,7 @@ fun DiscoveryGameRail(
     games: List<HomeGameUi>, zone: Int, state: HomeUiState, viewModel: HomeViewModel,
     dimensions: DiscoveryDimensions, cardHeight: Dp, modifier: Modifier = Modifier
 ) {
+    val boxArtStyle = com.nendo.argosy.ui.theme.LocalBoxArtStyle.current
     val selected = if (zone == DiscoveryFocus.HERO && state.discoveryFocus.zone != zone) {
         state.discoveryFocus.heroIndex
     } else if (state.discoveryFocus.zone == zone) state.focusedGameIndex
@@ -60,6 +61,9 @@ fun DiscoveryGameRail(
                 playing = request != null && state.isVideoPreviewActive,
                 focused = focused, cardHeight = cardHeight, maxWidth = availableWidth,
                 dimensions = dimensions,
+                coverAspectRatio = if (boxArtStyle.nativeAspectRatio) {
+                    game.coverAspectRatio ?: boxArtStyle.aspectRatio
+                } else boxArtStyle.aspectRatio,
                 onClick = { viewModel.selectDiscoveryGame(zone, index, activate = true) },
                 onLongClick = {
                     viewModel.selectDiscoveryGame(zone, index)
@@ -70,7 +74,7 @@ fun DiscoveryGameRail(
                         primary = MaterialTheme.colorScheme.secondary,
                         onPrimary = MaterialTheme.colorScheme.onSurface
                     )) {
-                        GameCard(game = game, isFocused = false, modifier = coverModifier,
+                        GameCard(game = game, isFocused = focused, modifier = coverModifier,
                             showPlatformBadge = true, scaleOverride = 1f, alphaOverride = 1f,
                             downloadIndicator = state.downloadIndicatorFor(game.id),
                             coverPathOverride = state.repairedCoverPaths[game.id],

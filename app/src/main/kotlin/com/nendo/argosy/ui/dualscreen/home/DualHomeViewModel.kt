@@ -2645,7 +2645,6 @@ class DualHomeViewModel(
             )
             add(if (game.isFavorite) DualLibraryMenuAction.UNFAVORITE else DualLibraryMenuAction.FAVORITE)
             add(DualLibraryMenuAction.DETAILS)
-            add(DualLibraryMenuAction.ADD_TO_COLLECTION)
             if (_uiState.value.layoutKind == com.nendo.argosy.domain.model.HomeLayoutKind.CUSTOM_GRID) {
                 add(DualLibraryMenuAction.ADD_TO_GRID)
             }

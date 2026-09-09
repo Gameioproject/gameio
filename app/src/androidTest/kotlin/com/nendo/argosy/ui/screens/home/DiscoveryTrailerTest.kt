@@ -69,4 +69,31 @@ class DiscoveryTrailerTest {
         val video = compose.onNodeWithTag("video", useUnmergedTree = true).fetchSemanticsNode().boundsInRoot
         assertTrue(tile.contains(video.topLeft) && tile.contains(video.bottomRight))
     }
+    @Test fun coverShapeChangesWidthAndStillExpandsIntoVideo() {
+        val ratio = mutableStateOf(0.75f)
+        val playing = mutableStateOf(false)
+        compose.setContent {
+            MaterialTheme {
+                Box(Modifier.testTag("shapeFrame")) {
+                    DiscoveryCoverTransition(
+                        playing = playing.value, focused = true, cardHeight = 150.dp,
+                        maxWidth = 320.dp, dimensions = DiscoveryDimensions(1f),
+                        onClick = {}, onLongClick = {}, coverAspectRatio = ratio.value,
+                        cover = { Box(it) }, video = { Box(it) }
+                    )
+                }
+            }
+        }
+        compose.onNodeWithTag("shapeFrame").assertWidthIsEqualTo(112.5.dp)
+        compose.runOnIdle { ratio.value = 1f }
+        compose.waitForIdle()
+        compose.onNodeWithTag("shapeFrame").assertWidthIsEqualTo(150.dp)
+        compose.runOnIdle { playing.value = true }
+        compose.waitForIdle()
+        compose.onNodeWithTag("shapeFrame").assertWidthIsAtLeast(260.dp)
+        compose.runOnIdle { playing.value = false }
+        compose.waitForIdle()
+        compose.onNodeWithTag("shapeFrame").assertWidthIsEqualTo(150.dp)
+    }
+
 }
