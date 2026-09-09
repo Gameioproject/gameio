@@ -49,7 +49,6 @@ import com.nendo.argosy.ui.screens.settings.SettingsUiState
 import com.nendo.argosy.ui.screens.settings.SettingsViewModel
 import com.nendo.argosy.ui.screens.settings.UpdateCheckState
 import com.nendo.argosy.ui.screens.settings.components.SectionHeader
-import com.nendo.argosy.ui.screens.settings.dialogs.LicensesDialog
 import com.nendo.argosy.ui.screens.settings.menu.SettingsLayout
 import com.nendo.argosy.ui.theme.Dimens
 import com.nendo.argosy.util.LogLevel
@@ -166,11 +165,6 @@ fun AboutSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
 
     fun pickerToken(item: AboutItem): Int =
         if (uiState.enumPickerKey == item.key) uiState.enumPickerToken else 0
-
-    if (uiState.showLicensesDialog) {
-        LicensesDialog(onDismiss = viewModel::hideLicenses)
-    }
-
 
     SectionPaneLayout(
         items = visibleItems,
