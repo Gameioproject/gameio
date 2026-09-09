@@ -39,7 +39,7 @@ android {
         applicationId = "com.playgameio.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 330
+        versionCode = 331
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

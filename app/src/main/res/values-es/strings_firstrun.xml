@@ -139,7 +139,7 @@
         <item quantity="many">%d plataformas</item>
         <item quantity="other">%d plataformas</item>
     </plurals>
-    <string name="firstrun_complete_hint">Sincroniza tu biblioteca desde los ajustes de colección para empezar.</string>
+    <string name="firstrun_complete_hint">Explora tus juegos. Gestiona la sincronización de la biblioteca en los ajustes de Gameio.</string>
     <string name="firstrun_complete_button_start">Empezar a jugar</string>
     <string name="firstrun_romm_sign_in_hint">Inicia sesión con tu cuenta de Gameio.</string>
     <string name="firstrun_romm_sign_in_button">Iniciar sesión</string>

@@ -148,7 +148,7 @@
         <item quantity="many">%d платформ</item>
         <item quantity="other">%d платформы</item>
     </plurals>
-    <string name="firstrun_complete_hint">Синхронизируйте библиотеку в настройках коллекций, чтобы начать.</string>
+    <string name="firstrun_complete_hint">Откройте для себя новые игры. Управляйте синхронизацией библиотеки в настройках Gameio.</string>
     <string name="firstrun_complete_button_start">Начать игру</string>
     <string name="firstrun_romm_sign_in_hint">Войдите в свою учётную запись Gameio.</string>
     <string name="firstrun_romm_sign_in_button">Войти</string>

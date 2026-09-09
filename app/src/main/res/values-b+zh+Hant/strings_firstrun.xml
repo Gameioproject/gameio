@@ -121,7 +121,7 @@
     <plurals name="firstrun_complete_platform_count">
         <item quantity="other">%d個平台</item>
     </plurals>
-    <string name="firstrun_complete_hint">請至合輯設定同步您的遊戲庫以開始使用。</string>
+    <string name="firstrun_complete_hint">開始探索您的遊戲。在 Gameio 設定中管理遊戲庫同步。</string>
     <string name="firstrun_complete_button_start">開始遊玩</string>
     <string name="firstrun_romm_sign_in_hint">使用你的 Gameio 帳號登入。</string>
     <string name="firstrun_romm_sign_in_button">登入</string>

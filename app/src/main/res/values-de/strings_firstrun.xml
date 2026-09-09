@@ -130,7 +130,7 @@
         <item quantity="one">%d Plattform</item>
         <item quantity="other">%d Plattformen</item>
     </plurals>
-    <string name="firstrun_complete_hint">Synchronisieren Sie Ihre Bibliothek über die Sammlungseinstellungen, um zu beginnen.</string>
+    <string name="firstrun_complete_hint">Entdecke deine Spiele. Verwalte die Bibliothekssynchronisierung in den Gameio-Einstellungen.</string>
     <string name="firstrun_complete_button_start">Los geht\'s</string>
     <string name="firstrun_romm_sign_in_hint">Melde dich mit deinem Gameio-Konto an.</string>
     <string name="firstrun_romm_sign_in_button">Anmelden</string>

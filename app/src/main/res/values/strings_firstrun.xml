@@ -338,10 +338,8 @@
         <item quantity="one">%d platform</item>
         <item quantity="other">%d platforms</item>
     </plurals>
-    <!-- Line telling the user where to start the first library synchronisation. "Collection
-         settings" names a section of the Settings screen inside this app, so match whatever
-         that section is called in your language. -->
-    <string name="firstrun_complete_hint">Sync your library from Collection settings to get started.</string>
+    <!-- Completion hint. Gameio settings is the account and library sync section. -->
+    <string name="firstrun_complete_hint">Start exploring your games. Manage library sync in Gameio settings.</string>
     <!-- Button that closes the wizard and opens the app. Verb phrase, imperative. -->
     <string name="firstrun_complete_button_start">Start Playing</string>
     <!-- Line under that heading. "Gameio" is this app. -->

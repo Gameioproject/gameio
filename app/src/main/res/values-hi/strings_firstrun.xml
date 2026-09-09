@@ -154,7 +154,7 @@
         <item quantity="one">%d प्लेटफ़ॉर्म</item>
         <item quantity="other">%d प्लेटफ़ॉर्म</item>
     </plurals>
-    <string name="firstrun_complete_hint">शुरू करने के लिए कलेक्शन सेटिंग्स से अपनी लाइब्रेरी सिंक करें।</string>
+    <string name="firstrun_complete_hint">अपने गेम देखें। Gameio सेटिंग्स में लाइब्रेरी सिंक प्रबंधित करें।</string>
     <string name="firstrun_complete_button_start">खेलना शुरू करें</string>
     <string name="firstrun_romm_sign_in_hint">अपने Gameio खाते से साइन इन करें।</string>
     <string name="firstrun_romm_sign_in_button">साइन इन करें</string>
