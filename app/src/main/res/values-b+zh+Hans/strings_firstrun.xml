@@ -121,7 +121,7 @@
     <plurals name="firstrun_complete_platform_count">
         <item quantity="other">%d个平台</item>
     </plurals>
-    <string name="firstrun_complete_hint">在合集设置中同步你的游戏库以开始使用。</string>
+    <string name="firstrun_complete_hint">开始探索你的游戏。在 Gameio 设置中管理游戏库同步。</string>
     <string name="firstrun_complete_button_start">开始游戏</string>
     <string name="firstrun_romm_sign_in_hint">使用你的 Gameio 账户登录。</string>
     <string name="firstrun_romm_sign_in_button">登录</string>

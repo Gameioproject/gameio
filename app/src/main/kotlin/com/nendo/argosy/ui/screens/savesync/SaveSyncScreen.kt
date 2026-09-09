@@ -59,6 +59,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import coil.compose.AsyncImage
+import com.nendo.argosy.BuildConfig
 import com.nendo.argosy.R
 import com.nendo.argosy.ui.common.rememberFileImageModel
 import com.nendo.argosy.ui.components.FooterHints
@@ -322,7 +323,7 @@ private fun ThisDeviceCardView(card: ThisDeviceCard, modifier: Modifier = Modifi
                     overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(Dimens.spacingXs))
-                VersionsLine(card.client, card.clientVersion, card.isConnected, card.serverVersion)
+                VersionsLine(card.isConnected)
             }
             if (card.isConnected) {
                 SaveCountChip(card.saveCount)
@@ -332,36 +333,24 @@ private fun ThisDeviceCardView(card: ThisDeviceCard, modifier: Modifier = Modifi
 }
 
 @Composable
-private fun VersionsLine(
-    client: String?,
-    clientVersion: String?,
-    connected: Boolean,
-    serverVersion: String?
-) {
+private fun VersionsLine(connected: Boolean) {
     val fadedColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-    val clientLabel = client?.takeIf { it.isNotBlank() }?.let { name ->
-        val displayName = name.replaceFirstChar { it.titlecase() }
-        val version = clientVersion?.takeIf { it.isNotBlank() }
-        if (version == null) {
-            displayName
-        } else {
-            stringResource(R.string.savesync_device_client_versioned, displayName, version)
-        }
-    }
-    val serverLabel = when {
-        connected && !serverVersion.isNullOrBlank() ->
-            stringResource(R.string.savesync_device_server_versioned, serverVersion)
-        connected -> stringResource(R.string.savesync_device_server_connected)
-        else -> stringResource(R.string.savesync_device_server_offline)
-    }
-    if (clientLabel == null && serverLabel.isBlank()) return
+    val clientLabel = stringResource(
+        R.string.savesync_device_client_versioned,
+        stringResource(R.string.app_name),
+        BuildConfig.VERSION_NAME
+    )
+    val serverLabel = stringResource(
+        if (connected) R.string.savesync_device_server_connected
+        else R.string.savesync_device_server_offline
+    )
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = clientLabel.orEmpty(),
+            text = clientLabel,
             style = MaterialTheme.typography.labelMedium,
             color = fadedColor,
             maxLines = 1,
