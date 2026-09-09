@@ -1,5 +1,7 @@
 package com.nendo.argosy.ui.screens.settings
 
+import com.nendo.argosy.ui.screens.settings.dialogs.LicensesDialog
+
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -723,6 +725,10 @@ fun SettingsScreen(
                     }
                 }
             )
+        }
+
+        if (uiState.showLicensesDialog) {
+            LicensesDialog(onDismiss = viewModel::hideLicenses)
         }
 
         AnimatedVisibility(
@@ -1798,4 +1804,3 @@ private fun cachesClearConfirmMessage(target: CachesClearTarget?): String = when
     CachesClearTarget.STEAM_DOWNLOADS -> stringResource(R.string.settings_shell_caches_steam_downloads_message)
     null -> ""
 }
-

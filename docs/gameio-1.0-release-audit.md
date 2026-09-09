@@ -8,17 +8,17 @@ Client fork includes catalog-on-demand browsing, ranked/genre discovery, owned/a
 
 ## Required work and evidence
 
-- [ ] Fixed service sign-in: remove address editing/display from onboarding, success, account settings, account switching, errors and help. Keep credential, offline, retry and sync flows.
-- [ ] Hide check-in, collections, Jellyfin and social entry points across drawer, quick settings, game menus, settings and companion navigation. Preserve saved data and internal implementations.
-- [ ] Audit every settings section and retain only controls with meaningful consumption sites in this client.
-- [ ] Home settings describe discovery, not upstream carousel/grid layouts. Preserve platform following, preview enable/delay/mute and useful artwork controls.
-- [ ] Theme and Interface controls affect current screens consistently. Verify scale, colors, typography, guide and covers; hide unused controls.
-- [ ] Remove RomM product/version/configuration wording from ordinary UI. Preserve open-source attribution and licenses.
+- [x] Fixed service sign-in: remove address editing/display from onboarding, success, account settings, account switching, errors and help. Keep credential, offline, retry and sync flows.
+- [x] Hide check-in, collections, Jellyfin and social entry points across drawer, quick settings, game menus, settings and companion navigation. Preserve saved data and internal implementations.
+- [x] Audit every settings section and retain only controls with meaningful consumption sites in this client.
+- [x] Home settings describe discovery, not upstream carousel/grid layouts. Preserve platform following, preview enable/delay/mute and useful artwork controls.
+- [x] Theme and Interface controls affect current screens consistently. Verify scale, colors, typography, guide and covers; hide unused controls.
+- [x] Remove RomM product/version/configuration wording from ordinary UI. Preserve open-source attribution and licenses.
 - [ ] Version 1.0.0 with increasing Android version code, release signing, updater compatibility and release artifact.
 - [ ] Debug and release builds, lint, unit tests, controller/touch device verification, fresh login and existing-account upgrade, library/download/sync smoke tests.
 - [ ] Final requirement-by-requirement audit against source, test output and installed release APK.
 
-## Settings inventory and decisions under review
+## Settings inventory and decisions
 
 - Account/sync: retain account management, sign out protections, library sync, platform selection, metadata and download preferences. Remove host editing, service version and unsupported server administration.
 - Theme/interface: replace upstream home layout choices and no-op controls; keep working customization and navigation options.
@@ -54,7 +54,7 @@ Current audit is in progress; unchecked items are not release-ready claims.
 | About and diagnostics | Gameio version, controller-accessible licenses, update channels, settings backup, restart and diagnostics retained. New backups use a Gameio filename while the importer accepts existing backup contents. Errors shown for update checks are user-facing, with technical detail retained internally. |
 | Social, Jellyfin, check-in, collections | Hidden from normal drawer, quick settings, settings and game menus, including companion entry points. Collections/social/media repositories, tables and preferences remain intact. |
 
-Native audit captured the root pages for Theme, Interface, Navigation, Audio, Displays, Built-in Emulator, RetroAchievements, BIOS, GPU Drivers, Platforms, Storage, Gameio, Steam, Permissions and About. The audit uses the existing emulator account and does not reset its data. Further final-build checks are still pending.
+Native audit captured the root pages for Theme, Interface, Navigation, Audio, Displays, Built-in Emulator, RetroAchievements, BIOS, GPU Drivers, Platforms, Storage, Gameio, Steam, Permissions and About. The audit uses the existing emulator account and does not reset its data. The signed release completed first-run setup and loaded the live catalog. Its drawer, Gameio settings, About, game details and full library were also inspected.
 
 ## Live service and local-data proof
 
@@ -79,3 +79,13 @@ Version name is `1.0.0`; base Android version code is 329 (universal APK code 30
 - Fresh installation of the optimized, signed production APK succeeded. Sign-in with the existing test account returned 38,302 games across 25 platforms, then advanced to local Android permissions and games-folder setup. No service URL was displayed.
 - The first full lint run found 23 missing catalog/keyboard/wallpaper translations inherited from earlier fork changes. They are now translated in all seven supported locales, and the final lint pass confirmed zero errors.
 - Fixed vertical swipes across the color slider changing its value; taps and horizontal drags still select color, and Default now resets it through touch as well as controller.
+
+## Final runtime checks
+
+- Source commit `e2e77d82`: signed production update installed over the first 1.0 candidate without clearing data. The existing account remained signed in and the downloaded game still displayed Play.
+- A game with an available source downloaded through the app: Ocarina of Time, 33,554,432 bytes, N64 header `80371240`, SHA-256 `49acd3885f13b0730119b78fb970911cc8aba614fe383368015c21565983368d`. A title without a source correctly failed without crashing.
+- The full library loaded 144 Nintendo 64 catalog entries; game details retained platform, artwork/description, rating and download/play controls. No collection action appeared in the audited drawer or game menus.
+- All 11 targeted UI tests passed on the final debug APK: four sign-in/keyboard/system-selection, two guide, three cover-transition and two slider tests. Earlier light/portrait variants passed four each.
+- Debug upgrade retained the existing 296,960-byte save and quick state; its save hash still matched the local database and live Gameio account.
+- Stability sweep hits are existing ViewModel/delegate lifecycle fields and controller callbacks, not mutable properties on composable state data classes. No native or save-format files changed for the hosted-client audit.
+- Physical handheld gameplay, LEDs and companion-display hardware were unavailable. The x86 emulator verifies frontend flows; native ARM execution remains a hardware validation limitation.
