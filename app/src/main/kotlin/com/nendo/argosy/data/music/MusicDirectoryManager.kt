@@ -23,6 +23,8 @@ class MusicDirectoryManager @Inject constructor(
     private val storagePreferences: StoragePreferencesRepository
 ) {
 
+    suspend fun usesDefaultLocation(): Boolean = storagePreferences.preferences.first().musicStoragePath == null
+
     suspend fun resolveMusicDir(): File {
         val override = storagePreferences.preferences.first().musicStoragePath
         return if (override != null) {

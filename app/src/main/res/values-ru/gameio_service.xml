@@ -4,4 +4,5 @@
     <string name="gameio_login_invalid_credentials">Проверьте имя пользователя и пароль и повторите попытку.</string>
     <string name="gameio_login_account_unavailable">Вход в эту учётную запись недоступен. Обратитесь в поддержку Gameio.</string>
     <string name="gameio_login_unavailable">Gameio сейчас недоступен. Проверьте подключение и повторите попытку.</string>
+    <string name="gameio_update_unavailable">Не удалось проверить обновления. Повторите попытку.</string>
 </resources>

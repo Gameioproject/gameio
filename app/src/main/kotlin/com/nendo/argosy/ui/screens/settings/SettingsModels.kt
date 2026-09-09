@@ -375,6 +375,7 @@ data class AmbientAudioState(
     val currentTrackName: String? = null,
     val playlistEntryCount: Int = 0,
     val musicDirPath: String? = null,
+    val musicDirIsDefault: Boolean = true,
     val pendingMusicRelocation: MusicRelocationPrompt? = null
 )
 

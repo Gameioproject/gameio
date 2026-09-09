@@ -68,7 +68,7 @@ class SettingsBackupRepository @Inject constructor(
             val file = File(path)
             if (!file.isFile) return@withContext SettingsImportResult.Error("File not found")
             val settings = JSONObject(file.readText()).optJSONObject(FIELD_SETTINGS)
-                ?: return@withContext SettingsImportResult.Error("Not an Argosy settings backup")
+                ?: return@withContext SettingsImportResult.Error("Not a Gameio settings backup")
             var applied = 0
             var skipped = 0
             dataStore.edit { prefs ->
@@ -125,7 +125,7 @@ class SettingsBackupRepository @Inject constructor(
     }
 
     companion object {
-        const val FILE_NAME = "argosy-settings.json"
+        const val FILE_NAME = "gameio-settings.json"
         private const val FORMAT_VERSION = 1
         private const val FIELD_VERSION = "version"
         private const val FIELD_APP_VERSION = "app_version"

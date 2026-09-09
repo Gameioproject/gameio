@@ -278,11 +278,11 @@
         <item quantity="one">%1$d save will be uploaded first. Once everything is on your server, this account\'s cached saves, states and settings are removed from this device. Your downloaded games stay.</item>
         <item quantity="other">%1$d saves will be uploaded first. Once everything is on your server, this account\'s cached saves, states and settings are removed from this device. Your downloaded games stay.</item>
     </plurals>
-    <string name="settings_shell_romm_signout_message">This account\'s cached saves, states and settings are removed from this device, and everything already uploaded stays on your server. Your downloaded games stay.</string>
+    <string name="settings_shell_romm_signout_message">This account\'s cached saves, states and settings are removed from this device. Everything already synced stays in Gameio. Your downloaded games stay.</string>
     <string name="settings_shell_modal_romm_signout_confirm">Sign Out</string>
 
     <string name="settings_shell_modal_reset_save_cache_title">Reset Save Cache?</string>
-    <string name="settings_shell_modal_reset_save_cache_message">This will delete all locally cached save snapshots and pending sync operations. Your actual save files and server saves are not affected.</string>
+    <string name="settings_shell_modal_reset_save_cache_message">This will delete all locally cached save snapshots and pending sync operations. Your actual save files and saves in Gameio are not affected.</string>
     <string name="settings_shell_modal_reset_save_cache_confirm">Reset</string>
 
     <string name="settings_shell_modal_clear_save_path_cache_title">Clear Save Path Cache?</string>
@@ -294,7 +294,7 @@
     <string name="settings_shell_modal_secure_saves_off_confirm">Turn Off</string>
 
     <string name="settings_shell_modal_clear_state_cache_title">Clear State Cache?</string>
-    <string name="settings_shell_modal_clear_state_cache_message">This will delete all locally cached save state snapshots and their pending sync operations. Save files and server copies are not affected.</string>
+    <string name="settings_shell_modal_clear_state_cache_message">This will delete all locally cached save state snapshots and their pending sync operations. Save files and copies in Gameio are not affected.</string>
     <string name="settings_shell_modal_clear_state_cache_confirm">Clear</string>
 
     <!-- Confirm button shared by every "Clear ... ?" cache modal below. -->
@@ -305,7 +305,7 @@
     <string name="settings_shell_modal_delete_core_confirm">Delete</string>
 
     <string name="settings_shell_modal_sync_saves_title">Sync Saves?</string>
-    <string name="settings_shell_modal_sync_saves_message">This will scan all downloaded games for save changes and sync them with the server. Local saves newer than the last sync will be uploaded, and newer server saves will be downloaded.</string>
+    <string name="settings_shell_modal_sync_saves_message">This will scan downloaded games for save changes and sync them with Gameio. Newer local saves are uploaded, and newer saves in Gameio are downloaded.</string>
     <string name="settings_shell_modal_sync_saves_confirm">Sync</string>
 
     <!-- ===== SettingsScreen: AccountModals ===== -->
@@ -404,7 +404,7 @@
     <!-- ===== SettingsScreen: cache clear confirm modals ===== -->
 
     <string name="settings_shell_caches_image_title">Clear Image Cache?</string>
-    <string name="settings_shell_caches_image_message">This will delete all cached covers, backgrounds, and screenshots. Images re-download from the server as you browse.</string>
+    <string name="settings_shell_caches_image_message">This will delete all cached covers, backgrounds, and screenshots. Images download again as you browse.</string>
     <string name="settings_shell_caches_rom_extraction_title">Clear Extracted ROMs?</string>
     <string name="settings_shell_caches_rom_extraction_message">This will delete extracted working copies of compressed games. They re-extract the next time each game launches.</string>
     <string name="settings_shell_caches_rom_staging_title">Clear Abandoned Staging?</string>

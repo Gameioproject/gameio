@@ -3,6 +3,7 @@ package com.nendo.argosy.ui.components
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
@@ -776,6 +777,7 @@ fun HueSliderPreference(
     lightness: Float = 0.5f,
     defaultLabel: String = stringResource(R.string.ui_hue_slider_default)
 ) {
+    val currentOnHueChange by rememberUpdatedState(onHueChange)
     val hueSteps = 36
     val hueColors = (0..hueSteps).map { step ->
         val hue = (step * 360f / hueSteps)
@@ -799,19 +801,16 @@ fun HueSliderPreference(
                 style = MaterialTheme.typography.titleMedium,
                 color = preferenceContentColor(isFocused)
             )
-            if (currentColor != null) {
-                Box(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clip(CircleShape)
-                        .background(currentColor)
-                        .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape)
-                )
-            } else {
+            Row(verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSm)) {
+                if (currentColor != null) {
+                    Box(Modifier.size(Dimens.iconMd).clip(CircleShape).background(currentColor))
+                }
                 Text(
                     text = defaultLabel,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = preferenceSecondaryColor(isFocused)
+                    color = preferenceSecondaryColor(isFocused),
+                    modifier = Modifier.clickableNoFocus { currentOnHueChange(null) }
                 )
             }
         }
@@ -826,18 +825,18 @@ fun HueSliderPreference(
                     Brush.horizontalGradient(hueColors)
                 )
                 .onSizeChanged { sliderSize = it }
-                .pointerInput(Unit) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            val event = awaitPointerEvent()
-                            if (event.changes.any { it.pressed }) {
-                                val x = event.changes.first().position.x
-                                val width = sliderSize.width.toFloat()
-                                if (width > 0) {
-                                    val hue = (x / width * 360f).coerceIn(0f, 360f)
-                                    onHueChange(hue)
-                                }
-                            }
+                .pointerInput(sliderSize) {
+                    detectTapGestures { offset ->
+                        if (sliderSize.width > 0) {
+                            currentOnHueChange((offset.x / sliderSize.width * 360f).coerceIn(0f, 360f))
+                        }
+                    }
+                }
+                .pointerInput(sliderSize) {
+                    detectHorizontalDragGestures { change, _ ->
+                        change.consume()
+                        if (sliderSize.width > 0) {
+                            currentOnHueChange((change.position.x / sliderSize.width * 360f).coerceIn(0f, 360f))
                         }
                     }
                 }

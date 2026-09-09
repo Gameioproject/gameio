@@ -886,7 +886,7 @@
     <!-- Row that writes the settings out to a file. Verb phrase. -->
     <string name="settings_about_export_title">Export Settings</string>
     <!-- Second line of that row. %1$s is the file name it writes; leave it as it comes. -->
-    <string name="settings_about_export_subtitle">Writes your appearance and navigation settings to %1$s. No accounts, servers or sync state are included.</string>
+    <string name="settings_about_export_subtitle">Writes your appearance and navigation settings to %1$s. Accounts and sync data are not included.</string>
     <!-- Row that reads settings back in from a file. Verb phrase. -->
     <string name="settings_about_import_title">Import Settings</string>
     <!-- Second line of that row. -->
@@ -1096,7 +1096,7 @@
     </plurals>
 
     <!-- Row opening the music the game server holds. Verb phrase. -->
-    <string name="settings_music_browse_server_title">Browse Server Music</string>
+    <string name="settings_music_browse_server_title">Browse Gameio Music</string>
     <!-- Second line of that row. "RomM" is the server software's name; leave it untranslated. -->
     <string name="settings_music_browse_server_subtitle">Preview and download tracks from Gameio</string>
     <!-- Row opening the music files on this device. Verb phrase. -->
@@ -1544,7 +1544,7 @@
     <!-- Second line of that row while the server can be reached. -->
     <string name="settings_caches_pending_uploads_subtitle_online">Sync now before clearing sync caches</string>
     <!-- Second line of that row while it cannot. -->
-    <string name="settings_caches_pending_uploads_subtitle_offline">Reconnect to the server to sync</string>
+    <string name="settings_caches_pending_uploads_subtitle_offline">Reconnect to Gameio to sync</string>
 
     <!-- Row that empties the stored save copies. Verb phrase. -->
     <string name="settings_caches_save_cache_title">Reset Save Cache</string>
@@ -2224,7 +2224,7 @@
          of a running game. Rendered in caps in English. -->
     <string name="settings_accounts_needs_sync_states">SAVE STATES WAITING ON A SYNC</string>
     <!-- Body under either of those headings. -->
-    <string name="settings_accounts_needs_sync_message">These were left empty because the copy on this device was known to be older than the server\'s. Sync to fill them in.</string>
+    <string name="settings_accounts_needs_sync_message">The copy on this device was older than the copy in Gameio. Sync to fill these slots.</string>
 
     <!-- Heading shown when no account has been paired. -->
     <string name="settings_accounts_empty_title">No Gameio account yet</string>
@@ -3280,7 +3280,7 @@
     <!-- Row title. Verb phrase: delete local games the server no longer has. -->
     <string name="settings_sync_filters_remove_orphans_title">Remove Orphaned Entries</string>
     <!-- Second line of that row. -->
-    <string name="settings_sync_filters_remove_orphans_subtitle">Delete games no longer on server</string>
+    <string name="settings_sync_filters_remove_orphans_subtitle">Remove games no longer available in Gameio</string>
     <!-- Footer hint. D-pad moves the row focus. -->
     <string name="settings_sync_filters_hint_navigate">Navigate</string>
     <!-- Footer hint. A toggles the focused switch. -->
@@ -3650,7 +3650,7 @@
          translated. -->
     <string name="settings_hard_reset_keeps_sign_ins">Settings and sign-ins - Gameio and Steam stay connected</string>
     <!-- Bullet item under the Keeps heading. -->
-    <string name="settings_hard_reset_keeps_synced_saves">Saves already synced to the server</string>
+    <string name="settings_hard_reset_keeps_synced_saves">Saves already synced to Gameio</string>
     <!-- Bullet item under the Keeps heading. -->
     <string name="settings_hard_reset_keeps_emulator_apps">Emulator apps and their own save data</string>
     <!-- Bullet item under the Keeps heading. -->
@@ -3664,7 +3664,7 @@
     <!-- Follow-up warning when the server connection is available. -->
     <string name="settings_hard_reset_sync_first_connected">Sync them first - resetting now would discard them forever.</string>
     <!-- Follow-up warning when the server connection is not available. -->
-    <string name="settings_hard_reset_sync_first_disconnected">Reconnect to the server and sync them first - resetting now would discard them forever.</string>
+    <string name="settings_hard_reset_sync_first_disconnected">Reconnect to Gameio and sync them first - resetting now would discard them forever.</string>
     <!-- Shown while the reset is running. -->
     <string name="settings_hard_reset_in_progress">Resetting...</string>
     <!-- Button label. Verb: abandon the reset. -->
@@ -3677,7 +3677,7 @@
     <!-- ===== Platform settings modal (Settings > components > PlatformSettingsModal) ===== -->
 
     <!-- Row title. Verb phrase: keep this platform's library in sync with the server. -->
-    <string name="settings_platform_modal_sync_label">Sync with Server</string>
+    <string name="settings_platform_modal_sync_label">Sync with Gameio</string>
     <!-- Row title. Noun phrase: where ROM files for this platform are stored. -->
     <string name="settings_platform_modal_rom_path_label">ROM Path</string>
     <!-- Row title. Noun phrase: where save files for this platform are stored. -->
@@ -3825,7 +3825,7 @@
     <string name="settings_accounts_delegate_completion_aborted">%1$d files changed mid-archive and were left as they were.</string>
     <!-- Appended sentence when some slots were left unsynced after a switch because the local
          copy might be stale. %1$d is the count. -->
-    <string name="settings_accounts_delegate_completion_needs_sync">%1$d slots were left empty because the local copy was known to be behind the server.</string>
+    <string name="settings_accounts_delegate_completion_needs_sync">%1$d slots were left empty because the local copy was older than the copy in Gameio.</string>
     <!-- Switch-blocked reason: another switch is already running. -->
     <string name="settings_accounts_delegate_blocker_already_switching">A switch is already running. Wait for it to finish.</string>
     <!-- Switch-blocked reason: a game is currently being played. -->
@@ -3880,7 +3880,7 @@
     <string name="settings_server_delegate_signout_switch_in_progress">An account switch is still finishing. Try again in a moment.</string>
     <!-- Inline error when sign-out is refused because of unsynced local work. %1$s is a summary
          of what is still outstanding. -->
-    <string name="settings_server_delegate_signout_refused">Still signed in: %1$s could not be sent to your server. Reconnect and sync, then sign out.</string>
+    <string name="settings_server_delegate_signout_refused">Still signed in: %1$s could not be synced to Gameio. Reconnect and sync, then sign out.</string>
     <!-- Pairing failure: the user declined the pairing request on the server. -->
     <string name="settings_server_delegate_pairing_denied">Pairing was denied on the server</string>
     <!-- Pairing failure: the pairing code timed out. -->

@@ -4,4 +4,5 @@
     <string name="gameio_login_invalid_credentials">अपना उपयोगकर्ता नाम और पासवर्ड जाँचकर फिर कोशिश करें।</string>
     <string name="gameio_login_account_unavailable">इस खाते में साइन इन नहीं हो सकता। Gameio सहायता से संपर्क करें।</string>
     <string name="gameio_login_unavailable">Gameio अभी उपलब्ध नहीं है। अपना कनेक्शन जाँचकर फिर कोशिश करें।</string>
+    <string name="gameio_update_unavailable">अपडेट की जाँच नहीं हो सकी। कृपया फिर से कोशिश करें।</string>
 </resources>

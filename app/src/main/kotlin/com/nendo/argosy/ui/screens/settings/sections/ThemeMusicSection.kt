@@ -210,7 +210,8 @@ fun ThemeMusicSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
             ThemeMusicItem.MusicLocation -> NavigationPreference(
                 icon = Icons.Outlined.Folder,
                 title = stringResource(R.string.settings_music_location_title),
-                subtitle = uiState.ambientAudio.musicDirPath ?: "",
+                subtitle = uiState.ambientAudio.musicDirPath?.takeUnless { uiState.ambientAudio.musicDirIsDefault }
+                    ?: stringResource(R.string.settings_storage_music_location_default),
                 isFocused = isFocused(item),
                 onClick = { viewModel.openMusicLocationPicker() }
             )

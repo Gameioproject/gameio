@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="source_filter_available">可下载</string>
+    <string name="home_library_downloadable">可下载</string>
+    <string name="home_search_label">搜索</string>
+    <string name="home_footer_search">搜索</string>
+    <string name="home_surprise_label">随机游戏</string>
+    <string name="home_empty_filtered">此筛选条件下没有游戏</string>
+    <string name="home_empty_filtered_cta">显示所有游戏</string>
+    <string name="search_footer_scope">搜索范围</string>
+    <string name="search_kb_space">空格</string>
+    <string name="search_kb_delete">删除</string>
+    <string name="search_kb_clear">清空</string>
+    <string name="search_kb_done">完成</string>
+    <string name="library_search_type_new">输入搜索内容…</string>
+    <string name="search_scope_local">此设备</string>
+    <string name="search_scope_platform">此平台</string>
+    <string name="search_scope_server">所有平台</string>
+    <string name="settings_home_screen_wallpaper_title">主机壁纸</string>
+    <string name="settings_home_screen_wallpaper_subtitle">游戏主机风格的背景</string>
+    <string name="settings_home_screen_wallpaper_none">无</string>
+    <string name="settings_home_screen_wallpaper_playstation">PlayStation</string>
+    <string name="settings_home_screen_wallpaper_switch">Switch</string>
+    <string name="settings_home_screen_wallpaper_xbox">Xbox</string>
+    <string name="settings_home_screen_wallpaper_custom">自选图片</string>
+</resources>

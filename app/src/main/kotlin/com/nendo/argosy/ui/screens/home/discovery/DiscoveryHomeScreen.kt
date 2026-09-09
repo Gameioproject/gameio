@@ -82,6 +82,7 @@ fun DiscoveryHomeScreen(state: HomeUiState, viewModel: HomeViewModel, onGameSele
                             Row(Modifier.height(dimensions.headingHeight).fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically) {
                                 Text(stringResource(section.titleRes), fontSize = dimensions.sectionTitle,
+                                    style = MaterialTheme.typography.titleMedium,
                                     color = MaterialTheme.colorScheme.onSurface)
                                 Spacer(Modifier.width(dimensions.gap))
                                 Text(if (section.continuation) stringResource(R.string.explore_more_genre)
@@ -147,7 +148,8 @@ private fun DiscoveryHeader(
         Row(Modifier.clickableNoFocus(onClick = onMenu), verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(d.gap)) {
             GameioMark(Modifier.size(d.control * 0.7f))
-            Text(stringResource(R.string.discovery_brand), fontSize = d.brand, color = MaterialTheme.colorScheme.onSurface)
+            Text(stringResource(R.string.discovery_brand), fontSize = d.brand,
+                style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
         }
         Spacer(Modifier.weight(1f))
         listOf(Icons.Default.Shuffle to R.string.discovery_surprise, Icons.Default.Search to R.string.discovery_search)

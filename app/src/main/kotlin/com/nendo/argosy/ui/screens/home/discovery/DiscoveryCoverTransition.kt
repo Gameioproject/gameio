@@ -28,11 +28,12 @@ fun DiscoveryCoverTransition(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
+    coverAspectRatio: Float = T.cardAspectRatio,
     cover: @Composable (Modifier) -> Unit,
     video: @Composable (Modifier) -> Unit,
     caption: @Composable () -> Unit = {}
 ) {
-    val portraitWidth = cardHeight * T.cardAspectRatio
+    val portraitWidth = cardHeight * coverAspectRatio
     val targetWidth = if (playing) cardHeight * T.trailerAspectRatio else portraitWidth
     val animated = focused || playing
     val width = if (animated) animateDpAsState(
@@ -43,7 +44,7 @@ fun DiscoveryCoverTransition(
         targetValue = if (playing) 0f else 1f,
         animationSpec = MotionTokens.Tween.medium, label = "trailerCoverAlpha"
     ).value else 1f
-    val shape = RoundedCornerShape(dimensions.radius)
+    val shape = RoundedCornerShape(com.nendo.argosy.ui.theme.LocalBoxArtStyle.current.cornerRadiusDp)
     Column(modifier.width(width)
         .then(if (focused) Modifier.border(dimensions.ring, MaterialTheme.colorScheme.primary, shape) else Modifier)
         .padding(dimensions.ringPadding)
