@@ -61,4 +61,35 @@ class DiscoveryNavigationTest {
         assertEquals(0, updated.focusedGameIndex)
         assertEquals("favorites", updated.discoverySections.single().key)
     }
+    @Test fun `explore omits empty personalized rows after applying platform filter`() {
+        val empty = state()
+        assertEquals(listOf("top-rated", "explore-tail"), empty.discoverySections.map { it.key })
+        val populated = empty.copy(recommendedGames = listOf(game(7)), favoriteGames = listOf(game(8)))
+        assertEquals(listOf("top-rated", "recommended", "favorites", "explore-tail"),
+            populated.discoverySections.map { it.key })
+        val filtered = populated.copy(currentRow = HomeRow.Platform(1))
+        assertEquals(listOf("top-rated", "explore-tail"), filtered.discoverySections.map { it.key })
+    }
+
+    @Test fun `removing an earlier empty row preserves focused section and game`() {
+        val previous = state().copy(
+            recommendedGames = listOf(game(7)), favoriteGames = listOf(game(8), game(9)),
+            discoveryFocus = DiscoveryFocus(zone = DiscoveryFocus.FIRST_ROW + 2,
+                rowIndexes = mapOf(DiscoveryFocus.FIRST_ROW + 2 to 1)), focusedGameIndex = 1
+        )
+        val updated = DiscoveryNavigation.reconcileSections(previous, previous.copy(recommendedGames = emptyList()))
+        assertEquals(DiscoveryFocus.FIRST_ROW + 1, updated.discoveryFocus.zone)
+        assertEquals(9L, updated.focusedGame?.id)
+        assertEquals(1, updated.discoveryFocus.rowIndexes[DiscoveryFocus.FIRST_ROW + 1])
+    }
+
+    @Test fun `removing the last favorite selects the next visible section safely`() {
+        val previous = state().copy(favoriteGames = listOf(game(8)),
+            discoveryFocus = DiscoveryFocus(zone = DiscoveryFocus.FIRST_ROW + 1), focusedGameIndex = 0)
+        val updated = DiscoveryNavigation.reconcileSections(previous, previous.copy(favoriteGames = emptyList()))
+        assertEquals("explore-tail", updated.discoverySections[updated.discoveryFocus.zone - DiscoveryFocus.FIRST_ROW].key)
+        assertEquals(0, updated.focusedGameIndex)
+        assertNull(updated.focusedGame)
+    }
+
 }

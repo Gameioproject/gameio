@@ -258,11 +258,12 @@ object ComponentDefaults {
         const val pagePaddingDp = 20
         const val barHeightDp = 34
         const val platformHeightDp = 30
+        const val firstRowPeekDp = 36
         const val footerHeightDp = 30
-        const val heroHeightDp = 210
+        const val heroHeightDp = 260
         const val heroWidthRatio = 0.34f
-        const val heroCardHeightDp = 158
-        const val rowCardHeightDp = 132
+        const val heroCardHeightDp = 240
+        const val rowCardHeightDp = 156
         const val cardAspectRatio = 0.72f
         const val trailerAspectRatio = 1.7777778f
         const val cardGapDp = 12

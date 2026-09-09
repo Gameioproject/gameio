@@ -5,15 +5,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nendo.argosy.ui.theme.generated.ComponentDefaults.DiscoveryHome as T
 
-data class DiscoveryDimensions(val scale: Float) {
+data class DiscoveryDimensions(val scale: Float, val viewportHeight: Dp? = null) {
     val padding get() = T.pagePaddingDp.dp * scale
     val bar get() = T.barHeightDp.dp * scale
     val platformBar get() = T.platformHeightDp.dp * scale
-    val heroHeight get() = T.heroHeightDp.dp * scale
+    val heroHeight get() = viewportHeight?.let {
+        (it - control - sectionGap - headingHeight - T.firstRowPeekDp.dp * scale)
+            .coerceAtLeast(T.heroHeightDp.dp * scale)
+    } ?: (T.heroHeightDp.dp * scale)
     val heroCard get() = T.heroCardHeightDp.dp * scale
     val rowCard get() = T.rowCardHeightDp.dp * scale
     val gap get() = T.cardGapDp.dp * scale
