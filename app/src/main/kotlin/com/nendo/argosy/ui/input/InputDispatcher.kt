@@ -138,6 +138,9 @@ class InputDispatcher(
     }
 
     fun dispatch(input: GamepadInput): InputResult {
+        // One press dismisses one layer, even if the button remains held.
+        if (input.event == GamepadEvent.Back && input.isRepeat) return InputResult.HANDLED
+
         if (System.currentTimeMillis() < inputBlockedUntil) {
             return InputResult.HANDLED
         }

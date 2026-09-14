@@ -223,7 +223,7 @@ class HomeViewModel @Inject constructor(
             _uiState.value.discoveryData.copy(platformId = platformId, loading = false, failed = true, filter = filter)
         }
         _uiState.update {
-            if (it.currentPlatform?.id == platformId && it.libraryFilter == filter) it.copy(discoveryData = loaded).let { updated ->
+            if (it.currentPlatform?.id == platformId && it.libraryFilter == filter) DiscoveryNavigation.reconcileGames(it, it.copy(discoveryData = loaded)).let { updated ->
                 val clamped = updated.copy(discoveryFocus = updated.discoveryFocus.copy(
                     zone = updated.discoveryFocus.zone.coerceAtMost(
                         DiscoveryFocus.FIRST_ROW + updated.discoverySections.lastIndex)))
@@ -350,7 +350,7 @@ class HomeViewModel @Inject constructor(
                         },
                         pinnedGamesLoading = lib.pinnedGamesLoading,
                         repairedCoverPaths = lib.repairedCoverPaths
-                    ).let { updated -> DiscoveryNavigation.reconcileSections(it, updated) }
+                    ).let { updated -> DiscoveryNavigation.reconcileGames(it, updated) }
                 }
             }
         }
@@ -496,7 +496,7 @@ class HomeViewModel @Inject constructor(
                 },
                 pinnedGamesLoading = lib.pinnedGamesLoading,
                 repairedCoverPaths = lib.repairedCoverPaths
-            ).let { updated -> DiscoveryNavigation.reconcileSections(it, updated) }
+            ).let { updated -> DiscoveryNavigation.reconcileGames(it, updated) }
         }
     }
 
@@ -538,7 +538,9 @@ class HomeViewModel @Inject constructor(
         libraryDelegate.observeRecentlyPlayedChanges(viewModelScope) { validated ->
             _uiState.update { state ->
                 val newState = state.copy(recentGames = validated)
-                if (state.currentRow == HomeRow.Continue && validated.isEmpty()) {
+                if (state.isDiscoveryHome) {
+                    DiscoveryNavigation.reconcileGames(state, newState)
+                } else if (state.currentRow == HomeRow.Continue && validated.isEmpty()) {
                     val newRow = newState.availableRows.firstOrNull() ?: HomeRow.Continue
                     newState.copy(currentRow = newRow, focusedGameIndex = 0)
                 } else {
@@ -739,11 +741,6 @@ class HomeViewModel @Inject constructor(
             libraryDelegate.loadFavorites()
             refreshDiscoveryData()
             flushLibraryState()
-            _uiState.update { current ->
-                val index = current.currentItems.indexOfFirst { (it as? HomeRowItem.Game)?.game?.id == focusedGameId }
-                current.copy(focusedGameIndex = index.takeIf { it >= 0 }
-                    ?: current.focusedGameIndex.coerceIn(0, current.currentItems.lastIndex.coerceAtLeast(0)))
-            }
             return
         }
         val result = libraryDelegate.refreshCurrentRow(state.currentRow, focusedGameId)
@@ -1672,9 +1669,10 @@ class HomeViewModel @Inject constructor(
 
     override fun scrollToFirst(): Boolean {
         val state = _uiState.value
-        if (state.isDiscoveryHome && state.discoveryFocus.zone != DiscoveryFocus.HERO) {
-            _uiState.update { it.copy(discoveryFocus = it.discoveryFocus.copy(zone = DiscoveryFocus.HERO),
-                focusedGameIndex = it.discoveryFocus.heroIndex) }
+        if (state.isDiscoveryHome) {
+            if (state.discoveryFocus.zone == DiscoveryFocus.HERO) return false
+            _uiState.update { DiscoveryNavigation.returnToHero(it) }
+            saveCurrentState()
             return true
         }
         if (!navigationDelegate.scrollToFirstItem(state.focusedGameIndex)) return false

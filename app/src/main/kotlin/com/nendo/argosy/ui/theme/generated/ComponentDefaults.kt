@@ -295,4 +295,12 @@ object ComponentDefaults {
         const val systemCellMinWidthDp = 128
     }
 
+    object GameioBackdrop {
+        const val cellSizeDp = 58
+        const val lineWidthDp = 0.5f
+        const val gridAlpha = 0.02f
+        const val glowAlpha = 0.08f
+        const val glowRadiusRatio = 0.8f
+    }
+
 }

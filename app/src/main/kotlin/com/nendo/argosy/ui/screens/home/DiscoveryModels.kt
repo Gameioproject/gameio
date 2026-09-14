@@ -166,6 +166,36 @@ object DiscoveryNavigation {
         )
     }
 
+    fun returnToHero(state: HomeUiState): HomeUiState {
+        if (state.discoveryFocus.zone == DiscoveryFocus.HERO) return state
+        return state.copy(
+            discoveryFocus = state.discoveryFocus.copy(zone = DiscoveryFocus.HERO,
+                rowIndexes = state.discoveryFocus.rowIndexes +
+                    (state.discoveryFocus.zone to state.focusedGameIndex)),
+            focusedGameIndex = state.discoveryFocus.heroIndex.coerceIn(
+                0, state.discoveryHero.lastIndex.coerceAtLeast(0))
+        )
+    }
+
+    fun reconcileGames(previous: HomeUiState, updated: HomeUiState): HomeUiState {
+        val reconciled = reconcileSections(previous, updated)
+        if (!previous.isDiscoveryHome || !updated.isDiscoveryHome ||
+            previous.currentRow != updated.currentRow ||
+            previous.discoveryFocus.feed != updated.discoveryFocus.feed) return reconciled
+        val index = reconciled.currentItems.indexOfFirst {
+            (it as? HomeRowItem.Game)?.game?.id == previous.focusedGame?.id
+        }.takeIf { it >= 0 } ?: reconciled.focusedGameIndex
+        val heroId = previous.discoveryHeroGame?.id
+        val heroIndex = reconciled.discoveryHero.indexOfFirst { it.id == heroId }
+            .takeIf { it >= 0 } ?: reconciled.discoveryFocus.heroIndex
+        return reconciled.copy(
+            focusedGameIndex = index.coerceIn(0, reconciled.currentItems.lastIndex.coerceAtLeast(0)),
+            discoveryFocus = reconciled.discoveryFocus.copy(
+                heroIndex = heroIndex.coerceIn(0, reconciled.discoveryHero.lastIndex.coerceAtLeast(0))
+            )
+        )
+    }
+
     fun horizontal(state: HomeUiState, delta: Int): HomeUiState {
         val count = when (state.discoveryFocus.zone) {
             DiscoveryFocus.TOOLS, DiscoveryFocus.ACTIONS -> 3

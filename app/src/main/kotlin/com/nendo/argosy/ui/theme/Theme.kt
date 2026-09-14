@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -95,17 +96,17 @@ internal fun createDarkColorScheme(
     tintBleed: Int = 0
 ) = darkColorScheme(
     primary = primary,
-    onPrimary = Color.White,
+    onPrimary = if (primary.luminance() > 0.5f) ColorTokens.Scheme.Dark.background else Color.White,
     primaryContainer = toContainerDark(primary),
     onPrimaryContainer = primary,
 
     secondary = secondary,
-    onSecondary = Color.White,
+    onSecondary = if (secondary.luminance() > 0.5f) ColorTokens.Scheme.Dark.background else Color.White,
     secondaryContainer = toContainerDark(secondary),
     onSecondaryContainer = secondary,
 
     tertiary = secondary,
-    onTertiary = Color.White,
+    onTertiary = if (secondary.luminance() > 0.5f) ColorTokens.Scheme.Dark.background else Color.White,
     tertiaryContainer = toContainerDark(secondary),
     onTertiaryContainer = secondary,
 
@@ -135,17 +136,17 @@ internal fun createLightColorScheme(
     tintBleed: Int = 0
 ) = lightColorScheme(
     primary = primary,
-    onPrimary = Color.White,
+    onPrimary = if (primary.luminance() > 0.5f) ColorTokens.Scheme.Dark.background else Color.White,
     primaryContainer = toContainerLight(primary),
     onPrimaryContainer = darken(primary),
 
     secondary = secondary,
-    onSecondary = Color.White,
+    onSecondary = if (secondary.luminance() > 0.5f) ColorTokens.Scheme.Dark.background else Color.White,
     secondaryContainer = toContainerLight(secondary),
     onSecondaryContainer = darken(secondary),
 
     tertiary = secondary,
-    onTertiary = Color.White,
+    onTertiary = if (secondary.luminance() > 0.5f) ColorTokens.Scheme.Dark.background else Color.White,
     tertiaryContainer = toContainerLight(secondary),
     onTertiaryContainer = darken(secondary),
 

@@ -51,4 +51,24 @@ class HomeGuideShortcutTest {
         assertTrue(footer.isHidden)
         verify(exactly = 0) { actions.surpriseMe() }
     }
+    @Test fun `holding back does not dismiss the underlying screen`() {
+        var screenBacks = 0
+        dispatcher.subscribeView(object : InputHandler {
+            override fun onBack(): InputResult {
+                screenBacks++
+                return InputResult.HANDLED
+            }
+        })
+        dispatcher.pushModal(object : InputHandler {
+            override fun onBack(): InputResult {
+                dispatcher.popModal()
+                return InputResult.HANDLED
+            }
+        })
+        dispatcher.dispatch(GamepadInput(GamepadEvent.Back))
+        dispatcher.dispatch(GamepadInput(GamepadEvent.Back, isRepeat = true))
+        assertEquals(0, screenBacks)
+        dispatcher.dispatch(GamepadInput(GamepadEvent.Back))
+        assertEquals(1, screenBacks)
+    }
 }

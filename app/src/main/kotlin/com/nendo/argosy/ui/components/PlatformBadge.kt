@@ -145,7 +145,8 @@ fun PlatformBadge(
         boxArtStyle.borderStyle != BoxArtBorderStyle.SOLID -> Color.Black.copy(alpha = 0.6f)
         else -> MaterialTheme.colorScheme.primary
     }
-    val textColor = Color.White
+    val textColor = if (boxArtStyle.borderStyle == BoxArtBorderStyle.SOLID)
+        MaterialTheme.colorScheme.onPrimary else Color.White
     val borderOffset = if (isFocused) boxArtStyle.borderThicknessDp else 0.dp
     val isExtremeCase = isFocused && boxArtStyle.borderThicknessDp >= 4.dp && userPadding <= 1.dp
     val earSize = if (isExtremeCase) outerCornerRadius - boxArtStyle.borderThicknessDp / 2 else outerCornerRadius
@@ -407,7 +408,8 @@ private fun PlatformSpineLabel(
     }
     val displayName = platformDisplayName.uppercase()
     val isHorizontal = edge == SpineEdge.TOP || edge == SpineEdge.BOTTOM
-    val textColor = Color.White
+    val textColor = if (boxArtStyle.borderStyle == BoxArtBorderStyle.SOLID)
+        MaterialTheme.colorScheme.onPrimary else Color.White
     val fontSize = 12.sp
 
     val rotation = when {

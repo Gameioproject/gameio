@@ -1,5 +1,6 @@
 package com.nendo.argosy.ui.screens.firstrun
 
+import com.nendo.argosy.ui.theme.gameioBackground
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +36,7 @@ import com.nendo.argosy.ui.util.clickableNoFocus
 
 @Composable
 internal fun SetupBackdrop(content: @Composable () -> Unit) {
-    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) { content() }
+    Box(Modifier.fillMaxSize().gameioBackground()) { content() }
 }
 
 @Composable

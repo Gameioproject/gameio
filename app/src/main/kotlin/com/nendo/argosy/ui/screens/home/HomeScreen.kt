@@ -1,6 +1,5 @@
 package com.nendo.argosy.ui.screens.home
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -230,11 +229,6 @@ fun HomeScreen(
                 }
             }
         }
-    }
-
-    BackHandler(enabled = true) {
-        // Prevent back from popping Home screen off nav stack
-        // Home is the root destination - back should do nothing
     }
 
     val context = LocalContext.current
