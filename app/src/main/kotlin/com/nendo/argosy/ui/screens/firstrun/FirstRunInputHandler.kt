@@ -51,6 +51,11 @@ class FirstRunInputHandler(
 
     override fun onBack(): InputResult {
         val state = viewModel.uiState.value
+        if (state.currentStep == FirstRunStep.FAVORITES) {
+            if (viewModel.favoritesDelegate.state.value.keyboardOpen) viewModel.favoritesDelegate.closeSearch()
+            else viewModel.finishFavoriteSelection()
+            return InputResult.HANDLED
+        }
         if (state.currentStep == FirstRunStep.WELCOME) {
             return InputResult.HANDLED
         }

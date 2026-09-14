@@ -673,6 +673,7 @@ class DualGameDetailInputHandler(
             }
             GameDetailOption.TITLE_ID -> onBroadcastDirectAction("REFRESH_TITLE_ID", gameId, null)
             GameDetailOption.FILES -> onBroadcastDirectAction("FILES", gameId, null)
+            GameDetailOption.COMMENTS, GameDetailOption.SOURCES -> onBroadcastDirectAction(option.name, gameId, null)
             GameDetailOption.REFRESH_METADATA -> onBroadcastDirectAction("REFRESH_METADATA", gameId, null)
             GameDetailOption.DELETE -> onBroadcastDirectAction("DELETE", gameId, null)
             GameDetailOption.HIDE -> {

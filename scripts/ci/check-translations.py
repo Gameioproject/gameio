@@ -151,7 +151,7 @@ def main():
         return 2
 
     base_strings, base_plurals, base_untranslatable = {}, {}, set()
-    for path in sorted(glob.glob(f"{BASE_DIR}/strings*.xml")):
+    for path in sorted(glob.glob(f"{BASE_DIR}/*.xml")):
         try:
             s, p, u = parse(path)
         except MalformedResource as exc:

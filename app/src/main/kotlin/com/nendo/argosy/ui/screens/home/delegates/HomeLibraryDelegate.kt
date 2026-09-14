@@ -819,15 +819,11 @@ class HomeLibraryDelegate @Inject constructor(
     private fun sourceFilterFor(filter: com.nendo.argosy.data.preferences.HomeLibraryFilter): String =
         when (filter) {
             com.nendo.argosy.data.preferences.HomeLibraryFilter.ALL -> "ALL"
-            com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE -> "AVAILABLE"
+            com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE -> "ALL"
             com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY -> "PLAYABLE"
         }
 
     private suspend fun ensureCatalogPage(platformId: Long, have: Int, want: Int): Boolean {
-        val prefs = preferencesRepository.userPreferences.first()
-        if (prefs.homeLibraryFilter == com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE) {
-            return catalogPager.ensureAvailable(platformId, want.coerceAtLeast(CATALOG_PAGE_SIZE))
-        }
         if (have >= want) return false
         // Exactly the rows the rail shows, and nothing ahead of them: the row paints after one
         // small response. The library tops the window up when it is opened.
@@ -850,16 +846,12 @@ class HomeLibraryDelegate @Inject constructor(
         return true
     }
 
-    /** Games a host offers a file for; the catalog lists plenty that none does. */
-    private fun filterDownloadable(candidates: List<GameEntity>): List<GameEntity> =
-        candidates.filter { (it.fileSizeBytes ?: 0L) > 0L || it.localPath != null }
-
     private suspend fun applyLibraryFilter(
         games: List<GameEntity>,
         filter: com.nendo.argosy.data.preferences.HomeLibraryFilter
     ): List<GameEntity> = when (filter) {
         com.nendo.argosy.data.preferences.HomeLibraryFilter.ALL -> games
-        com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE -> filterDownloadable(games)
+        com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE -> games
         com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY -> filterPlayable(games)
     }
 

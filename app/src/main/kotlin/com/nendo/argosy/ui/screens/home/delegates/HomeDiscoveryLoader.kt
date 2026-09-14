@@ -34,7 +34,7 @@ class HomeDiscoveryLoader @Inject constructor(
         val names = shown.associate { it.id to it.getDisplayName() }
         val ids = if (shelves.isCatalogOnly() && filter != HomeLibraryFilter.LIBRARY) {
             shelves.genrePage(genre, shown.map { it.slug }, page * pageSize, pageSize,
-                owned = filter == HomeLibraryFilter.DOWNLOADABLE)
+                owned = false)
         } else {
             games.getExploreGenrePage(genre, shown.map { it.id },
                 playableOnly = filter == HomeLibraryFilter.LIBRARY,
@@ -62,7 +62,7 @@ class HomeDiscoveryLoader @Inject constructor(
             val shelf = shelves.definitions(strict = true).firstOrNull { it.key == "top-rated" }
             val ids = if (shelf != null && shown.isNotEmpty()) {
                 shelves.gamesFor(shelf, shown.map { it.slug }, strict = true,
-                    owned = filter == HomeLibraryFilter.DOWNLOADABLE)
+                    owned = false)
             } else {
                 games.observeAllList().first().filter { it.platformId in shown.map { p -> p.id } }
                     .sortedByDescending { it.rating }.take(40).map { it.id }

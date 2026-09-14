@@ -222,6 +222,7 @@ data class ExtractionFailedInfo(
 data class GameDetailUiState(
     val game: GameDetailUi? = null,
     val menuFocusIndex: Int = 0,
+    val showComments: Boolean = false,
     val showMoreOptions: Boolean = false,
     val moreOptionsFocusIndex: Int = 0,
     val showPlayOptions: Boolean = false,

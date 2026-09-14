@@ -37,6 +37,7 @@ data class DownloadQueueEntity(
     val createdAt: Instant = Instant.now(),
     val isMultiFileRom: Boolean = false,
     val selectedFileIds: String? = null,
+    val addonSourceJson: String? = null,
     /**
      * RomM user who queued the download. The rom file itself is device-global and one copy serves
      * every account, so this is attribution for removal and pending-work accounting, not a

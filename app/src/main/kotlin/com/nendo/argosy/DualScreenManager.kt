@@ -1692,8 +1692,15 @@ class DualScreenManager(
     fun handleDirectAction(type: String, gameId: Long, channelName: String? = null, timestamp: Long? = null) {
         if (gameId < 0) return
         when (type) {
+            "COMMENTS", "SOURCES" -> {
+                companionHost?.onBackgroundForward()
+                onOpenOverlayFromCompanion("$OVERLAY_GAME_DETAIL:$gameId:${type.lowercase()}")
+            }
             "PLAY" -> handleDualPlay(gameId, channelName)
-            "DOWNLOAD" -> handleDualDownload(gameId)
+            "DOWNLOAD" -> if (gameRepository.usesAddonSources()) {
+                companionHost?.onBackgroundForward()
+                onOpenOverlayFromCompanion("$OVERLAY_GAME_DETAIL:$gameId:sources")
+            } else handleDualDownload(gameId)
             "REFRESH_METADATA" -> handleDualRefresh(gameId)
             "REFRESH_TITLE_ID" -> handleTitleIdRecheck(gameId)
             "RESYNC_PLATFORM" -> handleDualResyncPlatform(gameId)
@@ -3454,6 +3461,7 @@ class DualScreenManager(
         const val ACTION_WIZARD_STATE = "com.nendo.argosy.WIZARD_STATE"
         const val EXTRA_WIZARD_ACTIVE = "wizard_active"
         const val OVERLAY_MENU = "com.nendo.argosy.OVERLAY_MENU"
+        const val OVERLAY_GAME_DETAIL = "com.nendo.argosy.OVERLAY_GAME_DETAIL"
         const val OVERLAY_QUICK_MENU = "com.nendo.argosy.OVERLAY_QUICK_MENU"
         const val OVERLAY_QUICK_SETTINGS = "com.nendo.argosy.OVERLAY_QUICK_SETTINGS"
         private const val COMPANION_WATCHDOG_TIMEOUT_MS = 5000L

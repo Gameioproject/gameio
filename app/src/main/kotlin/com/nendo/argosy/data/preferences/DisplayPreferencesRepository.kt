@@ -638,7 +638,7 @@ class DisplayPreferencesRepository @Inject constructor(
     }
 
     suspend fun setHomeLibraryFilter(filter: HomeLibraryFilter) {
-        dataStore.edit { it[Keys.HOME_LIBRARY_FILTER] = filter.ordinal }
+        dataStore.edit { it[Keys.HOME_LIBRARY_FILTER] = filter.normalized().ordinal }
     }
 
     suspend fun setInstalledOnlyHome(enabled: Boolean) {

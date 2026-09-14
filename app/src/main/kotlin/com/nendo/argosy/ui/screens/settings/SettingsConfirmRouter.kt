@@ -137,10 +137,12 @@ internal fun routeConfirm(vm: SettingsViewModel): InputResult {
     val state = vm._uiState.value
     return when (state.currentSection) {
         SettingsSection.MAIN -> {
-            val item = mainSettingsItemAtFocusIndex(state.focusedIndex)
+            val item = mainSettingsItemAtFocusIndex(state.focusedIndex, state.server.supportUrl)
             when (item) {
                 is MainSettingsItem.Header -> Unit
                 MainSettingsItem.DeviceSettings -> vm.viewModelScope.launch { vm._openDeviceSettingsEvent.emit(Unit) }
+                MainSettingsItem.Addons -> vm.navigateToAddons()
+                MainSettingsItem.Support -> vm.supportGameio()
                 MainSettingsItem.RomM -> vm.navigateToSection(SettingsSection.ROMM)
                 MainSettingsItem.Saves -> vm.navigateToSection(SettingsSection.SAVES)
                 MainSettingsItem.RetroAchievements -> vm.navigateToSection(SettingsSection.RETRO_ACHIEVEMENTS)
@@ -1164,7 +1166,7 @@ private fun computeMaxFocusIndex(
     state: SettingsUiState,
     isConnected: Boolean
 ): Int = when (state.currentSection) {
-    SettingsSection.MAIN -> mainSettingsMaxFocusIndex()
+    SettingsSection.MAIN -> mainSettingsMaxFocusIndex(state.server.supportUrl)
     SettingsSection.ACCOUNTS -> if (state.accounts.signIn.active) {
         2
     } else if (state.accounts.switchInProgress) {
@@ -1334,5 +1336,4 @@ private fun routeBuiltinEmulatorConfirm(vm: SettingsViewModel, state: SettingsUi
     }
     return InputResult.HANDLED
 }
-
 

@@ -132,6 +132,8 @@ class RomMRepository @Inject constructor(
 
     fun getCapabilities(): RomMCapabilities = apiClient.getCapabilities()
 
+    fun usesAddonSources(): Boolean = apiClient.usesAddonSources()
+
     suspend fun fetchAndStorePlatforms(
         defaultSyncEnabled: Boolean = true
     ): RomMResult<List<PlatformEntity>> = apiClient.fetchAndStorePlatforms(defaultSyncEnabled)

@@ -47,6 +47,12 @@ interface DownloadQueueDao {
     @Query("DELETE FROM download_queue WHERE state = 'FAILED'")
     suspend fun clearFailed()
 
+    @Query("SELECT * FROM download_queue WHERE state = 'FAILED' AND addonSourceJson IS NOT NULL")
+    suspend fun getFailedAddonDownloads(): List<DownloadQueueEntity>
+
+    @Query("DELETE FROM download_queue WHERE state = 'FAILED' AND addonSourceJson IS NULL")
+    suspend fun clearLegacyFailed()
+
     @Query("DELETE FROM download_queue WHERE state IN ('COMPLETED', 'FAILED')")
     suspend fun clearFinished()
 

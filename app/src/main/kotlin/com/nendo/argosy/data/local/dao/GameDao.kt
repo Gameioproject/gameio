@@ -246,6 +246,15 @@ interface GameDao {
     suspend fun getGamesWithLocalPathInfo(): List<GameLocalPathInfo>
 
     @Query("""
+        SELECT id AS gameId, localPath FROM games WHERE localPath IS NOT NULL
+        UNION ALL SELECT gameId, localPath FROM game_files WHERE localPath IS NOT NULL
+        UNION ALL SELECT gameId, localPath FROM game_discs WHERE localPath IS NOT NULL
+        UNION ALL SELECT id AS gameId, m3uPath AS localPath FROM games WHERE m3uPath IS NOT NULL
+        UNION ALL SELECT gameId, m3uPath AS localPath FROM game_files WHERE m3uPath IS NOT NULL
+    """)
+    suspend fun getLocalFileOwners(): List<LocalFileOwner>
+
+    @Query("""
         SELECT id, platformId, localPath FROM games
         WHERE NOT EXISTS (SELECT 1 FROM user_roms_hidden h WHERE h.gameId = games.id AND (h.ownerUserId IS NULL OR h.ownerUserId IS :ownerUserId))
     """)
@@ -1191,6 +1200,8 @@ data class GameLocalPathInfo(
     val source: GameSource,
     val localPath: String?
 )
+
+data class LocalFileOwner(val gameId: Long, val localPath: String)
 
 data class GameStorageInfo(
     val id: Long,

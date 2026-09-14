@@ -48,6 +48,7 @@ internal fun SetupTextField(
     focusRequester: FocusRequester,
     placeholder: String? = null,
     isPassword: Boolean = false,
+    enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     onFocusChanged: ((Boolean) -> Unit)? = null
@@ -56,6 +57,7 @@ internal fun SetupTextField(
     val shape = RoundedCornerShape(Dimens.radiusMd)
     OutlinedTextField(
         value = value,
+        enabled = enabled,
         onValueChange = onValueChange,
         label = { Text(label) },
         placeholder = placeholder?.let { { Text(it) } },

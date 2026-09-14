@@ -24,6 +24,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChatBubbleOutline
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Circle
@@ -1148,6 +1150,8 @@ private fun OptionsTabContent(
             option, Icons.Filled.FolderSpecial,
             context.getString(R.string.dual_detail_option_add_to_collection)
         )
+        GameDetailOption.COMMENTS -> OptionEntry(option, Icons.Filled.ChatBubbleOutline, context.getString(R.string.comments_title))
+        GameDetailOption.SOURCES -> OptionEntry(option, Icons.Filled.Download, context.getString(R.string.game_sources_title))
         GameDetailOption.REFRESH_METADATA -> OptionEntry(
             option, Icons.Filled.Refresh,
             context.getString(R.string.dual_detail_option_refresh_metadata)
@@ -1171,7 +1175,7 @@ private fun OptionsTabContent(
         }
     }
 
-    val actionGroup = setOf(GameDetailOption.PLAY)
+    val actionGroup = setOf(GameDetailOption.PLAY, GameDetailOption.COMMENTS, GameDetailOption.SOURCES)
     val userDataGroup = setOf(
         GameDetailOption.RATING, GameDetailOption.DIFFICULTY,
         GameDetailOption.STATUS, GameDetailOption.TOGGLE_FAVORITE

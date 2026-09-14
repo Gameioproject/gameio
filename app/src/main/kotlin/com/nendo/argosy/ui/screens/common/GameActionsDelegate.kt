@@ -57,8 +57,8 @@ class GameActionsDelegate @Inject constructor(
 
     suspend fun removeFromLibrary(gameId: Long): Boolean = deleteGameUseCase.removeFromLibrary(gameId)
 
-    suspend fun queueDownload(gameId: Long): DownloadResult {
-        return downloadGameUseCase(gameId)
+    suspend fun queueDownload(gameId: Long, addonSource: com.nendo.argosy.data.addon.AddonSourceMatch? = null): DownloadResult {
+        return downloadGameUseCase(gameId, addonSource = addonSource)
     }
 
     suspend fun repairMissingDiscs(gameId: Long): DownloadResult {

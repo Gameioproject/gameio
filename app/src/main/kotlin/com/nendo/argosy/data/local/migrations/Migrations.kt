@@ -3509,3 +3509,9 @@ object Migration_179_180 : Migration(179, 180) {
         db.execSQL("ALTER TABLE `media_items` ADD COLUMN `gradientColors` TEXT")
     }
 }
+
+object Migration_180_181 : Migration(180, 181) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `download_queue` ADD COLUMN `addonSourceJson` TEXT")
+    }
+}

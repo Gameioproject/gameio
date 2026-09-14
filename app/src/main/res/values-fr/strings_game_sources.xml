@@ -1,0 +1,11 @@
+<resources>
+    <string name="game_sources_title">Sources du jeu</string>
+    <string name="game_sources_checking">Recherche des sources…</string>
+    <string name="game_sources_on_device">Ce jeu est sur votre appareil. Vous pouvez jouer sans extension.</string>
+    <string name="game_sources_import_prompt">Importez une extension pour trouver un téléchargement. Les jeux de votre dossier restent disponibles.</string>
+    <string name="game_sources_missing">Vos extensions ne proposent pas encore de source pour ce jeu.</string>
+    <string name="game_sources_choose">Choisissez une source à télécharger.</string>
+    <string name="game_sources_retry">Vérifier à nouveau</string>
+    <string name="game_sources_manage">Gérer les extensions</string>
+    <string name="game_sources_close">Fermer</string>
+</resources>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="game_sources_title">गेम के स्रोत</string>
+    <string name="game_sources_checking">स्रोत जाँचे जा रहे हैं…</string>
+    <string name="game_sources_on_device">यह गेम आपके डिवाइस पर है। आप ऐड-ऑन के बिना खेल सकते हैं।</string>
+    <string name="game_sources_import_prompt">डाउनलोड खोजने के लिए ऐड-ऑन आयात करें। आपके फ़ोल्डर के गेम हमेशा उपलब्ध रहते हैं।</string>
+    <string name="game_sources_missing">आपके ऐड-ऑन में इस गेम का स्रोत अभी नहीं है।</string>
+    <string name="game_sources_choose">डाउनलोड के लिए स्रोत चुनें।</string>
+    <string name="game_sources_retry">फिर से जाँचें</string>
+    <string name="game_sources_manage">ऐड-ऑन प्रबंधित करें</string>
+    <string name="game_sources_close">बंद करें</string>
+</resources>

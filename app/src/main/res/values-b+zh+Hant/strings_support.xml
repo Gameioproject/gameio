@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="support_gameio_title">支持 Gameio</string>
+    <string name="support_gameio_subtitle">幫助 Gameio 持續成長。將在瀏覽器中開啟支持頁面。</string>
+    <string name="support_gameio_browser_error">無法開啟連結。請安裝瀏覽器後重試。</string>
+</resources>

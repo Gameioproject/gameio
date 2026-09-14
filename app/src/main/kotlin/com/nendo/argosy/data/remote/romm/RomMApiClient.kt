@@ -32,6 +32,8 @@ class RomMApiClient @Inject constructor(
 
     fun getCapabilities(): RomMCapabilities = connectionManager.getCapabilities()
 
+    fun usesAddonSources(): Boolean = connectionManager.usesAddonSources()
+
     fun buildRomsQueryParams(
         platformId: Long? = null,
         searchTerm: String? = null,

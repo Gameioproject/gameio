@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
@@ -78,6 +79,7 @@ data class DownloadProgress(
     val bytesPerSecond: Long = 0,
     val statusMessage: String? = null,
     val selectedFileIds: List<Long>? = null,
+    val addonSourceJson: String? = null,
     /**
      * What the storage gate asked for when it held this download back, which is the transfer plus
      * the room its unpack needs, not the transfer alone. Null until a gate refuses.
@@ -162,7 +164,10 @@ class DownloadManager @Inject constructor(
     private val homeTileRepository: com.nendo.argosy.data.repository.HomeTileRepository,
     private val homeTilePromptQueue: com.nendo.argosy.data.repository.HomeTilePromptQueue,
     private val extContentOrganizer: ExtContentOrganizer,
-    private val romStagingManager: RomStagingManager
+    private val romStagingManager: RomStagingManager,
+    private val addonDownloads: com.nendo.argosy.data.addon.AddonDownloadService,
+    private val addonVerifier: com.nendo.argosy.data.addon.AddonFileVerifier,
+    private val addonStorage: com.nendo.argosy.data.addon.AddonDownloadStorage
 ) {
     private val _state = MutableStateFlow(DownloadQueueState())
     val state: StateFlow<DownloadQueueState> = _state.asStateFlow()
@@ -223,16 +228,18 @@ class DownloadManager @Inject constructor(
 
     private suspend fun restoreQueueFromDatabase() {
         Log.d(TAG, "restoreQueueFromDatabase: starting")
-        downloadQueueDao.clearFailed()
+        val failedAddons = downloadQueueDao.getFailedAddonDownloads()
+        downloadQueueDao.clearLegacyFailed()
         downloadQueueDao.clearCompleted()
 
         val pending = downloadQueueDao.getPendingDownloads()
         Log.d(TAG, "restoreQueueFromDatabase: found ${pending.size} pending downloads")
         pending.forEach { Log.d(TAG, "  - ${it.gameTitle}: state=${it.state}, bytes=${it.bytesDownloaded}/${it.totalBytes}") }
 
-        sweepAbandonedStaging(pending.map { it.id }.toSet())
+        sweepAbandonedStaging((pending + failedAddons).map { it.id }.toSet())
 
         if (pending.isEmpty()) {
+            _state.update { it.copy(completed = failedAddons.map { row -> row.toDownloadProgress() }) }
             updateAvailableStorage()
             return
         }
@@ -261,6 +268,7 @@ class DownloadManager @Inject constructor(
 
         _state.value = DownloadQueueState(
             queue = restored,
+            completed = failedAddons.map { it.toDownloadProgress() },
             availableStorageBytes = getGlobalStorageBytes()
         )
 
@@ -304,6 +312,21 @@ class DownloadManager @Inject constructor(
         }
     }
 
+    private suspend fun getInstallDir(progress: DownloadProgress, create: Boolean = true): File = withContext(Dispatchers.IO) {
+        val platformDir = getDownloadDir(progress.platformSlug)
+        progress.addonSourceJson?.let {
+            addonStorage.directory(platformDir, progress.gameId, it, create)
+        } ?: platformDir
+    }
+
+    private suspend fun validateStaging(area: StagingArea, progress: DownloadProgress) = withContext(Dispatchers.IO) {
+        if (progress.addonSourceJson == null) return@withContext
+        if (area.manifest.gameId != progress.gameId) {
+            throw com.nendo.argosy.data.addon.AddonException(com.nendo.argosy.data.addon.AddonFailure.STORAGE)
+        }
+        addonStorage.requireDestination(getInstallDir(progress), area.destinationDir)
+    }
+
     private sealed class StoragePlan {
         data class Staged(val destinationDir: File) : StoragePlan()
         data object Direct : StoragePlan()
@@ -326,7 +349,7 @@ class DownloadManager @Inject constructor(
      */
     private suspend fun planStorage(progress: DownloadProgress, claimStaging: Boolean): StoragePlan =
         withContext(Dispatchers.IO) {
-            val destinationDir = getDownloadDir(progress.platformSlug)
+            val destinationDir = getInstallDir(progress)
             val destinationFree = romStagingManager.availableBytes(destinationDir)
             val remainingArchive = (progress.totalBytes - progress.bytesDownloaded).coerceAtLeast(0L)
             val expands = !progress.isGameFileDownload &&
@@ -402,7 +425,7 @@ class DownloadManager @Inject constructor(
     }
 
     private suspend fun startDownloadJob(progress: DownloadProgress) {
-        val plan = planStorage(progress, claimStaging = true)
+        val plan = planOrFail(progress) ?: return
         val availableStorage = getAvailableStorageBytes(progress.platformSlug)
 
         if (plan is StoragePlan.Insufficient) {
@@ -542,7 +565,8 @@ class DownloadManager @Inject constructor(
         coverPath: String?,
         expectedSizeBytes: Long = 0,
         isMultiFileRom: Boolean = false,
-        selectedFileIds: List<Long>? = null
+        selectedFileIds: List<Long>? = null,
+        addonSourceJson: String? = null
     ) {
         val effectiveMultiFile = isMultiFileRom || (selectedFileIds?.size ?: 0) > 1
         val currentState = _state.value
@@ -550,17 +574,37 @@ class DownloadManager @Inject constructor(
         if (currentState.queue.any { it.gameId == gameId }) return
 
         val existing = downloadQueueDao.getByGameId(gameId)
+        if (addonSourceJson != null && existing?.addonSourceJson == addonSourceJson &&
+            existing.fileName == FileNames.sanitize(fileName) && existing.platformSlug == platformSlug) {
+            val resumed = existing.toDownloadProgress().copy(state = DownloadState.QUEUED, errorReason = null)
+            getInstallDir(resumed)
+            downloadQueueDao.updateState(existing.id, DownloadState.QUEUED.name)
+            _state.update { it.copy(queue = it.queue + resumed, completed = it.completed.filter { row -> row.id != existing.id }) }
+            processQueue()
+            return
+        }
         if (existing != null) {
             Log.d(TAG, "enqueueDownload: clearing stale queue entry for $gameTitle (state=${existing.state})")
-            existing.tempFilePath?.let { path ->
-                val tempFile = File(path)
-                if (tempFile.exists()) tempFile.delete()
+            if (existing.addonSourceJson != null) {
+                deleteOwnedPartial(existing.toDownloadProgress())
+                discardStagingFor(existing.id, existing.toDownloadProgress())
+            } else if (addonSourceJson == null) {
+                existing.tempFilePath?.let { path ->
+                    val tempFile = File(path)
+                    if (tempFile.exists()) tempFile.delete()
+                }
+                discardStagingFor(existing.id)
+            } else {
+                discardStagingFor(existing.id, removeDestinationPartials = false)
             }
-            discardStagingFor(existing.id)
             downloadQueueDao.deleteByGameId(gameId)
         }
 
-        val platformDir = getDownloadDir(platformSlug)
+        val platformDir = withContext(Dispatchers.IO) {
+            addonSourceJson?.let {
+                addonStorage.directory(getDownloadDir(platformSlug), gameId, it)
+            } ?: getDownloadDir(platformSlug)
+        }
         val diskFileName = FileNames.sanitize(fileName)
         val tempFilePath = File(platformDir, "${diskFileName}.tmp").absolutePath
 
@@ -579,6 +623,7 @@ class DownloadManager @Inject constructor(
             createdAt = Instant.now(),
             isMultiFileRom = effectiveMultiFile,
             selectedFileIds = selectedFileIds?.joinToString(","),
+            addonSourceJson = addonSourceJson,
             ownerUserId = syncPreferencesRepository.getRommUserId()
         )
 
@@ -601,15 +646,14 @@ class DownloadManager @Inject constructor(
             totalBytes = expectedSizeBytes,
             state = DownloadState.QUEUED,
             isMultiFileRom = effectiveMultiFile,
-            selectedFileIds = selectedFileIds
+            selectedFileIds = selectedFileIds,
+            addonSourceJson = addonSourceJson
         )
 
         if (isInstantDownload(expectedSizeBytes)) {
             startDownloadJob(progress)
         } else {
-            _state.value = _state.value.copy(
-                queue = _state.value.queue + progress
-            )
+            _state.update { it.copy(queue = it.queue + progress) }
             processQueue()
         }
     }
@@ -924,7 +968,9 @@ class DownloadManager @Inject constructor(
     }
 
     private suspend fun processQueue() {
-        if (!romMRepository.isConnected()) {
+        if (!romMRepository.isConnected() && _state.value.queue.none {
+                it.state == DownloadState.QUEUED && it.addonSourceJson != null
+            }) {
             Log.d(TAG, "processQueue: waiting for RomM connection")
             val connected = withTimeoutOrNull(CONNECTION_WAIT_TIMEOUT_MS) {
                 romMRepository.connectionState.first { it is ConnectionState.Connected }
@@ -949,7 +995,10 @@ class DownloadManager @Inject constructor(
 
         val slotsAvailable = maxConcurrent - currentActive
         val nextItems = _state.value.queue
-            .filter { it.state == DownloadState.QUEUED }
+            .filter {
+                it.state == DownloadState.QUEUED &&
+                    (it.addonSourceJson != null || romMRepository.isConnected())
+            }
             .take(slotsAvailable)
 
         Log.d(TAG, "processQueue: found ${nextItems.size} QUEUED items to process")
@@ -966,7 +1015,7 @@ class DownloadManager @Inject constructor(
                 continue
             }
 
-            val plan = planStorage(next, claimStaging = true)
+            val plan = planOrFail(next) ?: continue
             val availableStorage = getAvailableStorageBytes(next.platformSlug)
 
             if (plan is StoragePlan.Insufficient) {
@@ -1004,16 +1053,28 @@ class DownloadManager @Inject constructor(
         }
     }
 
+    private suspend fun planOrFail(progress: DownloadProgress): StoragePlan? = try {
+        planStorage(progress, claimStaging = true)
+    } catch (e: com.nendo.argosy.data.addon.AddonException) {
+        _state.update { it.copy(queue = it.queue.filter { row -> row.id != progress.id }) }
+        settleDownload(progress, DownloadResult.Failure(DownloadFailureReason.Addon(e.reason)))
+        null
+    }
+
     private suspend fun downloadRom(
         progress: DownloadProgress,
         plan: StoragePlan = StoragePlan.Direct
     ): DownloadResult =
         withContext(Dispatchers.IO) {
             try {
-                val platformDir = getDownloadDir(progress.platformSlug)
+                if (progress.addonSourceJson == null && romMRepository.usesAddonSources()) {
+                    throw com.nendo.argosy.data.addon.AddonException(com.nendo.argosy.data.addon.AddonFailure.NO_ADDONS)
+                }
+                val platformDir = getInstallDir(progress)
 
                 val carriedOver = romStagingManager.list()
                     .firstOrNull { it.manifest.downloadId == progress.id }
+                carriedOver?.let { validateStaging(it, progress) }
                 if (carriedOver?.manifest?.phase == StagingPhase.MOVING) {
                     return@withContext resumeStagedDeploy(carriedOver, progress)
                 }
@@ -1056,13 +1117,18 @@ class DownloadManager @Inject constructor(
 
                 val tempFile = File(downloadDir, "${progress.fileName}.tmp")
                 val targetFile = File(downloadDir, progress.fileName)
+                if (progress.addonSourceJson != null) {
+                    addonStorage.requireContained(downloadDir, tempFile)
+                    addonStorage.requireContained(downloadDir, targetFile)
+                }
 
                 if (targetFile.exists() && targetFile.length() >= progress.totalBytes && progress.totalBytes > 0) {
                     Log.d(TAG, "Target file already complete (${targetFile.length()} bytes), finalizing")
+                    verifyAddonTransfer(targetFile, progress)
                     return@withContext finalizeCompletedFile(targetFile, platformDir, progress, stagingArea)
                 }
 
-                val existingBytes = if (tempFile.exists()) tempFile.length() else 0L
+                var existingBytes = if (tempFile.exists()) tempFile.length() else 0L
 
                 // Temp file already has all the bytes (e.g., app was killed after download
                 // finished but before the rename). Promote it directly instead of requesting
@@ -1070,11 +1136,14 @@ class DownloadManager @Inject constructor(
                 if (existingBytes > 0 && progress.totalBytes > 0) {
                     if (existingBytes == progress.totalBytes) {
                         Log.d(TAG, "Temp file matches expected size ($existingBytes bytes), promoting to target")
-                        promoteTempFile(tempFile, targetFile)
+                        promoteVerifiedTempFile(tempFile, targetFile, progress)
                         return@withContext finalizeCompletedFile(targetFile, platformDir, progress, stagingArea)
                     } else if (existingBytes > progress.totalBytes) {
                         Log.w(TAG, "Temp file oversized ($existingBytes > ${progress.totalBytes}), deleting")
-                        tempFile.delete()
+                        if (!tempFile.delete()) {
+                            throw java.io.IOException("Could not restart oversized partial download")
+                        }
+                        existingBytes = 0L
                     }
                 }
 
@@ -1087,7 +1156,11 @@ class DownloadManager @Inject constructor(
                         "endpoint=$endpoint id=${progress.rommId} file=${progress.fileName} " +
                         "dir=${downloadDir.name} resume=${rangeHeader != null}"
                 )
-                val downloadCall = if (progress.isGameFileDownload) {
+                val downloadCall = if (progress.addonSourceJson != null) {
+                    addonDownloads.open(progress.addonSourceJson, rangeHeader)
+                } else if (romMRepository.usesAddonSources()) {
+                    throw com.nendo.argosy.data.addon.AddonException(com.nendo.argosy.data.addon.AddonFailure.NO_ADDONS)
+                } else if (progress.isGameFileDownload) {
                     romMRepository.downloadRomFile(progress.rommId, progress.fileName, rangeHeader)
                 } else {
                     romMRepository.downloadRom(
@@ -1103,6 +1176,7 @@ class DownloadManager @Inject constructor(
                         val contentLength = body.contentLength()
 
                         if (INVALID_CONTENT_TYPES.any { contentType.startsWith(it) }) {
+                            body.close()
                             return@withContext DownloadResult.Failure(
                                 DownloadFailureReason.InvalidContentType(contentType)
                             )
@@ -1120,6 +1194,7 @@ class DownloadManager @Inject constructor(
                         }
 
                         if (totalSize > 0 && totalSize < MIN_ROM_SIZE_BYTES) {
+                            body.close()
                             return@withContext DownloadResult.Failure(DownloadFailureReason.FileTooSmall)
                         }
 
@@ -1199,7 +1274,8 @@ class DownloadManager @Inject constructor(
                                 )
                                 downloadQueueDao.updateProgress(progress.id, bytesRead)
 
-                                promoteTempFile(tempFile, targetFile)
+                                output.flush()
+                                promoteVerifiedTempFile(tempFile, targetFile, progress)
                                 finalizeCompletedFile(
                                     targetFile, platformDir,
                                     progress.copy(totalBytes = totalSize), stagingArea
@@ -1212,7 +1288,7 @@ class DownloadManager @Inject constructor(
                             val tempSize = tempFile.length()
                             if (progress.totalBytes > 0 && tempSize == progress.totalBytes) {
                                 Log.w(TAG, "416: temp file ($tempSize bytes) matches expected, promoting as complete")
-                                promoteTempFile(tempFile, targetFile)
+                                promoteVerifiedTempFile(tempFile, targetFile, progress)
                                 return@withContext finalizeCompletedFile(targetFile, platformDir, progress, stagingArea)
                             } else {
                                 Log.w(TAG, "416: temp file ($tempSize bytes) vs expected (${progress.totalBytes}), deleting and retrying")
@@ -1229,6 +1305,8 @@ class DownloadManager @Inject constructor(
                         DownloadResult.Failure(DownloadFailureReason.ServerError(result.message))
                     }
                 }
+            } catch (e: com.nendo.argosy.data.addon.AddonException) {
+                DownloadResult.Failure(DownloadFailureReason.Addon(e.reason))
             } catch (_: CancellationException) {
                 DownloadResult.Cancelled
             } catch (e: Exception) {
@@ -1294,6 +1372,9 @@ class DownloadManager @Inject constructor(
         platformDir: File
     ): DownloadResult {
         var finalPath = deployedPath
+        if (progress.addonSourceJson != null) {
+            addonStorage.requireContained(getInstallDir(progress), File(finalPath))
+        }
         Log.d(TAG, "linkCompletedDownload: path=$finalPath, gameTitle=${progress.gameTitle}")
 
         if (progress.isGameFileDownload && !File(finalPath).exists()) {
@@ -1314,7 +1395,7 @@ class DownloadManager @Inject constructor(
         ) {
             val combined = if (extContentOrganizer.usesCombinedLayout(progress.gameId)) {
                 gameDao.getById(progress.gameId)?.copy(localPath = finalPath)?.let { game ->
-                    extContentOrganizer.enforceCombinedLayout(game, getDownloadDir(progress.platformSlug))
+                    extContentOrganizer.enforceCombinedLayout(game, platformDir)
                 }
             } else {
                 null
@@ -1322,7 +1403,7 @@ class DownloadManager @Inject constructor(
             if (combined != null) {
                 finalPath = combined.absolutePath
             } else {
-                extContentOrganizer.consolidate(finalPath, getDownloadDir(progress.platformSlug))
+                extContentOrganizer.consolidate(finalPath, platformDir)
             }
         }
 
@@ -1482,6 +1563,7 @@ class DownloadManager @Inject constructor(
         area: StagingArea,
         progress: DownloadProgress
     ): StagedDeployResult {
+        validateStaging(area, progress)
         val relative = area.manifest.launchRelPath
             ?: return StagedDeployResult.Failure(DownloadResult.Failure(DownloadFailureReason.StagedPathMissing))
         val destinationDir = area.destinationDir
@@ -1550,7 +1632,7 @@ class DownloadManager @Inject constructor(
     }
 
     private suspend fun resumeStagedDeploy(area: StagingArea, progress: DownloadProgress): DownloadResult {
-        val platformDir = getDownloadDir(progress.platformSlug)
+        val platformDir = getInstallDir(progress)
         Logger.info(TAG, "Resuming interrupted move | game=${progress.gameTitle}")
         return when (val deployed = deployStagedArea(area, progress)) {
             is StagedDeployResult.Success ->
@@ -1587,6 +1669,27 @@ class DownloadManager @Inject constructor(
         if (freed > 0) attributionRepository.markDirty(StorageCategory.ROM_STAGING)
         Logger.info(TAG, "Cleaned abandoned download staging | bytes=$freed")
         return freed
+    }
+
+    private suspend fun promoteVerifiedTempFile(tempFile: File, targetFile: File, progress: DownloadProgress) {
+        verifyAddonTransfer(tempFile, progress)
+        promoteTempFile(tempFile, targetFile)
+    }
+
+    private suspend fun verifyAddonTransfer(file: File, progress: DownloadProgress) {
+        val sourceJson = progress.addonSourceJson ?: return
+        try {
+            addonVerifier.verify(file, sourceJson)
+        } catch (e: com.nendo.argosy.data.addon.AddonException) {
+            if (e.reason == com.nendo.argosy.data.addon.AddonFailure.INTEGRITY) {
+                val retained = File(file.parentFile, "${file.name}.${progress.id}.${System.currentTimeMillis()}.invalid")
+                if (!file.renameTo(retained)) {
+                    throw com.nendo.argosy.data.addon.AddonException(com.nendo.argosy.data.addon.AddonFailure.STORAGE, e)
+                }
+                downloadQueueDao.updateProgress(progress.id, 0)
+            }
+            throw e
+        }
     }
 
     private fun promoteTempFile(tempFile: File, targetFile: File) {
@@ -1854,13 +1957,15 @@ class DownloadManager @Inject constructor(
             downloadJobs[active.id]?.cancel()
             downloadJobs.remove(active.id)
             scope.launch {
-                downloadQueueDao.deleteById(active.id)
-                withContext(Dispatchers.IO) {
+                if (active.addonSourceJson != null) {
+                    deleteOwnedPartial(active)
+                } else withContext(Dispatchers.IO) {
                     val platformDir = getDownloadDir(active.platformSlug)
                     val tempFile = File(platformDir, "${active.fileName}.tmp")
                     if (tempFile.exists()) tempFile.delete()
                 }
-                discardStagingFor(active.id)
+                discardStagingFor(active.id, active)
+                downloadQueueDao.deleteById(active.id)
             }
             _state.value = _state.value.copy(
                 activeDownloads = _state.value.activeDownloads.filter { it.id != active.id }
@@ -1870,13 +1975,15 @@ class DownloadManager @Inject constructor(
             val queued = _state.value.queue.find { it.rommId == rommId }
             if (queued != null) {
                 scope.launch {
-                    downloadQueueDao.deleteById(queued.id)
-                    withContext(Dispatchers.IO) {
+                    if (queued.addonSourceJson != null) {
+                        deleteOwnedPartial(queued)
+                    } else withContext(Dispatchers.IO) {
                         val platformDir = getDownloadDir(queued.platformSlug)
                         val tempFile = File(platformDir, "${queued.fileName}.tmp")
                         if (tempFile.exists()) tempFile.delete()
                     }
-                    discardStagingFor(queued.id)
+                    discardStagingFor(queued.id, queued)
+                    downloadQueueDao.deleteById(queued.id)
                 }
                 _state.value = _state.value.copy(
                     queue = _state.value.queue.filter { it.rommId != rommId }
@@ -1912,6 +2019,17 @@ class DownloadManager @Inject constructor(
         val item = _state.value.completed.find { it.id == downloadId } ?: return
 
         scope.launch {
+            if (item.addonSourceJson != null) {
+                downloadQueueDao.updateState(downloadId, DownloadState.QUEUED.name)
+                _state.update { current ->
+                    current.copy(
+                        completed = current.completed.filter { it.id != downloadId },
+                        queue = current.queue + item.copy(state = DownloadState.QUEUED, errorReason = null)
+                    )
+                }
+                processQueue()
+                return@launch
+            }
             downloadQueueDao.deleteById(downloadId)
 
             _state.value = _state.value.copy(
@@ -1952,15 +2070,31 @@ class DownloadManager @Inject constructor(
                     coverPath = item.coverPath,
                     expectedSizeBytes = item.totalBytes,
                     isMultiFileRom = item.isMultiFileRom,
-                    selectedFileIds = item.selectedFileIds
+                    selectedFileIds = item.selectedFileIds,
+                    addonSourceJson = item.addonSourceJson
                 )
             }
         }
     }
 
-    suspend fun getDownloadPath(platformSlug: String, fileName: String): File {
-        val platformDir = getDownloadDir(platformSlug)
-        return File(platformDir, fileName)
+    suspend fun getDownloadPath(entry: DownloadQueueEntity): File = withContext(Dispatchers.IO) {
+        if (entry.addonSourceJson == null && romMRepository.usesAddonSources()) {
+            throw com.nendo.argosy.data.addon.AddonException(com.nendo.argosy.data.addon.AddonFailure.NO_ADDONS)
+        }
+        val progress = entry.toDownloadProgress()
+        if (entry.addonSourceJson != null) {
+            val staged = romStagingManager.list().firstOrNull { it.manifest.downloadId == entry.id }
+            if (staged != null) {
+                validateStaging(staged, progress)
+                return@withContext File(staged.archiveDir, entry.fileName).also {
+                    addonStorage.requireContained(staged.archiveDir, it)
+                }
+            }
+        }
+        val directory = getInstallDir(progress, create = false)
+        File(directory, entry.fileName).also {
+            if (entry.addonSourceJson != null) addonStorage.requireContained(directory, it)
+        }
     }
 
     sealed class ExtractionResult {
@@ -1971,6 +2105,11 @@ class DownloadManager @Inject constructor(
     suspend fun retryExtraction(gameId: Long): ExtractionResult {
         val queueEntry = downloadQueueDao.getByGameId(gameId)
             ?: return ExtractionResult.Failure(DownloadFailureReason.NoDownloadEntryFound)
+
+        if (queueEntry.addonSourceJson != null) return retryAddonExtraction(queueEntry)
+        if (romMRepository.usesAddonSources()) {
+            return ExtractionResult.Failure(DownloadFailureReason.Addon(com.nendo.argosy.data.addon.AddonFailure.NO_ADDONS))
+        }
 
         val platformDir = getDownloadDir(queueEntry.platformSlug)
         val targetFile = File(platformDir, queueEntry.fileName)
@@ -2041,28 +2180,88 @@ class DownloadManager @Inject constructor(
         }
     }
 
-    suspend fun deleteFileAndRedownload(gameId: Long) {
+    suspend fun deleteFileAndRedownload(gameId: Long) = withContext(Dispatchers.IO) {
         val queueEntry = downloadQueueDao.getByGameId(gameId)
         if (queueEntry != null) {
-            val platformDir = getDownloadDir(queueEntry.platformSlug)
+            if (queueEntry.addonSourceJson == null && romMRepository.usesAddonSources()) {
+                discardStagingFor(queueEntry.id, removeDestinationPartials = false)
+                downloadQueueDao.deleteByGameId(gameId)
+                return@withContext
+            }
+            val progress = queueEntry.toDownloadProgress()
+            val platformDir = getInstallDir(progress, create = false)
             val targetFile = File(platformDir, queueEntry.fileName)
             val tempFile = File(platformDir, "${queueEntry.fileName}.tmp")
+            if (queueEntry.addonSourceJson != null) {
+                addonStorage.requireContained(platformDir, targetFile)
+                addonStorage.requireContained(platformDir, tempFile)
+            }
 
             if (targetFile.exists()) targetFile.delete()
             if (tempFile.exists()) tempFile.delete()
 
-            discardStagingFor(queueEntry.id)
+            discardStagingFor(queueEntry.id, progress)
             downloadQueueDao.deleteByGameId(gameId)
         }
     }
 
-    private suspend fun discardStagingFor(downloadId: Long) {
+    private suspend fun discardStagingFor(
+        downloadId: Long,
+        progress: DownloadProgress? = null,
+        removeDestinationPartials: Boolean = true
+    ) {
         val discarded = withContext(Dispatchers.IO) {
             romStagingManager.list()
                 .firstOrNull { it.manifest.downloadId == downloadId }
-                ?.also { romStagingManager.discard(it) }
+                ?.also {
+                    if (progress != null) validateStaging(it, progress)
+                    romStagingManager.discard(it, removeDestinationPartials)
+                }
         }
         if (discarded != null) attributionRepository.markDirty(StorageCategory.ROM_STAGING)
+    }
+
+    private suspend fun deleteOwnedPartial(progress: DownloadProgress) = withContext(Dispatchers.IO) {
+        val directory = getInstallDir(progress, create = false)
+        val partial = File(directory, "${progress.fileName}.tmp")
+        addonStorage.requireContained(directory, partial)
+        if (partial.exists() && !partial.delete()) {
+            throw com.nendo.argosy.data.addon.AddonException(com.nendo.argosy.data.addon.AddonFailure.STORAGE)
+        }
+    }
+
+    private suspend fun retryAddonExtraction(entry: DownloadQueueEntity): ExtractionResult = withContext(Dispatchers.IO) {
+        val progress = entry.toDownloadProgress()
+        try {
+            val directory = getInstallDir(progress)
+            val area = romStagingManager.list().firstOrNull { it.manifest.downloadId == entry.id }
+            area?.let { validateStaging(it, progress) }
+            val result = if (area?.manifest?.phase == StagingPhase.MOVING) {
+                resumeStagedDeploy(area, progress)
+            } else {
+                val target = getDownloadPath(entry)
+                if (!target.isFile) return@withContext ExtractionResult.Failure(DownloadFailureReason.DownloadedFileNoLongerExists)
+                verifyAddonTransfer(target, progress)
+                finalizeCompletedFile(target, directory, progress, area)
+            }
+            when (result) {
+                is DownloadResult.Success -> {
+                    downloadQueueDao.deleteById(entry.id)
+                    val path = gameDao.getById(entry.gameId)?.localPath
+                        ?: return@withContext ExtractionResult.Failure(DownloadFailureReason.DownloadedFileMissing)
+                    ExtractionResult.Success(path)
+                }
+                is DownloadResult.Failure -> ExtractionResult.Failure(result.reason)
+                is DownloadResult.WaitingForStorage -> ExtractionResult.Failure(result.reason)
+                DownloadResult.Cancelled -> throw CancellationException()
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: com.nendo.argosy.data.addon.AddonException) {
+            ExtractionResult.Failure(DownloadFailureReason.Addon(e.reason))
+        } catch (e: Exception) {
+            ExtractionResult.Failure(DownloadFailureReason.ExtractionFailed(e.message))
+        }
     }
 
     private suspend fun relocateSoundtrackFiles(
@@ -2141,6 +2340,7 @@ class DownloadManager @Inject constructor(
             },
             errorReason = DownloadFailureReasonCodec.decode(errorReason),
             isMultiFileRom = isMultiFileRom,
+            addonSourceJson = addonSourceJson,
             selectedFileIds = selectedFileIds
                 ?.split(",")?.mapNotNull { it.trim().toLongOrNull() }
                 ?.takeIf { it.isNotEmpty() }

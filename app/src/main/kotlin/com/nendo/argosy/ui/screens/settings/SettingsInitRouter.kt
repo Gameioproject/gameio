@@ -15,6 +15,7 @@ import com.nendo.argosy.libretro.LibretroCoreRegistry
 import com.nendo.argosy.core.input.ControllerDetector
 import com.nendo.argosy.core.input.DetectedLayout
 import com.nendo.argosy.ui.screens.settings.delegates.StorageSettingsDelegate
+import com.nendo.argosy.ui.screens.settings.sections.mainSettingsMaxFocusIndex
 import com.nendo.argosy.util.AppPaths
 import com.nendo.argosy.R
 import kotlinx.coroutines.delay
@@ -82,7 +83,14 @@ internal fun routeObserveDelegateStates(vm: SettingsViewModel) {
     }.launchIn(vm.viewModelScope)
 
     vm.serverDelegate.state.onEach { server ->
-        vm._uiState.update { it.copy(server = server) }
+        vm._uiState.update {
+            it.copy(
+                server = server,
+                focusedIndex = if (it.currentSection == SettingsSection.MAIN) {
+                    it.focusedIndex.coerceAtMost(mainSettingsMaxFocusIndex(server.supportUrl))
+                } else it.focusedIndex
+            )
+        }
     }.launchIn(vm.viewModelScope)
 
     vm.accountsDelegate.state.onEach { accounts ->
@@ -264,7 +272,8 @@ internal fun routeObserveConnectionState(vm: SettingsViewModel) {
             connectionStatus = status,
             rommVersion = version,
             screenshotUploadSupported = screenshotUpload,
-            musicApiSupported = musicApi
+            musicApiSupported = musicApi,
+            supportUrl = (connectionState as? ConnectionState.Connected)?.capabilities?.supportUrl
         ))
         vm.soundsDelegate.setMusicApiSupported(musicApi)
     }.launchIn(vm.viewModelScope)
@@ -652,7 +661,8 @@ internal fun routeLoadSettings(vm: SettingsViewModel) {
             screenshotUploadSupported = (connectionState as? ConnectionState.Connected)
                 ?.capabilities?.supportsScreenshotUpload == true,
             musicApiSupported = (connectionState as? ConnectionState.Connected)
-                ?.capabilities?.supportsMusicApi == true
+                ?.capabilities?.supportsMusicApi == true,
+            supportUrl = (connectionState as? ConnectionState.Connected)?.capabilities?.supportUrl
         ))
 
         val jellyfinInFlight = vm.jellyfinDelegate.state.value

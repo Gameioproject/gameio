@@ -1,0 +1,11 @@
+<resources>
+    <string name="game_sources_title">Game sources</string>
+    <string name="game_sources_checking">Checking sources…</string>
+    <string name="game_sources_on_device">This game is on your device. You can play without an add-on.</string>
+    <string name="game_sources_import_prompt">Import an add-on to find a download. Games in your folder always work.</string>
+    <string name="game_sources_missing">Your add-ons have no source for this game yet.</string>
+    <string name="game_sources_choose">Choose a source to download.</string>
+    <string name="game_sources_retry">Check again</string>
+    <string name="game_sources_manage">Manage add-ons</string>
+    <string name="game_sources_close">Close</string>
+</resources>

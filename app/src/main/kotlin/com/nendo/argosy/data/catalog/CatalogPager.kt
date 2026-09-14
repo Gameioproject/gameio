@@ -46,10 +46,6 @@ class CatalogPager @Inject constructor(
     /** Platforms whose last request came back short, meaning the server has nothing more. */
     private val exhausted = mutableSetOf<Long>()
 
-    /** The owned (downloadable) subset is paged separately; its offsets are its own. */
-    private val ownedLoaded = mutableMapOf<Long, Int>()
-    private val ownedExhausted = mutableSetOf<Long>()
-
     /** The A-Z index per platform; it only changes when the server's catalog does. */
     private val sectionCache =
         mutableMapOf<Long, List<com.nendo.argosy.data.remote.romm.RomMNameSection>>()
@@ -197,53 +193,11 @@ class CatalogPager @Inject constructor(
             wrote > 0
         }
 
-    /**
-     * Pull the platform's downloadable games (the server's owned subset) through [want] rows. The
-     * owned games sit anywhere in name order, so paging the whole catalog would only ever surface
-     * the few that happen to fall inside the scrolled window; this asks for exactly that subset.
-     */
-    suspend fun ensureAvailable(platformId: Long, want: Int): Boolean {
-        if (!isCatalogOnly() || platformId in ownedExhausted) {
-            markSettled(platformId)
-            return false
-        }
-        val have = ownedLoaded[platformId] ?: 0
-        if (have >= want) return false
-        return mutex.withLock {
-            var offset = ownedLoaded[platformId] ?: 0
-            var wrote = 0
-            while (offset < want) {
-                val fetched = librarySync.get().fetchCatalogPage(
-                    platformId = platformId,
-                    limit = PAGE_SIZE,
-                    offset = offset,
-                    ownedOnly = true
-                )
-                if (fetched <= 0) {
-                    ownedExhausted.add(platformId)
-                    break
-                }
-                offset += fetched
-                wrote += fetched
-                ownedLoaded[platformId] = offset
-                if (fetched < PAGE_SIZE) {
-                    ownedExhausted.add(platformId)
-                    break
-                }
-            }
-            if (wrote > 0) Logger.info(TAG, "platform $platformId owned subset now $offset rows")
-            markSettled(platformId)
-            wrote > 0
-        }
-    }
-
     /** Forget what is cached, so a resync or a server change starts paging afresh. */
     fun reset() {
         loaded.clear()
         totals.clear()
         exhausted.clear()
-        ownedLoaded.clear()
-        ownedExhausted.clear()
         sectionCache.clear()
         _settledPlatforms.value = emptySet()
     }

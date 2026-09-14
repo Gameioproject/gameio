@@ -111,6 +111,7 @@ class GameDetailViewModel @Inject constructor(
     val pickerModalDelegate: PickerModalDelegate,
     private val achievementDelegate: AchievementDelegate,
     private val downloadDelegate: DownloadDelegate,
+    val sourceDelegate: com.nendo.argosy.ui.screens.gamedetail.delegates.GameSourcesDelegate,
     private val saveManagement: SaveManagementDelegate,
     private val screenshotDelegate: ScreenshotDelegate,
     private val ratingsStatus: RatingsStatusDelegate,
@@ -428,6 +429,8 @@ class GameDetailViewModel @Inject constructor(
 
     fun loadGame(gameId: Long) {
         currentGameId = gameId
+        sourceDelegate.load(viewModelScope, gameId)
+        _uiState.update { it.copy(showComments = false) }
         pageLoadTime = System.currentTimeMillis()
         downloadDelegate.reset()
         imageCacheManager.pauseBackgroundCaching()
@@ -625,7 +628,7 @@ class GameDetailViewModel @Inject constructor(
                 if (romMRepository.isVersionAtLeast(RomMCapabilities.SCREENSHOT_UPLOAD_MIN_VERSION)) {
                     refreshUserScreenshotsInBackground(game.rommId)
                 }
-                if (!game.isMultiDisc && (game.fileSizeBytes == null || game.fileSizeBytes == 0L)) {
+                if (!romMRepository.usesAddonSources() && !game.isMultiDisc && (game.fileSizeBytes == null || game.fileSizeBytes == 0L)) {
                     downloadDelegate.refreshDownloadSizeInBackground(viewModelScope, game.rommId, gameId)
                 }
             }
@@ -863,7 +866,15 @@ class GameDetailViewModel @Inject constructor(
 
     // --- Download delegate forwarding ---
 
-    fun downloadGame() = downloadDelegate.downloadGame(viewModelScope, currentGameId, pageLoadTime, pageLoadDebounceMs)
+    fun downloadGame() {
+        if (romMRepository.usesAddonSources()) sourceDelegate.show()
+        else downloadDelegate.downloadGame(viewModelScope, currentGameId, pageLoadTime, pageLoadDebounceMs)
+    }
+    fun downloadSource(source: com.nendo.argosy.data.addon.AddonSourceMatch) =
+        downloadDelegate.downloadGame(viewModelScope, currentGameId, pageLoadTime, pageLoadDebounceMs, addonSource = source)
+    fun refreshSources() = sourceDelegate.load(viewModelScope, currentGameId, refresh = true)
+    fun showComments() { _uiState.update { it.copy(showComments = true) } }
+    fun dismissComments() { _uiState.update { it.copy(showComments = false) } }
 
     fun showFilesPicker() {
         toggleMoreOptions()
@@ -875,6 +886,7 @@ class GameDetailViewModel @Inject constructor(
     }
 
     fun promptOrDownload() {
+        if (romMRepository.usesAddonSources()) { sourceDelegate.show(); return }
         viewModelScope.launch {
             val built = downloadDelegate.buildFilePickerRows(currentGameId)
             if (built == null) {
@@ -949,6 +961,7 @@ class GameDetailViewModel @Inject constructor(
     // --- Play/Launch ---
 
     fun onResume() {
+        if (currentGameId > 0 && romMRepository.usesAddonSources()) refreshSources()
         if (gameLaunchDelegate.isSyncing) return
         gameLaunchDelegate.handleSessionEnd(viewModelScope)
     }
@@ -1795,6 +1808,8 @@ class GameDetailViewModel @Inject constructor(
             saveStatus != com.nendo.argosy.ui.screens.gamedetail.components.SaveSyncStatus.NO_SAVE &&
             saveStatus != com.nendo.argosy.ui.screens.gamedetail.components.SaveSyncStatus.NOT_CONFIGURED
         return MenuLayoutState(
+            hasComments = game?.igdbId != null,
+            hasSources = sourceDelegate.state.value.available,
             hasDescription = !game?.description.isNullOrBlank(),
             hasScreenshots = game?.screenshots?.isNotEmpty() == true,
             hasAchievements = game?.achievements?.isNotEmpty() == true,
@@ -1829,6 +1844,8 @@ class GameDetailViewModel @Inject constructor(
             MenuItem.Favorite -> toggleFavorite()
             MenuItem.Privacy -> togglePrivacy()
             MenuItem.PerGameSettings -> showPerGameSettings()
+            MenuItem.Comments -> showComments()
+            MenuItem.Sources -> sourceDelegate.show()
             MenuItem.Options -> toggleMoreOptions()
             MenuItem.Details -> {}
             MenuItem.Description -> {}
@@ -1972,6 +1989,8 @@ class GameDetailViewModel @Inject constructor(
     }
 
     private fun resetAllModals() {
+        sourceDelegate.dismiss()
+        dismissComments()
         pickerModalDelegate.reset()
         moreOptionsDelegate.reset()
         perGameSettingsDelegate.reset()

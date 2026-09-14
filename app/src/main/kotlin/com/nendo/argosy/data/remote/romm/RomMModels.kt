@@ -339,7 +339,8 @@ data class RomMRARefreshRequest(
 @JsonClass(generateAdapter = true)
 data class RomMHeartbeatResponse(
     @Json(name = "SYSTEM") val system: RomMSystem? = null,
-    @Json(name = "METADATA_SOURCES") val metadataSources: RomMMetadataSources? = null
+    @Json(name = "METADATA_SOURCES") val metadataSources: RomMMetadataSources? = null,
+    @Json(name = "FRONTEND") val frontend: RomMFrontend? = null
 ) {
     val version: String?
         get() = system?.version
@@ -354,6 +355,11 @@ data class RomMHeartbeatResponse(
     val steamGridDbEnabled: Boolean?
         get() = metadataSources?.steamGridDbEnabled
 }
+
+@JsonClass(generateAdapter = true)
+data class RomMFrontend(
+    @Json(name = "SUPPORT_URL") val supportUrl: String? = null
+)
 
 @JsonClass(generateAdapter = true)
 data class RomMCoverSearchResult(

@@ -634,6 +634,7 @@ class SecondaryHomeInputHandler(
             GameDetailOption.FILES -> {
                 broadcasts.broadcastDirectAction("FILES", gameId)
             }
+            GameDetailOption.COMMENTS, GameDetailOption.SOURCES -> broadcasts.broadcastDirectAction(option.name, gameId)
             GameDetailOption.REFRESH_METADATA -> {
                 broadcasts.broadcastDirectAction("REFRESH_METADATA", gameId)
             }

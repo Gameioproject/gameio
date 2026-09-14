@@ -58,7 +58,7 @@ fun HomeUiState.discoveryGames(games: List<HomeGameUi>): List<HomeGameUi> {
             (currentPlatform == null || game.platformId == currentPlatform?.id) &&
             when (libraryFilter) {
                 HomeLibraryFilter.ALL -> true
-                HomeLibraryFilter.DOWNLOADABLE -> game.isPlayable || (game.fileSizeBytes ?: 0) > 0
+                HomeLibraryFilter.DOWNLOADABLE -> true
                 HomeLibraryFilter.LIBRARY -> game.isPlayable
             }
     }.distinctBy { it.id }

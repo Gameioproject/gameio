@@ -434,6 +434,8 @@ class DualGameDetailViewModel(
                 isLoading = false,
                 achievementCount = game.achievementCount,
                 earnedAchievementCount = game.earnedAchievementCount,
+                igdbId = game.igdbId,
+                hasAddonSources = gameRepository.usesAddonSources(),
                 isRommGame = game.isRommGame,
                 isSteamGame = game.isSteamGame,
                 steamAppId = game.steamAppId,

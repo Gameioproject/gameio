@@ -1,23 +1,26 @@
 package com.nendo.argosy.data.preferences
 
 /**
- * What a Home row is allowed to show. On a catalog-only server most games are metadata the device
- * neither owns nor can fetch, so the middle state exists to hide the ones no host offers.
+ * Catalog browsing is independent of on-demand add-on availability.
  */
 enum class HomeLibraryFilter {
     /** Everything the catalog knows about. */
     ALL,
 
-    /** Only games a host offers a file for, whether or not this device has it. */
+    /**
+     * Retained only to read preferences saved before add-ons.
+     */
     DOWNLOADABLE,
 
     /** Only games whose content is on this device. */
     LIBRARY;
 
-    fun next(): HomeLibraryFilter = entries[(ordinal + 1) % entries.size]
+    fun next(): HomeLibraryFilter = if (this == LIBRARY) ALL else LIBRARY
+
+    fun normalized(): HomeLibraryFilter = if (this == DOWNLOADABLE) ALL else this
 
     companion object {
         fun fromOrdinal(value: Int): HomeLibraryFilter =
-            entries.getOrElse(value) { ALL }
+            entries.getOrElse(value) { ALL }.normalized()
     }
 }

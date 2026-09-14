@@ -38,9 +38,11 @@ class GenerateRecommendationsUseCase @Inject constructor(
         }
 
         val playedGames = gameDao.getPlayedGames(ownerUserId)
-        if (playedGames.isEmpty()) return emptyList()
+        val favorites = gameDao.getFavorites(ownerUserId)
+        val tasteGames = (playedGames + favorites).distinctBy { it.id }
+        if (tasteGames.isEmpty()) return emptyList()
 
-        val genreWeights = calculateGenreWeights(playedGames)
+        val genreWeights = calculateGenreWeights(tasteGames)
 
         if (shelfRepository.get().isCatalogOnly()) {
             genreWeights.entries
@@ -48,16 +50,16 @@ class GenerateRecommendationsUseCase @Inject constructor(
                 .take(2)
                 .forEach { (genre, _) -> shelfRepository.get().seedGenre(genre) }
         }
-        val platformWeights = calculatePlatformWeights(playedGames)
+        val platformWeights = calculatePlatformWeights(tasteGames)
         val playTimeBoost = calculatePlayTimeBoost(playedGames)
 
         val syncEnabledPlatformIds = platformRepository.getSyncEnabledPlatforms()
             .mapTo(mutableSetOf()) { it.id }
 
         val undownloadedGames = gameDao.getUnplayedUndownloadedGames(ownerUserId)
-            .filter { it.platformId in syncEnabledPlatformIds }
+            .filter { (syncEnabledPlatformIds.isEmpty() || it.platformId in syncEnabledPlatformIds) && !it.isFavorite }
         val installedUnplayed = gameDao.getUnplayedInstalledGames(ownerUserId)
-            .filter { it.platformId in syncEnabledPlatformIds }
+            .filter { (syncEnabledPlatformIds.isEmpty() || it.platformId in syncEnabledPlatformIds) && !it.isFavorite }
 
         if (undownloadedGames.isEmpty() && installedUnplayed.isEmpty()) return emptyList()
 
@@ -151,7 +153,7 @@ class GenerateRecommendationsUseCase @Inject constructor(
             val playCount = game.playCount.coerceAtLeast(1)
             val playTimeHours = game.playTimeMinutes / 60.0
             val recencyFactor = calculateRecencyFactor(game.lastPlayed)
-            val weight = (playCount + playTimeHours) * recencyFactor
+            val weight = (playCount + playTimeHours) * recencyFactor + if (game.isFavorite) 1.0 else 0.0
             weights[genre] = weights.getOrDefault(genre, 0.0) + weight
         }
         return weights
@@ -163,7 +165,7 @@ class GenerateRecommendationsUseCase @Inject constructor(
             val playCount = game.playCount.coerceAtLeast(1)
             val playTimeHours = game.playTimeMinutes / 60.0
             val recencyFactor = calculateRecencyFactor(game.lastPlayed)
-            val weight = (playCount + playTimeHours) * recencyFactor
+            val weight = (playCount + playTimeHours) * recencyFactor + if (game.isFavorite) 1.0 else 0.0
             weights[game.platformId] = weights.getOrDefault(game.platformId, 0.0) + weight
         }
         return weights

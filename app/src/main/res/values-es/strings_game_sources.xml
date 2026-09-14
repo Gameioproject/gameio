@@ -1,0 +1,11 @@
+<resources>
+    <string name="game_sources_title">Fuentes del juego</string>
+    <string name="game_sources_checking">Buscando fuentes…</string>
+    <string name="game_sources_on_device">Este juego está en tu dispositivo. Puedes jugar sin un complemento.</string>
+    <string name="game_sources_import_prompt">Importa un complemento para encontrar una descarga. Los juegos de tu carpeta siempre funcionan.</string>
+    <string name="game_sources_missing">Tus complementos aún no tienen una fuente para este juego.</string>
+    <string name="game_sources_choose">Elige una fuente para descargar.</string>
+    <string name="game_sources_retry">Volver a buscar</string>
+    <string name="game_sources_manage">Gestionar complementos</string>
+    <string name="game_sources_close">Cerrar</string>
+</resources>

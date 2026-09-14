@@ -10,6 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PATCH
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -19,6 +20,46 @@ import retrofit2.http.Streaming
 
 @Suppress("TooManyFunctions")
 interface RomMApi {
+
+    @Streaming
+    @GET("api/users/{id}/avatar")
+    suspend fun getGameCommentAvatar(@Path("id") userId: Long): Response<ResponseBody>
+
+    @GET("api/catalog/{id}/comments")
+    suspend fun getGameComments(@Path("id") igdbId: Long, @Query("sort") sort: String, @Query("offset") offset: Int = 0, @Query("limit") limit: Int = 20): Response<GameCommentPage>
+
+    @POST("api/catalog/{id}/comments")
+    suspend fun postGameComment(@Path("id") igdbId: Long, @Body body: GameCommentWrite): Response<GameComment>
+
+    @GET("api/comments/{id}/replies")
+    suspend fun getGameCommentReplies(@Path("id") commentId: Long, @Query("offset") offset: Int = 0, @Query("limit") limit: Int = 20): Response<GameCommentPage>
+
+    @PATCH("api/comments/{id}")
+    suspend fun editGameComment(@Path("id") commentId: Long, @Body body: GameCommentWrite): Response<GameComment>
+
+    @DELETE("api/comments/{id}")
+    suspend fun deleteGameComment(@Path("id") commentId: Long): Response<Unit>
+
+    @PUT("api/comments/{id}/like")
+    suspend fun likeGameComment(@Path("id") commentId: Long, @Body body: GameCommentLike): Response<GameComment>
+
+    @PUT("api/comments/{id}/report")
+    suspend fun reportGameComment(@Path("id") commentId: Long, @Body body: GameCommentReportWrite): Response<Unit>
+
+    @GET("api/comments/blocks")
+    suspend fun getGameCommentBlocks(): Response<List<GameCommentAuthor>>
+
+    @PUT("api/comments/blocks/{id}")
+    suspend fun blockGameCommentAuthor(@Path("id") userId: Long): Response<Unit>
+
+    @DELETE("api/comments/blocks/{id}")
+    suspend fun unblockGameCommentAuthor(@Path("id") userId: Long): Response<Unit>
+
+    @GET("api/comments/reports")
+    suspend fun getGameCommentReports(@Query("offset") offset: Int = 0, @Query("limit") limit: Int = 20): Response<GameCommentReportPage>
+
+    @PATCH("api/comments/reports/{id}")
+    suspend fun moderateGameComment(@Path("id") reportId: Long, @Body body: GameCommentModeration): Response<Unit>
 
     @GET("api/heartbeat")
     suspend fun heartbeat(): Response<RomMHeartbeatResponse>

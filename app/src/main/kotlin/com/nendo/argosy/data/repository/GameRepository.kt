@@ -66,8 +66,12 @@ class GameRepository @Inject constructor(
     private val preferencesRepository: UserPreferencesRepository,
     private val fileAccessLayer: com.nendo.argosy.data.storage.FileAccessLayer,
     private val volumeHealth: StorageVolumeHealth,
-    private val attributionRepository: StorageAttributionRepository
+    private val attributionRepository: StorageAttributionRepository,
+    private val localCatalogDiscovery: LocalCatalogDiscovery,
+    private val catalogIdentityLock: CatalogIdentityLock
 ) {
+    fun usesAddonSources(): Boolean = romMRepository.usesAddonSources()
+
     private val defaultDownloadDir: File by lazy {
         File(context.getExternalFilesDir(null), "downloads")
     }
@@ -264,7 +268,10 @@ class GameRepository @Inject constructor(
      * Only empty paths are filled. A game that already points somewhere is never repointed by a
      * scan, so a library the user chose not to migrate keeps working.
      */
-    private suspend fun claimInto(platform: PlatformEntity, games: List<GameEntity>): Int {
+    private suspend fun claimInto(platform: PlatformEntity, games: List<GameEntity>): Int =
+        catalogIdentityLock.withLock { claimIntoLocked(platform, games) }
+
+    private suspend fun claimIntoLocked(platform: PlatformEntity, games: List<GameEntity>): Int {
         val roots = candidateRootsFor(platform)
         val entries = mutableMapOf<ClaimCandidate, File>()
         for (root in roots) {
@@ -279,9 +286,11 @@ class GameRepository @Inject constructor(
 
         val targets = games.map { ClaimTarget(it.id, it.rommFileName, it.title) }
         val claims = claimLocalEntries(targets, entries.keys.toList())
+        val ownership = LocalPathOwnership(gameDao.getLocalFileOwners(), fileAccessLayer)
         var discovered = 0
 
         for (game in games) {
+            if (gameDao.getById(game.id)?.localPath != null) continue
             val candidate = claims[game.id] ?: continue
             val entry = entries[candidate] ?: continue
             val resolved = if (candidate.isDirectory) {
@@ -289,7 +298,9 @@ class GameRepository @Inject constructor(
             } else {
                 entry
             } ?: continue
+            if (ownership.hasForeignOwner(resolved.absolutePath, game.id)) continue
             gameDao.updateLocalPath(game.id, resolved.absolutePath, GameSource.ROMM_SYNCED)
+            ownership.claim(resolved.absolutePath, game.id)
             discovered++
             Log.d(TAG, "Discovered: ${game.title} -> ${entry.name}")
         }
@@ -304,8 +315,6 @@ class GameRepository @Inject constructor(
 
         val startTime = System.currentTimeMillis()
         val gamesWithoutPath = gameDao.getGamesWithRommIdButNoPath()
-        if (gamesWithoutPath.isEmpty()) return@withContext 0
-
         val gamesByPlatformId = gamesWithoutPath.groupBy { it.platformId }
         var discovered = 0
 
@@ -313,6 +322,8 @@ class GameRepository @Inject constructor(
             val platform = platformDao.getById(platformId) ?: continue
             discovered += claimInto(platform, games)
         }
+
+        discovered += localCatalogDiscovery.discover(getGlobalDownloadDir())
 
         val elapsed = System.currentTimeMillis() - startTime
         Log.d(TAG, "Discovery complete: $discovered files found in ${elapsed}ms")
@@ -700,10 +711,8 @@ class GameRepository @Inject constructor(
         if (!isStorageReady()) return@withContext 0
 
         val games = gameDao.getGamesWithRommIdButNoPathByPlatform(platformId)
-        if (games.isEmpty()) return@withContext 0
-
         val platform = platformDao.getById(platformId) ?: return@withContext 0
-        claimInto(platform, games)
+        claimInto(platform, games) + localCatalogDiscovery.discover(getGlobalDownloadDir(), platformId)
     }
 
     suspend fun validateDiscLocalFiles(platformId: Long): Int = withContext(Dispatchers.IO) {

@@ -322,7 +322,7 @@ class HomeViewModel @Inject constructor(
     fun openDiscoveryLibrary() {
         val source = when (_uiState.value.libraryFilter) {
             com.nendo.argosy.data.preferences.HomeLibraryFilter.ALL -> "ALL"
-            com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE -> "AVAILABLE"
+            com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE -> "ALL"
             com.nendo.argosy.data.preferences.HomeLibraryFilter.LIBRARY -> "PLAYABLE"
         }
         navigateToLibrary(_uiState.value.currentPlatform?.id, source)
@@ -1645,7 +1645,7 @@ class HomeViewModel @Inject constructor(
             } else {
                 val slugs = state.currentPlatform?.let { listOf(it.slug) } ?: state.platforms.map { it.slug }
                 if (slugs.isEmpty()) null else shelfRepository.randomLocalId(slugs,
-                    owned = state.libraryFilter == com.nendo.argosy.data.preferences.HomeLibraryFilter.DOWNLOADABLE)
+                    owned = false)
             }
             if (gameId != null && !gameRepository.isGameHidden(gameId)) {
                 _events.emit(HomeEvent.OpenGameDetail(gameId))

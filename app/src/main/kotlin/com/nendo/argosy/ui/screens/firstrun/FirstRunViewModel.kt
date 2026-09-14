@@ -43,11 +43,13 @@ enum class FirstRunStep {
     ROMM_LOGIN,
     ROMM_SUCCESS,
     PERMISSIONS,
+    ADDONS,
     ROM_PATH,
     IMAGE_CACHE,
     PLATFORM_SELECT,
     CORE_PROMPT,
     CORE_DOWNLOAD,
+    FAVORITES,
     COMPLETE
 }
 
@@ -121,7 +123,8 @@ class FirstRunViewModel @Inject constructor(
     private val permissionHelper: PermissionHelper,
     private val coreManager: LibretroCoreManager,
     private val gamepadInputHandler: GamepadInputHandler,
-    private val hapticManager: HapticFeedbackManager
+    private val hapticManager: HapticFeedbackManager,
+    val favoritesDelegate: FirstRunFavoritesDelegate
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(
@@ -138,13 +141,15 @@ class FirstRunViewModel @Inject constructor(
                 FirstRunStep.WELCOME -> FirstRunStep.ROMM_LOGIN
                 FirstRunStep.ROMM_LOGIN -> FirstRunStep.ROMM_SUCCESS
                 FirstRunStep.ROMM_SUCCESS -> FirstRunStep.PERMISSIONS
-                FirstRunStep.PERMISSIONS -> FirstRunStep.ROM_PATH
+                FirstRunStep.PERMISSIONS -> FirstRunStep.ADDONS
+                FirstRunStep.ADDONS -> FirstRunStep.ROM_PATH
                 FirstRunStep.ROM_PATH -> FirstRunStep.IMAGE_CACHE
                 // The catalog lists every system the server knows, so following is always a choice.
                 FirstRunStep.IMAGE_CACHE -> FirstRunStep.PLATFORM_SELECT
                 FirstRunStep.PLATFORM_SELECT -> FirstRunStep.CORE_PROMPT
                 FirstRunStep.CORE_PROMPT -> FirstRunStep.CORE_DOWNLOAD
-                FirstRunStep.CORE_DOWNLOAD -> FirstRunStep.COMPLETE
+                FirstRunStep.CORE_DOWNLOAD -> FirstRunStep.FAVORITES
+                FirstRunStep.FAVORITES -> FirstRunStep.COMPLETE
                 FirstRunStep.COMPLETE -> FirstRunStep.COMPLETE
             }
             val initialFocus = if (nextStep == FirstRunStep.IMAGE_CACHE) 1 else 0
@@ -154,6 +159,7 @@ class FirstRunViewModel @Inject constructor(
             FirstRunStep.PLATFORM_SELECT -> loadPlatformsForSelection()
             FirstRunStep.CORE_PROMPT -> checkMissingCores()
             FirstRunStep.CORE_DOWNLOAD -> prepareCoreDownloads()
+            FirstRunStep.FAVORITES -> favoritesDelegate.enter(viewModelScope)
             else -> {}
         }
     }
@@ -165,12 +171,14 @@ class FirstRunViewModel @Inject constructor(
                 FirstRunStep.ROMM_LOGIN -> FirstRunStep.ROMM_LOGIN
                 FirstRunStep.ROMM_SUCCESS -> FirstRunStep.ROMM_LOGIN
                 FirstRunStep.PERMISSIONS -> FirstRunStep.ROMM_SUCCESS
-                FirstRunStep.ROM_PATH -> FirstRunStep.PERMISSIONS
+                FirstRunStep.ADDONS -> FirstRunStep.PERMISSIONS
+                FirstRunStep.ROM_PATH -> FirstRunStep.ADDONS
                 FirstRunStep.IMAGE_CACHE -> FirstRunStep.ROM_PATH
                 FirstRunStep.PLATFORM_SELECT -> FirstRunStep.IMAGE_CACHE
                 FirstRunStep.CORE_PROMPT -> FirstRunStep.PLATFORM_SELECT
                 FirstRunStep.CORE_DOWNLOAD -> FirstRunStep.CORE_PROMPT
-                FirstRunStep.COMPLETE -> FirstRunStep.CORE_DOWNLOAD
+                FirstRunStep.FAVORITES -> FirstRunStep.CORE_PROMPT
+                FirstRunStep.COMPLETE -> FirstRunStep.FAVORITES
             }
             val initialFocus = if (prevStep == FirstRunStep.IMAGE_CACHE) 1 else 0
             if (prevStep == state.currentStep) {
@@ -179,6 +187,7 @@ class FirstRunViewModel @Inject constructor(
                 state.copy(currentStep = prevStep, focusedIndex = initialFocus)
             }
         }
+        if (_uiState.value.currentStep == FirstRunStep.FAVORITES) favoritesDelegate.enter(viewModelScope)
     }
 
     private fun loadPlatformsForSelection() {
@@ -215,8 +224,9 @@ class FirstRunViewModel @Inject constructor(
     fun skipCorePrompt() {
         val hadMissingCores = _uiState.value.missingCoreCount > 0
         _uiState.update { state ->
-            state.copy(currentStep = FirstRunStep.COMPLETE, focusedIndex = 0)
+            state.copy(currentStep = FirstRunStep.FAVORITES, focusedIndex = 0)
         }
+        favoritesDelegate.enter(viewModelScope)
         if (hadMissingCores) {
             viewModelScope.launch {
                 preferencesRepository.setBuiltinLibretroEnabled(false)
@@ -419,17 +429,23 @@ class FirstRunViewModel @Inject constructor(
             FirstRunStep.ROMM_LOGIN -> 2
             FirstRunStep.ROMM_SUCCESS -> 0
             FirstRunStep.PERMISSIONS -> 4
+            FirstRunStep.ADDONS -> 0
             FirstRunStep.ROM_PATH -> if (state.folderSelected) 1 else 0
             FirstRunStep.IMAGE_CACHE -> 1
             FirstRunStep.PLATFORM_SELECT -> state.platforms.size
             FirstRunStep.CORE_PROMPT -> 1
             FirstRunStep.CORE_DOWNLOAD -> 1
+            FirstRunStep.FAVORITES -> 0
             FirstRunStep.COMPLETE -> 0
         }
     }
 
     fun moveFocus(delta: Int): Boolean {
         val state = _uiState.value
+        if (state.currentStep == FirstRunStep.FAVORITES) {
+            favoritesDelegate.moveVertical(delta)
+            return true
+        }
         if (state.currentStep == FirstRunStep.PLATFORM_SELECT) {
             when {
                 state.platformSortMenuOpen -> {
@@ -465,6 +481,10 @@ class FirstRunViewModel @Inject constructor(
 
     fun moveButtonFocus(delta: Int): Boolean {
         val state = _uiState.value
+        if (state.currentStep == FirstRunStep.FAVORITES) {
+            favoritesDelegate.moveHorizontal(delta)
+            return true
+        }
         if (state.currentStep != FirstRunStep.PLATFORM_SELECT) return false
         if (state.platformHeaderFocused && !state.platformSortMenuOpen && !state.platformSearchActive) {
             _uiState.update { it.copy(platformHeaderIndex = (it.platformHeaderIndex + delta).mod(PLATFORM_HEADER_COUNT)) }
@@ -766,9 +786,16 @@ class FirstRunViewModel @Inject constructor(
                 if (state.focusedIndex == 0 && state.coreDownloadComplete) nextStep()
                 else if (state.focusedIndex == 1) skipCoreDownloads()
             }
+            FirstRunStep.ADDONS -> {}
+            FirstRunStep.FAVORITES -> favoritesDelegate.confirm(viewModelScope, ::nextStep)
             FirstRunStep.COMPLETE -> {}
         }
     }
+
+    fun setFavoriteQuery(query: String) = favoritesDelegate.setQuery(query, viewModelScope)
+    fun toggleSetupFavorite(gameId: Long) = favoritesDelegate.toggle(gameId, viewModelScope)
+    fun loadMoreSetupFavorites() = favoritesDelegate.loadMore(viewModelScope)
+    fun finishFavoriteSelection() = favoritesDelegate.leave(::nextStep)
 
     private fun canConnect(state: FirstRunUiState): Boolean =
             state.rommUsername.isNotBlank() &&

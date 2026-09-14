@@ -1,0 +1,11 @@
+<resources>
+    <string name="game_sources_title">遊戲來源</string>
+    <string name="game_sources_checking">正在檢查來源…</string>
+    <string name="game_sources_on_device">此遊戲已在裝置上，無需外掛即可遊玩。</string>
+    <string name="game_sources_import_prompt">匯入外掛以尋找下載來源。資料夾中的遊戲始終可用。</string>
+    <string name="game_sources_missing">你的外掛暫時沒有此遊戲的來源。</string>
+    <string name="game_sources_choose">選擇下載來源。</string>
+    <string name="game_sources_retry">重新檢查</string>
+    <string name="game_sources_manage">管理外掛</string>
+    <string name="game_sources_close">關閉</string>
+</resources>

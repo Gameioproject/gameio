@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Gamepad
 import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Memory
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Palette
@@ -117,6 +118,9 @@ internal sealed class MainSettingsItem(
     data object Storage :
         MainSettingsItem("storage", Icons.Default.Storage, R.string.settings_main_storage_title, "library")
 
+    data object Addons :
+        MainSettingsItem("addons", Icons.Default.Storage, R.string.addons_title, "library")
+
     data object RomM :
         MainSettingsItem("romm", Icons.Default.Dns, R.string.settings_main_romm_title, "connections")
     data object Steam : MainSettingsItem(
@@ -148,6 +152,8 @@ internal sealed class MainSettingsItem(
     )
     data object About :
         MainSettingsItem("about", Icons.Default.Info, R.string.settings_main_about_title, "system")
+    data object Support :
+        MainSettingsItem("support_gameio", Icons.Default.FavoriteBorder, R.string.support_gameio_title, "system")
 
     companion object {
         val ALL: List<MainSettingsItem>
@@ -157,27 +163,27 @@ internal sealed class MainSettingsItem(
                 Header("gameplayHeader", "gameplay", R.string.settings_main_section_gameplay),
                 BuiltinEmulator, Saves, RetroAchievements, Bios, Drivers,
                 Header("libraryHeader", "library", R.string.settings_main_section_library),
-                Platforms, Storage,
+                Platforms, Storage, Addons,
                 Header("connectionsHeader", "connections", R.string.settings_main_section_connections),
                 RomM, Steam,
                 Header("systemHeader", "system", R.string.settings_main_section_system),
-                Permissions, DeviceSettings, About
+                Permissions, DeviceSettings, About, Support
             )
     }
 }
 
-private val mainSettingsLayout = SettingsLayout<MainSettingsItem, Unit>(
+private val mainSettingsLayout = SettingsLayout<MainSettingsItem, String?>(
     allItems = MainSettingsItem.ALL,
     isFocusable = { it.isFocusable },
-    visibleWhen = { _, _ -> true },
+    visibleWhen = { item, supportUrl -> item != MainSettingsItem.Support || supportUrl != null },
     sectionOf = { it.section }
 )
 
-internal fun mainSettingsMaxFocusIndex(): Int =
-    mainSettingsLayout.maxFocusIndex(Unit)
+internal fun mainSettingsMaxFocusIndex(supportUrl: String? = null): Int =
+    mainSettingsLayout.maxFocusIndex(supportUrl)
 
-internal fun mainSettingsItemAtFocusIndex(index: Int): MainSettingsItem? =
-    mainSettingsLayout.itemAtFocusIndex(index, Unit)
+internal fun mainSettingsItemAtFocusIndex(index: Int, supportUrl: String? = null): MainSettingsItem? =
+    mainSettingsLayout.itemAtFocusIndex(index, supportUrl)
 
 
 @Composable
@@ -185,13 +191,16 @@ fun MainSettingsSection(uiState: SettingsUiState, viewModel: SettingsViewModel) 
     val context = LocalContext.current
     val listState = rememberLazyListState()
 
-    val visibleItems = remember { mainSettingsLayout.visibleItems(Unit) }
+    val supportUrl = uiState.server.supportUrl
+    val visibleItems = remember(supportUrl) { mainSettingsLayout.visibleItems(supportUrl) }
 
     fun isFocused(item: MainSettingsItem): Boolean =
-        uiState.focusedIndex == mainSettingsLayout.focusIndexOf(item, Unit)
+        uiState.focusedIndex == mainSettingsLayout.focusIndexOf(item, supportUrl)
 
     fun getSubtitle(item: MainSettingsItem): String = when (item) {
         is MainSettingsItem.Header -> ""
+        MainSettingsItem.Addons -> context.getString(R.string.addons_settings_hint)
+        MainSettingsItem.Support -> context.getString(R.string.support_gameio_subtitle)
         MainSettingsItem.DeviceSettings -> context.getString(R.string.settings_main_device_subtitle)
         MainSettingsItem.RomM -> when (uiState.server.connectionStatus) {
             ConnectionStatus.NOT_CONFIGURED ->
@@ -281,10 +290,12 @@ fun MainSettingsSection(uiState: SettingsUiState, viewModel: SettingsViewModel) 
 
     fun handleClick(item: MainSettingsItem) {
         if (item !is MainSettingsItem.Header) {
-            viewModel.setFocusIndex(mainSettingsLayout.focusIndexOf(item, Unit))
+            viewModel.setFocusIndex(mainSettingsLayout.focusIndexOf(item, supportUrl))
         }
         when (item) {
             is MainSettingsItem.Header -> Unit
+            MainSettingsItem.Addons -> viewModel.navigateToAddons()
+            MainSettingsItem.Support -> viewModel.supportGameio()
             MainSettingsItem.DeviceSettings -> context.startActivity(Intent(Settings.ACTION_SETTINGS))
             MainSettingsItem.RomM -> viewModel.navigateToSection(SettingsSection.ROMM)
             MainSettingsItem.Saves -> viewModel.navigateToSection(SettingsSection.SAVES)
@@ -312,7 +323,7 @@ fun MainSettingsSection(uiState: SettingsUiState, viewModel: SettingsViewModel) 
 
     FocusedScroll(
         listState = listState,
-        focusedIndex = mainSettingsLayout.focusToListIndex(uiState.focusedIndex, Unit)
+        focusedIndex = mainSettingsLayout.focusToListIndex(uiState.focusedIndex, supportUrl)
     )
 
     LazyColumn(

@@ -13,6 +13,7 @@ private const val BYTES_PER_MB = 1024L * 1024L
  * untranslated: it did not come from this app.
  */
 fun DownloadFailureReason.toNotificationText(): NotificationText = when (this) {
+    is DownloadFailureReason.Addon -> reason.toNotificationText()
     is DownloadFailureReason.InvalidContentType ->
         NotificationText.Res(R.string.error_download_invalid_content_type, listOf(contentType))
     DownloadFailureReason.FileTooSmall ->
