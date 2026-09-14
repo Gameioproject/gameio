@@ -77,6 +77,7 @@ fun FirstRunScreen(
     viewModel: FirstRunViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val favoritesState by viewModel.favoritesDelegate.state.collectAsState()
     val context = LocalContext.current
 
     val requestStorage = {
@@ -213,6 +214,10 @@ fun FirstRunScreen(
                     onRequestUsageStats = requestUsageStats,
                     onContinue = { viewModel.proceedFromPermissions() }
                 )
+                FirstRunStep.ADDONS -> com.nendo.argosy.ui.screens.addons.AddonsScreen(
+                    onExit = viewModel::nextStep,
+                    setup = true
+                )
                 FirstRunStep.ROM_PATH -> RomPathStep(
                     currentPath = uiState.romStoragePath,
                     folderSelected = uiState.folderSelected,
@@ -266,6 +271,15 @@ fun FirstRunScreen(
                     onRetry = { viewModel.retryCoreDownload(it) },
                     onContinue = { viewModel.nextStep() },
                     onSkip = { viewModel.skipCoreDownloads() }
+                )
+                FirstRunStep.FAVORITES -> FirstRunFavoritesStep(
+                    state = favoritesState,
+                    onSearch = viewModel.favoritesDelegate::openSearch,
+                    onQueryChange = viewModel::setFavoriteQuery,
+                    onCloseSearch = viewModel.favoritesDelegate::closeSearch,
+                    onToggle = viewModel::toggleSetupFavorite,
+                    onPage = viewModel::loadMoreSetupFavorites,
+                    onContinue = viewModel::finishFavoriteSelection
                 )
                 FirstRunStep.COMPLETE -> CompleteStep(
                     gameCount = uiState.rommGameCount,

@@ -275,7 +275,7 @@ fun SettingsScreen(
     LaunchedEffect(Unit) {
         viewModel.openUrlEvent.collect { url ->
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            context.startActivity(intent)
+            runCatching { context.startActivity(intent) }.onFailure { viewModel.onOpenUrlFailed() }
         }
     }
 

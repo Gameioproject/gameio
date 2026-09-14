@@ -34,6 +34,7 @@ sealed class DownloadResult {
  * [com.nendo.argosy.data.download.DownloadManager] cannot itself become a case here.
  */
 sealed class DownloadGameFailureReason {
+    data class Addon(val reason: com.nendo.argosy.data.addon.AddonFailure) : DownloadGameFailureReason()
     data object GameNotFound : DownloadGameFailureReason()
     data object GameNotSynced : DownloadGameFailureReason()
     data class InvalidFileType(val extension: String) : DownloadGameFailureReason()
@@ -54,18 +55,17 @@ class DownloadGameUseCase @Inject constructor(
     private val emulatorConfigDao: EmulatorConfigDao,
     private val downloadQueueDao: DownloadQueueDao,
     private val gameRepository: GameRepository,
-    private val preferencesRepository: com.nendo.argosy.data.preferences.UserPreferencesRepository
+    private val preferencesRepository: com.nendo.argosy.data.preferences.UserPreferencesRepository,
+    private val downloadAddonGame: DownloadAddonGameUseCase
 ) {
     suspend operator fun invoke(
         gameId: Long,
         selectedFileIds: List<Long>? = null,
-        versionRommId: Long? = null
+        versionRommId: Long? = null,
+        addonSource: com.nendo.argosy.data.addon.AddonSourceMatch? = null
     ): DownloadResult {
         val game = gameDao.getById(gameId)
             ?: return DownloadResult.Error(DownloadGameFailureReason.GameNotFound)
-
-        val rommId = versionRommId ?: game.rommId
-            ?: return DownloadResult.Error(DownloadGameFailureReason.GameNotSynced)
 
         // Check if game is already downloaded (validates path and tries discovery)
         if (gameRepository.validateAndDiscoverGame(gameId)) {
@@ -79,7 +79,14 @@ class DownloadGameUseCase @Inject constructor(
             failedEntry.state == DownloadState.FAILED.name &&
             decodedFailure is com.nendo.argosy.data.download.DownloadFailureReason.ExtractionFailed
         ) {
-            val targetFile = downloadManager.getDownloadPath(failedEntry.platformSlug, failedEntry.fileName)
+            val targetFile = try {
+                downloadManager.getDownloadPath(failedEntry)
+            } catch (e: com.nendo.argosy.data.addon.AddonException) {
+                if (e.reason == com.nendo.argosy.data.addon.AddonFailure.NO_ADDONS && romMRepository.usesAddonSources()) {
+                    return downloadAddonGame(game, addonSource)
+                }
+                return DownloadResult.Error(DownloadGameFailureReason.Addon(e.reason))
+            }
             if (targetFile.exists()) {
                 return DownloadResult.ExtractionFailed(
                     gameId = gameId,
@@ -88,6 +95,13 @@ class DownloadGameUseCase @Inject constructor(
                 )
             }
         }
+
+        if (romMRepository.usesAddonSources()) {
+            return downloadAddonGame(game, addonSource)
+        }
+
+        val rommId = versionRommId ?: game.rommId
+            ?: return DownloadResult.Error(DownloadGameFailureReason.GameNotSynced)
 
         Log.d(TAG, "invoke: game=${game.title}, id=$gameId, rommId=$rommId, isMultiDisc=${game.isMultiDisc}, localPath=${game.localPath}")
 
@@ -277,15 +291,15 @@ class DownloadGameUseCase @Inject constructor(
         return fileName.replaceAfterLast('.', preferredExt)
     }
 
-    private fun isPico8Cart(fileName: String, platformSlug: String): Boolean {
-        val lower = fileName.lowercase()
-        return lower.endsWith(".p8.png") ||
-            (PlatformDefinitions.getCanonicalSlug(platformSlug) == "pico8" &&
-                lower.substringAfterLast('.', "") == "png")
-    }
-
     companion object {
-        private val INVALID_ROM_EXTENSIONS = setOf(
+        internal fun isPico8Cart(fileName: String, platformSlug: String): Boolean {
+            val lower = fileName.lowercase()
+            return lower.endsWith(".p8.png") ||
+                (PlatformDefinitions.getCanonicalSlug(platformSlug) == "pico8" &&
+                    lower.substringAfterLast('.', "") == "png")
+        }
+
+        internal val INVALID_ROM_EXTENSIONS = setOf(
             "png", "jpg", "jpeg", "gif", "webp", "bmp",
             "html", "htm", "txt", "pdf"
         )

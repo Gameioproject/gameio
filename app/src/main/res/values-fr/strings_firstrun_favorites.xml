@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="firstrun_favorites_title">Vos jeux favoris</string>
+    <string name="firstrun_favorites_description">Choisissez quelques jeux que vous aimez. Trois à cinq suffisent pour commencer, mais cette étape est facultative. Vos choix deviennent des favoris et orientent les recommandations.</string>
+    <string name="firstrun_favorites_search">Chercher des jeux</string>
+    <string name="firstrun_favorites_continue">Continuer</string>
+    <string name="firstrun_favorites_skip">Passer pour le moment</string>
+    <string name="firstrun_favorites_results">Résultats pour « %1$s »</string>
+    <string name="firstrun_favorites_save_error">Impossible d’enregistrer ce favori. Sélectionnez-le à nouveau.</string>
+    <string name="firstrun_favorites_load_error">Le catalogue est inaccessible. Réessayez ou continuez la configuration.</string>
+    <string name="firstrun_favorites_retry">Réessayer</string>
+    <string name="firstrun_favorites_more">Afficher plus</string>
+    <string name="firstrun_favorites_loading">Chargement des jeux…</string>
+    <string name="firstrun_favorites_empty">Aucun jeu trouvé. Essayez un autre titre ou continuez.</string>
+    <string name="firstrun_favorites_search_placeholder">Rechercher dans le catalogue</string>
+    <string name="firstrun_favorites_remove">Retirer des favoris</string>
+    <string name="firstrun_favorites_add">Ajouter aux favoris</string>
+    <plurals name="firstrun_favorites_selected">
+        <item quantity="one">%d favori sélectionné</item>
+        <item quantity="many">%d favoris sélectionnés</item>
+        <item quantity="other">%d favoris sélectionnés</item>
+    </plurals>
+</resources>

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 154,
-    "identityHash": "4025d5bb84452f2d97744586406a5d68",
+    "identityHash": "1c644cb645bc2459b6a015e253c4ef04",
     "entities": [
       {
         "tableName": "platforms",
@@ -92,7 +92,7 @@
       },
       {
         "tableName": "games",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `platformId` INTEGER NOT NULL, `platformSlug` TEXT NOT NULL, `title` TEXT NOT NULL, `sortTitle` TEXT NOT NULL, `searchTitle` TEXT NOT NULL, `localPath` TEXT, `rommId` INTEGER, `rommFileName` TEXT, `igdbId` INTEGER, `raId` INTEGER, `steamAppId` INTEGER, `steamLauncher` TEXT, `steamInstallDir` TEXT, `packageName` TEXT, `launcherSetManually` INTEGER NOT NULL, `source` TEXT NOT NULL, `coverPath` TEXT, `originalCoverPath` TEXT, `coverSetManually` INTEGER NOT NULL, `gradientColors` TEXT, `backgroundPath` TEXT, `screenshotPaths` TEXT, `cachedScreenshotPaths` TEXT, `boxBackPath` TEXT, `boxSpinePath` TEXT, `developer` TEXT, `publisher` TEXT, `releaseYear` INTEGER, `genre` TEXT, `description` TEXT, `players` TEXT, `rating` REAL, `regions` TEXT, `languages` TEXT, `gameModes` TEXT, `franchises` TEXT, `genres` TEXT, `collections` TEXT, `alternativeNames` TEXT, `ageRatings` TEXT, `mobyId` INTEGER, `sgdbId` INTEGER, `ssId` INTEGER, `launchboxId` INTEGER, `hasheousId` INTEGER, `tgdbId` INTEGER, `hltbId` INTEGER, `timeToBeatMainSec` INTEGER, `timeToBeatExtraSec` INTEGER, `timeToBeatCompletionistSec` INTEGER, `flashpointId` TEXT, `gamelistId` TEXT, `libretroId` TEXT, `crcHash` TEXT, `md5Hash` TEXT, `sha1Hash` TEXT, `raHash` TEXT, `hasManual` INTEGER NOT NULL, `manualPath` TEXT, `remoteHasSoundtrack` INTEGER NOT NULL, `isIdentified` INTEGER NOT NULL, `userRating` INTEGER NOT NULL, `userDifficulty` INTEGER NOT NULL, `completion` INTEGER NOT NULL, `status` TEXT, `backlogged` INTEGER NOT NULL, `nowPlaying` INTEGER NOT NULL, `isFavorite` INTEGER NOT NULL, `isHidden` INTEGER NOT NULL, `playCount` INTEGER NOT NULL, `playTimeMinutes` INTEGER NOT NULL, `lastPlayed` INTEGER, `addedAt` INTEGER NOT NULL, `isMultiDisc` INTEGER NOT NULL, `lastPlayedDiscId` INTEGER, `m3uPath` TEXT, `activeVariantFileId` INTEGER, `lastPlayedFileId` INTEGER, `achievementCount` INTEGER NOT NULL, `earnedAchievementCount` INTEGER NOT NULL, `titleId` TEXT, `titleIdLocked` INTEGER NOT NULL, `storeEnrichStatus` INTEGER NOT NULL, `titleIdCandidates` TEXT, `saveId` TEXT, `youtubeVideoId` TEXT, `cheatsFetched` INTEGER NOT NULL, `cheatsFetchedAt` INTEGER, `cheatsSelectedRegion` TEXT, `cheatsSelectedVersion` TEXT, `achievementsFetchedAt` INTEGER, `romHash` TEXT, `verifiedRaId` INTEGER, `raIdVerified` INTEGER NOT NULL, `fileSizeBytes` INTEGER, `perGameSettingsEnabled` INTEGER NOT NULL, `perGameControlsEnabled` INTEGER NOT NULL, `syncDirty` INTEGER NOT NULL, FOREIGN KEY(`platformId`) REFERENCES `platforms`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `platformId` INTEGER NOT NULL, `platformSlug` TEXT NOT NULL, `title` TEXT NOT NULL, `sortTitle` TEXT NOT NULL, `searchTitle` TEXT NOT NULL, `localPath` TEXT, `rommId` INTEGER, `rommFileName` TEXT, `igdbId` INTEGER, `raId` INTEGER, `steamAppId` INTEGER, `steamLauncher` TEXT, `steamInstallDir` TEXT, `packageName` TEXT, `launcherSetManually` INTEGER NOT NULL, `source` TEXT NOT NULL, `coverPath` TEXT, `originalCoverPath` TEXT, `coverSetManually` INTEGER NOT NULL, `gradientColors` TEXT, `backgroundPath` TEXT, `screenshotPaths` TEXT, `cachedScreenshotPaths` TEXT, `boxBackPath` TEXT, `boxSpinePath` TEXT, `developer` TEXT, `publisher` TEXT, `releaseYear` INTEGER, `genre` TEXT, `description` TEXT, `players` TEXT, `rating` REAL, `regions` TEXT, `languages` TEXT, `gameModes` TEXT, `franchises` TEXT, `genres` TEXT, `collections` TEXT, `alternativeNames` TEXT, `ageRatings` TEXT, `mobyId` INTEGER, `sgdbId` INTEGER, `ssId` INTEGER, `launchboxId` INTEGER, `hasheousId` INTEGER, `tgdbId` INTEGER, `hltbId` INTEGER, `timeToBeatMainSec` INTEGER, `timeToBeatExtraSec` INTEGER, `timeToBeatCompletionistSec` INTEGER, `flashpointId` TEXT, `gamelistId` TEXT, `libretroId` TEXT, `crcHash` TEXT, `md5Hash` TEXT, `sha1Hash` TEXT, `raHash` TEXT, `hasManual` INTEGER NOT NULL, `manualPath` TEXT, `remoteHasSoundtrack` INTEGER NOT NULL, `isIdentified` INTEGER NOT NULL, `userRating` INTEGER NOT NULL, `userDifficulty` INTEGER NOT NULL, `completion` INTEGER NOT NULL, `status` TEXT, `backlogged` INTEGER NOT NULL, `nowPlaying` INTEGER NOT NULL, `isFavorite` INTEGER NOT NULL, `isHidden` INTEGER NOT NULL, `playCount` INTEGER NOT NULL, `playTimeMinutes` INTEGER NOT NULL, `lastPlayed` INTEGER, `addedAt` INTEGER NOT NULL, `isMultiDisc` INTEGER NOT NULL, `lastPlayedDiscId` INTEGER, `m3uPath` TEXT, `activeVariantFileId` INTEGER, `lastPlayedFileId` INTEGER, `achievementCount` INTEGER NOT NULL, `earnedAchievementCount` INTEGER NOT NULL, `activeSaveChannel` TEXT, `activeSaveTimestamp` INTEGER, `activeSaveApplied` INTEGER NOT NULL, `pendingDeviceSyncSaveId` INTEGER, `titleId` TEXT, `titleIdLocked` INTEGER NOT NULL, `storeEnrichStatus` INTEGER NOT NULL, `titleIdCandidates` TEXT, `saveId` TEXT, `youtubeVideoId` TEXT, `cheatsFetched` INTEGER NOT NULL, `cheatsFetchedAt` INTEGER, `cheatsSelectedRegion` TEXT, `cheatsSelectedVersion` TEXT, `achievementsFetchedAt` INTEGER, `romHash` TEXT, `verifiedRaId` INTEGER, `raIdVerified` INTEGER NOT NULL, `fileSizeBytes` INTEGER, `perGameSettingsEnabled` INTEGER NOT NULL, `perGameControlsEnabled` INTEGER NOT NULL, `syncDirty` INTEGER NOT NULL, FOREIGN KEY(`platformId`) REFERENCES `platforms`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -525,6 +525,27 @@
             "notNull": true
           },
           {
+            "fieldPath": "activeSaveChannel",
+            "columnName": "activeSaveChannel",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "activeSaveTimestamp",
+            "columnName": "activeSaveTimestamp",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "activeSaveApplied",
+            "columnName": "activeSaveApplied",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pendingDeviceSyncSaveId",
+            "columnName": "pendingDeviceSyncSaveId",
+            "affinity": "INTEGER"
+          },
+          {
             "fieldPath": "titleId",
             "columnName": "titleId",
             "affinity": "TEXT"
@@ -754,7 +775,7 @@
       },
       {
         "tableName": "game_user_overlay",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ownerUserId` INTEGER NOT NULL, `gameId` INTEGER NOT NULL, `isMember` INTEGER NOT NULL, `serverHidden` INTEGER NOT NULL, `isFavorite` INTEGER NOT NULL, `userRating` INTEGER NOT NULL, `userDifficulty` INTEGER NOT NULL, `completion` INTEGER NOT NULL, `status` TEXT, `backlogged` INTEGER NOT NULL, `nowPlaying` INTEGER NOT NULL, `playCount` INTEGER NOT NULL, `playTimeMinutes` INTEGER NOT NULL, `lastPlayed` INTEGER, `earnedAchievementCount` INTEGER NOT NULL, FOREIGN KEY(`gameId`) REFERENCES `games`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ownerUserId` INTEGER NOT NULL, `gameId` INTEGER NOT NULL, `isMember` INTEGER NOT NULL, `serverHidden` INTEGER NOT NULL, `isFavorite` INTEGER NOT NULL, `userRating` INTEGER NOT NULL, `userDifficulty` INTEGER NOT NULL, `completion` INTEGER NOT NULL, `status` TEXT, `backlogged` INTEGER NOT NULL, `nowPlaying` INTEGER NOT NULL, `playCount` INTEGER NOT NULL, `playTimeMinutes` INTEGER NOT NULL, `lastPlayed` INTEGER, `earnedAchievementCount` INTEGER NOT NULL, `activeSaveChannel` TEXT, `activeSaveTimestamp` INTEGER, `activeSaveApplied` INTEGER NOT NULL, `pendingDeviceSyncSaveId` INTEGER, FOREIGN KEY(`gameId`) REFERENCES `games`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -849,6 +870,27 @@
             "columnName": "earnedAchievementCount",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "activeSaveChannel",
+            "columnName": "activeSaveChannel",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "activeSaveTimestamp",
+            "columnName": "activeSaveTimestamp",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "activeSaveApplied",
+            "columnName": "activeSaveApplied",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pendingDeviceSyncSaveId",
+            "columnName": "pendingDeviceSyncSaveId",
+            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -1697,7 +1739,7 @@
       },
       {
         "tableName": "save_cache",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `gameId` INTEGER NOT NULL, `emulatorId` TEXT NOT NULL, `cachedAt` INTEGER NOT NULL, `saveSize` INTEGER NOT NULL, `cachePath` TEXT NOT NULL, `isLocked` INTEGER NOT NULL, `note` TEXT, `contentHash` TEXT, `cheatsUsed` INTEGER NOT NULL, `isHardcore` INTEGER NOT NULL, `slotName` TEXT, `isRollback` INTEGER NOT NULL, `channelName` TEXT, `needsRemoteSync` INTEGER NOT NULL, `lastSyncedAt` INTEGER, `remoteSyncError` TEXT, `rommSaveId` INTEGER, `ownerUserId` INTEGER, `serverCurrentAtSync` INTEGER NOT NULL DEFAULT 0, `isActive` INTEGER NOT NULL DEFAULT 0, `activeSaveApplied` INTEGER NOT NULL DEFAULT 0, `pendingDeviceSyncSaveId` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `gameId` INTEGER NOT NULL, `emulatorId` TEXT NOT NULL, `cachedAt` INTEGER NOT NULL, `saveSize` INTEGER NOT NULL, `cachePath` TEXT NOT NULL, `isLocked` INTEGER NOT NULL, `note` TEXT, `contentHash` TEXT, `cheatsUsed` INTEGER NOT NULL, `isHardcore` INTEGER NOT NULL, `slotName` TEXT, `isRollback` INTEGER NOT NULL, `channelName` TEXT, `needsRemoteSync` INTEGER NOT NULL, `lastSyncedAt` INTEGER, `remoteSyncError` TEXT, `rommSaveId` INTEGER, `ownerUserId` INTEGER, `serverCurrentAtSync` INTEGER NOT NULL DEFAULT 0)",
         "fields": [
           {
             "fieldPath": "id",
@@ -1811,25 +1853,6 @@
             "affinity": "INTEGER",
             "notNull": true,
             "defaultValue": "0"
-          },
-          {
-            "fieldPath": "isActive",
-            "columnName": "isActive",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
-          },
-          {
-            "fieldPath": "activeSaveApplied",
-            "columnName": "activeSaveApplied",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "0"
-          },
-          {
-            "fieldPath": "pendingDeviceSyncSaveId",
-            "columnName": "pendingDeviceSyncSaveId",
-            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -5417,7 +5440,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4025d5bb84452f2d97744586406a5d68')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1c644cb645bc2459b6a015e253c4ef04')"
     ]
   }
 }

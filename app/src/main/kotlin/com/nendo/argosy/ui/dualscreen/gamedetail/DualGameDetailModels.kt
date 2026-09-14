@@ -47,6 +47,8 @@ enum class GameDetailOption {
     TITLE_ID,
     FILES,
     ADD_TO_COLLECTION,
+    COMMENTS,
+    SOURCES,
     REFRESH_METADATA,
     DELETE,
     HIDE
@@ -60,6 +62,8 @@ data class DualCollectionItem(
 
 data class DualGameDetailUiState(
     val gameId: Long = -1,
+    val igdbId: Long? = null,
+    val hasAddonSources: Boolean = false,
     val title: String = "",
     val coverPath: String? = null,
     val backgroundPath: String? = null,
@@ -128,6 +132,8 @@ fun DualGameDetailUiState.visibleOptions(): List<GameDetailOption> {
         add(GameDetailOption.DIFFICULTY)
         add(GameDetailOption.STATUS)
         add(GameDetailOption.TOGGLE_FAVORITE)
+        if (igdbId != null) add(GameDetailOption.COMMENTS)
+        if (igdbId != null && hasAddonSources) add(GameDetailOption.SOURCES)
         if (isEmulated) add(GameDetailOption.CHANGE_EMULATOR)
         if (hasMultipleCores && isEmulated) add(GameDetailOption.CHANGE_CORE)
         if (hasFileBasedSaves && isEmulated) add(GameDetailOption.SAVE_PATH)

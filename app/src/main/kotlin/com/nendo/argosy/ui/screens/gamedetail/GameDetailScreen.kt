@@ -110,6 +110,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import com.nendo.argosy.ui.screens.gamedetail.comments.GameCommentsOverlay
+import com.nendo.argosy.ui.screens.gamedetail.modals.GameSourcesModal
 
 @Composable
 fun GameDetailScreen(
@@ -118,9 +120,12 @@ fun GameDetailScreen(
     onBack: () -> Unit,
     onNavigateToPlatformSettings: (platformId: Long) -> Unit = {},
     onNavigateToGame: (gameId: Long) -> Unit = {},
+    initialPanel: String? = null,
+    onManageAddons: () -> Unit = {},
     viewModel: GameDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val sourceState by viewModel.sourceDelegate.state.collectAsState()
     val requestSafGrant by viewModel.requestSafGrant.collectAsState()
     val context = LocalContext.current
 
@@ -146,6 +151,15 @@ fun GameDetailScreen(
         viewModel.loadGame(gameId)
     }
 
+    var openedInitialPanel by remember(gameId, initialPanel) { mutableStateOf(false) }
+    LaunchedEffect(initialPanel, uiState.game?.id, sourceState.available) {
+        if (!openedInitialPanel && uiState.game?.id == gameId) {
+            when (initialPanel) {
+                "comments" -> { viewModel.showComments(); openedInitialPanel = true }
+                "sources" -> if (sourceState.available) { viewModel.sourceDelegate.show(); openedInitialPanel = true }
+            }
+        }
+    }
     val pendingLaunch by argosyViewModel.pendingLaunch.collectAsState()
     LaunchedEffect(pendingLaunch, uiState.game?.id) {
         val pending = pendingLaunch ?: return@LaunchedEffect
@@ -238,6 +252,8 @@ fun GameDetailScreen(
             },
             onSectionLeft = {
                 val layoutState = MenuLayoutState(
+                    hasComments = uiState.game?.igdbId != null,
+                    hasSources = sourceState.available,
                     hasDescription = hasDescription,
                     hasScreenshots = hasScreenshots,
                     hasAchievements = hasAchievements,
@@ -263,6 +279,8 @@ fun GameDetailScreen(
             },
             onSectionRight = {
                 val layoutState = MenuLayoutState(
+                    hasComments = uiState.game?.igdbId != null,
+                    hasSources = sourceState.available,
                     hasDescription = hasDescription,
                     hasScreenshots = hasScreenshots,
                     hasAchievements = hasAchievements,
@@ -291,6 +309,8 @@ fun GameDetailScreen(
             onNavigateToGame = onNavigateToGame,
             isInScreenshotsSection = {
                 val layoutState = MenuLayoutState(
+                    hasComments = uiState.game?.igdbId != null,
+                    hasSources = sourceState.available,
                     hasDescription = hasDescription,
                     hasScreenshots = hasScreenshots,
                     hasAchievements = hasAchievements,
@@ -469,6 +489,10 @@ fun GameDetailScreen(
                 localModifiedFocusIndex = localModifiedFocusIndex
             )
         }
+        GameSourcesModal(viewModel.sourceDelegate, viewModel::downloadSource, viewModel::refreshSources, onManageAddons)
+        if (uiState.showComments && game != null) {
+            GameCommentsOverlay(game.igdbId, game.title, viewModel::dismissComments)
+        }
     }
 }
 
@@ -493,8 +517,9 @@ private fun GameDetailContent(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val pickerState by viewModel.pickerModalDelegate.state.collectAsState()
+    val sourceState by viewModel.sourceDelegate.state.collectAsState()
     val isAnySyncing = uiState.isSyncing || uiState.syncOverlayState != null
-    val showAnyOverlay = uiState.showMoreOptions || uiState.showPlayOptions ||
+    val showAnyOverlay = uiState.showComments || sourceState.visible || uiState.showMoreOptions || uiState.showPlayOptions ||
         uiState.showRatingsStatusMenu || pickerState.hasAnyPickerOpen ||
         uiState.showRatingPicker || uiState.showMissingDiscPrompt || isAnySyncing ||
         uiState.showSaveCacheDialog || uiState.showRenameDialog || uiState.showScreenshotViewer ||
@@ -522,6 +547,8 @@ private fun GameDetailContent(
     } ?: false
 
     val menuLayoutState = MenuLayoutState(
+        hasComments = game.igdbId != null,
+        hasSources = sourceState.available,
         hasDescription = !game.description.isNullOrBlank(),
         hasScreenshots = game.screenshots.isNotEmpty(),
         hasAchievements = game.achievements.isNotEmpty(),
@@ -673,6 +700,8 @@ private fun GameDetailContent(
                                     MenuItem.Favorite -> viewModel.toggleFavorite()
                                     MenuItem.Privacy -> viewModel.togglePrivacy()
                                     MenuItem.PerGameSettings -> viewModel.showPerGameSettings()
+                                    MenuItem.Comments -> viewModel.showComments()
+                                    MenuItem.Sources -> viewModel.sourceDelegate.show()
                                     MenuItem.Options -> viewModel.toggleMoreOptions()
                                     MenuItem.Details -> coroutineScope.launch {
                                         scrollState.animateScrollTo(0)
@@ -865,6 +894,7 @@ private fun GameDetailContent(
                             MenuItem.Favorite -> add(InputButton.A to if (game.isFavorite) menuUnfavoriteHint else menuFavoriteHint)
                             MenuItem.Privacy -> add(InputButton.A to if (uiState.isPrivate) menuMakePublicHint else menuMakePrivateHint)
                             MenuItem.PerGameSettings -> add(InputButton.A to configureHint)
+                            MenuItem.Comments, MenuItem.Sources -> add(InputButton.A to optionsHint)
                             MenuItem.Options -> add(InputButton.A to optionsHint)
                             MenuItem.Screenshots -> add(InputButton.A to viewScreenshotHint)
                             MenuItem.Achievements -> add(InputButton.A to viewAllAchievementsHint)
@@ -925,6 +955,7 @@ private fun GameDetailModals(
     localModifiedFocusIndex: Int
 ) {
     val pickerState by viewModel.pickerModalDelegate.state.collectAsState()
+    val sourceState by viewModel.sourceDelegate.state.collectAsState()
 
     AnimatedVisibility(
         visible = uiState.showMoreOptions,

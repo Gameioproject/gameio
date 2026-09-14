@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="support_gameio_title">Gameio को सहयोग दें</string>
+    <string name="support_gameio_subtitle">Gameio को आगे बढ़ाने में मदद करें। सहयोग पेज आपके ब्राउज़र में खुलेगा।</string>
+    <string name="support_gameio_browser_error">लिंक नहीं खुल सका। ब्राउज़र इंस्टॉल करें और फिर कोशिश करें।</string>
+</resources>

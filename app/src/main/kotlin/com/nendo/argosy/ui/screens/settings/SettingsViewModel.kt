@@ -1061,6 +1061,16 @@ class SettingsViewModel @Inject constructor(
     fun navigateToStorageCaches() = routeNavigateToStorageCaches(this, CACHES_ENTRY_TOP)
     fun navigateToStorageCachesForSteam() = routeNavigateToStorageCaches(this, CACHES_ENTRY_STEAM)
 
+    fun navigateToAddons() {
+        viewModelScope.launch {
+            _navigationEvents.emit(NavigationEvent(com.nendo.argosy.ui.navigation.Screen.Addons.route))
+        }
+    }
+
+    fun supportGameio() = routeSupportGameio(this)
+
+    fun onOpenUrlFailed() = routeOpenUrlFailed(this)
+
     fun navigateToSaveSyncScreen() {
         viewModelScope.launch {
             _navigationEvents.emit(

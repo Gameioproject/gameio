@@ -26,6 +26,7 @@ import com.nendo.argosy.data.model.VersionGroups
 import com.nendo.argosy.data.preferences.SyncFilterPreferences
 import com.nendo.argosy.data.preferences.UserPreferencesRepository
 import com.nendo.argosy.data.repository.BiosRepository
+import com.nendo.argosy.data.repository.LocalCatalogFiles
 import com.nendo.argosy.data.storage.StorageAttributionRepository
 import com.nendo.argosy.data.storage.StorageCategory
 import com.nendo.argosy.util.Logger
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.time.Duration
@@ -85,7 +87,8 @@ class RomMLibrarySyncService @Inject constructor(
     private val androidGameScanner: dagger.Lazy<com.nendo.argosy.data.scanner.AndroidGameScanner>,
     private val attributionRepository: StorageAttributionRepository,
     private val userRomsHiddenDao: com.nendo.argosy.data.local.dao.UserRomsHiddenDao,
-    private val pendingSyncQueueDao: com.nendo.argosy.data.local.dao.PendingSyncQueueDao
+    private val pendingSyncQueueDao: com.nendo.argosy.data.local.dao.PendingSyncQueueDao,
+    private val catalogIdentityLock: com.nendo.argosy.data.repository.CatalogIdentityLock
 ) {
     private val api: RomMApi? get() = connectionManager.getApi()
     private val syncMutex = Mutex()
@@ -724,11 +727,31 @@ class RomMLibrarySyncService @Inject constructor(
         }
     }
 
-    private suspend fun syncRom(rom: RomMRom, scope: SyncScope, syncFiles: Boolean = true): Pair<Boolean, GameEntity> {
+    private suspend fun syncRom(rom: RomMRom, scope: SyncScope, syncFiles: Boolean = true): Pair<Boolean, GameEntity> =
+        catalogIdentityLock.withLock { syncRomLocked(rom, scope, syncFiles) }
+
+    private suspend fun syncRomLocked(rom: RomMRom, scope: SyncScope, syncFiles: Boolean): Pair<Boolean, GameEntity> {
         val platformSlug = platformDao.getById(rom.platformId)?.slug
             ?: PlatformDefinitions.resolveImportSlug(rom.platformSlug, rom.platformName)
         val platformId = if (platformSlug == ANDROID_SLUG) LocalPlatformIds.ANDROID else rom.platformId
         val existing = gameDao.getByRommId(rom.id)
+
+        if (connectionManager.usesAddonSources()) {
+            val local = existing?.takeIf { it.localPath != null }
+                ?: if (existing == null) LocalCatalogFiles.provisionalMatch(
+                    gameDao.getDownloadedByPlatform(platformId), rom.name, rom.igdbId
+                ) else null
+            if (local != null) {
+                val adopted = database.withTransaction {
+                    val current = gameDao.getById(local.id) ?: local
+                    val coverUrl = rom.coverLarge?.let { apiClient.buildMediaUrl(it) } ?: rom.coverUrl
+                    current.attachLocalCatalogMetadata(rom, coverUrl).also { gameDao.update(it) }
+                }
+                scope.ownerUserId?.let { overlayWriter.grantMembership(it, adopted.id) }
+                if (existing != null) applyRomUserProperties(adopted.id, rom, scope)
+                return false to adopted
+            }
+        }
 
         val migrationSources = if (existing == null && rom.igdbId != null) {
             gameDao.getAllByIgdbIdAndPlatform(rom.igdbId, platformId)
@@ -1120,6 +1143,22 @@ class RomMLibrarySyncService @Inject constructor(
             }
         }
         ids
+    }
+
+    suspend fun fetchExactLocalCatalogMatch(platformId: Long, title: String): Long? = withContext(Dispatchers.IO) {
+        val currentApi = api ?: return@withContext null
+        if (!connectionManager.usesAddonSources() || title.isBlank()) return@withContext null
+        val response = currentApi.getRoms(apiClient.buildRomsQueryParams(
+            platformId = platformId, searchTerm = title, limit = 50, offset = 0, includeFiles = false
+        ))
+        if (!response.isSuccessful) return@withContext null
+        val page = response.body() ?: return@withContext null
+        if ((page.total ?: page.items.size) > 50 || (page.total == null && page.items.size >= 50)) return@withContext null
+        val candidates = page.items
+            .filter { it.platformId == platformId && LocalCatalogFiles.key(it.name) == LocalCatalogFiles.key(title) }
+        val match = candidates.singleOrNull() ?: return@withContext null
+        val scope = SyncScope(overlayWriter.activeOwnerId(), visibilityService.fetchCached(currentApi), null)
+        syncRom(match, scope, syncFiles = false).second.id
     }
 
     /** One random well-rated catalog game, stored locally; its local id, or null. */

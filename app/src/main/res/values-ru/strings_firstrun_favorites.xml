@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="firstrun_favorites_title">Ваши любимые игры</string>
+    <string name="firstrun_favorites_description">Выберите несколько любимых игр. Для начала достаточно трёх–пяти, но этот шаг можно пропустить. Выбранные игры попадут в избранное и помогут подобрать рекомендации.</string>
+    <string name="firstrun_favorites_search">Поиск игр</string>
+    <string name="firstrun_favorites_continue">Продолжить</string>
+    <string name="firstrun_favorites_skip">Пока пропустить</string>
+    <string name="firstrun_favorites_results">Результаты для «%1$s»</string>
+    <string name="firstrun_favorites_save_error">Не удалось сохранить избранное. Попробуйте выбрать игру ещё раз.</string>
+    <string name="firstrun_favorites_load_error">Каталог недоступен. Повторите попытку или продолжите настройку.</string>
+    <string name="firstrun_favorites_retry">Повторить</string>
+    <string name="firstrun_favorites_more">Показать ещё</string>
+    <string name="firstrun_favorites_loading">Загрузка игр…</string>
+    <string name="firstrun_favorites_empty">Игры не найдены. Попробуйте другое название или продолжите.</string>
+    <string name="firstrun_favorites_search_placeholder">Поиск по каталогу</string>
+    <string name="firstrun_favorites_remove">Убрать из избранного</string>
+    <string name="firstrun_favorites_add">В избранное</string>
+    <plurals name="firstrun_favorites_selected">
+        <item quantity="one">Выбрана %d игра</item>
+        <item quantity="few">Выбрано %d игры</item>
+        <item quantity="many">Выбрано %d игр</item>
+        <item quantity="other">Выбрано %d игр</item>
+    </plurals>
+</resources>

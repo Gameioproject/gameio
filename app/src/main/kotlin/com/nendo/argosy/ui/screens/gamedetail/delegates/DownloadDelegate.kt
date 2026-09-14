@@ -256,11 +256,17 @@ class DownloadDelegate @Inject constructor(
         }
     }
 
-    fun downloadGame(scope: CoroutineScope, gameId: Long, pageLoadTime: Long, pageLoadDebounceMs: Long) {
+    fun downloadGame(
+        scope: CoroutineScope,
+        gameId: Long,
+        pageLoadTime: Long,
+        pageLoadDebounceMs: Long,
+        addonSource: com.nendo.argosy.data.addon.AddonSourceMatch? = null
+    ) {
         val now = System.currentTimeMillis()
         if (now - pageLoadTime < pageLoadDebounceMs) return
         scope.launch {
-            when (val result = gameActions.queueDownload(gameId)) {
+            when (val result = gameActions.queueDownload(gameId, addonSource)) {
                 is DownloadResult.Queued -> { }
                 is DownloadResult.AlreadyDownloaded -> {
                     notificationManager.showSuccess(

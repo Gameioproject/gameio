@@ -1,6 +1,7 @@
 package com.nendo.argosy.ui.navigation
 
 sealed class Screen(val route: String) {
+    data object Addons : Screen("addons")
     data object FirstRun : Screen("first_run")
     data object Home : Screen("home")
     data object Library : Screen("library?platformId={platformId}&source={source}") {
@@ -34,7 +35,13 @@ sealed class Screen(val route: String) {
         }
     }
     data object GameDetail : Screen("game/{gameId}") {
-        fun createRoute(gameId: Long) = "game/$gameId"
+        const val ROUTE_WITH_ARGS = "game/{gameId}?panel={panel}"
+        const val PANEL_COMMENTS = "comments"
+        const val PANEL_SOURCES = "sources"
+        fun createRoute(gameId: Long, panel: String? = null): String = when (panel) {
+            PANEL_COMMENTS, PANEL_SOURCES -> "game/$gameId?panel=$panel"
+            else -> "game/$gameId"
+        }
     }
     /**
      * The media grid. [route] stays the bare path so the drawer keeps navigating and identifying by

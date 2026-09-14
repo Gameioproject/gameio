@@ -1,0 +1,11 @@
+<resources>
+    <string name="game_sources_title">Источники игры</string>
+    <string name="game_sources_checking">Проверка источников…</string>
+    <string name="game_sources_on_device">Эта игра уже на устройстве. Можно играть без дополнения.</string>
+    <string name="game_sources_import_prompt">Импортируйте дополнение, чтобы найти загрузку. Игры в вашей папке всегда доступны.</string>
+    <string name="game_sources_missing">В ваших дополнениях пока нет источника этой игры.</string>
+    <string name="game_sources_choose">Выберите источник для загрузки.</string>
+    <string name="game_sources_retry">Проверить снова</string>
+    <string name="game_sources_manage">Управление дополнениями</string>
+    <string name="game_sources_close">Закрыть</string>
+</resources>

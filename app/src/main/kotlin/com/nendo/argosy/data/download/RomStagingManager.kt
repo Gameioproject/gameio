@@ -116,8 +116,8 @@ class RomStagingManager @Inject constructor(
      * Only the `.partial` names this area's own output would produce are removed, so a discard can
      * never reach a finished rom or another download's work in the same folder.
      */
-    fun discard(area: StagingArea) {
-        removeOwnPartials(area)
+    fun discard(area: StagingArea, removeDestinationPartials: Boolean = true) {
+        if (removeDestinationPartials) removeOwnPartials(area)
         area.root.deleteRecursively()
         release(area.manifest.downloadId)
     }

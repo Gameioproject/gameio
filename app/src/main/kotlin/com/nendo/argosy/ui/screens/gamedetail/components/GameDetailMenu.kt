@@ -64,9 +64,12 @@ import com.nendo.argosy.R
 import com.nendo.argosy.ui.screens.gamedetail.GameDownloadStatus
 import com.nendo.argosy.ui.screens.settings.menu.SettingsLayout
 import com.nendo.argosy.ui.theme.Dimens
+import androidx.compose.material.icons.filled.ChatBubbleOutline
 import com.nendo.argosy.ui.util.clickableNoFocus
 
 data class MenuLayoutState(
+    val hasComments: Boolean = false,
+    val hasSources: Boolean = false,
     val hasDescription: Boolean = false,
     val hasScreenshots: Boolean = false,
     val hasAchievements: Boolean = false,
@@ -85,6 +88,8 @@ sealed class MenuItem(
     data object Favorite : MenuItem("favorite")
     data object Privacy : MenuItem("privacy", visibleWhen = { it.hasSocialAccount })
     data object PerGameSettings : MenuItem("per_game_settings", visibleWhen = { it.hasPerGameSettings })
+    data object Comments : MenuItem("comments", visibleWhen = { it.hasComments })
+    data object Sources : MenuItem("sources", visibleWhen = { it.hasSources })
     data object Options : MenuItem("options")
     data object Details : MenuItem("details")
     data object Description : MenuItem("description", visibleWhen = { it.hasDescription })
@@ -94,7 +99,7 @@ sealed class MenuItem(
 
     companion object {
         val ALL: List<MenuItem>
-            get() = listOf(Play, Saves, Favorite, Privacy, PerGameSettings, Options, Details, Description, Screenshots, Achievements, RelatedGames)
+            get() = listOf(Play, Saves, Favorite, Privacy, PerGameSettings, Comments, Sources, Options, Details, Description, Screenshots, Achievements, RelatedGames)
     }
 }
 
@@ -204,6 +209,14 @@ fun GameDetailMenu(
                     )
                 }
 
+                MenuItem.Comments, MenuItem.Sources -> {
+                    IconTextMenuItem(
+                        label = stringResource(if (item == MenuItem.Comments) R.string.comments_title else R.string.game_sources_title),
+                        icon = if (item == MenuItem.Comments) Icons.Default.ChatBubbleOutline else Icons.Default.Download,
+                        isFocused = isFocused, isCompact = isCompact,
+                        onClick = { onFocusChange(focusIndex); onItemClick(item) }
+                    )
+                }
                 MenuItem.Options -> {
                     OptionsMenuItem(
                         isFocused = isFocused,

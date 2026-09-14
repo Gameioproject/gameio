@@ -171,7 +171,7 @@ fun LibraryScreen(
 
     LaunchedEffect(initialSource) {
         if (initialSource != null) {
-            val sourceFilter = SourceFilter.entries.find { it.name == initialSource }
+            val sourceFilter = SourceFilter.fromName(initialSource)
             if (sourceFilter != null) {
                 viewModel.setInitialSourceFilter(sourceFilter)
             }

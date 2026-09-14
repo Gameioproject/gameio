@@ -70,6 +70,10 @@ fun NavGraph(
         popEnterTransition = { fadeIn(animationSpec = tween(150)) },
         popExitTransition = { fadeOut(animationSpec = tween(150)) }
     ) {
+        composable(Screen.Addons.route) {
+            com.nendo.argosy.ui.screens.addons.AddonsScreen(onExit = navigateBack)
+        }
+
         composable(Screen.FirstRun.route) {
             FirstRunScreen(
                 onComplete = {
@@ -255,13 +259,18 @@ fun NavGraph(
         }
 
         composable(
-            route = Screen.GameDetail.route,
-            arguments = listOf(navArgument("gameId") { type = NavType.LongType }),
+            route = Screen.GameDetail.ROUTE_WITH_ARGS,
+            arguments = listOf(
+                navArgument("gameId") { type = NavType.LongType },
+                navArgument("panel") { type = NavType.StringType; nullable = true; defaultValue = null }
+            ),
             deepLinks = listOf(navDeepLink { uriPattern = "argosy://game/{gameId}" })
         ) { backStackEntry ->
             val gameId = backStackEntry.arguments?.getLong("gameId") ?: return@composable
             GameDetailScreen(
                 gameId = gameId,
+                initialPanel = backStackEntry.arguments?.getString("panel"),
+                onManageAddons = { navController.navigate(Screen.Addons.route) },
                 argosyViewModel = argosyViewModel,
                 onBack = { navController.popBackStack() },
                 onNavigateToPlatformSettings = { platformId ->

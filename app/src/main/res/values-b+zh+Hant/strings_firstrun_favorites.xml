@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="firstrun_favorites_title">你喜愛的遊戲</string>
+    <string name="firstrun_favorites_description">選擇幾款你喜歡的遊戲。三到五款是不錯的開始，你也可以略過。所選遊戲將加入收藏，並協助推薦你可能喜歡的遊戲。</string>
+    <string name="firstrun_favorites_search">搜尋遊戲</string>
+    <string name="firstrun_favorites_continue">繼續</string>
+    <string name="firstrun_favorites_skip">暫時略過</string>
+    <string name="firstrun_favorites_results">「%1$s」的搜尋結果</string>
+    <string name="firstrun_favorites_save_error">無法儲存此收藏，請重新選擇。</string>
+    <string name="firstrun_favorites_load_error">無法連線至目錄。你可以重試或繼續設定。</string>
+    <string name="firstrun_favorites_retry">重試</string>
+    <string name="firstrun_favorites_more">顯示更多</string>
+    <string name="firstrun_favorites_loading">正在載入遊戲…</string>
+    <string name="firstrun_favorites_empty">找不到遊戲。請嘗試其他名稱或繼續設定。</string>
+    <string name="firstrun_favorites_search_placeholder">搜尋遊戲目錄</string>
+    <string name="firstrun_favorites_remove">取消收藏</string>
+    <string name="firstrun_favorites_add">加入收藏</string>
+    <plurals name="firstrun_favorites_selected">
+        <item quantity="other">已選擇 %d 款收藏遊戲</item>
+    </plurals>
+</resources>

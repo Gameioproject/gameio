@@ -467,7 +467,14 @@ fun ArgosyApp(
         ?: remember { mutableStateOf(null) }
     LaunchedEffect(pendingOverlay) {
         val eventName = pendingOverlay ?: return@LaunchedEffect
-        when (eventName) {
+        if (eventName.startsWith("${DualScreenManager.OVERLAY_GAME_DETAIL}:")) {
+            val parts = eventName.removePrefix("${DualScreenManager.OVERLAY_GAME_DETAIL}:").split(":")
+            val gameId = parts.getOrNull(0)?.toLongOrNull()
+            val panel = parts.getOrNull(1)
+            if (gameId != null && panel in listOf(Screen.GameDetail.PANEL_COMMENTS, Screen.GameDetail.PANEL_SOURCES)) {
+                navController.navigate(Screen.GameDetail.createRoute(gameId, panel)) { launchSingleTop = true }
+            }
+        } else when (eventName) {
             DualScreenManager.OVERLAY_QUICK_MENU -> openQuickMenu()
             DualScreenManager.OVERLAY_QUICK_SETTINGS -> openQuickSettings()
             else -> openDrawer()
@@ -856,7 +863,8 @@ fun ArgosyApp(
                 if (a.isOverlayFocused) {
                     a.isOverlayFocused = false
                     a.dualScreenManager.companionHost?.onOverlayClosed()
-                    a.dualScreenManager.companionHost?.refocusSelf()
+                    if (a.dualScreenManager.isRolesSwapped.value) a.dualScreenManager.onRefocusUpper()
+                    else a.dualScreenManager.companionHost?.refocusSelf()
                 }
             }
         }
@@ -1898,6 +1906,8 @@ fun ArgosyApp(
                                     GameDetailOption.SELECT_DISC -> {
                                         dualScreenManager.handleDirectAction("SELECT_DISC", gameId)
                                     }
+                                    GameDetailOption.COMMENTS,
+                                    GameDetailOption.SOURCES,
                                     GameDetailOption.REFRESH_METADATA,
                                     GameDetailOption.DELETE -> {
                                         dualScreenManager.handleDirectAction(option.name, gameId)

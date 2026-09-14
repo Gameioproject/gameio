@@ -64,6 +64,8 @@ class VariantScanner @Inject constructor(
             val launchTargetPaths = candidates.map { it.first.absolutePath }.toSet()
             for (variant in existingVariants) {
                 if (variant.rommFileId != null) continue
+                if (variant.category == VariantCategory.GAME.key && variant.romId == 0L &&
+                    File(variant.filePath).isAbsolute) continue
                 val path = variant.localPath
                 if (path == null || path !in launchTargetPaths) {
                     gameFileDao.deleteById(variant.id)

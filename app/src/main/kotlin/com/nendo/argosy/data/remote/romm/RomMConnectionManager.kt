@@ -7,6 +7,7 @@ import android.provider.Settings
 import android.util.Base64
 import com.nendo.argosy.BuildConfig
 import com.nendo.argosy.data.preferences.UserPreferencesRepository
+import com.nendo.argosy.data.preferences.CatalogServerModeRepository
 import com.nendo.argosy.data.repository.BiosRepository
 import com.nendo.argosy.data.sync.AccountRemovalResult
 import com.nendo.argosy.data.sync.UnflushedQueuePolicy
@@ -85,7 +86,8 @@ class RomMConnectionManager @Inject constructor(
     private val accountRemovalService: dagger.Lazy<com.nendo.argosy.data.sync.AccountRemovalService>,
     private val syncCoordinator: dagger.Lazy<com.nendo.argosy.data.sync.SyncCoordinator>,
     private val retroAchievementsRepository: dagger.Lazy<com.nendo.argosy.data.repository.RetroAchievementsRepository>,
-    private val apiFactory: RomMApiFactory
+    private val apiFactory: RomMApiFactory,
+    private val catalogServerMode: CatalogServerModeRepository
 ) {
     private var api: RomMApi? = null
     private var baseUrl: String = ""
@@ -118,6 +120,8 @@ class RomMConnectionManager @Inject constructor(
         return (_connectionState.value as? ConnectionState.Connected)?.capabilities
             ?: RomMCapabilities.NONE
     }
+
+    fun usesAddonSources(): Boolean = catalogServerMode.usesAddonSources()
 
     fun isVersionAtLeast(minVersion: String): Boolean {
         val current = getConnectedVersion() ?: return false
@@ -283,6 +287,7 @@ class RomMConnectionManager @Inject constructor(
         for (candidateUrl in urlsToTry) {
             val normalizedUrl = candidateUrl.trimEnd('/') + "/"
             try {
+                catalogServerMode.select(normalizedUrl)
                 val newApi = createApi(normalizedUrl, token)
                 val response = newApi.heartbeat()
 
@@ -293,8 +298,9 @@ class RomMConnectionManager @Inject constructor(
                     saveSyncRepository.get().setApi(api)
                     biosRepository.setApi(api)
                     val body = response.body()
+                    if (body != null) catalogServerMode.remember(normalizedUrl, body.catalogOnly)
                     val version = body?.version ?: "unknown"
-                    val capabilities = RomMCapabilities.from(version, body?.libretroApiEnabled, body?.steamGridDbEnabled, body?.catalogOnly == true)
+                    val capabilities = RomMCapabilities.from(version, body?.libretroApiEnabled, body?.steamGridDbEnabled, body?.catalogOnly == true, body?.frontend?.supportUrl)
                     _connectionState.value = ConnectionState.Connected(version, capabilities)
                     saveSyncRepository.get().setCapabilities(capabilities)
                     reconnectPending = false
@@ -473,6 +479,7 @@ class RomMConnectionManager @Inject constructor(
     private fun deviceDisplayName(): String = "${Build.MANUFACTURER} ${Build.MODEL}".trim()
 
     fun disconnect() {
+        catalogServerMode.clearSelection()
         reconnectPending = false
         reconnectJob?.cancel()
         reconnectJob = null
@@ -572,8 +579,9 @@ class RomMConnectionManager @Inject constructor(
             val response = currentApi.heartbeat()
             if (response.isSuccessful) {
                 val body = response.body()
+                if (body != null) catalogServerMode.remember(baseUrl, body.catalogOnly)
                 val version = body?.version ?: "unknown"
-                val capabilities = RomMCapabilities.from(version, body?.libretroApiEnabled, body?.steamGridDbEnabled, body?.catalogOnly == true)
+                val capabilities = RomMCapabilities.from(version, body?.libretroApiEnabled, body?.steamGridDbEnabled, body?.catalogOnly == true, body?.frontend?.supportUrl)
                 _connectionState.value = ConnectionState.Connected(version, capabilities)
                 saveSyncRepository.get().setCapabilities(capabilities)
                 reconnectPending = false

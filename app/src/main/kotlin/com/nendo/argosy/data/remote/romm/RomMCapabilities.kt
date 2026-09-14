@@ -13,6 +13,7 @@ data class RomMCapabilities(
     val supportsMusicApi: Boolean,
     val supportsCoverSearch: Boolean = false,
     val catalogOnly: Boolean = false,
+    val supportUrl: String? = null,
 ) {
     companion object {
         /**
@@ -46,9 +47,11 @@ data class RomMCapabilities(
             version: String?,
             libretroEnabled: Boolean? = null,
             steamGridDbEnabled: Boolean? = null,
-            catalogOnly: Boolean = false
+            catalogOnly: Boolean = false,
+            supportUrl: String? = null
         ): RomMCapabilities {
-            if (version.isNullOrBlank() || version == "unknown") return NONE
+            val support = normalizeSupportUrl(supportUrl)
+            if (version.isNullOrBlank() || version == "unknown") return NONE.copy(supportUrl = support)
             val syncEngine = compareVersions(version, SYNC_ENGINE_MIN_VERSION) >= 0
             val deviceSync = compareVersions(version, DEVICE_SYNC_MIN_VERSION) >= 0
             // A catalog-only server has no ROM files, saves, screenshots or music behind the
@@ -68,6 +71,7 @@ data class RomMCapabilities(
                 supportsMusicApi = compareVersions(version, MUSIC_API_MIN_VERSION) >= 0 && !catalogOnly,
                 supportsCoverSearch = steamGridDbEnabled == true && !catalogOnly,
                 catalogOnly = catalogOnly,
+                supportUrl = support,
             )
         }
 

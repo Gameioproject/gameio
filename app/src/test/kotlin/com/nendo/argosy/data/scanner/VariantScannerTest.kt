@@ -96,6 +96,21 @@ class VariantScannerTest {
     }
 
     @Test
+    fun `folder-discovered edition rows survive category scans but unrelated local rows do not`() = runTest {
+        val folder = gameFolder("Some Game")
+        val base = write(folder, "Some Game.chd")
+        val edition = write(folder, "Some Game (Europe).chd")
+        val owned = GameFileEntity(id = 7, gameId = 1, fileName = edition.name,
+            filePath = edition.absolutePath, category = "game", fileSize = 8, localPath = edition.absolutePath)
+        coEvery { dao.getVariantsForGame(1) } returns listOf(owned,
+            owned.copy(id = 8, filePath = "remote/edition.chd", romId = 20),
+            owned.copy(id = 9, category = "hack"))
+        scanner.scanForVariants(game(base.absolutePath))
+        assertEquals(listOf(8L, 9L), deleted)
+        assertTrue(inserted.isEmpty())
+    }
+
+    @Test
     fun `file in hack subdirectory becomes a hack variant`() = runTest {
         val folder = gameFolder("Some Game")
         val base = write(folder, "Some Game.chd")

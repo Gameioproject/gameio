@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="firstrun_favorites_title">Your favorite games</string>
+    <string name="firstrun_favorites_description">Choose a few games you love. Three to five is a good start, and you can skip this. Your choices become favorites and help shape recommendations.</string>
+    <string name="firstrun_favorites_search">Search games</string>
+    <string name="firstrun_favorites_continue">Continue</string>
+    <string name="firstrun_favorites_skip">Skip for now</string>
+    <string name="firstrun_favorites_results">Results for “%1$s”</string>
+    <string name="firstrun_favorites_save_error">Could not save that favorite. Try selecting it again.</string>
+    <string name="firstrun_favorites_load_error">The catalog could not be reached. You can retry or continue setup.</string>
+    <string name="firstrun_favorites_retry">Retry</string>
+    <string name="firstrun_favorites_more">Show more</string>
+    <string name="firstrun_favorites_loading">Loading games…</string>
+    <string name="firstrun_favorites_empty">No games found. Try another title or continue setup.</string>
+    <string name="firstrun_favorites_search_placeholder">Search the catalog</string>
+    <string name="firstrun_favorites_remove">Remove favorite</string>
+    <string name="firstrun_favorites_add">Add favorite</string>
+    <plurals name="firstrun_favorites_selected">
+        <item quantity="one">%d favorite selected</item>
+        <item quantity="other">%d favorites selected</item>
+    </plurals>
+</resources>

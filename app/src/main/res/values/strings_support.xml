@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="support_gameio_title">Support Gameio</string>
+    <string name="support_gameio_subtitle">Help keep Gameio growing. Opens the support page in your browser.</string>
+    <string name="support_gameio_browser_error">Could not open the link. Install a browser and try again.</string>
+</resources>

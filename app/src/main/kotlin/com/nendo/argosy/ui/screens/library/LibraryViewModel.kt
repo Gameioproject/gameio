@@ -112,10 +112,14 @@ enum class FilterCategory(@StringRes val labelRes: Int) {
  */
 enum class SourceFilter(@StringRes val labelRes: Int) {
     ALL(R.string.source_filter_all),
-    AVAILABLE(R.string.source_filter_available),
     PLAYABLE(R.string.source_filter_playable),
     FAVORITES(R.string.source_filter_favorites),
-    HIDDEN(R.string.source_filter_hidden)
+    HIDDEN(R.string.source_filter_hidden);
+
+    companion object {
+        fun fromName(name: String): SourceFilter? =
+            if (name == "AVAILABLE") ALL else entries.find { it.name == name }
+    }
 }
 
 data class ActiveFilters(
@@ -399,9 +403,6 @@ private const val TAG = "LibraryVM"
 // switch still feels immediate.
 private const val MIN_SWITCH_VISIBLE_MS = 180L
 
-/** Owned rows to pull before the Available grid first paints; the scroll handler pages the rest. */
-private const val AVAILABLE_FIRST_PAGE = 200
-
 sealed class LibraryEvent {
     data class LaunchIntent(val intent: Intent, val options: android.os.Bundle? = null) : LibraryEvent()
 }
@@ -507,7 +508,7 @@ class LibraryViewModel @Inject constructor(
             val prefs = preferencesRepository.userPreferences.first()
             val option = SortOption.entries.firstOrNull { it.name == prefs.libraryDefaultSort }
                 ?: SortOption.TITLE
-            val source = SourceFilter.entries.firstOrNull { it.name == prefs.libraryDefaultSource }
+            val source = SourceFilter.fromName(prefs.libraryDefaultSource)
                 ?: SourceFilter.PLAYABLE
             val platforms = prefs.libraryDefaultPlatform
                 .takeIf { it.isNotBlank() }
@@ -984,11 +985,7 @@ class LibraryViewModel @Inject constructor(
         if (jumpInFlight) return
         viewModelScope.launch {
             loadServerSections(platformId)
-            if (_uiState.value.activeFilters.source == SourceFilter.AVAILABLE) {
-                catalogPager.ensureAvailable(platformId, lastVisibleIndex + 200)
-            } else {
-                catalogPager.ensureThrough(platformId, lastVisibleIndex)
-            }
+            catalogPager.ensureThrough(platformId, lastVisibleIndex)
         }
     }
 
@@ -1028,11 +1025,7 @@ class LibraryViewModel @Inject constructor(
             ?.takeIf { catalogPager.isCatalogOnly() && filters.source != SourceFilter.HIDDEN }
         if (pagedPlatformId != null) {
             viewModelScope.launch {
-                if (filters.source == SourceFilter.AVAILABLE) {
-                    catalogPager.ensureAvailable(pagedPlatformId, AVAILABLE_FIRST_PAGE)
-                } else {
-                    catalogPager.ensureThrough(pagedPlatformId, 0)
-                }
+                catalogPager.ensureThrough(pagedPlatformId, 0)
             }
         }
 
@@ -1054,7 +1047,7 @@ class LibraryViewModel @Inject constructor(
                 }
             } else {
                 when (filters.source) {
-                    SourceFilter.ALL, SourceFilter.AVAILABLE -> gameRepository.observeAllList()
+                    SourceFilter.ALL -> gameRepository.observeAllList()
                     SourceFilter.PLAYABLE -> gameRepository.observePlayableList()
                     SourceFilter.FAVORITES -> gameRepository.observeFavoritesList()
                     SourceFilter.HIDDEN -> gameRepository.observeHiddenList()
@@ -1092,9 +1085,7 @@ class LibraryViewModel @Inject constructor(
                         val matchesPlayers = filters.players.isEmpty() ||
                             game.gameModes?.split(",")?.map { it.trim() }?.any { it in filters.players } == true
                         val matchesSeries = seriesIds == null || game.id in seriesIds
-                        val matchesAvailable = filters.source != SourceFilter.AVAILABLE ||
-                            (game.fileSizeBytes ?: 0L) > 0L || game.localPath != null
-                        matchesSearch && matchesPlatform && matchesGenre && matchesPlayers && matchesSeries && matchesAvailable
+                        matchesSearch && matchesPlatform && matchesGenre && matchesPlayers && matchesSeries
                     }
 
                     val sections = computeSections(filteredGames, filters.sort, sortPartition)

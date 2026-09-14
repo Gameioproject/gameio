@@ -1,0 +1,11 @@
+<resources>
+    <string name="game_sources_title">游戏来源</string>
+    <string name="game_sources_checking">正在检查来源…</string>
+    <string name="game_sources_on_device">此游戏已在设备上，无需插件即可游玩。</string>
+    <string name="game_sources_import_prompt">导入插件以查找下载来源。文件夹中的游戏始终可用。</string>
+    <string name="game_sources_missing">你的插件暂时没有此游戏的来源。</string>
+    <string name="game_sources_choose">选择下载来源。</string>
+    <string name="game_sources_retry">重新检查</string>
+    <string name="game_sources_manage">管理插件</string>
+    <string name="game_sources_close">关闭</string>
+</resources>

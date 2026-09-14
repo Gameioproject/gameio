@@ -869,7 +869,8 @@ data class ServerState(
     val uploadScreenshotsEnabled: Boolean = true,
     val boxArtCacheEnabled: Boolean = true,
     val screenshotUploadSupported: Boolean = false,
-    val musicApiSupported: Boolean = false
+    val musicApiSupported: Boolean = false,
+    val supportUrl: String? = null
 )
 
 /**
