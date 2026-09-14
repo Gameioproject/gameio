@@ -1,5 +1,6 @@
 package com.nendo.argosy.ui.theme.backdrop
 
+import com.nendo.argosy.ui.theme.gameioBackground
 import android.graphics.Matrix
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
@@ -65,7 +66,7 @@ private class BackdropLayer(val shader: Shader, val brush: ShaderBrush, val tile
 fun Modifier.surfaceBackdrop(role: BackdropRole): Modifier {
     val base = MaterialTheme.colorScheme.background
     val config = LocalSurfaceBackdrop.current
-    if (!config.enabled) return background(base)
+    if (!config.enabled) return gameioBackground()
     val tint = LocalArgosyTheme.current.focusAccent
     val cellSizePx = with(LocalDensity.current) {
         (config.cellSize * LocalUiScale.current.scale).dp.toPx()

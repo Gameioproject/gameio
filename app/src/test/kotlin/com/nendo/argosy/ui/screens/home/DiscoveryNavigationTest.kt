@@ -92,4 +92,49 @@ class DiscoveryNavigationTest {
         assertNull(updated.focusedGame)
     }
 
+    @Test fun `refresh preserves latest selection while games reorder`() {
+        val current = state().copy(recentGames = listOf(game(1), game(2), game(3)), focusedGameIndex = 2)
+        val updated = DiscoveryNavigation.reconcileGames(current,
+            current.copy(recentGames = listOf(game(3), game(1), game(2))))
+        assertEquals(3L, updated.focusedGame?.id)
+        assertEquals(0, updated.focusedGameIndex)
+    }
+
+    @Test fun `moving left progresses one game and stops at the edge`() {
+        val current = state().copy(recentGames = (1L..8L).map { game(it) }, focusedGameIndex = 6)
+        val moved = DiscoveryNavigation.horizontal(current, -1)
+        assertEquals(5, moved.focusedGameIndex)
+        val refreshed = DiscoveryNavigation.reconcileGames(moved, moved.copy(discoveryData = DiscoveryData()))
+        assertEquals(5, refreshed.focusedGameIndex)
+        assertEquals(0, DiscoveryNavigation.horizontal(current.copy(focusedGameIndex = 0), -1).focusedGameIndex)
+    }
+
+    @Test fun `back restores hero selection and does not reset it on another press`() {
+        val current = state()
+        val lower = DiscoveryNavigation.vertical(DiscoveryNavigation.vertical(current, 1), 1)
+        val home = DiscoveryNavigation.returnToHero(lower)
+        assertEquals(2L, home.focusedGame?.id)
+        assertEquals(home, DiscoveryNavigation.returnToHero(home))
+    }
+
+    @Test fun `refresh safely clamps selection when game is removed`() {
+        val current = state()
+        val updated = DiscoveryNavigation.reconcileGames(current, current.copy(recentGames = listOf(game(1)), discoveryData = DiscoveryData()))
+        assertEquals(0, updated.focusedGameIndex)
+        assertEquals(1L, updated.focusedGame?.id)
+    }
+
+    @Test fun `empty recent updates keep the selected fallback game`() {
+        val current = state().copy(recentGames = emptyList(), focusedGameIndex = 1)
+        val updated = DiscoveryNavigation.reconcileGames(current, current.copy(recentGames = emptyList()))
+        assertEquals(4L, updated.focusedGame?.id)
+        assertEquals(1, updated.focusedGameIndex)
+    }
+
+    @Test fun `refresh preserves remembered hero while exploring`() {
+        val current = DiscoveryNavigation.vertical(state(), 1)
+        val updated = DiscoveryNavigation.reconcileGames(current,
+            current.copy(recentGames = listOf(game(2), game(1))))
+        assertEquals(2L, DiscoveryNavigation.returnToHero(updated).focusedGame?.id)
+    }
 }

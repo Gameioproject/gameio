@@ -16,6 +16,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.foundation.interaction.DragInteraction
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import com.nendo.argosy.ui.components.YouTubeVideoPlayer
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +49,31 @@ fun DiscoveryGameRail(
     } else if (state.discoveryFocus.zone == zone) state.focusedGameIndex
     else state.discoveryFocus.rowIndexes[zone] ?: 0
     val list = rememberLazyListState(initialFirstVisibleItemIndex = selected.coerceIn(0, games.lastIndex.coerceAtLeast(0)))
+    var dragging by remember { mutableStateOf(false) }
+    var touchSelection by remember { mutableStateOf<Int?>(null) }
+    val currentGames by rememberUpdatedState(games)
+    LaunchedEffect(list) {
+        list.interactionSource.interactions.collectLatest { interaction ->
+            when (interaction) {
+                is DragInteraction.Start -> dragging = true
+                is DragInteraction.Stop, is DragInteraction.Cancel -> {
+                    snapshotFlow { list.isScrollInProgress }.first { !it }
+                    val visible = list.layoutInfo.visibleItemsInfo
+                    val item = visible.firstOrNull { it.offset >= 0 } ?: visible.firstOrNull()
+                    if (item != null && item.index in currentGames.indices) {
+                        touchSelection = item.index
+                        viewModel.selectDiscoveryGame(zone, item.index)
+                    }
+                    dragging = false
+                }
+            }
+        }
+    }
     LaunchedEffect(selected, state.discoveryFocus.zone == zone) {
-        if (state.discoveryFocus.zone == zone && games.isNotEmpty()) {
+        if (touchSelection == selected) {
+            touchSelection = null
+        } else if (!dragging && state.discoveryFocus.zone == zone && games.isNotEmpty()) {
+            touchSelection = null
             list.scrollDiscoverySelection(selected.coerceIn(0, games.lastIndex))
         }
     }
@@ -72,7 +104,7 @@ fun DiscoveryGameRail(
                 cover = { coverModifier ->
                     MaterialTheme(colorScheme = MaterialTheme.colorScheme.copy(
                         primary = MaterialTheme.colorScheme.secondary,
-                        onPrimary = MaterialTheme.colorScheme.onSurface
+                        onPrimary = MaterialTheme.colorScheme.onSecondary
                     )) {
                         GameCard(game = game, isFocused = focused, modifier = coverModifier,
                             showPlatformBadge = true, scaleOverride = 1f, alphaOverride = 1f,

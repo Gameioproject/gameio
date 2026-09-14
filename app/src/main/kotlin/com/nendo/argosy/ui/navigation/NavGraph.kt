@@ -1,5 +1,9 @@
 package com.nendo.argosy.ui.navigation
 
+import androidx.activity.compose.BackHandler
+import com.nendo.argosy.ui.input.LocalInputDispatcher
+import com.nendo.argosy.ui.input.GamepadInput
+import com.nendo.argosy.ui.input.GamepadEvent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -56,6 +60,7 @@ fun NavGraph(
             if (!navController.popBackStack()) navigateToDefault()
         }
     }
+    val inputDispatcher = LocalInputDispatcher.current
     NavHost(
         modifier = modifier,
         navController = navController,
@@ -128,7 +133,7 @@ fun NavGraph(
                 onMediaLibrarySelect = { libraryId ->
                     navController.navigate(Screen.MediaLibrary.createRoute(libraryId))
                 },
-                onNavigateToDefault = navigateToDefault,
+                onNavigateToDefault = navigateBack,
                 onDrawerToggle = onDrawerToggle
             )
         }
@@ -238,9 +243,7 @@ fun NavGraph(
             val action = backStackEntry.arguments?.getString("action")
             val platformId = backStackEntry.arguments?.getLong("platformId")?.takeIf { it >= 0 }
             SettingsScreen(
-                onBack = {
-                    if (platformId != null) navController.popBackStack() else navigateToDefault()
-                },
+                onBack = navigateBack,
                 initialSection = section,
                 initialAction = action,
                 initialPlatformId = platformId,
@@ -456,6 +459,13 @@ fun NavGraph(
 
         composable(Screen.QuayPass.route) {
             QuayPassCheckInScreen(onBack = navigateBack)
+        }
+    }
+    // Register after NavHost so system Back uses the same modal and screen handlers.
+    BackHandler {
+        val result = inputDispatcher.dispatch(GamepadInput(GamepadEvent.Back))
+        if (!result.handled && navController.currentDestination?.route != Screen.Home.route) {
+            navigateBack()
         }
     }
 }

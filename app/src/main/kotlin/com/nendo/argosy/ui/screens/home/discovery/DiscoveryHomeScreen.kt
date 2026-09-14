@@ -1,5 +1,6 @@
 package com.nendo.argosy.ui.screens.home.discovery
 
+import com.nendo.argosy.ui.theme.gameioBackground
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,7 +38,7 @@ import com.nendo.argosy.ui.theme.generated.ComponentDefaults.DiscoveryHome as T
 @Composable
 fun DiscoveryHomeScreen(state: HomeUiState, viewModel: HomeViewModel, onGameSelect: (Long) -> Unit, onMenu: () -> Unit, useBackdrop: Boolean = false) {
     DiscoveryTheme {
-        BoxWithConstraints(Modifier.fillMaxSize().then(if (useBackdrop) Modifier else Modifier.background(MaterialTheme.colorScheme.background))) {
+        BoxWithConstraints(Modifier.fillMaxSize().then(if (useBackdrop) Modifier else Modifier.gameioBackground())) {
             val dimensions = DiscoveryDimensions(
                 (maxHeight / T.referenceHeightDp.dp).coerceIn(T.minScale, T.maxScale) * LocalUiScale.current.scale,
                 bodyTextScale = MaterialTheme.typography.bodyMedium.fontSize.value /

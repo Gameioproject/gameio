@@ -1,5 +1,6 @@
 package com.nendo.argosy.ui.screens.search
 
+import com.nendo.argosy.ui.theme.gameioBackground
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -116,7 +117,7 @@ fun SearchScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .gameioBackground()
     ) {
         SearchHeader(
             query = uiState.query,

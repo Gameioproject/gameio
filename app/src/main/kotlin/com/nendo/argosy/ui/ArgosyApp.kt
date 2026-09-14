@@ -1,5 +1,6 @@
 package com.nendo.argosy.ui
 
+import com.nendo.argosy.ui.theme.gameioBackground
 import androidx.annotation.StringRes
 import androidx.compose.ui.res.stringResource
 import com.nendo.argosy.R
@@ -1095,7 +1096,7 @@ fun ArgosyApp(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
+                    .gameioBackground()
                     .padding(bottom = bottomReserved)
                     .onFocusChanged { keySinkFocused = it.isFocused }
                     .focusRequester(rootFocusRequester)
