@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.nendo.argosy.R
 import com.nendo.argosy.data.addon.AddonSourceMatch
+import com.nendo.argosy.ui.common.kindLabelRes
 import com.nendo.argosy.ui.common.messageRes
 import com.nendo.argosy.ui.components.CenteredModal
 import com.nendo.argosy.ui.components.FocusedScroll
@@ -98,8 +99,9 @@ fun GameSourcesModal(
             verticalArrangement = Arrangement.spacedBy(Dimens.spacingXs)) {
             items(state.sourceChoices.size, key = { "${state.sourceChoices[it].addonId}:${state.sourceChoices[it].source.id}" }) { index ->
                 val match = state.sourceChoices[index]
+                val kind = stringResource(match.source.kindLabelRes)
                 OptionItem(label = match.source.filename, icon = Icons.Default.Download,
-                    value = listOfNotNull(match.addonName, match.source.region, match.source.size?.let(::formatBytes)).joinToString(" · "),
+                    value = listOfNotNull(kind, match.source.region, match.source.size?.let(::formatBytes), match.addonName).joinToString(" · "),
                     isFocused = state.focusedIndex == index, onClick = { delegate.focus(index); activate(index) })
             }
             item("retry") {

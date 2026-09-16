@@ -53,6 +53,7 @@ import javax.inject.Singleton
 private const val STORAGE_BUFFER_BYTES = 50 * 1024 * 1024L
 private const val INTERNAL_STAGING_RESERVE_BYTES = 1024 * 1024 * 1024L
 private const val DOWNLOAD_BUFFER_SIZE = 64 * 1024
+private const val WRITE_BUFFER_SIZE = 1024 * 1024
 private const val UI_UPDATE_INTERVAL_MS = 500L
 private const val DB_UPDATE_INTERVAL_MS = 5000L
 
@@ -1719,7 +1720,7 @@ class DownloadManager @Inject constructor(
     }
 
     private fun createOutputStream(tempFile: File, isResume: Boolean): java.io.OutputStream {
-        return if (isResume && tempFile.exists()) {
+        val file = if (isResume && tempFile.exists()) {
             RandomAccessFile(tempFile, "rw").apply {
                 seek(tempFile.length())
             }.let { raf ->
@@ -1732,6 +1733,7 @@ class DownloadManager @Inject constructor(
         } else {
             FileOutputStream(tempFile)
         }
+        return java.io.BufferedOutputStream(file, WRITE_BUFFER_SIZE)
     }
 
     private suspend fun processDownloadedFile(

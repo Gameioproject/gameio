@@ -112,6 +112,7 @@ class UserPreferencesRepository @Inject constructor(
             visibleSystemApps = app.visibleSystemApps,
             appOrder = app.appOrder,
             maxConcurrentDownloads = storage.maxConcurrentDownloads,
+            downloadConnections = storage.downloadConnections,
             instantDownloadThresholdMb = storage.instantDownloadThresholdMb,
             stageDownloadsInternally = storage.stageDownloadsInternally,
             gridDensity = display.gridDensity,
@@ -431,6 +432,7 @@ class UserPreferencesRepository @Inject constructor(
 
     suspend fun setRomStoragePath(path: String) = storagePrefs.setRomStoragePath(path)
     suspend fun setMaxConcurrentDownloads(count: Int) = storagePrefs.setMaxConcurrentDownloads(count)
+    suspend fun setDownloadConnections(count: Int) = storagePrefs.setDownloadConnections(count)
     suspend fun setInstantDownloadThresholdMb(value: Int) = storagePrefs.setInstantDownloadThresholdMb(value)
     suspend fun setStageDownloadsInternally(enabled: Boolean) = storagePrefs.setStageDownloadsInternally(enabled)
     suspend fun setCustomBiosPath(path: String?) = storagePrefs.setCustomBiosPath(path)
@@ -736,6 +738,7 @@ data class UserPreferences(
     val visibleSystemApps: Set<String> = emptySet(),
     val appOrder: List<String> = emptyList(),
     val maxConcurrentDownloads: Int = 1,
+    val downloadConnections: Int = DownloadConnections.DEFAULT,
     val instantDownloadThresholdMb: Int = 50,
     val stageDownloadsInternally: Boolean = true,
     val gridDensity: GridDensity = GridDensity.NORMAL,

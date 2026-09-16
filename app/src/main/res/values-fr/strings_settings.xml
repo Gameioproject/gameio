@@ -708,6 +708,13 @@
     <string name="settings_storage_builtin_state_path_internal">Interne (par défaut)</string>
 
     <string name="settings_storage_max_downloads_title">Téléchargements actifs max</string>
+    <string name="settings_storage_connections_title">Connexions de téléchargement</string>
+    <string name="settings_storage_connections_subtitle">Fragments récupérés en même temps par téléchargement. Plus de connexions aident sur un Wi-Fi lent.</string>
+    <plurals name="settings_storage_connections_value">
+        <item quantity="one">%d connexion</item>
+        <item quantity="many">%d connexions</item>
+        <item quantity="other">%d connexions</item>
+    </plurals>
     <string name="settings_storage_threshold_title">Seuil de téléchargement instantané</string>
     <string name="settings_storage_threshold_value">%1$d MB</string>
     <string name="settings_storage_threshold_subtitle">Les fichiers sous cette taille se téléchargent immédiatement</string>

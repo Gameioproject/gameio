@@ -1,6 +1,7 @@
 package com.nendo.argosy.ui.screens.settings
 
 import com.nendo.argosy.R
+import com.nendo.argosy.data.preferences.DownloadConnections
 import com.nendo.argosy.ui.common.DisplayText
 import com.nendo.argosy.core.emulator.EmulatorDownloadState
 import com.nendo.argosy.data.cache.GradientExtractionConfig
@@ -751,6 +752,7 @@ data class StorageState(
     val downloadedGamesSize: Long = 0,
     val downloadedGamesCount: Int = 0,
     val maxConcurrentDownloads: Int = 1,
+    val downloadConnections: Int = DownloadConnections.DEFAULT,
     val instantDownloadThresholdMb: Int = 50,
     val stageDownloadsInternally: Boolean = true,
     val availableSpace: Long = 0,

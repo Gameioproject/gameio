@@ -706,6 +706,7 @@ internal fun routeLoadSettings(vm: SettingsViewModel) {
             downloadedGamesSize = downloadedSize,
             downloadedGamesCount = downloadedCount,
             maxConcurrentDownloads = prefs.maxConcurrentDownloads,
+            downloadConnections = prefs.downloadConnections,
             instantDownloadThresholdMb = prefs.instantDownloadThresholdMb,
             stageDownloadsInternally = prefs.stageDownloadsInternally,
             availableSpace = availableSpace,

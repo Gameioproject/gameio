@@ -8,4 +8,7 @@
     <string name="game_sources_retry">Vérifier à nouveau</string>
     <string name="game_sources_manage">Gérer les extensions</string>
     <string name="game_sources_close">Fermer</string>
+    <string name="game_sources_kind_archive">Internet Archive</string>
+    <string name="game_sources_kind_torrent">Torrent · Real-Debrid</string>
+    <string name="game_sources_kind_direct">Lien direct</string>
 </resources>

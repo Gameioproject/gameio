@@ -8,4 +8,7 @@
     <string name="game_sources_retry">Проверить снова</string>
     <string name="game_sources_manage">Управление дополнениями</string>
     <string name="game_sources_close">Закрыть</string>
+    <string name="game_sources_kind_archive">Internet Archive</string>
+    <string name="game_sources_kind_torrent">Торрент · Real-Debrid</string>
+    <string name="game_sources_kind_direct">Прямая ссылка</string>
 </resources>

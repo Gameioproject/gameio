@@ -721,6 +721,14 @@
     <string name="settings_storage_builtin_state_path_internal">Внутреннее (по умолчанию)</string>
 
     <string name="settings_storage_max_downloads_title">Макс. активных загрузок</string>
+    <string name="settings_storage_connections_title">Соединения загрузки</string>
+    <string name="settings_storage_connections_subtitle">Сколько фрагментов загружается одновременно для одной игры. Больше соединений помогает при медленном Wi-Fi.</string>
+    <plurals name="settings_storage_connections_value">
+        <item quantity="one">%d соединение</item>
+        <item quantity="few">%d соединения</item>
+        <item quantity="many">%d соединений</item>
+        <item quantity="other">%d соединения</item>
+    </plurals>
     <string name="settings_storage_threshold_title">Порог мгновенной загрузки</string>
     <string name="settings_storage_threshold_value">%1$d MB</string>
     <string name="settings_storage_threshold_subtitle">Файлы меньше этого размера загружаются сразу</string>

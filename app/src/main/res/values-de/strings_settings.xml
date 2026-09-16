@@ -702,6 +702,12 @@
     <string name="settings_storage_builtin_state_path_internal">Intern (Standard)</string>
 
     <string name="settings_storage_max_downloads_title">Max. gleichzeitige Downloads</string>
+    <string name="settings_storage_connections_title">Download-Verbindungen</string>
+    <string name="settings_storage_connections_subtitle">Gleichzeitig abgerufene Fragmente pro Spiel-Download. Mehr Verbindungen helfen bei langsamem WLAN.</string>
+    <plurals name="settings_storage_connections_value">
+        <item quantity="one">%d Verbindung</item>
+        <item quantity="other">%d Verbindungen</item>
+    </plurals>
     <string name="settings_storage_threshold_title">Schwelle für Sofort-Download</string>
     <string name="settings_storage_threshold_value">%1$d MB</string>
     <string name="settings_storage_threshold_subtitle">Dateien unter dieser Größe werden sofort heruntergeladen</string>

@@ -679,6 +679,11 @@
     <string name="settings_storage_builtin_state_path_internal">内部存储 (默认)</string>
 
     <string name="settings_storage_max_downloads_title">最大同时下载数</string>
+    <string name="settings_storage_connections_title">下载连接数</string>
+    <string name="settings_storage_connections_subtitle">每个游戏下载同时获取的分片数。连接越多，在慢速 Wi-Fi 上越有帮助。</string>
+    <plurals name="settings_storage_connections_value">
+        <item quantity="other">%d 个连接</item>
+    </plurals>
     <string name="settings_storage_threshold_title">即时下载阈值</string>
     <string name="settings_storage_threshold_value">%1$d MB</string>
     <string name="settings_storage_threshold_subtitle">小于此大小的文件会立即下载</string>

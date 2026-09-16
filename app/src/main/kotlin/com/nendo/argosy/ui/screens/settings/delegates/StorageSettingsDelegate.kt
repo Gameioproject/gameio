@@ -1,6 +1,7 @@
 package com.nendo.argosy.ui.screens.settings.delegates
 
 import android.content.Context
+import com.nendo.argosy.data.preferences.DownloadConnections
 import android.os.Build
 import android.os.Environment
 import android.util.Log
@@ -141,6 +142,14 @@ class StorageSettingsDelegate @Inject constructor(
             val next = !_state.value.stageDownloadsInternally
             preferencesRepository.setStageDownloadsInternally(next)
             _state.update { it.copy(stageDownloadsInternally = next) }
+        }
+    }
+
+    fun cycleDownloadConnections(scope: CoroutineScope, direction: Int = 1) {
+        scope.launch {
+            val next = cycleInList(_state.value.downloadConnections, DownloadConnections.OPTIONS, direction)
+            preferencesRepository.setDownloadConnections(next)
+            _state.update { it.copy(downloadConnections = next) }
         }
     }
 

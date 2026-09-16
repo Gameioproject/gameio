@@ -8,4 +8,7 @@
     <string name="game_sources_retry">重新檢查</string>
     <string name="game_sources_manage">管理外掛</string>
     <string name="game_sources_close">關閉</string>
+    <string name="game_sources_kind_archive">Internet Archive</string>
+    <string name="game_sources_kind_torrent">種子 · Real-Debrid</string>
+    <string name="game_sources_kind_direct">直接連結</string>
 </resources>

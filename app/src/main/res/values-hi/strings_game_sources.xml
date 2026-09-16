@@ -8,4 +8,7 @@
     <string name="game_sources_retry">फिर से जाँचें</string>
     <string name="game_sources_manage">ऐड-ऑन प्रबंधित करें</string>
     <string name="game_sources_close">बंद करें</string>
+    <string name="game_sources_kind_archive">Internet Archive</string>
+    <string name="game_sources_kind_torrent">टोरेंट · Real-Debrid</string>
+    <string name="game_sources_kind_direct">सीधा लिंक</string>
 </resources>

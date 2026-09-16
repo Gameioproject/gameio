@@ -8,4 +8,7 @@
     <string name="game_sources_retry">重新检查</string>
     <string name="game_sources_manage">管理插件</string>
     <string name="game_sources_close">关闭</string>
+    <string name="game_sources_kind_archive">Internet Archive</string>
+    <string name="game_sources_kind_torrent">种子 · Real-Debrid</string>
+    <string name="game_sources_kind_direct">直接链接</string>
 </resources>
