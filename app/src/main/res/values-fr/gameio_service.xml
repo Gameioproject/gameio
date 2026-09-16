@@ -4,5 +4,6 @@
     <string name="gameio_login_invalid_credentials">Vérifiez votre nom d’utilisateur et votre mot de passe, puis réessayez.</string>
     <string name="gameio_login_account_unavailable">Ce compte ne peut pas se connecter. Contactez l’assistance Gameio.</string>
     <string name="gameio_login_unavailable">Gameio est indisponible pour le moment. Vérifiez votre connexion et réessayez.</string>
+    <string name="gameio_login_too_many_devices">Trop d’appareils sont connectés à ce compte. Retirez-en un dans l’application web Gameio, puis réessayez.</string>
     <string name="gameio_update_unavailable">Impossible de rechercher les mises à jour. Veuillez réessayer.</string>
 </resources>
