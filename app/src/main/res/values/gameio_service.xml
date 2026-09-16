@@ -4,5 +4,6 @@
     <string name="gameio_login_invalid_credentials">Check your username and password, then try again.</string>
     <string name="gameio_login_account_unavailable">This account cannot sign in. Contact Gameio support for help.</string>
     <string name="gameio_login_unavailable">Gameio is unavailable right now. Check your connection and try again.</string>
+    <string name="gameio_login_too_many_devices">Too many devices are signed in to this account. Remove one in the Gameio web app, then try again.</string>
     <string name="gameio_update_unavailable">Could not check for updates. Please try again.</string>
 </resources>

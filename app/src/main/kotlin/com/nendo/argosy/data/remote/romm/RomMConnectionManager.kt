@@ -60,7 +60,7 @@ sealed class ConnectionState {
     data class Failed(val reason: String) : ConnectionState()
 }
 
-enum class SignInFailureReason { INVALID_CREDENTIALS, ACCOUNT_UNAVAILABLE, UNAVAILABLE }
+enum class SignInFailureReason { INVALID_CREDENTIALS, ACCOUNT_UNAVAILABLE, TOO_MANY_DEVICES, UNAVAILABLE }
 
 /** What a username-and-password sign-in produced. */
 sealed class SignInResult {
@@ -408,6 +408,7 @@ class RomMConnectionManager @Inject constructor(
                         when (response.code()) {
                             401 -> SignInFailureReason.INVALID_CREDENTIALS
                             403 -> SignInFailureReason.ACCOUNT_UNAVAILABLE
+                            400 -> SignInFailureReason.TOO_MANY_DEVICES
                             else -> SignInFailureReason.UNAVAILABLE
                         }
                     )
