@@ -718,6 +718,13 @@
     <string name="settings_storage_builtin_state_path_internal">Interno (predeterminado)</string>
 
     <string name="settings_storage_max_downloads_title">Descargas activas máximas</string>
+    <string name="settings_storage_connections_title">Conexiones de descarga</string>
+    <string name="settings_storage_connections_subtitle">Fragmentos descargados a la vez por juego. Más conexiones ayudan con Wi-Fi lento.</string>
+    <plurals name="settings_storage_connections_value">
+        <item quantity="one">%d conexión</item>
+        <item quantity="many">%d conexiones</item>
+        <item quantity="other">%d conexiones</item>
+    </plurals>
     <string name="settings_storage_threshold_title">Umbral de descarga instantánea</string>
     <string name="settings_storage_threshold_value">%1$d MB</string>
     <string name="settings_storage_threshold_subtitle">Los archivos por debajo de este tamaño se descargan de inmediato</string>

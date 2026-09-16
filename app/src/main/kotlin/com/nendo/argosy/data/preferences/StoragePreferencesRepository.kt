@@ -18,6 +18,7 @@ data class StoragePreferences(
     val musicStoragePath: String? = null,
     val mediaStoragePath: String? = null,
     val maxConcurrentDownloads: Int = 1,
+    val downloadConnections: Int = DownloadConnections.DEFAULT,
     val instantDownloadThresholdMb: Int = 50,
     val stageDownloadsInternally: Boolean = true,
     val customBiosPath: String? = null,
@@ -26,6 +27,13 @@ data class StoragePreferences(
     val steamInstallVolume: String? = null,
     val gameNativeSyncDirs: Map<GameNativeSyncFolder, String> = emptyMap()
 )
+
+object DownloadConnections {
+    val OPTIONS = listOf(1, 4, 8, 16)
+    const val DEFAULT = 4
+
+    fun nearest(value: Int?): Int = value?.let { wanted -> OPTIONS.minBy { kotlin.math.abs(it - wanted) } } ?: DEFAULT
+}
 
 @Singleton
 class StoragePreferencesRepository @Inject constructor(
@@ -36,6 +44,7 @@ class StoragePreferencesRepository @Inject constructor(
         val MUSIC_STORAGE_PATH = stringPreferencesKey("music_storage_path")
         val MEDIA_STORAGE_PATH = stringPreferencesKey("media_storage_path")
         val MAX_CONCURRENT_DOWNLOADS = intPreferencesKey("max_concurrent_downloads")
+        val DOWNLOAD_CONNECTIONS = intPreferencesKey("download_connections")
         val INSTANT_DOWNLOAD_THRESHOLD_MB = intPreferencesKey("instant_download_threshold_mb")
         val STAGE_DOWNLOADS_INTERNALLY = booleanPreferencesKey("stage_downloads_internally")
         val CUSTOM_BIOS_PATH = stringPreferencesKey("custom_bios_path")
@@ -54,6 +63,7 @@ class StoragePreferencesRepository @Inject constructor(
             musicStoragePath = prefs[Keys.MUSIC_STORAGE_PATH],
             mediaStoragePath = prefs[Keys.MEDIA_STORAGE_PATH],
             maxConcurrentDownloads = prefs[Keys.MAX_CONCURRENT_DOWNLOADS] ?: 1,
+            downloadConnections = DownloadConnections.nearest(prefs[Keys.DOWNLOAD_CONNECTIONS]),
             instantDownloadThresholdMb = prefs[Keys.INSTANT_DOWNLOAD_THRESHOLD_MB] ?: 50,
             stageDownloadsInternally = prefs[Keys.STAGE_DOWNLOADS_INTERNALLY] ?: true,
             customBiosPath = prefs[Keys.CUSTOM_BIOS_PATH],
@@ -86,6 +96,10 @@ class StoragePreferencesRepository @Inject constructor(
 
     suspend fun setMaxConcurrentDownloads(count: Int) {
         dataStore.edit { it[Keys.MAX_CONCURRENT_DOWNLOADS] = count.coerceIn(1, 5) }
+    }
+
+    suspend fun setDownloadConnections(count: Int) {
+        dataStore.edit { it[Keys.DOWNLOAD_CONNECTIONS] = DownloadConnections.nearest(count) }
     }
 
     suspend fun setInstantDownloadThresholdMb(value: Int) {

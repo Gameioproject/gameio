@@ -692,6 +692,12 @@
     <string name="settings_storage_builtin_state_path_internal">इंटरनल (डिफ़ॉल्ट)</string>
 
     <string name="settings_storage_max_downloads_title">अधिकतम सक्रिय डाउनलोड</string>
+    <string name="settings_storage_connections_title">डाउनलोड कनेक्शन</string>
+    <string name="settings_storage_connections_subtitle">प्रति गेम डाउनलोड एक साथ लाए जाने वाले हिस्से। धीमे Wi-Fi पर अधिक कनेक्शन मदद करते हैं।</string>
+    <plurals name="settings_storage_connections_value">
+        <item quantity="one">%d कनेक्शन</item>
+        <item quantity="other">%d कनेक्शन</item>
+    </plurals>
     <string name="settings_storage_threshold_title">तुरंत डाउनलोड सीमा</string>
     <string name="settings_storage_threshold_value">%1$d MB</string>
     <string name="settings_storage_threshold_subtitle">इस आकार से छोटी फ़ाइलें तुरंत डाउनलोड होती हैं</string>

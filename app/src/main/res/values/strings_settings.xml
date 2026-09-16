@@ -1343,6 +1343,12 @@
     <!-- Row title. Noun phrase: how many downloads may run at once. -->
     <string name="settings_storage_max_downloads_title">Max Active Downloads</string>
     <!-- Row title. Noun phrase: the size under which a download starts without asking. -->
+    <string name="settings_storage_connections_title">Download Connections</string>
+    <string name="settings_storage_connections_subtitle">Fragments fetched at once per game download. More connections help on slow single-connection Wi-Fi.</string>
+    <plurals name="settings_storage_connections_value">
+        <item quantity="one">%d connection</item>
+        <item quantity="other">%d connections</item>
+    </plurals>
     <string name="settings_storage_threshold_title">Instant Download Threshold</string>
     <!-- Value of that row. %1$d is a number and "MB" the symbol for megabytes. -->
     <string name="settings_storage_threshold_value">%1$d MB</string>

@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.nendo.argosy.R
+import com.nendo.argosy.data.preferences.DownloadConnections
 import com.nendo.argosy.data.steam.SteamConnectionState
 import com.nendo.argosy.data.storage.StorageCategory
 import com.nendo.argosy.data.storage.StorageSnapshot
@@ -117,6 +118,7 @@ internal sealed class StorageItem(
     data object BuiltinStatePath : StorageItem("builtinStatePath", "locations")
 
     data object MaxDownloads : StorageItem("maxDownloads", "downloads")
+    data object Connections : StorageItem("downloadConnections", "downloads")
     data object Threshold : StorageItem("threshold", "downloads")
     data object InternalStaging : StorageItem("internalStaging", "downloads")
 
@@ -138,7 +140,7 @@ internal sealed class StorageItem(
                 VolumeHero, RecomputeRow, GamesTile, MusicTile, CachesTile, SteamTile,
                 LocationsSpacer, LocationsHeader,
                 GlobalRomPath, ImageCache, MusicLocation, BiosFolder, BuiltinSavePath, BuiltinStatePath,
-                DownloadsSpacer, DownloadsHeader, MaxDownloads, Threshold, InternalStaging,
+                DownloadsSpacer, DownloadsHeader, MaxDownloads, Connections, Threshold, InternalStaging,
                 DangerSpacer, DangerHeader, ResetLibrary, HardReset
             )
     }
@@ -562,6 +564,25 @@ fun StorageSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
                 isFocused = isFocused(item),
                 onAdjust = { viewModel.adjustMaxConcurrentDownloads(it) }
             )
+
+            StorageItem.Connections -> {
+                val options = DownloadConnections.OPTIONS
+                val currentIndex = options.indexOf(storage.downloadConnections).coerceAtLeast(0)
+                CyclePreference(
+                    title = stringResource(R.string.settings_storage_connections_title),
+                    value = pluralStringResource(
+                        R.plurals.settings_storage_connections_value,
+                        storage.downloadConnections, storage.downloadConnections
+                    ),
+                    isFocused = isFocused(item),
+                    onClick = { viewModel.cycleDownloadConnections(1) },
+                    onPrev = { viewModel.cycleDownloadConnections(-1) },
+                    subtitle = stringResource(R.string.settings_storage_connections_subtitle),
+                    options = options.map { context.resources.getQuantityString(R.plurals.settings_storage_connections_value, it, it) },
+                    onSelect = { viewModel.cycleDownloadConnections(it - currentIndex) },
+                    pickerRequestToken = if (uiState.enumPickerKey == item.key) uiState.enumPickerToken else 0
+                )
+            }
 
             StorageItem.Threshold -> {
                 val thresholds = remember { listOf(50, 100, 250, 500) }

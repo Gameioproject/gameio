@@ -12,6 +12,10 @@ import com.nendo.argosy.data.remote.romm.RomMResult
 import com.squareup.moshi.Moshi
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
+import io.mockk.every
+import com.nendo.argosy.data.preferences.UserPreferencesRepository
+import com.nendo.argosy.data.preferences.UserPreferences
 import okhttp3.Call
 import okhttp3.EventListener
 import okhttp3.OkHttpClient
@@ -148,6 +152,9 @@ class AddonHttpClientTest {
         val match = AddonSourceMatch("test", "Test", source, format.fingerprint(manifest), "123:snes")
         val addons = mockk<AddonRepository>()
         coEvery { addons.manifestFor(match) } returns manifest
-        return AddonDownloadService(addons, format, http, mockk()) to format.encodeMatch(match)
+        val preferences = mockk<UserPreferencesRepository> {
+            every { userPreferences } returns flowOf(UserPreferences(downloadConnections = 1))
+        }
+        return AddonDownloadService(addons, format, http, mockk(), preferences) to format.encodeMatch(match)
     }
 }

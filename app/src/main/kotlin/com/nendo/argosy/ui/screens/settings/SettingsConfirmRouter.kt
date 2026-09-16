@@ -473,6 +473,10 @@ private fun routeStorageConfirm(vm: SettingsViewModel, state: SettingsUiState): 
         StorageItem.BuiltinSavePath -> vm.openBuiltinSavePathBrowser()
         StorageItem.BuiltinStatePath -> vm.openBuiltinStatePathBrowser()
         StorageItem.MaxDownloads -> vm.cycleMaxConcurrentDownloads()
+        StorageItem.Connections -> {
+            vm.requestEnumPicker(StorageItem.Connections.key)
+            return InputResult.handled(SoundType.OPEN_MODAL)
+        }
         StorageItem.Threshold -> {
             vm.requestEnumPicker(StorageItem.Threshold.key)
             return InputResult.handled(SoundType.OPEN_MODAL)

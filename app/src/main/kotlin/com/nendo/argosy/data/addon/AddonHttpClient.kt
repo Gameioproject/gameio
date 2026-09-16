@@ -11,6 +11,8 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
+import okhttp3.ConnectionPool
+import okhttp3.Dispatcher
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -20,7 +22,11 @@ import okio.Buffer
 import okio.ForwardingSource
 import okio.buffer
 import java.io.IOException
+import java.net.InetAddress
+import java.net.InetSocketAddress
+import java.net.Socket
 import java.util.concurrent.TimeUnit
+import javax.net.SocketFactory
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.resume
@@ -34,6 +40,9 @@ class AddonHttpClient internal constructor(private val client: OkHttpClient) {
         .readTimeout(30, TimeUnit.SECONDS)
         .followRedirects(false)
         .followSslRedirects(false)
+        .socketFactory(ReceiveBufferSocketFactory(RECEIVE_BUFFER_BYTES))
+        .dispatcher(Dispatcher().apply { maxRequestsPerHost = MAX_CONNECTIONS; maxRequests = MAX_CONNECTIONS * 2 })
+        .connectionPool(ConnectionPool(MAX_CONNECTIONS * 2, 5, TimeUnit.MINUTES))
         .build())
 
     suspend fun bytes(url: HttpUrl, maxBytes: Int, isAllowed: (HttpUrl) -> Boolean): ByteArray {
@@ -72,6 +81,43 @@ class AddonHttpClient internal constructor(private val client: OkHttpClient) {
         }
         throw AddonException(AddonFailure.NETWORK)
     }
+
+    private companion object {
+        const val RECEIVE_BUFFER_BYTES = 4 * 1024 * 1024
+        const val MAX_CONNECTIONS = 16
+    }
+}
+
+/**
+ * Android caps TCP receive autotuning at 2 MiB on Wi-Fi, which limits one connection to a
+ * distant download host to a few MiB/s. An explicit buffer set before connecting lets the
+ * window scale up to net.core.rmem_max instead.
+ */
+internal class ReceiveBufferSocketFactory(
+    private val receiveBufferBytes: Int,
+    private val delegate: SocketFactory = SocketFactory.getDefault()
+) : SocketFactory() {
+    override fun createSocket(): Socket = delegate.createSocket().tuned()
+
+    override fun createSocket(host: String, port: Int): Socket =
+        createSocket().apply { connect(InetSocketAddress(host, port)) }
+
+    override fun createSocket(host: String, port: Int, localHost: InetAddress, localPort: Int): Socket =
+        createSocket().apply {
+            bind(InetSocketAddress(localHost, localPort))
+            connect(InetSocketAddress(host, port))
+        }
+
+    override fun createSocket(host: InetAddress, port: Int): Socket =
+        createSocket().apply { connect(InetSocketAddress(host, port)) }
+
+    override fun createSocket(address: InetAddress, port: Int, localAddress: InetAddress, localPort: Int): Socket =
+        createSocket().apply {
+            bind(InetSocketAddress(localAddress, localPort))
+            connect(InetSocketAddress(address, port))
+        }
+
+    private fun Socket.tuned(): Socket = apply { receiveBufferSize = receiveBufferBytes }
 }
 
 private data class BoundedResponse(val bytes: ByteArray? = null, val location: String? = null)

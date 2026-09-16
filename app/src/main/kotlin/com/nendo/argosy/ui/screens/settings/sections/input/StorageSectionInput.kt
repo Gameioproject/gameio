@@ -80,6 +80,10 @@ internal class StorageSectionInput(
                 viewModel.adjustMaxConcurrentDownloads(direction)
                 return InputResult.HANDLED
             }
+            StorageItem.Connections -> {
+                viewModel.cycleDownloadConnections(direction)
+                return InputResult.HANDLED
+            }
             StorageItem.Threshold -> {
                 viewModel.cycleInstantDownloadThreshold(direction)
                 return InputResult.HANDLED
