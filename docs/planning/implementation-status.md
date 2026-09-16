@@ -105,9 +105,9 @@ The English keys exist in non-`strings*` XML files, but the checker loaded only
 `values/strings*.xml` while loading every translated XML file. Its English glob
 now loads all `values/*.xml`; the existing parser still selects only strings and
 plurals. `python3 scripts/ci/check-translations.py` passes all seven locales with
-5,344 English keys, including placeholder and plural checks. New families have
-exact key parity in every locale: Add-ons 53, comments 69, setup favorites 16,
-Support 3 and game sources 9.
+5,342 English keys after the final unused-resource cleanup, including placeholder
+and plural checks. The add-on, comments, setup favorites, support and game-source
+families have exact key parity in every locale.
 
 ### Regression and contract evidence before final release gate
 
@@ -141,7 +141,7 @@ Support 3 and game sources 9.
   blocks. The sole coupling warning requests live RomM model proof, supplied
   above. Manual input/modal review found one missing new header-list key and
   filesystem work in the new owned-download directory path without an IO
-boundary; both were corrected before the successful serial release gate. No new
+  boundary; both were corrected before the successful serial release gate. No new
   UI game/platform DAO access, domain Android/Compose imports, or mutable UI
   state fields were introduced.
 
@@ -183,3 +183,44 @@ No app-data clear or emulator wipe occurred.
 A real support destination remains an owner configuration item; absent
 configuration keeps the support action hidden. Public APK publication and live
 source cutover are separate owner-controlled release actions.
+
+### Signed 1.1.0 upgrade and optimized runtime
+
+The final resource cleanup builds successfully in 8m 54s with lint and all debug,
+instrumentation and release assembly tasks in a single serial Gradle invocation
+(`/tmp/gameio-release-final.log`). Both lint variants report zero errors. All
+seven translated locales pass the final 5,342-key check.
+
+The universal release APK identifies implementation commit
+`2f57e9257f400f4585f3f911365bdeed0ad8aa9d` in its embedded version-control metadata.
+It is version **1.1.0**, code **3000334**, and **30,010,791 bytes**. Its SHA256 is
+`a7d6de98cf98f4abfc4665c11ecaaf2692720aac94381cab9bd4dcb7d976c2b6`.
+APK Signature Scheme v2 verifies against the same Gameio certificate as the
+previous website APK. The certificate SHA256 is
+`e8cb75f19b87a932dc1fc7910de15b694adf91be68210ef65634a99bbe63ed2c`.
+
+Installing that exact signed APK with `-r` over the existing 1.0.0/code 3000333
+production package succeeds. A private backup preceded the upgrade. Opening the
+optimized app migrates Room 180 to 181 and preserves all 65 game IDs, compatibility
+ROM IDs and platform IDs. Existing local paths remain unchanged. The live-server
+Comments list and composer open through touch/controller without posting test
+content to production.
+
+The signed app imports the private JSON using the normal file browser. Import
+does not fetch a shard; returning to the selected game fetches one `cf.json`.
+The source picker parses and displays its USA 8 MiB entry, then the normal queue
+downloads it directly. The completed file has the same verified MD5/SHA1 recorded
+above and links to the existing local game 2/compatibility ROM 49100004. No save was
+uploaded or changed during this smoke test. Private upgrade evidence is under
+`/tmp/gameio-signed-upgrade-qawdu2x5`.
+
+Both implementation commits are pushed on `feature/addons-community`: client
+`2f57e925` and server `4eb60471c`. Documentation-only release evidence can follow
+without changing the compiled implementation revision.
+
+### Public 1.1.0 publication (16 September 2026)
+
+The same universal release APK (SHA256 `a7d6de98…c2b6`, 30,010,791 bytes) is
+published through `scripts/publish-apk.sh` as `/apk/gameio-e7de8378.apk`, and
+`/apk/latest.json` names it. The bytes downloaded from https://playgameio.com
+hash to the same SHA256. Live source cutover has not been performed yet.

@@ -34,23 +34,36 @@ All comments resources are present in the app's eight locales.
 
 ## Verification
 
-On 14 September 2026, both detail layouts and the debug/test APKs compile. The
-first 13 comments JVM cases pass, covering pagination, replies, permissions,
-blocking, moderation, retained drafts, cancellation, controller capture, Unicode,
-session-bound writes and authenticated avatars. The fourteenth case exercises
-reopening a cached conversation after switching accounts; execution is pending
-the final integrated test batch. Device touch/controller and dual-screen behavior
-remain part of release QA.
+On 14 September 2026, both detail layouts and the debug/test APKs compile. All
+14 comments JVM cases pass, covering pagination, replies, permissions, blocking,
+moderation, retained drafts, cancellation, controller capture, Unicode,
+session-bound writes, authenticated avatars, and reopening a cached conversation
+after switching accounts.
 
-The isolated emulator pass exercised posting and reading a spoiler comment,
+The isolated emulator passes exercised posting and reading a spoiler comment,
 revealing it, liking it, editing its body and spoiler setting, posting a one-level
 reply, and deleting that own reply. Touch and controller navigation both reached
-the composer and comment actions. Sorting, reply pagination, report/block menus,
-admin moderation and dual-screen interaction still need the remaining device pass.
-That pass stopped when the shared database engine stalled during the separately
-authorized production migration; the API error retained the draft. A touch
-capture gap on the overlay's blank background was identified and patched after
-this pass, so the corrected overlay still requires device confirmation.
+the composer and comment actions. Top/Newest selection displays the appropriate
+selection and loading state. Expanding the fixture conversation renders the first
+20 replies and exposes More replies. A report submitted through native text input
+returned the success message. Blocking its author removed that author's comments;
+controller navigation opened the blocked-user list and completed Unblock, leaving
+the empty-list state. The temporary report was then dismissed through the isolated
+admin API, preserving the original moderation fixture.
+
+The first pass stopped during a database-engine stall in the separately authorized
+production migration; its API error retained the draft. A touch-capture gap on the
+overlay's blank background was identified and patched. The follow-up pass confirms
+that taps in the blank margins over the underlying detail menu remain captured.
+
+The bounded device pass did not confirm distinct Top/Newest ordering visually,
+the rendered second reply page or root-comment page, the admin moderation UI, or
+physical dual-screen/controller behavior. Pagination, ordering and moderation have
+automated coverage; those remaining device checks are not claimed as completed.
+The emulator runs the ARM64 APK through x86 translation. Its normal ARM64 core
+download loaded the add-on ROM correctly but the emulator's native translation
+crashed when the N64 dynamic recompiler started, so this run does not establish
+successful gameplay on an ARM64 handheld.
 
 `CommentsQaSetupTest` is an opt-in instrumentation helper for that QA. It accepts
 only the designated loopback test server, requires fresh app data or the same

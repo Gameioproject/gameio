@@ -1,6 +1,6 @@
 # Local games and the shared catalog
 
-Copy game files into the configured platform folder. Setup, startup, returning to the app, and the existing storage rescan actions discover them without an add-on or a per-game import form. The global download folder, custom platform folders, and existing platform filesystem aliases share the same root resolution as launching.
+Copy game files into the configured platform folder. Startup and Settings → Platforms → [platform] → Scan for Files discover them without an add-on or a per-game import form. Returning to the app validates already known files; use Scan for Files to discover a copy without restarting. The global download folder, custom platform folders, and existing platform filesystem aliases share the same root resolution as launching.
 
 Discovery makes an unmatched file playable immediately as a local catalog entry. In the background it asks the metadata catalog for that title and platform, with a bounded result page and timeout. Only a unique normalized exact title match is attached automatically; an ambiguous title or unavailable server leaves the local entry usable. This does not index source archives or download the full catalog.
 
