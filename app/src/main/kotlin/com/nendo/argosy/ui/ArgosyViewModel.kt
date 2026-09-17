@@ -890,6 +890,14 @@ class ArgosyViewModel @Inject constructor(
                 )
             )
 
+    val scanlineOverlayEnabled: StateFlow<Boolean> = preferencesRepository.userPreferences
+        .map { it.scanlineOverlayEnabled }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = false
+        )
+
     val screenDimmerPreferences: StateFlow<ScreenDimmerPreferences> = preferencesRepository.userPreferences
         .map { prefs ->
             ScreenDimmerPreferences(

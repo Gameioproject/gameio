@@ -104,6 +104,9 @@
     <string name="settings_interface_ui_scale_title">Масштаб интерфейса</string>
     <string name="settings_interface_compact_footer_title">Компактная панель</string>
     <string name="settings_interface_compact_footer_subtitle">Использовать более тонкую панель подсказок</string>
+
+    <string name="settings_interface_scanlines_title">Строки развёртки</string>
+    <string name="settings_interface_scanlines_subtitle">Линии как на кинескопе поверх экрана. По умолчанию выключено.</string>
     <string name="settings_interface_controller_grip_title">Хват контроллера</string>
     <string name="settings_interface_controller_grip_subtitle">Сдвинуть интерфейс выше зоны, занимаемой хватом</string>
     <string name="settings_interface_home_screen_title">Главный экран</string>

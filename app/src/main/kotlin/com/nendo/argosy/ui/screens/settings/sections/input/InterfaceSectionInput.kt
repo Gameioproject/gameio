@@ -61,6 +61,9 @@ internal class InterfaceSectionInput(
             InterfaceItem.CompactFooter -> return toggleLeftRight(direction, state.display.compactFooter) {
                 viewModel.setCompactFooter(it)
             }
+            InterfaceItem.Scanlines -> return toggleLeftRight(direction, state.display.scanlineOverlay) {
+                viewModel.setScanlineOverlay(it)
+            }
             else -> {}
         }
         return InputResult.UNHANDLED

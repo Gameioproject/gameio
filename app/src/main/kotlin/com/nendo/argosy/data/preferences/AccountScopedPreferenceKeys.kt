@@ -125,6 +125,7 @@ object AccountScopedPreferenceKeys {
         "use_accent_color_footer",
         "installed_only_home",
         "video_wallpaper_enabled",
+        "scanline_overlay_enabled",
         "video_wallpaper_muted",
         "video_wallpaper_delay_seconds",
         "box_art_shape",

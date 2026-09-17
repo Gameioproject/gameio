@@ -18,6 +18,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
@@ -33,8 +36,12 @@ import com.nendo.argosy.data.preferences.BoxArtOuterEffect
 import com.nendo.argosy.data.preferences.GlowColorMode
 import com.nendo.argosy.ui.theme.LocalBoxArtStyle
 import com.nendo.argosy.ui.theme.LocalLauncherTheme
+import com.nendo.argosy.ui.theme.LocalMotionTier
 import com.nendo.argosy.ui.theme.Motion
+import com.nendo.argosy.ui.theme.MotionTier
 import com.nendo.argosy.ui.theme.generated.ComponentDefaults
+import com.nendo.argosy.ui.theme.generated.DimensionTokens
+import com.nendo.argosy.ui.theme.generated.MotionTokens
 
 /**
  * The single owner of how a piece of cover art reacts to focus.
@@ -107,6 +114,28 @@ fun Modifier.boxArtFrame(
         label = "boxArtShine"
     ) ?: remember { mutableStateOf(0f) }
 
+    val motionTier = LocalMotionTier.current
+    val effectsAllowed = motionTier != MotionTier.Reduced
+    val tiltProgress by animateFloatAsState(
+        targetValue = if (isFocused && effectsAllowed) 1f else 0f,
+        animationSpec = Motion.focusSpring,
+        label = "boxArtTilt"
+    )
+    val cartridgeShine = if (isFocused && effectsAllowed) {
+        rememberInfiniteTransition(label = "cartridgeShine")
+    } else null
+    val cartridgeShineOffset by cartridgeShine?.animateFloat(
+        initialValue = -ComponentDefaults.FocusEffects.shineBandPercent,
+        targetValue = 1f + ComponentDefaults.FocusEffects.shineBandPercent,
+        animationSpec = infiniteRepeatable(
+            animation = tween(MotionTokens.Tween.shineMs, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "cartridgeShine"
+    ) ?: remember { mutableStateOf(0f) }
+    val bloomColor = glowGradientColors?.first ?: glowColor
+    val showBloom = isFocused && outerEffect == BoxArtOuterEffect.OFF
+
     val borderColor = MaterialTheme.colorScheme.primary
     val showBorder = drawBorder &&
         isFocused &&
@@ -120,7 +149,39 @@ fun Modifier.boxArtFrame(
             transformOrigin = TransformOrigin(0.5f, scalePivotY)
             this.alpha = alpha
             this.clip = false
+            if (tiltProgress > 0f) {
+                val degrees = ComponentDefaults.FocusEffects.tiltDegrees * tiltProgress
+                cameraDistance = TILT_CAMERA_DISTANCE * density
+                rotationY = -degrees
+                rotationX = degrees * ComponentDefaults.FocusEffects.tiltTipRatio
+            }
         }
+        .then(
+            if (showBloom) {
+                Modifier.drawBehind {
+                    val spread = DimensionTokens.Layout.focusBloomSpread.toFloat()
+                    val radius = maxOf(size.width, size.height) / 2f + spread
+                    val center = Offset(
+                        size.width / 2f,
+                        size.height / 2f + DimensionTokens.Layout.focusBloomOffsetY
+                    )
+                    val peak = ComponentDefaults.FocusEffects.bloomAlpha
+                    drawCircle(
+                        brush = Brush.radialGradient(
+                            colorStops = arrayOf(
+                                0f to bloomColor.copy(alpha = peak),
+                                0.55f to bloomColor.copy(alpha = peak * 0.35f),
+                                1f to Color.Transparent
+                            ),
+                            center = center,
+                            radius = radius
+                        ),
+                        radius = radius,
+                        center = center
+                    )
+                }
+            } else Modifier
+        )
         .then(
             if (showOuterEffect) {
                 Modifier.drawBehind {
@@ -215,4 +276,29 @@ fun Modifier.boxArtFrame(
                 Modifier.background(SolidColor(MaterialTheme.colorScheme.surfaceVariant))
             }
         )
+        .then(
+            if (cartridgeShine != null) {
+                Modifier.drawWithContent {
+                    drawContent()
+                    val band = size.width * ComponentDefaults.FocusEffects.shineBandPercent
+                    val start = cartridgeShineOffset * size.width
+                    val peak = ComponentDefaults.FocusEffects.shineAlpha
+                    drawRect(
+                        brush = Brush.linearGradient(
+                            colorStops = arrayOf(
+                                0f to Color.Transparent,
+                                0.5f to Color.White.copy(alpha = peak * 0.5f),
+                                0.62f to Color.White.copy(alpha = peak),
+                                1f to Color.Transparent
+                            ),
+                            start = Offset(start, 0f),
+                            end = Offset(start + band, size.height)
+                        ),
+                        blendMode = BlendMode.Screen
+                    )
+                }
+            } else Modifier
+        )
 }
+
+private const val TILT_CAMERA_DISTANCE = 14f

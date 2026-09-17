@@ -211,6 +211,10 @@
     <!-- Second line of that row. "Control guide bar" is the strip that says what each button
          does. -->
     <string name="settings_interface_compact_footer_subtitle">Use a thinner control guide bar</string>
+
+    <!-- Toggle for the CRT scanline overlay. Noun, plural. -->
+    <string name="settings_interface_scanlines_title">Scanlines</string>
+    <string name="settings_interface_scanlines_subtitle">CRT lines over the screen. Off by default.</string>
     <!-- Row opening the settings for handhelds with a clip-on grip. Noun phrase. -->
     <string name="settings_interface_controller_grip_title">Controller Grip</string>
     <!-- Second line of that row. -->

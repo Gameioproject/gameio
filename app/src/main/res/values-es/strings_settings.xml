@@ -113,6 +113,9 @@
     <string name="settings_interface_ui_scale_title">Escala de la interfaz</string>
     <string name="settings_interface_compact_footer_title">Pie de página compacto</string>
     <string name="settings_interface_compact_footer_subtitle">Usar una barra de controles más fina</string>
+
+    <string name="settings_interface_scanlines_title">Líneas de escaneo</string>
+    <string name="settings_interface_scanlines_subtitle">Líneas de CRT sobre la pantalla. Desactivado por defecto.</string>
     <string name="settings_interface_controller_grip_title">Agarre del mando</string>
     <string name="settings_interface_controller_grip_subtitle">Desplazar la interfaz fuera del área que cubre un agarre</string>
     <string name="settings_interface_home_screen_title">Pantalla de inicio</string>

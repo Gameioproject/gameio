@@ -519,6 +519,7 @@ internal fun routeLoadSettings(vm: SettingsViewModel) {
             boxArtCapableGames = boxArtCapableGames,
             useAccentColorFooter = prefs.useAccentColorFooter,
             compactFooter = prefs.compactFooter,
+            scanlineOverlay = prefs.scanlineOverlayEnabled,
             boxArtShape = prefs.boxArtShape,
             boxArtCornerRadius = prefs.boxArtCornerRadius,
             boxArtBorderThickness = prefs.boxArtBorderThickness,

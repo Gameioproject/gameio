@@ -83,6 +83,7 @@ data class DisplayPreferences(
     val platformIndicatorContent: PlatformIndicatorContent = PlatformIndicatorContent.NAME,
     val defaultView: DefaultView = DefaultView.HOME,
     val videoWallpaperEnabled: Boolean = false,
+    val scanlineOverlayEnabled: Boolean = false,
     val videoWallpaperDelaySeconds: Int = 3,
     val videoWallpaperMuted: Boolean = false,
     val ambientLedEnabled: Boolean = false,
@@ -174,6 +175,7 @@ class DisplayPreferencesRepository @Inject constructor(
         val PLATFORM_INDICATOR_CONTENT = stringPreferencesKey("platform_indicator_content")
         val DEFAULT_VIEW = stringPreferencesKey("default_view")
         val VIDEO_WALLPAPER_ENABLED = booleanPreferencesKey("video_wallpaper_enabled")
+        val SCANLINE_OVERLAY_ENABLED = booleanPreferencesKey("scanline_overlay_enabled")
         val VIDEO_WALLPAPER_DELAY_SECONDS = intPreferencesKey("video_wallpaper_delay_seconds")
         val VIDEO_WALLPAPER_MUTED = booleanPreferencesKey("video_wallpaper_muted")
         val AMBIENT_LED_ENABLED = booleanPreferencesKey("ambient_led_enabled")
@@ -269,6 +271,7 @@ class DisplayPreferencesRepository @Inject constructor(
             platformIndicatorContent = PlatformIndicatorContent.fromString(prefs[Keys.PLATFORM_INDICATOR_CONTENT]),
             defaultView = DefaultView.fromString(prefs[Keys.DEFAULT_VIEW]),
             videoWallpaperEnabled = prefs[Keys.VIDEO_WALLPAPER_ENABLED] ?: false,
+            scanlineOverlayEnabled = prefs[Keys.SCANLINE_OVERLAY_ENABLED] ?: false,
             videoWallpaperDelaySeconds = prefs[Keys.VIDEO_WALLPAPER_DELAY_SECONDS] ?: 3,
             videoWallpaperMuted = prefs[Keys.VIDEO_WALLPAPER_MUTED] ?: false,
             ambientLedEnabled = prefs[Keys.AMBIENT_LED_ENABLED] ?: false,
@@ -559,6 +562,10 @@ class DisplayPreferencesRepository @Inject constructor(
 
     suspend fun setVideoWallpaperEnabled(enabled: Boolean) {
         dataStore.edit { it[Keys.VIDEO_WALLPAPER_ENABLED] = enabled }
+    }
+
+    suspend fun setScanlineOverlayEnabled(enabled: Boolean) {
+        dataStore.edit { it[Keys.SCANLINE_OVERLAY_ENABLED] = enabled }
     }
 
     suspend fun setVideoWallpaperDelaySeconds(seconds: Int) {

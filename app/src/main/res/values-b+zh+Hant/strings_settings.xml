@@ -90,6 +90,9 @@
     <string name="settings_interface_ui_scale_title">介面縮放</string>
     <string name="settings_interface_compact_footer_title">精簡頁尾</string>
     <string name="settings_interface_compact_footer_subtitle">使用較窄的操作提示列</string>
+
+    <string name="settings_interface_scanlines_title">掃描線</string>
+    <string name="settings_interface_scanlines_subtitle">螢幕上的CRT掃描線。預設關閉。</string>
     <string name="settings_interface_controller_grip_title">控制器握把</string>
     <string name="settings_interface_controller_grip_subtitle">將介面上移，避開握把遮擋的區域</string>
     <string name="settings_interface_home_screen_title">主畫面</string>

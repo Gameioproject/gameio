@@ -101,6 +101,9 @@
     <string name="settings_interface_ui_scale_title">UI स्केल</string>
     <string name="settings_interface_compact_footer_title">कॉम्पैक्ट फ़ुटर</string>
     <string name="settings_interface_compact_footer_subtitle">पतली कंट्रोल गाइड बार का उपयोग करें</string>
+
+    <string name="settings_interface_scanlines_title">स्कैनलाइन</string>
+    <string name="settings_interface_scanlines_subtitle">स्क्रीन पर CRT जैसी लाइनें। डिफ़ॉल्ट रूप से बंद।</string>
     <string name="settings_interface_controller_grip_title">कंट्रोलर ग्रिप</string>
     <string name="settings_interface_controller_grip_subtitle">ग्रिप वाले हिस्से से UI को ऊपर खिसकाएँ</string>
     <string name="settings_interface_home_screen_title">होम स्क्रीन</string>

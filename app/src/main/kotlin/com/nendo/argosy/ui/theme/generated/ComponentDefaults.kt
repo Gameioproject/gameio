@@ -27,6 +27,14 @@ import com.nendo.argosy.data.preferences.SystemIconPosition
 import com.nendo.argosy.data.preferences.ThemeMode
 
 object ComponentDefaults {
+    object GameioBackdrop {
+        const val cellSizeDp = 58
+        const val lineWidthDp = 0.5f
+        const val gridAlpha = 0.02f
+        const val glowAlpha = 0.08f
+        const val glowRadiusRatio = 0.8f
+    }
+
     object BoxArt {
         val shape = BoxArtShape.STANDARD
         val cornerRadius = BoxArtCornerRadius.MEDIUM
@@ -188,7 +196,7 @@ object ComponentDefaults {
         const val cellSizeDefaultDp = 104
         const val scatterMaxCellRatio = 0.35f
         const val jitterMaxScaleDropRatio = 0.5f
-        const val jitterMaxRotationDegrees = 60
+        const val jitterMaxRotationDegrees = 60f
         const val stampCellRatio = 0.6f
     }
 
@@ -283,6 +291,24 @@ object ComponentDefaults {
         const val platformMinWidthDp = 42
     }
 
+    object FocusEffects {
+        const val washAlpha = 0.26f
+        const val washMidAlpha = 0.1f
+        const val washEndPercent = 0.78f
+        const val barGlowAlpha = 0.55f
+        const val bloomAlpha = 0.4f
+        const val tiltDegrees = 7f
+        const val tiltTipRatio = 0.4f
+        const val shineBandPercent = 0.46f
+        const val shineAlpha = 0.85f
+        const val scanlineAlpha = 0.055f
+        const val scanlineSpacingDp = 3
+        const val scanlineThicknessDp = 1
+        const val driftTravelPercent = 0.03f
+        const val driftScaleMin = 1.06f
+        const val driftScaleMax = 1.1f
+    }
+
     object ConsoleUi {
         const val brandSizeDp = 80
         const val compactBrandSizeDp = 56
@@ -293,14 +319,6 @@ object ComponentDefaults {
         const val keyMinSizeDp = 18
         const val systemRowHeightDp = 64
         const val systemCellMinWidthDp = 128
-    }
-
-    object GameioBackdrop {
-        const val cellSizeDp = 58
-        const val lineWidthDp = 0.5f
-        const val gridAlpha = 0.02f
-        const val glowAlpha = 0.08f
-        const val glowRadiusRatio = 0.8f
     }
 
 }
