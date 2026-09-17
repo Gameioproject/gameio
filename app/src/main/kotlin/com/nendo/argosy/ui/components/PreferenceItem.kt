@@ -67,6 +67,8 @@ import com.nendo.argosy.ui.theme.AspectRatioClass
 import com.nendo.argosy.ui.theme.Dimens
 import com.nendo.argosy.ui.theme.LocalArgosyTheme
 import com.nendo.argosy.ui.theme.LocalUiScale
+import com.nendo.argosy.ui.primitives.FocusIndicators
+import com.nendo.argosy.ui.primitives.argosyFocusIndicators
 import com.nendo.argosy.ui.theme.Motion
 import com.nendo.argosy.ui.theme.generated.ColorTokens
 
@@ -94,22 +96,28 @@ internal fun preferenceModifier(
     val accent = preferenceAccent(isDangerous)
     val surface = MaterialTheme.colorScheme.surface
     val background by animateColorAsState(
-        targetValue = if (isFocused) accent.copy(alpha = 0.15f).compositeOver(surface) else surface.copy(alpha = 0.10f),
+        targetValue = surface.copy(alpha = if (isFocused) 0.18f else 0.10f),
         animationSpec = Motion.focusColorSpec,
         label = "pref-bg"
-    )
-    val borderAlpha by animateFloatAsState(
-        targetValue = if (isFocused) 0.8f else 0f,
-        animationSpec = Motion.focusSpring,
-        label = "pref-border"
     )
 
     return Modifier
         .fillMaxWidth()
         .heightIn(min = Dimens.settingsItemMinHeight)
+        .argosyFocusIndicators(
+            focused = isFocused,
+            indicators = FocusIndicators.RowBloom,
+            tint = accent,
+            shape = preferenceShape
+        )
         .clip(preferenceShape)
         .background(background)
-        .border(Dimens.borderThin, accent.copy(alpha = borderAlpha), preferenceShape)
+        .argosyFocusIndicators(
+            focused = isFocused,
+            indicators = FocusIndicators.Row,
+            tint = accent,
+            shape = preferenceShape
+        )
         .then(
             when {
                 onClick != null -> Modifier.clickableNoFocus(onClick = onClick)

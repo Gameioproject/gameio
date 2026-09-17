@@ -60,6 +60,7 @@ internal sealed class InterfaceItem(
     data object Language : InterfaceItem("language", "layout")
     data object UiScale : InterfaceItem("uiScale", "layout")
     data object CompactFooter : InterfaceItem("compactFooter", "layout")
+    data object Scanlines : InterfaceItem("scanlines", "layout")
     data object ControllerGrip : InterfaceItem("controllerGrip", "layout")
     data object HomeScreen : InterfaceItem("homeScreen", "layout")
     data object LibraryView : InterfaceItem("libraryView", "layout")
@@ -74,7 +75,7 @@ internal sealed class InterfaceItem(
          */
         val ALL: List<InterfaceItem>
             get() = listOf(
-                Language, UiScale, CompactFooter, ControllerGrip,
+                Language, UiScale, CompactFooter, Scanlines, ControllerGrip,
                 HomeScreen, LibraryView, BoxArt
             )
     }
@@ -188,6 +189,14 @@ fun InterfaceSection(uiState: SettingsUiState, viewModel: SettingsViewModel) {
                     isEnabled = display.compactFooter,
                     isFocused = isFocused(item),
                     onToggle = { viewModel.setCompactFooter(it) }
+                )
+
+                InterfaceItem.Scanlines -> SwitchPreference(
+                    title = stringResource(R.string.settings_interface_scanlines_title),
+                    subtitle = stringResource(R.string.settings_interface_scanlines_subtitle),
+                    isEnabled = display.scanlineOverlay,
+                    isFocused = isFocused(item),
+                    onToggle = { viewModel.setScanlineOverlay(it) }
                 )
 
                 InterfaceItem.ControllerGrip -> NavigationPreference(

@@ -234,6 +234,7 @@ data class DisplayState(
     val boxArtCapableGames: Int = 0,
     val useAccentColorFooter: Boolean = false,
     val compactFooter: Boolean = false,
+    val scanlineOverlay: Boolean = false,
     val boxArtShape: BoxArtShape = BoxArtShape.STANDARD,
     val boxArtCornerRadius: BoxArtCornerRadius = BoxArtCornerRadius.MEDIUM,
     val boxArtBorderThickness: BoxArtBorderThickness = BoxArtBorderThickness.MEDIUM,

@@ -1,5 +1,6 @@
 package com.nendo.argosy.ui
 
+import com.nendo.argosy.ui.components.scanlineOverlay
 import com.nendo.argosy.ui.theme.gameioBackground
 import androidx.annotation.StringRes
 import androidx.compose.ui.res.stringResource
@@ -149,6 +150,7 @@ fun ArgosyApp(
     val quickSettingsFooterHints by viewModel.quickSettingsFooterHints.collectAsState()
     val screenDimmerPrefs by viewModel.screenDimmerPreferences.collectAsState()
     val isEmulatorRunning by viewModel.isEmulatorRunning.collectAsState()
+    val scanlineOverlayEnabled by viewModel.scanlineOverlayEnabled.collectAsState()
     val quickMenuState by quickMenuViewModel.uiState.collectAsState()
     val saveConflictInfo by viewModel.saveConflictInfo.collectAsState()
     val saveConflictButtonIndex by viewModel.saveConflictButtonIndex.collectAsState()
@@ -1105,6 +1107,7 @@ fun ArgosyApp(
                 modifier = Modifier
                     .fillMaxSize()
                     .gameioBackground()
+                    .scanlineOverlay(scanlineOverlayEnabled && !isEmulatorRunning)
                     .padding(bottom = bottomReserved)
                     .onFocusChanged { keySinkFocused = it.isFocused }
                     .focusRequester(rootFocusRequester)

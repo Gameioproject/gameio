@@ -111,6 +111,9 @@
     <string name="settings_interface_ui_scale_title">UI-Skalierung</string>
     <string name="settings_interface_compact_footer_title">Kompakter Footer</string>
     <string name="settings_interface_compact_footer_subtitle">Schmalere Bedienleiste verwenden</string>
+
+    <string name="settings_interface_scanlines_title">Scanlines</string>
+    <string name="settings_interface_scanlines_subtitle">CRT-Linien über dem Bildschirm. Standardmäßig aus.</string>
     <string name="settings_interface_controller_grip_title">Controller-Griff</string>
     <string name="settings_interface_controller_grip_subtitle">Schiebt die Oberfläche aus dem vom Griff verdeckten Bereich</string>
     <string name="settings_interface_home_screen_title">Startbildschirm</string>

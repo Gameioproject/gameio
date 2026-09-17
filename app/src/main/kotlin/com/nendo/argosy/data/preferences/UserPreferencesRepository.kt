@@ -172,6 +172,7 @@ class UserPreferencesRepository @Inject constructor(
             lastIntegrityCheckTime = storage.lastIntegrityCheckTime,
             steamInstallVolume = storage.steamInstallVolume,
             videoWallpaperEnabled = display.videoWallpaperEnabled,
+            scanlineOverlayEnabled = display.scanlineOverlayEnabled,
             videoWallpaperDelaySeconds = display.videoWallpaperDelaySeconds,
             videoWallpaperMuted = display.videoWallpaperMuted,
             uiScale = display.uiScale,
@@ -284,6 +285,8 @@ class UserPreferencesRepository @Inject constructor(
         displayPrefs.setHomeLayout(settings)
     suspend fun setUseAccentColorFooter(use: Boolean) = displayPrefs.setUseAccentColorFooter(use)
     suspend fun setCompactFooter(enabled: Boolean) = displayPrefs.setCompactFooter(enabled)
+    suspend fun setScanlineOverlayEnabled(enabled: Boolean) =
+        displayPrefs.setScanlineOverlayEnabled(enabled)
     suspend fun setGripAutoControllers(
         controllers: com.nendo.argosy.domain.model.GripAutoControllers
     ) = displayPrefs.setGripAutoControllers(controllers)
@@ -805,6 +808,7 @@ data class UserPreferences(
     val screenDimmerLevel: Int = 50,
     val customBiosPath: String? = null,
     val videoWallpaperEnabled: Boolean = false,
+    val scanlineOverlayEnabled: Boolean = false,
     val videoWallpaperDelaySeconds: Int = 3,
     val videoWallpaperMuted: Boolean = false,
     val uiScale: Int = 100,

@@ -511,6 +511,13 @@ class DisplaySettingsDelegate @Inject constructor(
         }
     }
 
+    fun setScanlineOverlay(scope: CoroutineScope, enabled: Boolean) {
+        scope.launch {
+            preferencesRepository.setScanlineOverlayEnabled(enabled)
+            _state.update { it.copy(scanlineOverlay = enabled) }
+        }
+    }
+
     fun showGripControllerModal() {
         _state.update { it.copy(showGripControllerModal = true) }
     }

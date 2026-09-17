@@ -60,6 +60,10 @@ object DimensionTokens {
         const val storageGameCoverWidth = 64
         const val storageGameCoverHeight = 88
         const val settingsItemMinHeight = 40
+        const val focusBarWidth = 3
+        const val focusBarInset = 10
+        const val focusBloomSpread = 60
+        const val focusBloomOffsetY = 8
         const val menuRowHeight = 40
         const val menuRowHeightLg = 52
         const val listGap = 8

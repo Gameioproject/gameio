@@ -113,6 +113,7 @@ object SettingsBackupKeys {
         SettingsBackupKey("use_game_background", SettingsBackupType.BOOLEAN),
         SettingsBackupKey("home_background_mode", SettingsBackupType.STRING),
         SettingsBackupKey("video_wallpaper_enabled", SettingsBackupType.BOOLEAN),
+        SettingsBackupKey("scanline_overlay_enabled", SettingsBackupType.BOOLEAN),
         SettingsBackupKey("video_wallpaper_muted", SettingsBackupType.BOOLEAN),
         SettingsBackupKey("video_wallpaper_delay_seconds", SettingsBackupType.INT)
     )
