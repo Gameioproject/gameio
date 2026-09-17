@@ -5,18 +5,29 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-8.0+-green.svg)](https://developer.android.com/about/versions/oreo)
 
+<img src="docs/images/home.png" alt="Gameio home screen with platform tabs, a featured game and discovery rows" width="100%" />
+
 Gameio is a controller-first Android launcher for handhelds. Instead of starting from the files you already have, it starts from the games: every system you follow shows its full catalog, with covers, descriptions, ratings and trailers, whether or not a game is on your device.
 
 Like Stremio does for movies, Gameio doesn't host any games. **Add-ons** supply the download links. When you open a game, each add-on you've imported is asked where that game can be downloaded, and Gameio fetches it from there.
 
+| Explore | Game page |
+|---|---|
+| <img src="docs/images/explore.png" alt="Top rated and genre rows" /> | <img src="docs/images/game.png" alt="Game page with actions, rating, description and screenshots" /> |
+
 ## How it works
 
 1. **Sign in and pick your systems.** Home fills with every game the catalog knows for them.
-2. **Import an add-on**, a small JSON file, during setup or under **Settings → Add-ons**.
+2. **Import an add-on**, a small JSON file, during setup or under **Settings → Add-ons → Import add-on**.
 3. **Open any game.** Gameio lists the sources your add-ons found. Pick one, and it downloads, verifies and launches with your emulator.
 4. **Already have games?** Put them in your platform folders and Gameio shows them alongside the catalog.
 
-Add-on sources can be direct HTTPS links, Internet Archive files, or single files inside torrents. Torrents are resolved through your own Real-Debrid account. The format and tools for building add-ons live in the `gameio-addons` repo.
+## Add-ons
+
+- **Get the Gameio add-on:** [gameio-sources.json](https://addons.playgameio.com/gameio-sources.json). Download it to your device and import it in Gameio.
+- **Make your own:** read the [add-on guide](docs/addon-format.md). The [gameio-addons](https://github.com/naifqarni/gameio-addons) repo has the build and validation tools and a Claude skill that walks you through it.
+
+Add-on sources can be direct HTTPS links, Internet Archive files, or single files inside torrents. Torrents are resolved through your own Real-Debrid account.
 
 ## Features
 
@@ -36,8 +47,6 @@ Download the latest APK from **[playgameio.com](https://playgameio.com)**. It ru
 ```bash
 ./gradlew :app:assembleDebug
 ```
-
-The server behind the catalog, accounts and save sync is [gameio-server](https://github.com/naifqarni/gameio-server).
 
 ## Credits and license
 
