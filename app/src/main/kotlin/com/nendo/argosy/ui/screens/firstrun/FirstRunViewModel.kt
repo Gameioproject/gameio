@@ -82,6 +82,7 @@ data class FirstRunUiState(
     val rommUsername: String = "",
     val rommPassword: String = "",
     val isConnecting: Boolean = false,
+    val signUpMode: Boolean = false,
     val connectionError: FirstRunError? = null,
     val rommGameCount: Int = 0,
     val rommPlatformCount: Int = 0,
@@ -426,7 +427,7 @@ class FirstRunViewModel @Inject constructor(
         val state = _uiState.value
         return when (state.currentStep) {
             FirstRunStep.WELCOME -> 0
-            FirstRunStep.ROMM_LOGIN -> 2
+            FirstRunStep.ROMM_LOGIN -> 3
             FirstRunStep.ROMM_SUCCESS -> 0
             FirstRunStep.PERMISSIONS -> 4
             FirstRunStep.ADDONS -> 0
@@ -541,6 +542,55 @@ class FirstRunViewModel @Inject constructor(
         }
     }
 
+    fun toggleSignUpMode() {
+        _uiState.update { it.copy(signUpMode = !it.signUpMode, connectionError = null) }
+    }
+
+    /**
+     * Creates the account, then signs in with it. The server only answers while it has
+     * seats left, so a full server surfaces as a sign-up error rather than a sign-in one.
+     */
+    private fun signUpThenConnect(username: String, password: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isConnecting = true, connectionError = null) }
+            when (val result = romMRepository.signUp(DEFAULT_SERVER_URL, username, password)) {
+                is RomMResult.Success -> connectAfterSignUp(username, password)
+                is RomMResult.Error -> _uiState.update {
+                    it.copy(
+                        isConnecting = false,
+                        connectionError = FirstRunError(
+                            textRes = if (result.code == 403) {
+                                R.string.firstrun_signup_full
+                            } else {
+                                R.string.firstrun_signup_failed
+                            }
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    private suspend fun connectAfterSignUp(username: String, password: String) {
+        val result = romMRepository.connectWithPassword(
+            url = DEFAULT_SERVER_URL,
+            username = username,
+            password = password
+        )
+        when (result) {
+            is SignInResult.Connected, is SignInResult.AddedAccount -> {
+                _uiState.update { it.copy(rommPassword = "", signUpMode = false) }
+                onAuthSuccess()
+            }
+            is SignInResult.Failed -> _uiState.update {
+                it.copy(
+                    isConnecting = false,
+                    connectionError = FirstRunError(textRes = result.messageRes)
+                )
+            }
+        }
+    }
+
     fun connectToRomm() {
         val state = _uiState.value
         if (state.isConnecting) return
@@ -548,6 +598,10 @@ class FirstRunViewModel @Inject constructor(
             _uiState.update {
                 it.copy(connectionError = FirstRunError(textRes = R.string.firstrun_romm_credentials_required))
             }
+            return
+        }
+        if (state.signUpMode) {
+            signUpThenConnect(state.rommUsername, state.rommPassword)
             return
         }
         viewModelScope.launch {
@@ -722,6 +776,7 @@ class FirstRunViewModel @Inject constructor(
                 when (state.focusedIndex) {
                     0, 1 -> openKeyboard(state.focusedIndex)
                     2 -> if (!state.isConnecting && canConnect(state)) connectToRomm()
+                    3 -> toggleSignUpMode()
                 }
             }
             FirstRunStep.ROMM_SUCCESS -> nextStep()

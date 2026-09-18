@@ -158,6 +158,15 @@
     <string name="firstrun_complete_button_start">खेलना शुरू करें</string>
     <string name="firstrun_romm_sign_in_hint">अपने Gameio खाते से साइन इन करें।</string>
     <string name="firstrun_romm_sign_in_button">साइन इन करें</string>
+
+    <string name="firstrun_signup_title">खाता बनाएँ</string>
+    <string name="firstrun_signup_test_notice">यह एक टेस्ट खाता है। Gameio के परीक्षण के दौरान इसे और इसमें सहेजी गई हर चीज़ को बिना चेतावनी हटाया जा सकता है।</string>
+    <string name="firstrun_signup_button">खाता बनाएँ</string>
+    <string name="firstrun_signup_working">खाता बनाया जा रहा है...</string>
+    <string name="firstrun_signup_switch">खाता नहीं है? एक बनाएँ</string>
+    <string name="firstrun_signup_have_account">मेरे पास पहले से खाता है</string>
+    <string name="firstrun_signup_full">अभी रजिस्ट्रेशन बंद है: सर्वर भर चुका है।</string>
+    <string name="firstrun_signup_failed">खाता नहीं बनाया जा सका। नाम और पासवर्ड जाँचें, फिर कोशिश करें।</string>
     <string name="firstrun_romm_sign_in_connecting">साइन इन हो रहा है\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">सर्वर बदलें</string>
     <string name="firstrun_romm_credentials_required">अपना उपयोगकर्ता नाम और पासवर्ड दर्ज करें</string>

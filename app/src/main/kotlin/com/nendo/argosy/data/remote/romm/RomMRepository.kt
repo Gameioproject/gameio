@@ -64,6 +64,9 @@ class RomMRepository @Inject constructor(
     suspend fun signOut(discardUnflushed: Boolean = false) =
         connectionManager.signOut(discardUnflushed)
 
+    suspend fun signUp(url: String, username: String, password: String): RomMResult<Unit> =
+        connectionManager.signUp(url, username, password)
+
     suspend fun checkConnection() = connectionManager.checkConnection()
 
     fun getCurrentDeviceId(): String? = connectionManager.getDeviceId()

@@ -184,6 +184,8 @@ fun FirstRunScreen(
                     username = uiState.rommUsername,
                     password = uiState.rommPassword,
                     isConnecting = uiState.isConnecting,
+                    signUpMode = uiState.signUpMode,
+                    onToggleSignUp = { viewModel.toggleSignUpMode() },
                     error = firstRunErrorText(uiState.connectionError),
                     focusedIndex = uiState.focusedIndex,
                     rommFocusField = uiState.rommFocusField,

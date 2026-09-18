@@ -79,6 +79,9 @@ interface RomMApi {
     @GET("api/users/me")
     suspend fun getCurrentUser(): Response<RomMUser>
 
+    @POST("api/users/signup")
+    suspend fun signUp(@Body body: RomMSignUpRequest): Response<RomMUser>
+
     @GET("api/permissions/me")
     suspend fun getMyPermissions(): Response<RomMPermissionsResponse>
 

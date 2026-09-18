@@ -346,6 +346,23 @@
     <string name="firstrun_romm_sign_in_hint">Sign in with your Gameio account.</string>
     <!-- Button that signs in. -->
     <string name="firstrun_romm_sign_in_button">Sign in</string>
+
+    <!-- Title of the account creation form. Verb phrase. -->
+    <string name="firstrun_signup_title">Create an account</string>
+    <!-- Warning shown above the sign-up fields while Gameio is in testing. -->
+    <string name="firstrun_signup_test_notice">This is a test account. It may be deleted without warning while Gameio is being tested, along with anything saved to it.</string>
+    <!-- Button that creates the account. Verb phrase. -->
+    <string name="firstrun_signup_button">Create account</string>
+    <!-- The same button while the account is being created. -->
+    <string name="firstrun_signup_working">Creating account...</string>
+    <!-- Link from the sign-in form to the sign-up form. -->
+    <string name="firstrun_signup_switch">No account? Create one</string>
+    <!-- Link back from the sign-up form to the sign-in form. -->
+    <string name="firstrun_signup_have_account">I already have an account</string>
+    <!-- Error when the server has no seats left for new accounts. -->
+    <string name="firstrun_signup_full">Sign-up is closed for now: the server is full.</string>
+    <!-- Error when account creation failed for any other reason. -->
+    <string name="firstrun_signup_failed">The account could not be created. Check the name and password, then try again.</string>
     <!-- Label on the sign-in button while the request is in flight. -->
     <string name="firstrun_romm_sign_in_connecting">Signing in\u2026</string>
     <!-- Button that goes back to the server address field. -->

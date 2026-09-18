@@ -80,3 +80,9 @@ data class RomMSaveConflictDetail(
     @Json(name = "current_save_time") val currentSaveTime: String,
     @Json(name = "device_sync_time") val deviceSyncTime: String
 )
+
+@JsonClass(generateAdapter = true)
+data class RomMSignUpRequest(
+    @Json(name = "username") val username: String,
+    @Json(name = "password") val password: String
+)

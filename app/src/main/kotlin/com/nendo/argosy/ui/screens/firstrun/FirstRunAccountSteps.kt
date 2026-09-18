@@ -98,6 +98,8 @@ internal fun RommLoginStep(
     username: String,
     password: String,
     isConnecting: Boolean,
+    signUpMode: Boolean = false,
+    onToggleSignUp: (() -> Unit)? = null,
     error: String?,
     focusedIndex: Int,
     rommFocusField: Int?,
@@ -191,11 +193,22 @@ internal fun RommLoginStep(
                         .padding(horizontal = Dimens.spacingLg, vertical = Dimens.spacingLg)
                 ) {
                     Text(
-                        text = stringResource(R.string.firstrun_romm_sign_in_button),
+                        text = stringResource(
+                            if (signUpMode) R.string.firstrun_signup_title
+                            else R.string.firstrun_romm_sign_in_button
+                        ),
                         style = MaterialTheme.typography.headlineSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.fillMaxWidth().padding(bottom = Dimens.spacingMd)
                     )
+                    if (signUpMode) {
+                        Text(
+                            text = stringResource(R.string.firstrun_signup_test_notice),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.fillMaxWidth().padding(bottom = Dimens.spacingMd)
+                        )
+                    }
                         SetupTextField(
                             value = username,
                             onValueChange = onUsernameChange,
@@ -233,14 +246,28 @@ internal fun RommLoginStep(
                         Spacer(modifier = Modifier.height(Dimens.spacingLg))
                         Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMd)) {
                             SetupPrimaryButton(
-                                text = if (isConnecting) {
-                                    stringResource(R.string.firstrun_romm_sign_in_connecting)
-                                } else {
-                                    stringResource(R.string.firstrun_romm_sign_in_button)
+                                text = when {
+                                    isConnecting && signUpMode ->
+                                        stringResource(R.string.firstrun_signup_working)
+                                    isConnecting -> stringResource(R.string.firstrun_romm_sign_in_connecting)
+                                    signUpMode -> stringResource(R.string.firstrun_signup_button)
+                                    else -> stringResource(R.string.firstrun_romm_sign_in_button)
                                 },
                                 isFocused = focusedIndex == 2,
                                 enabled = !isConnecting && canConnect,
                                 onClick = onConnect
+                            )
+                        }
+                        if (onToggleSignUp != null) {
+                            Spacer(modifier = Modifier.height(Dimens.spacingSm))
+                            SetupSecondaryButton(
+                                text = stringResource(
+                                    if (signUpMode) R.string.firstrun_signup_have_account
+                                    else R.string.firstrun_signup_switch
+                                ),
+                                isFocused = focusedIndex == 3,
+                                enabled = !isConnecting,
+                                onClick = onToggleSignUp
                             )
                         }
                 }
