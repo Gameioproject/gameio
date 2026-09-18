@@ -15,6 +15,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import com.nendo.argosy.util.Logger
 import com.squareup.moshi.Moshi
+import java.io.IOException
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -259,6 +260,29 @@ class RomMConnectionManager @Inject constructor(
     }
 
     /** Probes a server URL with a throwaway client, leaving the live session untouched. */
+    /**
+     * Creates an account on the server, which only answers while it has seats left. The
+     * caller signs in afterwards: sign-up mints no token of its own.
+     */
+    suspend fun signUp(url: String, username: String, password: String): RomMResult<Unit> {
+        var lastError: String? = null
+        for (candidateUrl in buildUrlsToTry(url)) {
+            val normalizedUrl = candidateUrl.trimEnd('/') + "/"
+            try {
+                val response = createApi(normalizedUrl, null)
+                    .signUp(RomMSignUpRequest(username = username, password = password))
+                if (response.isSuccessful) return RomMResult.Success(Unit)
+                return RomMResult.Error(
+                    response.errorBody()?.string().orEmpty().ifBlank { "HTTP ${response.code()}" },
+                    response.code()
+                )
+            } catch (e: IOException) {
+                lastError = e.message ?: "Connection failed"
+            }
+        }
+        return RomMResult.Error(lastError ?: "Connection failed")
+    }
+
     suspend fun probeServerVersion(url: String): RomMResult<String> {
         var lastError: String? = null
         for (candidateUrl in buildUrlsToTry(url)) {

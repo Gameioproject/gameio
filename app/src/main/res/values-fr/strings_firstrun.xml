@@ -143,6 +143,15 @@
     <string name="firstrun_complete_button_start">Commencer à jouer</string>
     <string name="firstrun_romm_sign_in_hint">Connectez-vous avec votre compte Gameio.</string>
     <string name="firstrun_romm_sign_in_button">Se connecter</string>
+
+    <string name="firstrun_signup_title">Créer un compte</string>
+    <string name="firstrun_signup_test_notice">Ceci est un compte de test. Il peut être supprimé sans préavis pendant la phase de test de Gameio, avec tout ce qui y est enregistré.</string>
+    <string name="firstrun_signup_button">Créer le compte</string>
+    <string name="firstrun_signup_working">Création du compte...</string>
+    <string name="firstrun_signup_switch">Pas de compte ? Créez-en un</string>
+    <string name="firstrun_signup_have_account">J\'ai déjà un compte</string>
+    <string name="firstrun_signup_full">Les inscriptions sont fermées pour l\'instant : le serveur est plein.</string>
+    <string name="firstrun_signup_failed">Le compte n\'a pas pu être créé. Vérifiez le nom et le mot de passe, puis réessayez.</string>
     <string name="firstrun_romm_sign_in_connecting">Connexion\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">Changer de serveur</string>
     <string name="firstrun_romm_credentials_required">Saisissez votre nom d\'utilisateur et votre mot de passe</string>
