@@ -17,15 +17,23 @@ Like Stremio does for movies, Gameio doesn't host any games. **Add-ons** supply 
 
 ## How it works
 
-1. **Sign in and pick your systems.** Home fills with every game the catalog knows for them.
+1. **Create an account** in the app, or sign in if you have one. Then pick your systems, and home fills with every game the catalog knows for them.
 2. **Import an add-on**, a small JSON file, during setup or under **Settings → Add-ons → Import add-on**.
 3. **Open any game.** Gameio lists the sources your add-ons found. Pick one, and it downloads, verifies and launches with your emulator.
 4. **Already have games?** Put them in your platform folders and Gameio shows them alongside the catalog.
 
 ## Add-ons
 
-- **Get the Gameio add-on:** [gameio-sources.json](https://addons.playgameio.com/gameio-sources.json). Download it to your device and import it in Gameio.
-- **Make your own:** read the [add-on guide](docs/addon-format.md). The [gameio-addons](https://github.com/Gameioproject/gameio-addons) repo has the build and validation tools and a Claude skill that walks you through it.
+Two sample add-ons are ready to import. Download one on your device, then import it in Gameio:
+
+| Add-on | Games | Needs |
+|---|---|---|
+| [Internet Archive](https://addons.playgameio.com/gameio-archive.json) | 3,076 | nothing |
+| [Minerva, RetroAchievements](https://addons.playgameio.com/gameio-minerva-ra.json) | 5,862 | your own Real-Debrid account |
+
+These are samples; a real add-on can be far larger. Most games behind the Real-Debrid one are not cached there yet, so the first download of a game waits while Real-Debrid fetches it.
+
+**Make your own:** read the [add-on guide](docs/addon-format.md). The [gameio-addons](https://github.com/Gameioproject/gameio-addons) repo has the build and validation tools and a Claude skill that walks you through it.
 
 Add-on sources can be direct HTTPS links, Internet Archive files, or single files inside torrents. Torrents are resolved through your own Real-Debrid account.
 
@@ -38,9 +46,15 @@ Add-on sources can be direct HTTPS links, Internet Archive files, or single file
 - Emulator auto-detection, built-in cores, RetroAchievements, dual-screen support
 - Fully usable with a gamepad, and touch-friendly too
 
+### The look
+
+Focus is a light source, not an outline: the selected item glows in the colours of its own cover art, tiles tilt towards where you came from, and a shine sweeps across covers like light on a cartridge. The backdrop drifts slowly behind it all, and home shows the artwork of whatever you are on. **Settings → Interface** keeps the controls: background artwork and cover previews, cover glow and box-art effects, and CRT **Scanlines**, which ship off.
+
 ## Get it
 
 Download the latest APK from **[playgameio.com](https://playgameio.com)**. It runs on Android 8.0 and up and is designed for handhelds such as Retroid, AYN Odin and Anbernic devices. Gameio needs a Gameio account and the emulators for the systems you play.
+
+Android may warn that the app comes from outside the Play Store; that is Play Protect reacting to any APK installed directly, not to something found in this one.
 
 ## Build
 
