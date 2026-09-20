@@ -104,8 +104,9 @@
 
     <!-- ===== Step 3: sign-in succeeded ===== -->
 
-    <!-- Heading confirming the app is now signed in to the server. Statement, celebratory. -->
-    <string name="firstrun_romm_success_title">Connected successfully!</string>
+    <!-- Heading confirming the account is now signed in. Statement about the user, addressed
+         to them: "you are logged in", not "the connection succeeded". -->
+    <string name="firstrun_romm_success_title">You’re logged in</string>
     <!-- Line naming which server the app connected to. "Server" is a noun label; %1$s is the
          server web address and is never translated. -->
     <string name="firstrun_romm_success_server">Server: %1$s</string>
@@ -371,5 +372,5 @@
     <string name="firstrun_romm_credentials_required">Enter your username and password</string>
     <!-- Brand line under the wordmark on the welcome and sign-in screens. Not translated: it is
          the product's own tagline, the same words as on the website. -->
-    <string name="firstrun_brand_tagline" translatable="false">Netflix for retro games.</string>
+    <string name="firstrun_brand_tagline" translatable="false">Stremio for games.</string>
 </resources>

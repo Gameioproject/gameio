@@ -31,7 +31,7 @@
     <string name="firstrun_device_pairing_error_expired">Le code de jumelage a expiré, recommencez</string>
     <string name="firstrun_device_pairing_error_unexpected">Résultat de jumelage inattendu</string>
 
-    <string name="firstrun_romm_success_title">Connecté avec succès !</string>
+    <string name="firstrun_romm_success_title">Vous êtes connecté</string>
     <string name="firstrun_romm_success_server">Serveur : %1$s</string>
     <string name="firstrun_romm_success_library">%1$s sur %2$s</string>
     <plurals name="firstrun_romm_success_game_count">

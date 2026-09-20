@@ -41,7 +41,7 @@
 
     <!-- ===== Step 3: sign-in succeeded ===== -->
 
-    <string name="firstrun_romm_success_title">सफलतापूर्वक कनेक्ट हुआ!</string>
+    <string name="firstrun_romm_success_title">आप लॉग इन हैं</string>
     <string name="firstrun_romm_success_server">सर्वर: %1$s</string>
     <string name="firstrun_romm_success_library">%2$s में %1$s</string>
     <plurals name="firstrun_romm_success_game_count">

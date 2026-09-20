@@ -2,12 +2,12 @@ package com.nendo.argosy.ui.screens.home.delegates
 
 import androidx.compose.ui.graphics.toArgb
 import com.nendo.argosy.BuildConfig
-import com.nendo.argosy.ui.theme.ALauncherColors
 import com.nendo.argosy.data.preferences.UserPreferencesRepository
 import com.nendo.argosy.data.remote.romm.RomMRepository
 import com.nendo.argosy.data.steam.SteamAuthManager
 import com.nendo.argosy.domain.model.Changelog
 import com.nendo.argosy.domain.model.ChangelogEntry
+import com.nendo.argosy.ui.theme.ALauncherColors
 import com.nendo.argosy.domain.model.RequiredAction
 import com.nendo.argosy.data.sync.PlatformSyncQueue
 import kotlinx.coroutines.CoroutineScope
@@ -83,13 +83,8 @@ class HomeSyncDelegate @Inject constructor(
         }
 
         if (lastSeenVersion != currentVersion) {
-            val majorBefore = lastSeenVersion.substringBefore('.').toIntOrNull()
-            if (majorBefore != null && majorBefore < 2 && prefs.primaryColor == null) {
-                preferencesRepository.setCustomColors(
-                    ALauncherColors.Indigo.toArgb(),
-                    prefs.secondaryColor,
-                    prefs.tertiaryColor
-                )
+            if (prefs.primaryColor == ALauncherColors.Indigo.toArgb()) {
+                preferencesRepository.setCustomColors(null, prefs.secondaryColor, prefs.tertiaryColor)
             }
             val entry = Changelog.getEntry(currentVersion)
             if (entry != null) {
