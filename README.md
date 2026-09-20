@@ -25,7 +25,7 @@ Like Stremio does for movies, Gameio doesn't host any games. **Add-ons** supply 
 ## Add-ons
 
 - **Get the Gameio add-on:** [gameio-sources.json](https://addons.playgameio.com/gameio-sources.json). Download it to your device and import it in Gameio.
-- **Make your own:** read the [add-on guide](docs/addon-format.md). The [gameio-addons](https://github.com/naifqarni/gameio-addons) repo has the build and validation tools and a Claude skill that walks you through it.
+- **Make your own:** read the [add-on guide](docs/addon-format.md). The [gameio-addons](https://github.com/Gameioproject/gameio-addons) repo has the build and validation tools and a Claude skill that walks you through it.
 
 Add-on sources can be direct HTTPS links, Internet Archive files, or single files inside torrents. Torrents are resolved through your own Real-Debrid account.
 
