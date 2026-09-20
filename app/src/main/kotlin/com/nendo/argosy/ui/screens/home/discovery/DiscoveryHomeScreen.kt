@@ -27,6 +27,7 @@ import com.nendo.argosy.ui.util.clickableNoFocus
 import com.nendo.argosy.ui.theme.LocalUiScale
 import com.nendo.argosy.R
 import com.nendo.argosy.ui.components.FooterHints
+import com.nendo.argosy.ui.components.fastAnimateScrollToItem
 import com.nendo.argosy.ui.components.FooterSpacer
 import com.nendo.argosy.ui.components.FooterVariant
 import com.nendo.argosy.ui.components.GameioMark
@@ -181,7 +182,7 @@ private fun DiscoveryPlatforms(state: HomeUiState, viewModel: HomeViewModel, d: 
     val list = rememberLazyListState()
     val selected = if (state.discoveryFocus.zone == DiscoveryFocus.PLATFORMS) state.discoveryFocus.control
         else state.availableRows.indexOf(state.currentRow).coerceAtLeast(0)
-    LaunchedEffect(selected) { if (state.availableRows.isNotEmpty()) list.animateScrollToItem(selected) }
+    LaunchedEffect(selected) { if (state.availableRows.isNotEmpty()) list.fastAnimateScrollToItem(selected) }
     LazyRow(state = list, modifier = Modifier.fillMaxWidth().height(d.platformBar),
         horizontalArrangement = Arrangement.spacedBy(d.gap / 2, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,

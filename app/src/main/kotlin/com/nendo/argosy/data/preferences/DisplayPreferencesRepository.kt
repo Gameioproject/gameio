@@ -57,7 +57,7 @@ data class DisplayPreferences(
     val backgroundBlur: Int = 0,
     val backgroundSaturation: Int = 100,
     val backgroundOpacity: Int = 100,
-    val useGameBackground: Boolean = false,
+    val useGameBackground: Boolean = true,
     val customBackgroundPath: String? = null,
     val homeBackgroundMode: HomeBackgroundMode = HomeBackgroundMode.GAME_ART,
     val homeLayout: com.nendo.argosy.domain.model.HomeLayoutSettings =
@@ -239,7 +239,7 @@ class DisplayPreferencesRepository @Inject constructor(
             backgroundBlur = prefs[Keys.BACKGROUND_BLUR] ?: 40,
             backgroundSaturation = prefs[Keys.BACKGROUND_SATURATION] ?: 100,
             backgroundOpacity = prefs[Keys.BACKGROUND_OPACITY] ?: 100,
-            useGameBackground = prefs[Keys.USE_GAME_BACKGROUND] ?: false,
+            useGameBackground = prefs[Keys.USE_GAME_BACKGROUND] ?: true,
             customBackgroundPath = prefs[Keys.CUSTOM_BACKGROUND_PATH],
             homeBackgroundMode = HomeBackgroundMode.fromString(prefs[Keys.HOME_BACKGROUND_MODE]),
             homeLayout = com.nendo.argosy.domain.model.HomeLayoutSettings.fromJson(

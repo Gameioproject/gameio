@@ -761,7 +761,7 @@ data class UserPreferences(
     val backgroundBlur: Int = 0,
     val backgroundSaturation: Int = 100,
     val backgroundOpacity: Int = 100,
-    val useGameBackground: Boolean = false,
+    val useGameBackground: Boolean = true,
     val customBackgroundPath: String? = null,
     val homeBackgroundMode: HomeBackgroundMode = HomeBackgroundMode.GAME_ART,
     val homeLayout: com.nendo.argosy.domain.model.HomeLayoutSettings =
