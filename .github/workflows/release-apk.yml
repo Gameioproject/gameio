@@ -61,13 +61,13 @@ jobs:
         run: ./gradlew :app:assembleRelease -PallAbis --no-daemon
 
       - name: Upload arm64 APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gameio-arm64
           path: app/build/outputs/apk/release/*arm64*.apk
 
       - name: Upload all release APKs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: gameio-all
           path: app/build/outputs/apk/release/*.apk
