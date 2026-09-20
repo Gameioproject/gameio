@@ -5,7 +5,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-8.0+-green.svg)](https://developer.android.com/about/versions/oreo)
 
-<img src="docs/images/home.png" alt="Gameio home screen with platform tabs, a featured game and discovery rows" width="100%" />
+<img src="docs/images/home.webp" alt="Gameio home screen with platform tabs, a featured game and discovery rows" width="100%" />
 
 Gameio is a controller-first Android launcher for handhelds. Instead of starting from the files you already have, it starts from the games: every system you follow shows its full catalog, with covers, descriptions, ratings and trailers, whether or not a game is on your device.
 
@@ -13,7 +13,7 @@ Like Stremio does for movies, Gameio doesn't host any games. **Add-ons** supply 
 
 | Explore | Game page |
 |---|---|
-| <img src="docs/images/explore.png" alt="Top rated and genre rows" /> | <img src="docs/images/game.png" alt="Game page with actions, rating, description and screenshots" /> |
+| <img src="docs/images/explore.webp" alt="Top rated and genre rows" /> | <img src="docs/images/game.webp" alt="Game page with actions, rating, description and screenshots" /> |
 
 ## How it works
 
