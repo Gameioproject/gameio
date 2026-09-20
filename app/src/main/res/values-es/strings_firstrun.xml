@@ -31,7 +31,7 @@
     <string name="firstrun_device_pairing_error_expired">El código de emparejamiento venció, empieza de nuevo</string>
     <string name="firstrun_device_pairing_error_unexpected">Resultado de emparejamiento inesperado</string>
 
-    <string name="firstrun_romm_success_title">¡Conectado con éxito!</string>
+    <string name="firstrun_romm_success_title">Has iniciado sesión</string>
     <string name="firstrun_romm_success_server">Servidor: %1$s</string>
     <string name="firstrun_romm_success_library">%1$s en %2$s</string>
     <plurals name="firstrun_romm_success_game_count">

@@ -15,9 +15,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,7 +36,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -311,13 +312,19 @@ internal fun RommLoginStep(
 }
 
 
+/**
+ * Landing after sign-in. It reports the account the app is now signed in as; it deliberately
+ * does not count the library, because on the hosted service that number describes the whole
+ * catalogue rather than anything this user owns, which was only ever meaningful self-hosted.
+ */
 @Composable
 internal fun RommSuccessStep(
-    gameCount: Int,
-    platformCount: Int,
+    username: String,
     isFocused: Boolean,
     onContinue: () -> Unit
 ) {
+    val colors = MaterialTheme.colorScheme
+    val panelShape = RoundedCornerShape(Dimens.radiusLg)
     SetupBackdrop {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -327,46 +334,79 @@ internal fun RommSuccessStep(
                 .verticalScroll(rememberScrollState())
                 .padding(Dimens.spacingXl)
         ) {
-            GameioMark(tile = false, modifier = Modifier.size(ConsoleUi.brandSizeDp.dp))
-            Spacer(modifier = Modifier.height(Dimens.spacingSm))
-            Icon(
-                Icons.Default.Check,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.size(Dimens.iconLg)
-            )
-            Spacer(modifier = Modifier.height(Dimens.spacingXs))
-            Text(
-                text = stringResource(R.string.firstrun_romm_success_title),
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(Dimens.spacingMd))
-            Text(
-                text = stringResource(R.string.gameio_login_success_message),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = stringResource(
-                    R.string.firstrun_romm_success_library,
-                    pluralStringResource(R.plurals.firstrun_romm_success_game_count, gameCount, gameCount),
-                    pluralStringResource(R.plurals.firstrun_romm_success_platform_count, platformCount, platformCount)
-                ),
-                color = MaterialTheme.colorScheme.secondary,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(Dimens.spacingXl))
-            SetupPrimaryButton(
-                text = stringResource(R.string.firstrun_romm_success_button_continue),
-                isFocused = isFocused,
-                onClick = onContinue
-            )
+            GameioMark(tile = false, modifier = Modifier.size(ConsoleUi.compactBrandSizeDp.dp))
+            Spacer(modifier = Modifier.height(Dimens.spacingLg))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .widthIn(max = ConsoleUi.formWidthDp.dp)
+                    .background(colors.surface, panelShape)
+                    .border(Dimens.borderThin, colors.outlineVariant, panelShape)
+                    .padding(horizontal = Dimens.spacingLg, vertical = Dimens.spacingXl)
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(Dimens.avatarXl)
+                        .background(colors.primary.copy(alpha = SUCCESS_BADGE_FILL_ALPHA), CircleShape)
+                        .border(Dimens.borderMedium, colors.primary.copy(alpha = SUCCESS_BADGE_RING_ALPHA), CircleShape)
+                ) {
+                    Icon(
+                        Icons.Default.Check,
+                        contentDescription = null,
+                        tint = colors.primary,
+                        modifier = Modifier.size(Dimens.iconLg)
+                    )
+                }
+                Spacer(modifier = Modifier.height(Dimens.spacingMd))
+                Text(
+                    text = stringResource(R.string.firstrun_romm_success_title),
+                    color = colors.onSurface,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center
+                )
+                if (username.isNotBlank()) {
+                    Spacer(modifier = Modifier.height(Dimens.spacingSm))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(Dimens.spacingXs),
+                        modifier = Modifier
+                            .background(colors.surfaceVariant, RoundedCornerShape(Dimens.radiusPill))
+                            .padding(horizontal = Dimens.spacingMd, vertical = Dimens.spacingXs)
+                    ) {
+                        Icon(
+                            Icons.Default.Person,
+                            contentDescription = null,
+                            tint = colors.onSurfaceVariant,
+                            modifier = Modifier.size(Dimens.iconSm)
+                        )
+                        Text(
+                            text = username,
+                            color = colors.onSurface,
+                            style = MaterialTheme.typography.bodyMedium,
+                            maxLines = 1
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(Dimens.spacingMd))
+                Text(
+                    text = stringResource(R.string.gameio_login_success_message),
+                    color = colors.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(Dimens.spacingXl))
+                SetupPrimaryButton(
+                    text = stringResource(R.string.firstrun_romm_success_button_continue),
+                    isFocused = isFocused,
+                    onClick = onContinue
+                )
+            }
         }
     }
 }
+
+private const val SUCCESS_BADGE_FILL_ALPHA = 0.14f
+
+private const val SUCCESS_BADGE_RING_ALPHA = 0.5f

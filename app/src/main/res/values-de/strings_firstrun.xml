@@ -31,7 +31,7 @@
     <string name="firstrun_device_pairing_error_expired">Kopplungscode abgelaufen, bitte erneut starten</string>
     <string name="firstrun_device_pairing_error_unexpected">Unerwartetes Kopplungsergebnis</string>
 
-    <string name="firstrun_romm_success_title">Erfolgreich verbunden!</string>
+    <string name="firstrun_romm_success_title">Du bist angemeldet</string>
     <string name="firstrun_romm_success_server">Server: %1$s</string>
     <string name="firstrun_romm_success_library">%1$s auf %2$s</string>
     <plurals name="firstrun_romm_success_game_count">

@@ -31,7 +31,7 @@
     <string name="firstrun_device_pairing_error_expired">配對代碼已逾期，請重新開始</string>
     <string name="firstrun_device_pairing_error_unexpected">未預期的配對結果</string>
 
-    <string name="firstrun_romm_success_title">連線成功！</string>
+    <string name="firstrun_romm_success_title">已登入</string>
     <string name="firstrun_romm_success_server">伺服器：%1$s</string>
     <string name="firstrun_romm_success_library">%1$s，橫跨%2$s</string>
     <plurals name="firstrun_romm_success_game_count">

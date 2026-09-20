@@ -199,8 +199,7 @@ fun FirstRunScreen(
                     onKeyboardDismiss = { viewModel.closeKeyboard() }
                 )
                 FirstRunStep.ROMM_SUCCESS -> RommSuccessStep(
-                    gameCount = uiState.rommGameCount,
-                    platformCount = uiState.rommPlatformCount,
+                    username = uiState.rommUsername,
                     isFocused = true,
                     onContinue = { viewModel.nextStep() }
                 )
@@ -284,8 +283,6 @@ fun FirstRunScreen(
                     onContinue = viewModel::finishFavoriteSelection
                 )
                 FirstRunStep.COMPLETE -> CompleteStep(
-                    gameCount = uiState.rommGameCount,
-                    platformCount = uiState.rommPlatformCount,
                     isFocused = true,
                     onStart = {
                         viewModel.completeSetup(onDone = onComplete)
@@ -870,8 +867,6 @@ private fun CoreDownloadItem(
 
 @Composable
 private fun CompleteStep(
-    gameCount: Int,
-    platformCount: Int,
     isFocused: Boolean,
     onStart: () -> Unit
 ) {
@@ -888,17 +883,6 @@ private fun CompleteStep(
             color = MaterialTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.height(Dimens.spacingMd))
-
-        Text(
-            text = stringResource(
-                R.string.firstrun_complete_library,
-                pluralStringResource(R.plurals.firstrun_complete_game_count, gameCount, gameCount),
-                pluralStringResource(R.plurals.firstrun_complete_platform_count, platformCount, platformCount)
-            ),
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(Dimens.spacingSm))
         Text(
             text = stringResource(R.string.firstrun_complete_hint),
             style = MaterialTheme.typography.bodyMedium,

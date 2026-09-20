@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import com.nendo.argosy.ui.primitives.FocusIndicators
 import com.nendo.argosy.ui.primitives.argosyFocusIndicators
 import com.nendo.argosy.ui.theme.Dimens
@@ -110,6 +111,16 @@ internal fun SetupSecondaryButton(
     enabled: Boolean = true
 ) = SetupButton(text, isFocused, onClick, enabled, primary = false)
 
+/**
+ * One button in the setup wizard, in the two weights the flow uses.
+ *
+ * Focus is carried by the fill, not by the ring alone. The default palette resolves primary,
+ * secondary and onSurface to the same near-white, so the accent ring this drew sat on a
+ * near-white primary button and vanished; the focused button is now the only solid
+ * accent-filled control on the screen. A button focused while still disabled - Sign in before
+ * both fields are typed, Continue before storage is granted - keeps the ring and the accent
+ * wash, so the cursor never disappears onto an inert control.
+ */
 @Composable
 private fun SetupButton(
     text: String,
@@ -121,15 +132,16 @@ private fun SetupButton(
 ) {
     val colors = MaterialTheme.colorScheme
     val shape = RoundedCornerShape(Dimens.radiusMd)
+    val active = isFocused && enabled
     val fill = when {
+        active -> colors.primary
         !enabled -> colors.surfaceVariant
-        primary -> colors.onSurface
-        isFocused -> colors.surfaceVariant
+        primary -> colors.primary.copy(alpha = REST_PRIMARY_FILL_ALPHA)
         else -> colors.surface
     }
     val ink = when {
+        active -> colors.onPrimary
         !enabled -> colors.onSurfaceVariant
-        primary -> colors.background
         else -> colors.onSurface
     }
     Row(
@@ -137,11 +149,12 @@ private fun SetupButton(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.heightIn(min = Dimens.buttonHeight)
             .background(fill, shape)
-            .border(Dimens.borderThin, colors.outlineVariant, shape)
+            .border(Dimens.borderThin, if (primary) colors.outline else colors.outlineVariant, shape)
             .argosyFocusIndicators(
-                focused = isFocused && enabled,
-                indicators = FocusIndicators.Ring,
-                ringColor = colors.secondary,
+                focused = isFocused,
+                indicators = FocusIndicators(fill = true, ring = true),
+                tint = colors.primary,
+                ringColor = colors.primary,
                 ringThickness = Dimens.borderMedium,
                 shape = shape
             )
@@ -149,6 +162,14 @@ private fun SetupButton(
             .padding(horizontal = Dimens.spacingLg, vertical = Dimens.spacingSm)
     ) {
         if (icon != null) Icon(icon, contentDescription = null, tint = ink, modifier = Modifier.size(Dimens.iconSm))
-        Text(text, style = MaterialTheme.typography.titleSmall, color = ink, maxLines = 1)
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = if (active) FontWeight.SemiBold else FontWeight.Medium,
+            color = ink,
+            maxLines = 1
+        )
     }
 }
+
+private const val REST_PRIMARY_FILL_ALPHA = 0.16f

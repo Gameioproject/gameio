@@ -31,7 +31,7 @@
     <string name="firstrun_device_pairing_error_expired">Код сопряжения истёк, начните заново</string>
     <string name="firstrun_device_pairing_error_unexpected">Непредвиденный результат сопряжения</string>
 
-    <string name="firstrun_romm_success_title">Подключение выполнено успешно!</string>
+    <string name="firstrun_romm_success_title">Вы вошли в аккаунт</string>
     <string name="firstrun_romm_success_server">Сервер: %1$s</string>
     <string name="firstrun_romm_success_library">%1$s на %2$s</string>
     <plurals name="firstrun_romm_success_game_count">

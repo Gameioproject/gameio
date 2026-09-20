@@ -31,7 +31,7 @@
     <string name="firstrun_device_pairing_error_expired">配对码已过期，请重新开始</string>
     <string name="firstrun_device_pairing_error_unexpected">意外的配对结果</string>
 
-    <string name="firstrun_romm_success_title">连接成功！</string>
+    <string name="firstrun_romm_success_title">已登录</string>
     <string name="firstrun_romm_success_server">服务器：%1$s</string>
     <string name="firstrun_romm_success_library">%2$s，%1$s</string>
     <plurals name="firstrun_romm_success_game_count">

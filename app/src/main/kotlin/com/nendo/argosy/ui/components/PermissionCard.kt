@@ -26,6 +26,8 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.nendo.argosy.R
+import com.nendo.argosy.ui.primitives.FocusIndicators
+import com.nendo.argosy.ui.primitives.argosyFocusIndicators
 import com.nendo.argosy.ui.theme.Dimens
 import com.nendo.argosy.ui.theme.LocalArgosyTheme
 import com.nendo.argosy.ui.util.clickableNoFocus
@@ -60,9 +62,21 @@ fun PermissionCard(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = Dimens.settingsItemMinHeight)
+            .argosyFocusIndicators(
+                focused = isFocused,
+                indicators = FocusIndicators.RowBloom,
+                tint = focusAccent,
+                shape = shape
+            )
             .clip(shape)
             .clickableNoFocus(onClick = onClick)
             .background(backgroundColor, shape)
+            .argosyFocusIndicators(
+                focused = isFocused,
+                indicators = FocusIndicators.Row,
+                tint = focusAccent,
+                shape = shape
+            )
             .padding(Dimens.spacingMd),
         verticalAlignment = Alignment.CenterVertically
     ) {
