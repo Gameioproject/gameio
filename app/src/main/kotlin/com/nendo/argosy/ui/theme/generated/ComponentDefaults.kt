@@ -292,15 +292,15 @@ object ComponentDefaults {
     }
 
     object FocusEffects {
-        const val washAlpha = 0.26f
-        const val washMidAlpha = 0.1f
+        const val washAlpha = 0.2f
+        const val washMidAlpha = 0.07f
         const val washEndPercent = 0.78f
-        const val barGlowAlpha = 0.55f
-        const val bloomAlpha = 0.4f
+        const val barGlowAlpha = 0.4f
+        const val bloomAlpha = 0.22f
         const val tiltDegrees = 7f
         const val tiltTipRatio = 0.4f
         const val shineBandPercent = 0.46f
-        const val shineAlpha = 0.85f
+        const val shineAlpha = 0.6f
         const val scanlineAlpha = 0.055f
         const val scanlineSpacingDp = 3
         const val scanlineThicknessDp = 1
