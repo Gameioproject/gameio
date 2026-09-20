@@ -9,10 +9,10 @@ import retrofit2.http.Query
 
 interface GitHubApi {
 
-    @GET("repos/naifqarni/gameio/releases/latest")
+    @GET("repos/Gameioproject/gameio/releases/latest")
     suspend fun getLatestRelease(): Response<GitHubRelease>
 
-    @GET("repos/naifqarni/gameio/releases")
+    @GET("repos/Gameioproject/gameio/releases")
     suspend fun getReleases(
         @Query("per_page") perPage: Int = 10,
         @Query("page") page: Int = 1
