@@ -159,7 +159,7 @@ fun NavGraph(
             arguments = listOf(navArgument("collectionId") { type = NavType.LongType })
         ) {
             CollectionDetailScreen(
-                onBack = { navController.popBackStack() },
+                onBack = navigateBack,
                 onGameClick = { gameId ->
                     navController.navigate(Screen.GameDetail.createRoute(gameId))
                 }
@@ -171,7 +171,7 @@ fun NavGraph(
             arguments = listOf(navArgument("type") { type = NavType.StringType })
         ) {
             VirtualBrowserScreen(
-                onBack = { navController.popBackStack() },
+                onBack = navigateBack,
                 onCategoryClick = { category ->
                     val type = it.arguments?.getString("type") ?: "genres"
                     navController.navigate(Screen.VirtualCategory.createRoute(type, category))
@@ -187,7 +187,7 @@ fun NavGraph(
             )
         ) {
             VirtualCategoryScreen(
-                onBack = { navController.popBackStack() },
+                onBack = navigateBack,
                 onGameClick = { gameId ->
                     navController.navigate(Screen.GameDetail.createRoute(gameId))
                 }
@@ -272,7 +272,7 @@ fun NavGraph(
                 initialPanel = backStackEntry.arguments?.getString("panel"),
                 onManageAddons = { navController.navigate(Screen.Addons.route) },
                 argosyViewModel = argosyViewModel,
-                onBack = { navController.popBackStack() },
+                onBack = navigateBack,
                 onNavigateToPlatformSettings = { platformId ->
                     navController.navigate(
                         Screen.Settings.createRoute(section = "platform_detail", platformId = platformId)
@@ -311,7 +311,7 @@ fun NavGraph(
             val itemId = backStackEntry.arguments?.getString("itemId") ?: return@composable
             MediaDetailScreen(
                 itemId = itemId,
-                onBack = { navController.popBackStack() },
+                onBack = navigateBack,
                 onPlay = onPlayMedia,
                 onNavigateToLibrary = { libraryId ->
                     navController.navigate(Screen.MediaLibrary.createRoute(libraryId))
@@ -343,7 +343,7 @@ fun NavGraph(
 
         composable(Screen.ManagePins.route) {
             ManagePinsScreen(
-                onBack = { navController.popBackStack() }
+                onBack = navigateBack
             )
         }
 
@@ -379,7 +379,7 @@ fun NavGraph(
             val userId = backStackEntry.arguments?.getString("userId") ?: return@composable
             UserProfileScreen(
                 userId = userId,
-                onBack = { navController.popBackStack() },
+                onBack = navigateBack,
                 onNavigateToGameDetail = { gameId ->
                     navController.navigate(Screen.GameDetail.createRoute(gameId.toLong()))
                 }
@@ -393,7 +393,7 @@ fun NavGraph(
             val eventId = backStackEntry.arguments?.getString("eventId") ?: return@composable
             FeedEventDetailScreen(
                 eventId = eventId,
-                onBack = { navController.popBackStack() },
+                onBack = navigateBack,
                 onNavigateToGame = { gameId ->
                     navController.navigate(Screen.GameDetail.createRoute(gameId))
                 },
@@ -409,7 +409,7 @@ fun NavGraph(
             val initialGameTitle = prevHandle?.get<String>("doodle_initial_game_title")
             val initialGameCoverPath = prevHandle?.get<String>("doodle_initial_game_cover_path")
             DoodleScreen(
-                onBack = { navController.popBackStack() },
+                onBack = navigateBack,
                 onDone = { data, size, gameId, gameTitle, gameCoverPath ->
                     navController.previousBackStackEntry
                         ?.savedStateHandle
@@ -436,8 +436,8 @@ fun NavGraph(
 
         composable(Screen.AvatarDoodle.route) {
             DoodleScreen(
-                onBack = { navController.popBackStack() },
-                onDone = { _, _, _, _, _ -> navController.popBackStack() },
+                onBack = navigateBack,
+                onDone = { _, _, _, _, _ -> navigateBack() },
                 avatarMode = true,
                 inputRoute = Screen.AvatarDoodle.route
             )
@@ -450,8 +450,8 @@ fun NavGraph(
             val doodleGameTitle = backStackEntry.savedStateHandle.get<String>("doodle_game_title")
             val doodleGameCoverPath = backStackEntry.savedStateHandle.get<String>("doodle_game_cover_path")
             PostEditorScreen(
-                onBack = { navController.popBackStack() },
-                onPosted = { navController.popBackStack() },
+                onBack = navigateBack,
+                onPosted = { navigateBack() },
                 onNavigateToDoodle = { gameId, gameTitle, gameCoverPath ->
                     backStackEntry.savedStateHandle["doodle_initial_game_id"] = gameId
                     backStackEntry.savedStateHandle["doodle_initial_game_title"] = gameTitle
