@@ -155,6 +155,7 @@ class GamepadInputHandler @Inject constructor(
 
         if (direction == lastStickDirection) return null
         lastStickDirection = direction
+        if (direction != null) flushDeferredConfirm()
         return direction
     }
 
@@ -222,16 +223,13 @@ class GamepadInputHandler @Inject constructor(
             }
         }
         if (gamepadEvent == GamepadEvent.Confirm && event.action == KeyEvent.ACTION_UP) {
-            confirmDeferJob?.cancel()
-            if (confirmDeferred && !confirmFired) {
-                confirmFired = true
-                confirmDeferred = false
-                emitWithDebounce(GamepadEvent.Confirm)
-            }
+            flushDeferredConfirm()
             return true
         }
 
         if (event.action != KeyEvent.ACTION_DOWN) return true
+
+        flushDeferredConfirm()
 
         val isRepeat = event.repeatCount > 0
 
@@ -249,6 +247,22 @@ class GamepadInputHandler @Inject constructor(
 
         emitWithDebounce(gamepadEvent, isRepeat, signature)
         return true
+    }
+
+    /**
+     * Sends a Confirm that is still waiting to hear whether it was a long press.
+     *
+     * The wait is what makes a long press possible, but it also leaves a window in which the
+     * next press is delivered first: pressing a key on the console keyboard and moving before
+     * the button is released would otherwise type whatever the d-pad landed on, not the key
+     * that was pressed. Any later input ends that wait, so the press keeps its own target.
+     */
+    private fun flushDeferredConfirm() {
+        confirmDeferJob?.cancel()
+        if (!confirmDeferred || confirmFired) return
+        confirmFired = true
+        confirmDeferred = false
+        emitWithDebounce(GamepadEvent.Confirm)
     }
 
     private fun emitWithDebounce(
