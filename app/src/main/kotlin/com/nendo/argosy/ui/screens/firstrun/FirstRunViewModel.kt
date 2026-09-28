@@ -76,11 +76,20 @@ data class FirstRunError(
     val serverMessage: String? = null
 )
 
+/**
+ * Where the recovery address sits while signing up, in the same index space the
+ * console keyboard and the d-pad share. Signing in has no such field, so the
+ * buttons take these places instead.
+ */
+private const val EMAIL_FIELD_INDEX = 2
+private const val NO_INDEX = -1
+
 data class FirstRunUiState(
     val currentStep: FirstRunStep = FirstRunStep.WELCOME,
     val focusedIndex: Int = 0,
     val rommUsername: String = "",
     val rommPassword: String = "",
+    val rommEmail: String = "",
     val isConnecting: Boolean = false,
     val signUpMode: Boolean = false,
     val connectionError: FirstRunError? = null,
@@ -427,7 +436,7 @@ class FirstRunViewModel @Inject constructor(
         val state = _uiState.value
         return when (state.currentStep) {
             FirstRunStep.WELCOME -> 0
-            FirstRunStep.ROMM_LOGIN -> 3
+            FirstRunStep.ROMM_LOGIN -> if (state.signUpMode) 4 else 3
             FirstRunStep.ROMM_SUCCESS -> 0
             FirstRunStep.PERMISSIONS -> 4
             FirstRunStep.ADDONS -> 0
@@ -517,6 +526,10 @@ class FirstRunViewModel @Inject constructor(
         _uiState.update { it.copy(rommPassword = password, connectionError = null) }
     }
 
+    fun setRommEmail(email: String) {
+        _uiState.update { it.copy(rommEmail = email.trim(), connectionError = null) }
+    }
+
     fun openKeyboard(field: Int) {
         _uiState.update { it.copy(keyboardField = field, connectionError = null) }
     }
@@ -531,6 +544,7 @@ class FirstRunViewModel @Inject constructor(
         return when (state.keyboardField) {
             0 -> state.rommUsername
             1 -> state.rommPassword
+            EMAIL_FIELD_INDEX -> state.rommEmail
             else -> ""
         }
     }
@@ -539,6 +553,7 @@ class FirstRunViewModel @Inject constructor(
         when (_uiState.value.keyboardField) {
             0 -> setRommUsername(value)
             1 -> setRommPassword(value)
+            EMAIL_FIELD_INDEX -> setRommEmail(value)
         }
     }
 
@@ -550,19 +565,19 @@ class FirstRunViewModel @Inject constructor(
      * Creates the account, then signs in with it. The server only answers while it has
      * seats left, so a full server surfaces as a sign-up error rather than a sign-in one.
      */
-    private fun signUpThenConnect(username: String, password: String) {
+    private fun signUpThenConnect(username: String, password: String, email: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(isConnecting = true, connectionError = null) }
-            when (val result = romMRepository.signUp(DEFAULT_SERVER_URL, username, password)) {
+            when (val result = romMRepository.signUp(DEFAULT_SERVER_URL, username, password, email)) {
                 is RomMResult.Success -> connectAfterSignUp(username, password)
                 is RomMResult.Error -> _uiState.update {
                     it.copy(
                         isConnecting = false,
                         connectionError = FirstRunError(
-                            textRes = if (result.code == 403) {
-                                R.string.firstrun_signup_full
-                            } else {
-                                R.string.firstrun_signup_failed
+                            textRes = when (result.code) {
+                                403 -> R.string.firstrun_signup_full
+                                429 -> R.string.firstrun_signup_too_many
+                                else -> R.string.firstrun_signup_failed
                             }
                         )
                     )
@@ -601,7 +616,13 @@ class FirstRunViewModel @Inject constructor(
             return
         }
         if (state.signUpMode) {
-            signUpThenConnect(state.rommUsername, state.rommPassword)
+            if (state.rommEmail.isBlank()) {
+                _uiState.update {
+                    it.copy(connectionError = FirstRunError(textRes = R.string.firstrun_signup_email_required))
+                }
+                return
+            }
+            signUpThenConnect(state.rommUsername, state.rommPassword, state.rommEmail)
             return
         }
         viewModelScope.launch {
@@ -773,10 +794,14 @@ class FirstRunViewModel @Inject constructor(
         when (state.currentStep) {
             FirstRunStep.WELCOME -> nextStep()
             FirstRunStep.ROMM_LOGIN -> {
+                val emailIndex = if (state.signUpMode) EMAIL_FIELD_INDEX else NO_INDEX
+                val connectIndex = if (state.signUpMode) 3 else 2
+                val toggleIndex = if (state.signUpMode) 4 else 3
                 when (state.focusedIndex) {
                     0, 1 -> openKeyboard(state.focusedIndex)
-                    2 -> if (!state.isConnecting && canConnect(state)) connectToRomm()
-                    3 -> toggleSignUpMode()
+                    emailIndex -> openKeyboard(EMAIL_FIELD_INDEX)
+                    connectIndex -> if (!state.isConnecting && canConnect(state)) connectToRomm()
+                    toggleIndex -> toggleSignUpMode()
                 }
             }
             FirstRunStep.ROMM_SUCCESS -> nextStep()
@@ -854,7 +879,8 @@ class FirstRunViewModel @Inject constructor(
 
     private fun canConnect(state: FirstRunUiState): Boolean =
             state.rommUsername.isNotBlank() &&
-            state.rommPassword.isNotBlank()
+            state.rommPassword.isNotBlank() &&
+            (!state.signUpMode || state.rommEmail.isNotBlank())
 
     fun proceedFromPlatformSelect() {
         nextStep()

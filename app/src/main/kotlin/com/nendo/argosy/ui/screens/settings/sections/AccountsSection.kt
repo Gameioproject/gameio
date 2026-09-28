@@ -388,10 +388,12 @@ private fun AccountPairingPane(uiState: SettingsUiState, viewModel: SettingsView
     val signIn = uiState.accounts.signIn
     com.nendo.argosy.ui.screens.firstrun.RommLoginStep(
         username = signIn.username, password = signIn.password,
+        email = "",
         isConnecting = signIn.connecting, error = signIn.error,
         focusedIndex = uiState.focusedIndex, rommFocusField = null,
         onUsernameChange = viewModel::setAddAccountUsername,
         onPasswordChange = viewModel::setAddAccountPassword,
+        onEmailChange = {},
         onConnect = viewModel::submitAddAccount, onClearFocusField = {},
         keyboardField = signIn.keyboardField,
         keyboardText = if (signIn.keyboardField == 0) signIn.username else signIn.password,

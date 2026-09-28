@@ -364,7 +364,18 @@
     <string name="firstrun_signup_full">Sign-up is closed for now: the server is full.</string>
     <!-- Error when account creation failed for any other reason. -->
     <string name="firstrun_signup_failed">The account could not be created. Check the name and password, then try again.</string>
+    <!-- Label of the email field on the sign-up form. Noun. -->
+    <string name="firstrun_signup_email_label">Email</string>
+    <!-- Line under the email field saying what the address is for. -->
+    <string name="firstrun_signup_email_hint">Used only to reset your password if you forget it.</string>
+    <!-- Shown when create account is pressed with the email still empty. -->
+    <string name="firstrun_signup_email_required">Enter an email address so you can reset your password later</string>
+    <!-- Error when the server is refusing further sign-ups from this address for now. -->
+    <string name="firstrun_signup_too_many">Too many sign-ups from this connection. Wait a while and try again.</string>
     <!-- Label on the sign-in button while the request is in flight. -->
+    <!-- Line under the sign-in form telling people where a forgotten password is reset.
+         The web address is a domain and is never translated. -->
+    <string name="firstrun_signin_forgot_password">Forgot your password? Reset it at playgameio.com</string>
     <string name="firstrun_romm_sign_in_connecting">Signing in\u2026</string>
     <!-- Button that goes back to the server address field. -->
     <string name="firstrun_romm_sign_in_change_server">Change server</string>

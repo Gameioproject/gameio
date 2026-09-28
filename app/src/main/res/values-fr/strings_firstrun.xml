@@ -152,6 +152,11 @@
     <string name="firstrun_signup_have_account">J\'ai déjà un compte</string>
     <string name="firstrun_signup_full">Les inscriptions sont fermées pour l\'instant : le serveur est plein.</string>
     <string name="firstrun_signup_failed">Le compte n\'a pas pu être créé. Vérifiez le nom et le mot de passe, puis réessayez.</string>
+    <string name="firstrun_signup_email_label">E-mail</string>
+    <string name="firstrun_signup_email_hint">Sert uniquement à réinitialiser votre mot de passe en cas d\'oubli.</string>
+    <string name="firstrun_signup_email_required">Saisissez une adresse e-mail pour pouvoir réinitialiser votre mot de passe plus tard</string>
+    <string name="firstrun_signup_too_many">Trop d\'inscriptions depuis cette connexion. Patientez un moment et réessayez.</string>
+    <string name="firstrun_signin_forgot_password">Mot de passe oublié ? Réinitialisez-le sur playgameio.com</string>
     <string name="firstrun_romm_sign_in_connecting">Connexion\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">Changer de serveur</string>
     <string name="firstrun_romm_credentials_required">Saisissez votre nom d\'utilisateur et votre mot de passe</string>

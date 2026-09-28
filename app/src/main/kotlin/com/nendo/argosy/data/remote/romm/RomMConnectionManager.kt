@@ -264,13 +264,18 @@ class RomMConnectionManager @Inject constructor(
      * Creates an account on the server, which only answers while it has seats left. The
      * caller signs in afterwards: sign-up mints no token of its own.
      */
-    suspend fun signUp(url: String, username: String, password: String): RomMResult<Unit> {
+    suspend fun signUp(
+        url: String,
+        username: String,
+        password: String,
+        email: String
+    ): RomMResult<Unit> {
         var lastError: String? = null
         for (candidateUrl in buildUrlsToTry(url)) {
             val normalizedUrl = candidateUrl.trimEnd('/') + "/"
             try {
                 val response = createApi(normalizedUrl, null)
-                    .signUp(RomMSignUpRequest(username = username, password = password))
+                    .signUp(RomMSignUpRequest(username = username, password = password, email = email))
                 if (response.isSuccessful) return RomMResult.Success(Unit)
                 return RomMResult.Error(
                     response.errorBody()?.string().orEmpty().ifBlank { "HTTP ${response.code()}" },

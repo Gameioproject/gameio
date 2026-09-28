@@ -134,6 +134,11 @@
     <string name="firstrun_signup_have_account">我已经有账户了</string>
     <string name="firstrun_signup_full">暂时无法注册：服务器已满。</string>
     <string name="firstrun_signup_failed">无法创建账户。请检查用户名和密码后重试。</string>
+    <string name="firstrun_signup_email_label">电子邮箱</string>
+    <string name="firstrun_signup_email_hint">仅在你忘记密码时用于重置密码。</string>
+    <string name="firstrun_signup_email_required">请填写电子邮箱，以便日后重置密码</string>
+    <string name="firstrun_signup_too_many">此连接的注册次数过多。请稍后再试。</string>
+    <string name="firstrun_signin_forgot_password">忘记密码？在 playgameio.com 重置</string>
     <string name="firstrun_romm_sign_in_connecting">登录中\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">更换服务器</string>
     <string name="firstrun_romm_credentials_required">请输入用户名和密码</string>
