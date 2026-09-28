@@ -3,11 +3,20 @@ name: Release APK
 on:
   push:
     branches: [main]
+  release:
+    types: [published]
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Tag of an existing GitHub release to attach the APKs to (optional)
+        required: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: write
 
 jobs:
   release:
@@ -71,3 +80,10 @@ jobs:
         with:
           name: gameio-all
           path: app/build/outputs/apk/release/*.apk
+
+      - name: Attach APKs to the GitHub release
+        if: github.event_name == 'release' || inputs.release_tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.release_tag }}
+        run: gh release upload "$RELEASE_TAG" app/build/outputs/apk/release/*.apk --clobber --repo "$GITHUB_REPOSITORY"
