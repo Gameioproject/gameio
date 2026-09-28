@@ -183,6 +183,7 @@ fun FirstRunScreen(
                 FirstRunStep.ROMM_LOGIN -> RommLoginStep(
                     username = uiState.rommUsername,
                     password = uiState.rommPassword,
+                    email = uiState.rommEmail,
                     isConnecting = uiState.isConnecting,
                     signUpMode = uiState.signUpMode,
                     onToggleSignUp = { viewModel.toggleSignUpMode() },
@@ -191,6 +192,7 @@ fun FirstRunScreen(
                     rommFocusField = uiState.rommFocusField,
                     onUsernameChange = { viewModel.setRommUsername(it) },
                     onPasswordChange = { viewModel.setRommPassword(it) },
+                    onEmailChange = { viewModel.setRommEmail(it) },
                     onConnect = { viewModel.connectToRomm() },
                     onClearFocusField = { viewModel.clearRommFocusField() },
                     keyboardField = uiState.keyboardField,

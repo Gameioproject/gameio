@@ -98,6 +98,7 @@ internal fun WelcomeStep(isFocused: Boolean, onGetStarted: () -> Unit) {
 internal fun RommLoginStep(
     username: String,
     password: String,
+    email: String,
     isConnecting: Boolean,
     signUpMode: Boolean = false,
     onToggleSignUp: (() -> Unit)? = null,
@@ -106,6 +107,7 @@ internal fun RommLoginStep(
     rommFocusField: Int?,
     onUsernameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
     onConnect: () -> Unit,
     onClearFocusField: () -> Unit,
     keyboardField: Int?,
@@ -115,22 +117,27 @@ internal fun RommLoginStep(
 ) {
     val usernameFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
+    val emailFocusRequester = remember { FocusRequester() }
     val focusManager: FocusManager = LocalFocusManager.current
     val keyboard: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current
 
-    val canConnect = username.isNotBlank() && password.isNotBlank()
+    val canConnect = username.isNotBlank() && password.isNotBlank() &&
+        (!signUpMode || email.isNotBlank())
+    val connectIndex = if (signUpMode) 3 else 2
+    val toggleIndex = if (signUpMode) 4 else 3
 
     LaunchedEffect(rommFocusField) {
         when (rommFocusField) {
             0 -> usernameFocusRequester.requestFocus()
             1 -> passwordFocusRequester.requestFocus()
+            2 -> if (signUpMode) emailFocusRequester.requestFocus()
         }
         if (rommFocusField != null) {
             onClearFocusField()
         }
     }
     LaunchedEffect(focusedIndex) {
-        val onAField = focusedIndex <= 1
+        val onAField = focusedIndex <= if (signUpMode) 2 else 1
         if (!onAField) {
             keyboard?.hide()
             focusManager.clearFocus()
@@ -235,7 +242,9 @@ internal fun RommLoginStep(
                             ),
                             keyboardActions = KeyboardActions(
                                 onGo = {
-                                    if (!isConnecting && canConnect) {
+                                    if (signUpMode) {
+                                        emailFocusRequester.requestFocus()
+                                    } else if (!isConnecting && canConnect) {
                                         keyboard?.hide()
                                         focusManager.clearFocus()
                                         onConnect()
@@ -243,6 +252,35 @@ internal fun RommLoginStep(
                                 }
                             )
                         )
+                        if (signUpMode) {
+                            Spacer(modifier = Modifier.height(Dimens.spacingSm))
+                            SetupTextField(
+                                value = email,
+                                onValueChange = onEmailChange,
+                                label = stringResource(R.string.firstrun_signup_email_label),
+                                gamepadFocused = focusedIndex == 2,
+                                focusRequester = emailFocusRequester,
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Email,
+                                    imeAction = ImeAction.Go
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onGo = {
+                                        if (!isConnecting && canConnect) {
+                                            keyboard?.hide()
+                                            focusManager.clearFocus()
+                                            onConnect()
+                                        }
+                                    }
+                                )
+                            )
+                            Text(
+                                text = stringResource(R.string.firstrun_signup_email_hint),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.fillMaxWidth().padding(top = Dimens.spacingXs)
+                            )
+                        }
                         SetupError(error)
                         Spacer(modifier = Modifier.height(Dimens.spacingLg))
                         Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMd)) {
@@ -254,9 +292,17 @@ internal fun RommLoginStep(
                                     signUpMode -> stringResource(R.string.firstrun_signup_button)
                                     else -> stringResource(R.string.firstrun_romm_sign_in_button)
                                 },
-                                isFocused = focusedIndex == 2,
+                                isFocused = focusedIndex == connectIndex,
                                 enabled = !isConnecting && canConnect,
                                 onClick = onConnect
+                            )
+                        }
+                        if (!signUpMode) {
+                            Text(
+                                text = stringResource(R.string.firstrun_signin_forgot_password),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.fillMaxWidth().padding(top = Dimens.spacingSm)
                             )
                         }
                         if (onToggleSignUp != null) {
@@ -266,7 +312,7 @@ internal fun RommLoginStep(
                                     if (signUpMode) R.string.firstrun_signup_have_account
                                     else R.string.firstrun_signup_switch
                                 ),
-                                isFocused = focusedIndex == 3,
+                                isFocused = focusedIndex == toggleIndex,
                                 enabled = !isConnecting,
                                 onClick = onToggleSignUp
                             )
