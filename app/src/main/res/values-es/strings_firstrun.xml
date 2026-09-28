@@ -156,7 +156,8 @@
     <string name="firstrun_signup_email_hint">Solo se usa para restablecer tu contraseña si la olvidas.</string>
     <string name="firstrun_signup_email_required">Introduce un correo electrónico para poder restablecer tu contraseña más adelante</string>
     <string name="firstrun_signup_too_many">Demasiados registros desde esta conexión. Espera un poco e inténtalo de nuevo.</string>
-    <string name="firstrun_signin_forgot_password">¿Olvidaste tu contraseña? Restablécela en playgameio.com</string>
+    <string name="firstrun_signin_reset_password">Restablecer contraseña</string>
+    <string name="firstrun_signin_reset_password_hint">Abre playgameio.com en el navegador. Vuelve aquí para iniciar sesión.</string>
     <string name="firstrun_romm_sign_in_connecting">Iniciando sesión\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">Cambiar de servidor</string>
     <string name="firstrun_romm_credentials_required">Escribe tu nombre de usuario y contraseña</string>

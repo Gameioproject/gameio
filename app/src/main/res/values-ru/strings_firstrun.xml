@@ -165,7 +165,8 @@
     <string name="firstrun_signup_email_hint">Нужна только для сброса пароля, если вы его забудете.</string>
     <string name="firstrun_signup_email_required">Укажите адрес почты, чтобы позже можно было сбросить пароль</string>
     <string name="firstrun_signup_too_many">Слишком много регистраций с этого подключения. Подождите и попробуйте снова.</string>
-    <string name="firstrun_signin_forgot_password">Забыли пароль? Сбросьте его на playgameio.com</string>
+    <string name="firstrun_signin_reset_password">Сбросить пароль</string>
+    <string name="firstrun_signin_reset_password_hint">Откроется playgameio.com в браузере. Вернитесь сюда, чтобы войти.</string>
     <string name="firstrun_romm_sign_in_connecting">Вход\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">Сменить сервер</string>
     <string name="firstrun_romm_credentials_required">Введите имя пользователя и пароль</string>

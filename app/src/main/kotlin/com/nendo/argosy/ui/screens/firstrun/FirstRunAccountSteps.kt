@@ -108,6 +108,7 @@ internal fun RommLoginStep(
     onUsernameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onEmailChange: (String) -> Unit,
+    onResetPassword: () -> Unit,
     onConnect: () -> Unit,
     onClearFocusField: () -> Unit,
     keyboardField: Int?,
@@ -125,6 +126,7 @@ internal fun RommLoginStep(
         (!signUpMode || email.isNotBlank())
     val connectIndex = if (signUpMode) 3 else 2
     val toggleIndex = if (signUpMode) 4 else 3
+    val resetIndex = 4
 
     LaunchedEffect(rommFocusField) {
         when (rommFocusField) {
@@ -297,14 +299,6 @@ internal fun RommLoginStep(
                                 onClick = onConnect
                             )
                         }
-                        if (!signUpMode) {
-                            Text(
-                                text = stringResource(R.string.firstrun_signin_forgot_password),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.fillMaxWidth().padding(top = Dimens.spacingSm)
-                            )
-                        }
                         if (onToggleSignUp != null) {
                             Spacer(modifier = Modifier.height(Dimens.spacingSm))
                             SetupSecondaryButton(
@@ -315,6 +309,21 @@ internal fun RommLoginStep(
                                 isFocused = focusedIndex == toggleIndex,
                                 enabled = !isConnecting,
                                 onClick = onToggleSignUp
+                            )
+                        }
+                        if (!signUpMode) {
+                            Spacer(modifier = Modifier.height(Dimens.spacingSm))
+                            SetupSecondaryButton(
+                                text = stringResource(R.string.firstrun_signin_reset_password),
+                                isFocused = focusedIndex == resetIndex,
+                                enabled = !isConnecting,
+                                onClick = onResetPassword
+                            )
+                            Text(
+                                text = stringResource(R.string.firstrun_signin_reset_password_hint),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.fillMaxWidth().padding(top = Dimens.spacingXs)
                             )
                         }
                 }

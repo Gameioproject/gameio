@@ -147,7 +147,8 @@
     <string name="firstrun_signup_email_hint">Wird nur verwendet, um dein Passwort zurückzusetzen, falls du es vergisst.</string>
     <string name="firstrun_signup_email_required">Gib eine E-Mail-Adresse ein, damit du dein Passwort später zurücksetzen kannst</string>
     <string name="firstrun_signup_too_many">Zu viele Registrierungen über diese Verbindung. Warte eine Weile und versuch es erneut.</string>
-    <string name="firstrun_signin_forgot_password">Passwort vergessen? Setz es auf playgameio.com zurück</string>
+    <string name="firstrun_signin_reset_password">Passwort zurücksetzen</string>
+    <string name="firstrun_signin_reset_password_hint">Öffnet playgameio.com im Browser. Komm danach zum Anmelden hierher zurück.</string>
     <string name="firstrun_romm_sign_in_connecting">Anmeldung\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">Server wechseln</string>
     <string name="firstrun_romm_credentials_required">Gib deinen Benutzernamen und dein Passwort ein</string>
