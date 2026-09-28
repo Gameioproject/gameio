@@ -1,5 +1,7 @@
 # Gameio
 
+### 🌐 [playgameio.com](https://playgameio.com): download the app
+
 **Stremio for games.** Explore the whole library of every system you love, and let add-ons find the files.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
