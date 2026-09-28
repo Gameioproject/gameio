@@ -171,7 +171,8 @@
     <string name="firstrun_signup_email_hint">इसका उपयोग केवल पासवर्ड भूल जाने पर उसे रीसेट करने के लिए होता है।</string>
     <string name="firstrun_signup_email_required">ईमेल पता डालें ताकि बाद में पासवर्ड रीसेट किया जा सके</string>
     <string name="firstrun_signup_too_many">इस कनेक्शन से बहुत सारे साइन-अप हुए हैं। कुछ देर बाद फिर कोशिश करें।</string>
-    <string name="firstrun_signin_forgot_password">पासवर्ड भूल गए? इसे playgameio.com पर रीसेट करें</string>
+    <string name="firstrun_signin_reset_password">पासवर्ड रीसेट करें</string>
+    <string name="firstrun_signin_reset_password_hint">ब्राउज़र में playgameio.com खुलेगा। इसके बाद साइन इन करने यहीं लौटें।</string>
     <string name="firstrun_romm_sign_in_connecting">साइन इन हो रहा है\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">सर्वर बदलें</string>
     <string name="firstrun_romm_credentials_required">अपना उपयोगकर्ता नाम और पासवर्ड दर्ज करें</string>

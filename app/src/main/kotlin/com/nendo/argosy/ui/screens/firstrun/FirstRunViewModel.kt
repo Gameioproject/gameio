@@ -30,8 +30,11 @@ import com.nendo.argosy.ui.components.PLATFORM_HEADER_SORT
 import com.nendo.argosy.util.PermissionHelper
 import com.nendo.argosy.util.PlatformFilterLogic
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
@@ -83,6 +86,7 @@ data class FirstRunError(
  */
 private const val EMAIL_FIELD_INDEX = 2
 private const val NO_INDEX = -1
+private const val PASSWORD_RESET_URL = "https://playgameio.com/forgot-password"
 
 data class FirstRunUiState(
     val currentStep: FirstRunStep = FirstRunStep.WELCOME,
@@ -144,6 +148,9 @@ class FirstRunViewModel @Inject constructor(
         )
     )
     val uiState: StateFlow<FirstRunUiState> = _uiState.asStateFlow()
+
+    private val _openResetPasswordEvent = MutableSharedFlow<String>()
+    val openResetPasswordEvent: SharedFlow<String> = _openResetPasswordEvent.asSharedFlow()
 
     fun nextStep() {
         _uiState.update { state ->
@@ -436,7 +443,7 @@ class FirstRunViewModel @Inject constructor(
         val state = _uiState.value
         return when (state.currentStep) {
             FirstRunStep.WELCOME -> 0
-            FirstRunStep.ROMM_LOGIN -> if (state.signUpMode) 4 else 3
+            FirstRunStep.ROMM_LOGIN -> 4
             FirstRunStep.ROMM_SUCCESS -> 0
             FirstRunStep.PERMISSIONS -> 4
             FirstRunStep.ADDONS -> 0
@@ -555,6 +562,14 @@ class FirstRunViewModel @Inject constructor(
             1 -> setRommPassword(value)
             EMAIL_FIELD_INDEX -> setRommEmail(value)
         }
+    }
+
+    /**
+     * Hands the reset to a browser. The launcher never sees the mailed link, and
+     * the web sign-in that form used to live behind is closed on the hosted service.
+     */
+    fun openPasswordReset() {
+        viewModelScope.launch { _openResetPasswordEvent.emit(PASSWORD_RESET_URL) }
     }
 
     fun toggleSignUpMode() {
@@ -797,11 +812,13 @@ class FirstRunViewModel @Inject constructor(
                 val emailIndex = if (state.signUpMode) EMAIL_FIELD_INDEX else NO_INDEX
                 val connectIndex = if (state.signUpMode) 3 else 2
                 val toggleIndex = if (state.signUpMode) 4 else 3
+                val resetIndex = if (state.signUpMode) NO_INDEX else 4
                 when (state.focusedIndex) {
                     0, 1 -> openKeyboard(state.focusedIndex)
                     emailIndex -> openKeyboard(EMAIL_FIELD_INDEX)
                     connectIndex -> if (!state.isConnecting && canConnect(state)) connectToRomm()
                     toggleIndex -> toggleSignUpMode()
+                    resetIndex -> openPasswordReset()
                 }
             }
             FirstRunStep.ROMM_SUCCESS -> nextStep()

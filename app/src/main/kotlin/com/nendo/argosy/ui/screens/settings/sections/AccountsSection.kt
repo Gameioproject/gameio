@@ -394,6 +394,7 @@ private fun AccountPairingPane(uiState: SettingsUiState, viewModel: SettingsView
         onUsernameChange = viewModel::setAddAccountUsername,
         onPasswordChange = viewModel::setAddAccountPassword,
         onEmailChange = {},
+        onResetPassword = {},
         onConnect = viewModel::submitAddAccount, onClearFocusField = {},
         keyboardField = signIn.keyboardField,
         keyboardText = if (signIn.keyboardField == 0) signIn.username else signIn.password,

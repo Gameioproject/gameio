@@ -19,6 +19,7 @@ fun RomMConfigForm(uiState: SettingsUiState, viewModel: SettingsViewModel) {
         onUsernameChange = viewModel::setRommConfigUsername,
         onPasswordChange = viewModel::setRommConfigPassword,
         onEmailChange = {},
+        onResetPassword = {},
         onConnect = viewModel::connectToRomm,
         onClearFocusField = {},
         keyboardField = server.rommFocusField,

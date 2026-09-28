@@ -138,7 +138,8 @@
     <string name="firstrun_signup_email_hint">僅在你忘記密碼時用於重設密碼。</string>
     <string name="firstrun_signup_email_required">請填寫電子郵件，以便日後重設密碼</string>
     <string name="firstrun_signup_too_many">此連線的註冊次數過多。請稍後再試。</string>
-    <string name="firstrun_signin_forgot_password">忘記密碼？在 playgameio.com 重設</string>
+    <string name="firstrun_signin_reset_password">重設密碼</string>
+    <string name="firstrun_signin_reset_password_hint">將在瀏覽器中開啟 playgameio.com。完成後回到這裡登入。</string>
     <string name="firstrun_romm_sign_in_connecting">登入中\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">更換伺服器</string>
     <string name="firstrun_romm_credentials_required">請輸入使用者名稱和密碼</string>

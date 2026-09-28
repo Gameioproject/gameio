@@ -80,6 +80,12 @@ fun FirstRunScreen(
     val favoritesState by viewModel.favoritesDelegate.state.collectAsState()
     val context = LocalContext.current
 
+    LaunchedEffect(Unit) {
+        viewModel.openResetPasswordEvent.collect { url ->
+            runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
+        }
+    }
+
     val requestStorage = {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
@@ -193,6 +199,7 @@ fun FirstRunScreen(
                     onUsernameChange = { viewModel.setRommUsername(it) },
                     onPasswordChange = { viewModel.setRommPassword(it) },
                     onEmailChange = { viewModel.setRommEmail(it) },
+                    onResetPassword = { viewModel.openPasswordReset() },
                     onConnect = { viewModel.connectToRomm() },
                     onClearFocusField = { viewModel.clearRommFocusField() },
                     keyboardField = uiState.keyboardField,

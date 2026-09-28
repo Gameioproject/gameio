@@ -373,9 +373,10 @@
     <!-- Error when the server is refusing further sign-ups from this address for now. -->
     <string name="firstrun_signup_too_many">Too many sign-ups from this connection. Wait a while and try again.</string>
     <!-- Label on the sign-in button while the request is in flight. -->
-    <!-- Line under the sign-in form telling people where a forgotten password is reset.
-         The web address is a domain and is never translated. -->
-    <string name="firstrun_signin_forgot_password">Forgot your password? Reset it at playgameio.com</string>
+    <!-- Button on the sign-in form that opens the reset page in a browser. Verb phrase. -->
+    <string name="firstrun_signin_reset_password">Reset password</string>
+    <!-- Line under that button saying where it goes and to come back. The web address is a domain and is never translated. -->
+    <string name="firstrun_signin_reset_password_hint">Opens playgameio.com in your browser. Come back here to sign in after.</string>
     <string name="firstrun_romm_sign_in_connecting">Signing in\u2026</string>
     <!-- Button that goes back to the server address field. -->
     <string name="firstrun_romm_sign_in_change_server">Change server</string>
