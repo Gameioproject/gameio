@@ -248,6 +248,7 @@ object SettingsBackupKeys {
 
     private val DOWNLOADS_AND_CACHES = listOf(
         SettingsBackupKey("max_concurrent_downloads", SettingsBackupType.INT),
+        SettingsBackupKey("download_connections", SettingsBackupType.INT),
         SettingsBackupKey("instant_download_threshold_mb", SettingsBackupType.INT),
         SettingsBackupKey("stage_downloads_internally", SettingsBackupType.BOOLEAN),
         SettingsBackupKey("download_category_defaults", SettingsBackupType.STRING),
