@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Schedule
@@ -25,6 +24,8 @@ import com.nendo.argosy.domain.model.CompletionStatus
 import com.nendo.argosy.ui.common.color
 import com.nendo.argosy.ui.common.icon
 import com.nendo.argosy.ui.theme.Dimens
+import com.nendo.argosy.ui.theme.PixelShape
+import com.nendo.argosy.ui.theme.pixelLabelStyle
 import com.nendo.argosy.ui.common.labelRes
 
 @Composable
@@ -34,7 +35,7 @@ fun MetadataChip(label: String, value: String) {
         modifier = Modifier
             .background(
                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                RoundedCornerShape(Dimens.radiusMd)
+                PixelShape
             )
             .padding(horizontal = Dimens.spacingMd, vertical = Dimens.spacingSm)
     ) {
@@ -45,7 +46,7 @@ fun MetadataChip(label: String, value: String) {
         )
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = pixelLabelStyle(),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
@@ -63,7 +64,7 @@ fun RatingChip(
         modifier = Modifier
             .background(
                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                RoundedCornerShape(Dimens.radiusSm)
+                PixelShape
             )
             .padding(horizontal = Dimens.radiusLg, vertical = Dimens.radiusSm)
     ) {
@@ -94,7 +95,7 @@ fun RatingChip(
         }
         Text(
             text = label,
-            style = MaterialTheme.typography.labelSmall,
+            style = pixelLabelStyle(),
             color = if (isSet) {
                 MaterialTheme.colorScheme.onSurfaceVariant
             } else {
@@ -111,7 +112,7 @@ fun CommunityRatingChip(rating: Float) {
         modifier = Modifier
             .background(
                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                RoundedCornerShape(Dimens.radiusSm)
+                PixelShape
             )
             .padding(horizontal = Dimens.radiusLg, vertical = Dimens.radiusSm)
     ) {
@@ -136,7 +137,7 @@ fun CommunityRatingChip(rating: Float) {
         }
         Text(
             text = stringResource(R.string.gamedetail_chip_community_rating_label),
-            style = MaterialTheme.typography.labelSmall,
+            style = pixelLabelStyle(),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
@@ -165,7 +166,7 @@ fun PlayTimeChip(minutes: Int) {
         modifier = Modifier
             .background(
                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                RoundedCornerShape(Dimens.radiusSm)
+                PixelShape
             )
             .padding(horizontal = Dimens.radiusLg, vertical = Dimens.radiusSm)
     ) {
@@ -187,7 +188,7 @@ fun PlayTimeChip(minutes: Int) {
         }
         Text(
             text = stringResource(R.string.gamedetail_chip_play_time_label),
-            style = MaterialTheme.typography.labelSmall,
+            style = pixelLabelStyle(),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
@@ -202,7 +203,7 @@ fun StatusChip(statusValue: String?) {
         modifier = Modifier
             .background(
                 MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
-                RoundedCornerShape(Dimens.radiusSm)
+                PixelShape
             )
             .padding(horizontal = Dimens.radiusLg, vertical = Dimens.radiusSm)
     ) {

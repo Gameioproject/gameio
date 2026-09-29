@@ -1,5 +1,6 @@
 package com.nendo.argosy.ui.components
 
+import com.nendo.argosy.ui.theme.pixelLabelStyle
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -135,7 +136,7 @@ fun SystemStatusBar(
 
         Text(
             text = formatClockTime(LocalContext.current, currentTime.longValue),
-            style = MaterialTheme.typography.titleMedium,
+            style = pixelLabelStyle(MaterialTheme.typography.titleMedium.fontSize),
             color = effectiveColor
         )
 
@@ -191,7 +192,7 @@ private fun BatteryIndicator(
         )
         Text(
             text = "$level%",
-            style = MaterialTheme.typography.labelMedium,
+            style = pixelLabelStyle(MaterialTheme.typography.labelMedium.fontSize),
             color = color
         )
     }

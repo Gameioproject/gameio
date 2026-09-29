@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Download
@@ -64,6 +63,7 @@ import com.nendo.argosy.R
 import com.nendo.argosy.ui.screens.gamedetail.GameDownloadStatus
 import com.nendo.argosy.ui.screens.settings.menu.SettingsLayout
 import com.nendo.argosy.ui.theme.Dimens
+import com.nendo.argosy.ui.theme.PixelShape
 import androidx.compose.material.icons.filled.ChatBubbleOutline
 import com.nendo.argosy.ui.util.clickableNoFocus
 
@@ -371,7 +371,7 @@ private fun PlayMenuItem(
             Box(
                 modifier = (if (isCompact) Modifier else Modifier.fillMaxWidth())
                     .height(40.dp)
-                    .clip(RoundedCornerShape(Dimens.radiusMd))
+                    .clip(PixelShape)
                     .drawBehind {
                         drawRect(trackColor)
                         drawRect(fillColor, size = size.copy(width = size.width * animatedProgress))
@@ -408,7 +408,7 @@ private fun PlayMenuItem(
         } else {
             Button(
                 onClick = onClick,
-                shape = RoundedCornerShape(Dimens.radiusMd),
+                shape = PixelShape,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = containerColor,
                     contentColor = contentColor

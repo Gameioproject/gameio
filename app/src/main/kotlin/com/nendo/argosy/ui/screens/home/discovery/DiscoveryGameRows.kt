@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -37,6 +36,8 @@ import com.nendo.argosy.ui.components.GameCard
 import com.nendo.argosy.ui.screens.home.*
 import com.nendo.argosy.ui.theme.generated.ComponentDefaults.DiscoveryHome as T
 import com.nendo.argosy.ui.util.clickableNoFocus
+import com.nendo.argosy.ui.theme.PixelShape
+import com.nendo.argosy.ui.theme.pixelLabelStyle
 
 @Composable
 fun DiscoveryGameRail(
@@ -147,7 +148,7 @@ fun DiscoveryHero(
         verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.fillMaxWidth(T.heroWidthRatio), verticalArrangement = Arrangement.Center) {
             Text(stringResource(if (game?.lastPlayedAt != null) R.string.discovery_continue else R.string.discovery_hero_fallback),
-                fontSize = dimensions.label, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                style = pixelLabelStyle(dimensions.label), color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (game != null) {
                 Text(game.title, fontSize = dimensions.title,
                 style = MaterialTheme.typography.headlineMedium.copy(lineHeight = androidx.compose.ui.unit.TextUnit.Unspecified), color = MaterialTheme.colorScheme.onSurface,
@@ -163,7 +164,7 @@ fun DiscoveryHero(
                         modifier = Modifier.padding(top = dimensions.gap / 2))
                 }
                 game.rating?.let {
-                    Text(stringResource(R.string.discovery_rating, it.toInt()), fontSize = dimensions.label,
+                    Text(stringResource(R.string.discovery_rating, it.toInt()), style = pixelLabelStyle(dimensions.label),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(top = dimensions.gap / 2))
                 }
@@ -217,7 +218,7 @@ fun DiscoveryButton(
     label: String, focused: Boolean, dimensions: DiscoveryDimensions,
     onClick: () -> Unit, primary: Boolean = false, quiet: Boolean = false, icon: (@Composable () -> Unit)? = null
 ) {
-    val shape = RoundedCornerShape(dimensions.control / 2)
+    val shape = PixelShape
     Row(Modifier.height(dimensions.control)
         .border(dimensions.ring, if (focused) MaterialTheme.colorScheme.secondary else Color.Transparent, shape)
         .background(when {
@@ -229,7 +230,7 @@ fun DiscoveryButton(
         .padding(horizontal = dimensions.gap),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
         if (icon != null) icon()
-        if (label.isNotEmpty()) Text(label, fontSize = dimensions.label,
+        if (label.isNotEmpty()) Text(label, style = pixelLabelStyle(dimensions.label),
             color = if (primary) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
             maxLines = 1)
     }

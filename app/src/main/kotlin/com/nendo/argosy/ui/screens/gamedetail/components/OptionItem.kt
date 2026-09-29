@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
@@ -24,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.nendo.argosy.R
 import com.nendo.argosy.ui.theme.Dimens
+import com.nendo.argosy.ui.theme.PixelShape
 import com.nendo.argosy.ui.theme.LocalArgosyTheme
 import com.nendo.argosy.ui.theme.generated.ColorTokens
 
@@ -59,8 +59,8 @@ fun OptionItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(Dimens.radiusMd))
-            .background(backgroundColor, RoundedCornerShape(Dimens.radiusMd))
+            .clip(PixelShape)
+            .background(backgroundColor, PixelShape)
             .then(if (onClick != null && isEnabled) Modifier.clickableNoFocus(onClick = onClick) else Modifier)
             .padding(horizontal = Dimens.radiusLg, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,

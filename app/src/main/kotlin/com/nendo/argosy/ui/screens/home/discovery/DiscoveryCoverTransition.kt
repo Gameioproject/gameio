@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +15,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import com.nendo.argosy.ui.theme.generated.ComponentDefaults.DiscoveryHome as T
 import com.nendo.argosy.ui.theme.generated.MotionTokens
+import com.nendo.argosy.ui.theme.generated.ComponentDefaults.Pixel as P
+import com.nendo.argosy.ui.theme.pixelCornerBrackets
+import androidx.compose.ui.unit.dp
 import com.nendo.argosy.ui.util.clickableNoFocus
 
 @Composable
@@ -46,7 +48,12 @@ fun DiscoveryCoverTransition(
     ).value else 1f
     val shape = RoundedCornerShape(com.nendo.argosy.ui.theme.LocalBoxArtStyle.current.cornerRadiusDp)
     Column(modifier.width(width)
-        .then(if (focused) Modifier.border(dimensions.ring, MaterialTheme.colorScheme.primary, shape) else Modifier)
+        .then(if (focused) Modifier.pixelCornerBrackets(
+            MaterialTheme.colorScheme.primary,
+            length = P.bracketLengthDp.dp * dimensions.scale,
+            width = P.bracketWidthDp.dp * dimensions.scale,
+            offset = 0.dp
+        ) else Modifier)
         .padding(dimensions.ringPadding)
         .clickableNoFocus(onClick = onClick, onLongClick = onLongClick)) {
         if (animated) {
