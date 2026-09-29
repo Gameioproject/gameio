@@ -54,6 +54,13 @@ data class RomMClientTokenRequest(
 )
 
 @JsonClass(generateAdapter = true)
+data class RomMGoogleSignInRequest(
+    @Json(name = "id_token") val idToken: String,
+    @Json(name = "name") val name: String,
+    @Json(name = "scopes") val scopes: List<String>
+)
+
+@JsonClass(generateAdapter = true)
 data class RomMClientTokenResponse(
     @Json(name = "id") val id: Long,
     @Json(name = "name") val name: String? = null,

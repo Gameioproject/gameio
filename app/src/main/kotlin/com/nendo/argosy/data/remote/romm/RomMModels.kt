@@ -358,7 +358,8 @@ data class RomMHeartbeatResponse(
 
 @JsonClass(generateAdapter = true)
 data class RomMFrontend(
-    @Json(name = "SUPPORT_URL") val supportUrl: String? = null
+    @Json(name = "SUPPORT_URL") val supportUrl: String? = null,
+    @Json(name = "GOOGLE_CLIENT_ID") val googleClientId: String? = null
 )
 
 @JsonClass(generateAdapter = true)

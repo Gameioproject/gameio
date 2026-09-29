@@ -59,6 +59,11 @@ class RomMRepository @Inject constructor(
         activate: Boolean = true
     ): SignInResult = connectionManager.connectWithPassword(url, username, password, activate)
 
+    suspend fun googleClientId(url: String): String? = connectionManager.googleClientId(url)
+
+    suspend fun connectWithGoogle(url: String, idToken: String): SignInResult =
+        connectionManager.connectWithGoogle(url, idToken)
+
     fun disconnect() = connectionManager.disconnect()
 
     suspend fun signOut(discardUnflushed: Boolean = false) =

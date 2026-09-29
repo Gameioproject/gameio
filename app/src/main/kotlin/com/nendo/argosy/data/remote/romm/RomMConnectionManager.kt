@@ -63,9 +63,14 @@ sealed class ConnectionState {
     data class Failed(val reason: String) : ConnectionState()
 }
 
-enum class SignInFailureReason { INVALID_CREDENTIALS, ACCOUNT_UNAVAILABLE, TOO_MANY_DEVICES, UNAVAILABLE }
+enum class SignInFailureReason {
+    INVALID_CREDENTIALS, ACCOUNT_UNAVAILABLE, TOO_MANY_DEVICES, UNAVAILABLE,
+    GOOGLE_REJECTED, SIGNUP_FULL, RATE_LIMITED
+}
 
-/** What a username-and-password sign-in produced. */
+/**
+ * What a password or Google sign-in produced.
+ */
 sealed class SignInResult {
     /** Signed in and this connection is now the live one. */
     data class Connected(val token: String) : SignInResult()
@@ -479,6 +484,67 @@ class RomMConnectionManager @Inject constructor(
             }
         }
 
+        return SignInResult.Failed(lastError ?: "Could not reach that server")
+    }
+
+    /**
+     * The Google client id [url] accepts ID tokens for, or null when that server has no Google
+     * sign-in. Read from the heartbeat so the app carries no Google configuration of its own.
+     */
+    suspend fun googleClientId(url: String): String? {
+        for (candidateUrl in buildUrlsToTry(url)) {
+            val normalizedUrl = candidateUrl.trimEnd('/') + "/"
+            try {
+                val response = createApi(normalizedUrl, null).heartbeat()
+                if (response.isSuccessful) {
+                    return response.body()?.frontend?.googleClientId?.takeIf { it.isNotBlank() }
+                }
+            } catch (e: IOException) {
+                Logger.info(TAG, "googleClientId: ${e.message} at $normalizedUrl")
+            }
+        }
+        return null
+    }
+
+    /**
+     * Signs in with a Google ID token. The server makes the account on first use, so this is
+     * sign-up and sign-in at once; like [connectWithPassword] it keeps only the client token.
+     */
+    suspend fun connectWithGoogle(url: String, idToken: String): SignInResult {
+        val request = RomMGoogleSignInRequest(
+            idToken = idToken,
+            name = deviceDisplayName(),
+            scopes = CLIENT_TOKEN_SCOPES
+        )
+        var lastError: String? = null
+        for (candidateUrl in buildUrlsToTry(url)) {
+            val normalizedUrl = candidateUrl.trimEnd('/') + "/"
+            try {
+                val response = createApi(normalizedUrl, null).signInWithGoogle(request)
+                if (!response.isSuccessful) {
+                    val detail = parseDetail(response.errorBody()?.string())
+                    return SignInResult.Failed(
+                        detail ?: "Google sign-in failed (${response.code()})",
+                        when {
+                            response.code() == 401 -> SignInFailureReason.GOOGLE_REJECTED
+                            response.code() == 403 && detail?.startsWith("Sign-up is closed") == true ->
+                                SignInFailureReason.SIGNUP_FULL
+                            response.code() == 403 -> SignInFailureReason.ACCOUNT_UNAVAILABLE
+                            response.code() == 429 -> SignInFailureReason.RATE_LIMITED
+                            else -> SignInFailureReason.UNAVAILABLE
+                        }
+                    )
+                }
+                val token = response.body()?.rawToken
+                    ?: return SignInResult.Failed("Server returned no token")
+                return when (val result = connectWithToken(normalizedUrl, token)) {
+                    is RomMResult.Success -> SignInResult.Connected(token)
+                    is RomMResult.Error -> SignInResult.Failed(result.message)
+                }
+            } catch (e: IOException) {
+                lastError = e.message ?: "Connection failed"
+            }
+        }
         return SignInResult.Failed(lastError ?: "Could not reach that server")
     }
 

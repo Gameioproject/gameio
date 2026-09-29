@@ -161,4 +161,9 @@
     <string name="firstrun_romm_sign_in_connecting">Connexion\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">Changer de serveur</string>
     <string name="firstrun_romm_credentials_required">Saisissez votre nom d\'utilisateur et votre mot de passe</string>
+    <string name="firstrun_google_button">Continuer avec Google</string>
+    <string name="firstrun_google_divider">ou</string>
+    <string name="firstrun_google_no_account">Aucun compte Google sur cet appareil. Ajoutez-en un dans les paramètres Android, ou utilisez un nom d\'utilisateur et un mot de passe.</string>
+    <string name="firstrun_google_unavailable">La connexion avec Google n\'est pas disponible sur cet appareil. Utilisez un nom d\'utilisateur et un mot de passe.</string>
+    <string name="firstrun_google_failed">La connexion avec Google n\'a pas fonctionné. Réessayez, ou utilisez un nom d\'utilisateur et un mot de passe.</string>
 </resources>

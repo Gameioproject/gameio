@@ -76,6 +76,13 @@ interface RomMApi {
         @Body body: RomMClientTokenRequest
     ): Response<RomMClientTokenResponse>
 
+    /**
+     * Trades a Google ID token for a client token, creating the account on first use. The
+     * response has the same shape as [createClientToken].
+     */
+    @POST("api/auth/google")
+    suspend fun signInWithGoogle(@Body body: RomMGoogleSignInRequest): Response<RomMClientTokenResponse>
+
     @GET("api/users/me")
     suspend fun getCurrentUser(): Response<RomMUser>
 

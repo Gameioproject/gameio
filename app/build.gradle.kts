@@ -251,6 +251,11 @@ dependencies {
     implementation(libs.bundles.network)
     ksp(libs.moshi.kotlin)
 
+    // Sign in with Google
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services)
+    implementation(libs.google.id)
+
     // CBOR (QuayPass BLE wire format)
     implementation(libs.upokecenter.cbor)
 

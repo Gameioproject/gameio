@@ -170,4 +170,9 @@
     <string name="firstrun_romm_sign_in_connecting">Вход\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">Сменить сервер</string>
     <string name="firstrun_romm_credentials_required">Введите имя пользователя и пароль</string>
+    <string name="firstrun_google_button">Продолжить с Google</string>
+    <string name="firstrun_google_divider">или</string>
+    <string name="firstrun_google_no_account">На этом устройстве нет аккаунта Google. Добавьте его в настройках Android или войдите по имени пользователя и паролю.</string>
+    <string name="firstrun_google_unavailable">Вход через Google на этом устройстве недоступен. Войдите по имени пользователя и паролю.</string>
+    <string name="firstrun_google_failed">Не удалось войти через Google. Попробуйте ещё раз или войдите по имени пользователя и паролю.</string>
 </resources>

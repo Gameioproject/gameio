@@ -58,3 +58,9 @@
 -keep class discordpp.** { *; }
 -dontwarn com.discord.socialsdk.**
 -dontwarn discordpp.**
+
+# Credential Manager reaches its Play services provider by reflection
+-if class androidx.credentials.CredentialManager
+-keep class androidx.credentials.playservices.** {
+  *;
+}
