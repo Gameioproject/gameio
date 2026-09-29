@@ -1,50 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Gameio mark "Fan": three covers fanned like a hand of cards, the front one
-     ringed. Scaled into the 66dp safe centre of the 108dp canvas so no launcher
-     mask clips a corner. -->
+<!-- Gameio mark: a pixel-art controller. Scaled into the 66dp safe centre of the 108dp
+     canvas so no launcher mask clips a corner. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <group
-        android:pivotX="54"
-        android:pivotY="54"
-        android:scaleX="0.7"
-        android:scaleY="0.7"
-        android:translateY="-5.6">
-        <group
-            android:pivotX="40"
-            android:pivotY="62"
-            android:rotation="-18">
-        <path
-            android:fillColor="#E64A8B"
-            android:pathData="M28.00,36.00 H52.00 A5,5 0 0 1 57.00,41.00 V83.00 A5,5 0 0 1 52.00,88.00 H28.00 A5,5 0 0 1 23.00,83.00 V41.00 A5,5 0 0 1 28.00,36.00 Z" />
-        </group>
-        <group
-            android:pivotX="68"
-            android:pivotY="62"
-            android:rotation="18">
-        <path
-            android:fillColor="#2FBF8F"
-            android:pathData="M56.00,36.00 H80.00 A5,5 0 0 1 85.00,41.00 V83.00 A5,5 0 0 1 80.00,88.00 H56.00 A5,5 0 0 1 51.00,83.00 V41.00 A5,5 0 0 1 56.00,36.00 Z" />
-        </group>
-        <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M42.00,28.50 H66.00 A8.5,8.5 0 0 1 74.50,37.00 V79.00 A8.5,8.5 0 0 1 66.00,87.50 H42.00 A8.5,8.5 0 0 1 33.50,79.00 V37.00 A8.5,8.5 0 0 1 42.00,28.50 Z" />
-        <path
-            android:fillColor="#F2B734"
-            android:pathData="M42.00,32.00 H66.00 A5,5 0 0 1 71.00,37.00 V79.00 A5,5 0 0 1 66.00,84.00 H42.00 A5,5 0 0 1 37.00,79.00 V37.00 A5,5 0 0 1 42.00,32.00 Z" />
-        <path
-            android:fillColor="#FF5A3C"
-            android:pathData="M46.00,41.00 H62.00 A2,2 0 0 1 64.00,43.00 V57.00 A2,2 0 0 1 62.00,59.00 H46.00 A2,2 0 0 1 44.00,57.00 V43.00 A2,2 0 0 1 46.00,41.00 Z" />
-        <path
-            android:fillColor="#1C3C8F"
-            android:fillAlpha="0.45"
-            android:pathData="M45.50,66.00 H62.50 A1.5,1.5 0 0 1 64.00,67.50 V67.50 A1.5,1.5 0 0 1 62.50,69.00 H45.50 A1.5,1.5 0 0 1 44.00,67.50 V67.50 A1.5,1.5 0 0 1 45.50,66.00 Z" />
-        <path
-            android:fillColor="#1C3C8F"
-            android:fillAlpha="0.3"
-            android:pathData="M45.50,72.00 H54.50 A1.5,1.5 0 0 1 56.00,73.50 V73.50 A1.5,1.5 0 0 1 54.50,75.00 H45.50 A1.5,1.5 0 0 1 44.00,73.50 V73.50 A1.5,1.5 0 0 1 45.50,72.00 Z" />
-    </group>
+    <path
+        android:fillColor="#F5F5F5"
+        android:pathData="M29.3,36.9h19v3.8h-19zM59.7,36.9h19v3.8h-19zM25.5,40.7h57v3.8h-57zM25.5,44.5h11.4v3.8h-11.4zM40.7,44.5h30.4v3.8h-30.4zM74.9,44.5h7.6v3.8h-7.6zM25.5,48.3h7.6v3.8h-7.6zM44.5,48.3h22.8v3.8h-22.8zM71.1,48.3h3.8v3.8h-3.8zM78.7,48.3h3.8v3.8h-3.8zM25.5,52.1h11.4v3.8h-11.4zM40.7,52.1h30.4v3.8h-30.4zM74.9,52.1h7.6v3.8h-7.6zM25.5,55.9h57v3.8h-57zM25.5,59.7h22.8v3.8h-22.8zM59.7,59.7h22.8v3.8h-22.8zM25.5,63.5h15.2v3.8h-15.2zM67.3,63.5h15.2v3.8h-15.2zM29.3,67.3h7.6v3.8h-7.6zM71.1,67.3h7.6v3.8h-7.6z" />
 </vector>

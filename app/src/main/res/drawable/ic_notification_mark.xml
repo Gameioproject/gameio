@@ -1,36 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Gameio mark "Fan" as a notification small icon: white silhouette, alpha only. -->
+<!-- Gameio pixel controller mark as a notification small icon: white silhouette, alpha only. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <group
-        android:pivotX="54"
-        android:pivotY="54"
-        android:scaleX="1.45"
-        android:scaleY="1.45"
-        android:translateY="-6">
-        <group
-            android:pivotX="40"
-            android:pivotY="62"
-            android:rotation="-18">
-        <path
-            android:fillColor="#FFFFFF"
-            android:fillAlpha="0.55"
-            android:pathData="M28.00,36.00 H52.00 A5,5 0 0 1 57.00,41.00 V83.00 A5,5 0 0 1 52.00,88.00 H28.00 A5,5 0 0 1 23.00,83.00 V41.00 A5,5 0 0 1 28.00,36.00 Z" />
-        </group>
-        <group
-            android:pivotX="68"
-            android:pivotY="62"
-            android:rotation="18">
-        <path
-            android:fillColor="#FFFFFF"
-            android:fillAlpha="0.55"
-            android:pathData="M56.00,36.00 H80.00 A5,5 0 0 1 85.00,41.00 V83.00 A5,5 0 0 1 80.00,88.00 H56.00 A5,5 0 0 1 51.00,83.00 V41.00 A5,5 0 0 1 56.00,36.00 Z" />
-        </group>
-        <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M42.00,32.00 H66.00 A5,5 0 0 1 71.00,37.00 V79.00 A5,5 0 0 1 66.00,84.00 H42.00 A5,5 0 0 1 37.00,79.00 V37.00 A5,5 0 0 1 42.00,32.00 Z" />
-    </group>
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M11.1,24.3h33v6.6h-33zM63.9,24.3h33v6.6h-33zM4.5,30.9h99v6.6h-99zM4.5,37.5h19.8v6.6h-19.8zM30.9,37.5h52.8v6.6h-52.8zM90.3,37.5h13.2v6.6h-13.2zM4.5,44.1h13.2v6.6h-13.2zM37.5,44.1h39.6v6.6h-39.6zM83.7,44.1h6.6v6.6h-6.6zM96.9,44.1h6.6v6.6h-6.6zM4.5,50.7h19.8v6.6h-19.8zM30.9,50.7h52.8v6.6h-52.8zM90.3,50.7h13.2v6.6h-13.2zM4.5,57.3h99v6.6h-99zM4.5,63.9h39.6v6.6h-39.6zM63.9,63.9h39.6v6.6h-39.6zM4.5,70.5h26.4v6.6h-26.4zM77.1,70.5h26.4v6.6h-26.4zM11.1,77.1h13.2v6.6h-13.2zM83.7,77.1h13.2v6.6h-13.2z" />
 </vector>
