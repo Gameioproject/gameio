@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -43,6 +42,7 @@ import com.nendo.argosy.data.preferences.BoxArtBorderStyle
 import com.nendo.argosy.data.preferences.PlatformIndicatorContent
 import com.nendo.argosy.data.preferences.SystemIconPosition
 import com.nendo.argosy.ui.theme.LocalBoxArtStyle
+import com.nendo.argosy.ui.theme.PixelFontFamily
 
 private val BASE_WIDTH_DP = 150.dp
 private val BASE_FONT_SIZE_SP = 11.sp
@@ -218,7 +218,7 @@ private fun BadgeInnerContent(
             Text(
                 text = displayName,
                 fontSize = fontSize,
-                fontWeight = FontWeight.Bold,
+                fontFamily = PixelFontFamily,
                 color = textColor,
                 lineHeight = fontSize,
                 maxLines = 1,
@@ -228,7 +228,7 @@ private fun BadgeInnerContent(
         PlatformIndicatorContent.NAME -> Text(
             text = displayName,
             fontSize = fontSize,
-            fontWeight = FontWeight.Bold,
+            fontFamily = PixelFontFamily,
             color = textColor,
             lineHeight = fontSize,
             maxLines = 1,
@@ -436,7 +436,7 @@ private fun PlatformSpineLabel(
         PlatformIndicatorContent.NAME -> Text(
             text = displayName,
             fontSize = fontSize,
-            fontWeight = FontWeight.Bold,
+            fontFamily = PixelFontFamily,
             color = textColor,
             lineHeight = fontSize,
             maxLines = 1,
@@ -457,7 +457,7 @@ private fun PlatformSpineLabel(
             Text(
                 text = displayName,
                 fontSize = fontSize,
-                fontWeight = FontWeight.Bold,
+                fontFamily = PixelFontFamily,
                 color = textColor,
                 lineHeight = fontSize,
                 maxLines = 1,

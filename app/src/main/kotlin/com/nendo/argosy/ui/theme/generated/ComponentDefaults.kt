@@ -28,11 +28,20 @@ import com.nendo.argosy.data.preferences.ThemeMode
 
 object ComponentDefaults {
     object GameioBackdrop {
-        const val cellSizeDp = 58
-        const val lineWidthDp = 0.5f
-        const val gridAlpha = 0.02f
+        const val cellSizeDp = 14
+        const val dotSizeDp = 1.5f
+        const val gridAlpha = 0.07f
         const val glowAlpha = 0.08f
         const val glowRadiusRatio = 0.8f
+    }
+
+    object Pixel {
+        const val stepDp = 3
+        const val bracketLengthDp = 12
+        const val bracketWidthDp = 3
+        const val bracketOffsetDp = 6
+        const val labelSp = 9
+        const val labelLetterSpacingSp = 0.6f
     }
 
     object BoxArt {

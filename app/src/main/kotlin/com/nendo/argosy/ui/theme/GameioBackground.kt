@@ -16,16 +16,21 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.Canvas
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.ImageShader
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.unit.dp
 import com.nendo.argosy.ui.theme.generated.ComponentDefaults.FocusEffects as FX
 import com.nendo.argosy.ui.theme.generated.MotionTokens
+import kotlin.math.roundToInt
 import kotlin.math.sin
 import com.nendo.argosy.ui.theme.generated.ComponentDefaults.GameioBackdrop as T
 
 /**
- * A stationary square grid keeps the backdrop quiet while game rows scroll; only the glow
+ * A stationary pixel-dot grid keeps the backdrop quiet while game rows scroll; only the glow
  * drifts, so a still screen keeps breathing without anything sliding under the covers.
  */
 @Composable
@@ -43,27 +48,28 @@ fun Modifier.gameioBackground(): Modifier {
         label = "backdropDrift"
     ) ?: remember { mutableStateOf(0f) }
     return drawWithCache {
-        val cell = T.cellSizeDp.dp.toPx()
-        val grid = Path().apply {
-            var x = 0f
-            while (x < size.width) { moveTo(x, 0f); lineTo(x, size.height); x += cell }
-            var y = 0f
-            while (y < size.height) { moveTo(0f, y); lineTo(size.width, y); y += cell }
+        val cell = T.cellSizeDp.dp.toPx().roundToInt().coerceAtLeast(2)
+        val dot = T.dotSizeDp.dp.toPx().coerceIn(1f, cell / 2f)
+        val tile = ImageBitmap(cell, cell).also { bitmap ->
+            Canvas(bitmap).drawRect(0f, 0f, dot, dot, Paint().apply {
+                color = colors.onSurface.copy(alpha = T.gridAlpha)
+            })
         }
-        val sweep = sin(driftPhase * TWO_PI)
-        val breathe = (sin(driftPhase * TWO_PI * 2f) + 1f) / 2f
+        val dots = ShaderBrush(ImageShader(tile, TileMode.Repeated, TileMode.Repeated))
         val travel = size.width * FX.driftTravelPercent
-        val glowScale = FX.driftScaleMin + (FX.driftScaleMax - FX.driftScaleMin) * breathe
-        val glow = Brush.radialGradient(
-            listOf(colors.onSurface.copy(alpha = T.glowAlpha), Color.Transparent),
-            center = Offset(size.width / 2 + travel * sweep, travel * sweep * 0.5f),
-            radius = size.maxDimension * T.glowRadiusRatio * glowScale
-        )
-        val stroke = Stroke(T.lineWidthDp.dp.toPx())
+        val glowColors = listOf(colors.onSurface.copy(alpha = T.glowAlpha), Color.Transparent)
         onDrawBehind {
+            val sweep = sin(driftPhase * TWO_PI)
+            val breathe = (sin(driftPhase * TWO_PI * 2f) + 1f) / 2f
+            val glowScale = FX.driftScaleMin + (FX.driftScaleMax - FX.driftScaleMin) * breathe
+            val glow = Brush.radialGradient(
+                glowColors,
+                center = Offset(size.width / 2 + travel * sweep, travel * sweep * 0.5f),
+                radius = size.maxDimension * T.glowRadiusRatio * glowScale
+            )
             drawRect(colors.background)
             drawRect(glow)
-            drawPath(grid, colors.onSurface.copy(alpha = T.gridAlpha), style = stroke)
+            drawRect(dots)
         }
     }
 }

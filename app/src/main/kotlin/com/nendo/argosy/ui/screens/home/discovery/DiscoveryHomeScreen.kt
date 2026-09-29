@@ -89,7 +89,7 @@ fun DiscoveryHomeScreen(state: HomeUiState, viewModel: HomeViewModel, onGameSele
                                 Spacer(Modifier.width(dimensions.gap))
                                 Text(if (section.continuation) stringResource(R.string.explore_more_genre)
                                     else state.currentPlatform?.displayName ?: stringResource(R.string.discovery_all_platforms),
-                                    fontSize = dimensions.label, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    style = com.nendo.argosy.ui.theme.pixelLabelStyle(dimensions.label), color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                             when {
                                 section.loading && section.games.isEmpty() -> Row(
