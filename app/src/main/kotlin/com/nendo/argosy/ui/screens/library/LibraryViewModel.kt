@@ -89,6 +89,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 
@@ -402,6 +403,7 @@ private const val TAG = "LibraryVM"
 // Long enough for the eye to register that the grid changed, short enough that a
 // switch still feels immediate.
 private const val MIN_SWITCH_VISIBLE_MS = 180L
+private const val SERVER_SEARCH_DEBOUNCE_MS = 300L
 
 sealed class LibraryEvent {
     data class LaunchIntent(val intent: Intent, val options: android.os.Bundle? = null) : LibraryEvent()
@@ -920,15 +922,19 @@ class LibraryViewModel @Inject constructor(
         if (query.isNotBlank()) runServerSearch(query)
     }
 
+    private var serverSearchJob: Job? = null
+
     /**
      * Pull the server's matches into the store so the existing filter can find them. The grid reads
      * Room, so results appear the moment they land.
      */
     private fun runServerSearch(query: String) {
+        serverSearchJob?.cancel()
         val scope = _uiState.value.searchScope
         if (scope == com.nendo.argosy.data.catalog.SearchScope.LOCAL) return
         if (!catalogPager.isCatalogOnly() || query.isBlank()) return
-        viewModelScope.launch {
+        serverSearchJob = viewModelScope.launch {
+            delay(SERVER_SEARCH_DEBOUNCE_MS)
             catalogPager.searchServer(
                 query = query,
                 platformId = if (scope == com.nendo.argosy.data.catalog.SearchScope.PLATFORM) {

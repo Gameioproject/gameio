@@ -316,7 +316,7 @@ class ImageCacheManager @Inject constructor(
             }
         }
 
-        val bitmap = downloadAndResize(request.url, 1280) ?: return
+        val bitmap = withContext(Dispatchers.IO) { downloadAndResize(request.url, 1280) } ?: return
 
         FileOutputStream(cachedFile).use { out ->
             bitmap.compress(Bitmap.CompressFormat.JPEG, 87, out)
@@ -868,7 +868,7 @@ class ImageCacheManager @Inject constructor(
                 }
             }
 
-            val bitmap = downloadAndResize(url, 480) ?: return@forEachIndexed
+            val bitmap = withContext(Dispatchers.IO) { downloadAndResize(url, 480) } ?: return@forEachIndexed
 
             FileOutputStream(cachedFile).use { out ->
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 75, out)
@@ -962,7 +962,7 @@ class ImageCacheManager @Inject constructor(
             }
         }
 
-        val bitmap = downloadBitmap(request.logoUrl) ?: return
+        val bitmap = withContext(Dispatchers.IO) { downloadBitmap(request.logoUrl) } ?: return
         val transparentBitmap = removeBlackBackground(bitmap)
         bitmap.recycle()
 
@@ -1129,8 +1129,8 @@ class ImageCacheManager @Inject constructor(
             }
         }
 
-        val bitmap = downloadAndResize(request.url, 400)
-            ?: game?.steamAppId?.let { downloadSteamCoverFallback(it) }
+        val bitmap = withContext(Dispatchers.IO) { downloadAndResize(request.url, 400) }
+            ?: game?.steamAppId?.let { withContext(Dispatchers.IO) { downloadSteamCoverFallback(it) } }
             ?: return
 
         val hasTransparency = hasTransparentPixels(bitmap)
@@ -1184,7 +1184,7 @@ class ImageCacheManager @Inject constructor(
             }
         }
 
-        val bitmap = downloadAndResize(request.url, 400)
+        val bitmap = withContext(Dispatchers.IO) { downloadAndResize(request.url, 400) }
         if (bitmap == null) {
             Log.w(TAG, "Box face download failed: ${request.url}")
             return

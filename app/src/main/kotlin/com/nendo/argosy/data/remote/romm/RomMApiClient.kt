@@ -4,6 +4,12 @@ import com.nendo.argosy.data.local.dao.PlatformDao
 import com.nendo.argosy.data.local.entity.PlatformEntity
 import com.nendo.argosy.data.platform.PlatformDefinitions
 import com.nendo.argosy.util.Logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -125,8 +131,26 @@ class RomMApiClient @Inject constructor(
         }
     }
 
+    private val romFetchScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val romFetchesInFlight = ConcurrentHashMap<Long, Deferred<RomMResult<RomMRom>>>()
+
+    /**
+     * Concurrent callers asking for the same rom share one request; the game detail screen
+     * opens with several of them at once.
+     */
     suspend fun getRom(romId: Long): RomMResult<RomMRom> {
         val currentApi = api ?: return RomMResult.Error("Not connected")
+        val fetch = romFetchesInFlight.computeIfAbsent(romId) {
+            romFetchScope.async { fetchRom(currentApi, romId) }
+        }
+        return try {
+            fetch.await()
+        } finally {
+            romFetchesInFlight.remove(romId, fetch)
+        }
+    }
+
+    private suspend fun fetchRom(currentApi: RomMApi, romId: Long): RomMResult<RomMRom> {
         return try {
             val response = currentApi.getRom(romId)
             if (response.isSuccessful) {

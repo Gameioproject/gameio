@@ -73,18 +73,18 @@ class RomMUserPropertyService @Inject constructor(
     }
 
     suspend fun refreshUserProps(gameId: Long): RomMResult<Unit> {
-        val currentApi = api ?: return RomMResult.Success(Unit)
+        if (api == null) return RomMResult.Success(Unit)
         val game = gameDao.getById(gameId) ?: return RomMResult.Error("Game not found")
         val rommId = game.rommId ?: return RomMResult.Success(Unit)
 
         return try {
-            val response = currentApi.getRom(rommId)
-            if (!response.isSuccessful) {
-                Logger.warn(TAG, "refreshUserProps: failed to fetch rom $rommId: ${response.code()}")
-                return RomMResult.Success(Unit)
+            val rom = when (val result = apiClient.getRom(rommId)) {
+                is RomMResult.Success -> result.data
+                is RomMResult.Error -> {
+                    Logger.warn(TAG, "refreshUserProps: failed to fetch rom $rommId: ${result.code ?: result.message}")
+                    return RomMResult.Success(Unit)
+                }
             }
-
-            val rom = response.body() ?: return RomMResult.Success(Unit)
             val romUser = rom.romUser ?: return RomMResult.Success(Unit)
 
             val hasRating = pendingSyncQueueDao.hasPending(gameId, SyncType.RATING)
@@ -114,9 +114,9 @@ class RomMUserPropertyService @Inject constructor(
     suspend fun fetchUserScreenshots(rommId: Long): List<String> = withContext(Dispatchers.IO) {
         val currentApi = api ?: return@withContext emptyList()
         try {
-            val response = currentApi.getRom(rommId)
-            if (!response.isSuccessful) return@withContext emptyList()
-            val shots = response.body()?.userScreenshots.orEmpty().filter { it.isGallery }
+            val rom = (apiClient.getRom(rommId) as? RomMResult.Success)?.data
+                ?: return@withContext emptyList()
+            val shots = rom.userScreenshots.orEmpty().filter { it.isGallery }
             shots.mapNotNull { shot ->
                 val target = imageCacheManager.userScreenshotTargetFile(rommId, shot.id, shot.updatedAt ?: "")
                 if (target.exists() && target.length() > 0) return@mapNotNull target.absolutePath
