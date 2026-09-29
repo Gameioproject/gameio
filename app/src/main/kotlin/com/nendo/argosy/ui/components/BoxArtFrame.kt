@@ -215,3 +215,4 @@ fun Modifier.boxArtFrame(
                 Modifier.background(SolidColor(MaterialTheme.colorScheme.surfaceVariant))
             }
         )
+}
