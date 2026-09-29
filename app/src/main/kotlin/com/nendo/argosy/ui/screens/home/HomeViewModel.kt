@@ -210,18 +210,26 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private suspend fun refreshDiscoveryData() {
-        exploreDelegate.reset()
+    /**
+     * Reloads the discovery sections for the current platform and filter. A scope change starts
+     * Explore over; a same-scope refresh (returning from a game) keeps the Explore shelves and
+     * the focused row, and refreshes the rest in place without a loading state.
+     */
+    private suspend fun refreshDiscoveryData(scopeChanged: Boolean = true) {
         val platformId = _uiState.value.currentPlatform?.id
         val filter = _uiState.value.libraryFilter
-        _uiState.update { it.copy(discoveryData = it.discoveryData.copy(loading = true, failed = false)) }
+        val current = _uiState.value.discoveryData
+        val inPlace = !scopeChanged && !current.failed &&
+            current.platformId == platformId && current.filter == filter
+        if (!inPlace) exploreDelegate.reset()
+        if (!inPlace) _uiState.update { it.copy(discoveryData = it.discoveryData.copy(loading = true, failed = false)) }
         val loaded = try {
             discoveryLoader.load(platformId, filter)
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
         } catch (e: Exception) {
             _uiState.value.discoveryData.copy(platformId = platformId, loading = false, failed = true, filter = filter)
-        }
+        }.let { if (inPlace && it.failed) current else it }
         _uiState.update {
             if (it.currentPlatform?.id == platformId && it.libraryFilter == filter) DiscoveryNavigation.reconcileGames(it, it.copy(discoveryData = loaded)).let { updated ->
                 val clamped = updated.copy(discoveryFocus = updated.discoveryFocus.copy(
@@ -739,7 +747,7 @@ class HomeViewModel @Inject constructor(
         if (state.isDiscoveryHome) {
             libraryDelegate.loadRecentGames()
             libraryDelegate.loadFavorites()
-            refreshDiscoveryData()
+            refreshDiscoveryData(scopeChanged = false)
             flushLibraryState()
             return
         }
