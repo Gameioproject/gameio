@@ -38,6 +38,8 @@ const val DEFAULT_SERVER_URL = "https://playgameio.com"
 private const val MIN_DEVICE_API_VERSION = "4.7.0"
 private const val DOWNLOAD_STALL_TIMEOUT_SECONDS = 300
 
+private const val HEARTBEAT_FRESH_MS = 30_000L
+
 private val RECONNECT_BACKOFF_MS = listOf(5_000L, 10_000L, 20_000L, 40_000L, 60_000L)
 
 private val CLIENT_TOKEN_SCOPES = listOf(
@@ -101,6 +103,7 @@ class RomMConnectionManager @Inject constructor(
     private var reconnectJob: Job? = null
     private var networkCallbackRegistered = false
     @Volatile private var reconnectPending = false
+    @Volatile private var lastHeartbeatOkAt = 0L
 
     private val _connectionState = MutableStateFlow<ConnectionState>(ConnectionState.Disconnected)
     val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
@@ -139,9 +142,23 @@ class RomMConnectionManager @Inject constructor(
         }
         if (prefs.rommBaseUrl.isNullOrBlank()) return
         registerNetworkCallback()
+        if (isFreshConnectionTo(prefs.rommBaseUrl, prefs.rommToken)) {
+            Logger.info(TAG, "initialize: heartbeat is fresh, keeping the current connection")
+            return
+        }
         val result = attemptConnection(prefs.rommBaseUrl, prefs.rommToken)
         Logger.info(TAG, "initialize: connect result=$result, state=${_connectionState.value}")
         if (result is RomMResult.Error) scheduleReconnect() else backfillIdentityIfMissing(prefs.rommToken)
+    }
+
+    /**
+     * Startup and every resume ask for a connection within moments of each other; a heartbeat
+     * that already succeeded for the same server and token answers them all.
+     */
+    private fun isFreshConnectionTo(url: String, token: String?): Boolean {
+        if (!isConnected() || api == null || accessToken != token) return false
+        if (android.os.SystemClock.elapsedRealtime() - lastHeartbeatOkAt >= HEARTBEAT_FRESH_MS) return false
+        return buildUrlsToTry(url).any { it.trimEnd('/') + "/" == baseUrl }
     }
 
     /**
@@ -333,6 +350,7 @@ class RomMConnectionManager @Inject constructor(
                     _connectionState.value = ConnectionState.Connected(version, capabilities)
                     saveSyncRepository.get().setCapabilities(capabilities)
                     reconnectPending = false
+                    lastHeartbeatOkAt = android.os.SystemClock.elapsedRealtime()
                     Logger.info(TAG, "connect: success at $normalizedUrl, version=$version, capabilities=$capabilities")
                     if (registerDevice && token != null && isVersionAtLeast(MIN_DEVICE_API_VERSION)) {
                         registerDeviceIfNeeded()
@@ -615,6 +633,7 @@ class RomMConnectionManager @Inject constructor(
                 _connectionState.value = ConnectionState.Connected(version, capabilities)
                 saveSyncRepository.get().setCapabilities(capabilities)
                 reconnectPending = false
+                lastHeartbeatOkAt = android.os.SystemClock.elapsedRealtime()
                 Logger.info(TAG, "checkConnection: connected, version=$version")
             } else {
                 Logger.info(TAG, "checkConnection: heartbeat failed with ${response.code()}, scheduling reconnect")

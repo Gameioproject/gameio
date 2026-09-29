@@ -1073,7 +1073,7 @@ class RomMLibrarySyncService @Inject constructor(
 
         val scope = SyncScope(
             ownerUserId = overlayWriter.activeOwnerId(),
-            visibility = visibilityService.fetch(api),
+            visibility = visibilityService.fetchCached(api),
             serverRomIds = null
         )
         var written = 0
@@ -1127,7 +1127,7 @@ class RomMLibrarySyncService @Inject constructor(
         if (roms.isEmpty()) return@withContext emptyList()
         val scope = SyncScope(
             ownerUserId = overlayWriter.activeOwnerId(),
-            visibility = visibilityService.fetch(api),
+            visibility = visibilityService.fetchCached(api),
             serverRomIds = null
         )
         val ids = mutableListOf<Long>()
@@ -1174,7 +1174,7 @@ class RomMLibrarySyncService @Inject constructor(
         val rom = response.body() ?: return@withContext null
         val scope = SyncScope(
             ownerUserId = overlayWriter.activeOwnerId(),
-            visibility = visibilityService.fetch(api),
+            visibility = visibilityService.fetchCached(api),
             serverRomIds = null
         )
         try {
