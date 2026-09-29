@@ -124,8 +124,7 @@ internal fun RommLoginStep(
     val focusManager: FocusManager = LocalFocusManager.current
     val keyboard: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current
 
-    val canConnect = username.isNotBlank() && password.isNotBlank() &&
-        (!signUpMode || email.isNotBlank())
+    val canConnect = username.isNotBlank() && password.isNotBlank()
     val focus = RommLoginFocus(signUpMode = signUpMode, googleAvailable = googleAvailable)
 
     LaunchedEffect(rommFocusField) {
@@ -185,6 +184,7 @@ internal fun RommLoginStep(
                     onDismiss = onKeyboardDismiss,
                     placeholder = when (keyboardField) {
                         0 -> stringResource(R.string.settings_romm_config_username_label)
+                        2 -> stringResource(R.string.firstrun_signup_email_label)
                         else -> stringResource(R.string.settings_romm_config_password_label)
                     },
                     embedded = true,
@@ -255,6 +255,12 @@ internal fun RommLoginStep(
                             )
                         )
                         if (signUpMode) {
+                            Text(
+                                text = stringResource(R.string.firstrun_signup_password_hint),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.fillMaxWidth().padding(top = Dimens.spacingXs)
+                            )
                             Spacer(modifier = Modifier.height(Dimens.spacingSm))
                             SetupTextField(
                                 value = email,

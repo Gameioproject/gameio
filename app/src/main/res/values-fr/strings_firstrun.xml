@@ -153,9 +153,16 @@
     <string name="firstrun_signup_full">Les inscriptions sont fermées pour l\'instant : le serveur est plein.</string>
     <string name="firstrun_signup_failed">Le compte n\'a pas pu être créé. Vérifiez le nom et le mot de passe, puis réessayez.</string>
     <string name="firstrun_signup_email_label">E-mail</string>
-    <string name="firstrun_signup_email_hint">Sert uniquement à réinitialiser votre mot de passe en cas d\'oubli.</string>
+    <string name="firstrun_signup_email_hint">Facultatif. Sert uniquement à réinitialiser votre mot de passe si vous l’oubliez.</string>
     <string name="firstrun_signup_email_required">Saisissez une adresse e-mail pour pouvoir réinitialiser votre mot de passe plus tard</string>
     <string name="firstrun_signup_too_many">Trop d\'inscriptions depuis cette connexion. Patientez un moment et réessayez.</string>
+    <string name="firstrun_signup_password_hint">Au moins 6 caractères. Lettres, chiffres et symboles, sans accents ni emoji.</string>
+    <string name="firstrun_signup_username_taken">Ce nom d’utilisateur est déjà pris. Essayez-en un autre.</string>
+    <string name="firstrun_signup_email_taken">Cette adresse e-mail appartient déjà à un autre compte.</string>
+    <string name="firstrun_signup_username_invalid">Les noms d’utilisateur doivent comporter au moins 3 caractères : lettres, chiffres, - et _ uniquement.</string>
+    <string name="firstrun_signup_password_invalid">Les mots de passe doivent comporter au moins 6 caractères, sans accents ni emoji.</string>
+    <string name="firstrun_signup_email_invalid">Cette adresse e-mail ne semble pas correcte. Vérifiez-la ou laissez le champ vide.</string>
+    <string name="firstrun_signup_created_signin_failed">Votre compte a été créé, mais la connexion a échoué. Connectez-vous avec ci-dessous.</string>
     <string name="firstrun_signin_reset_password">Réinitialiser le mot de passe</string>
     <string name="firstrun_signin_reset_password_hint">Ouvre playgameio.com dans le navigateur. Revenez ici pour vous connecter.</string>
     <string name="firstrun_romm_sign_in_connecting">Connexion\u2026</string>

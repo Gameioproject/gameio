@@ -162,9 +162,16 @@
     <string name="firstrun_signup_full">Регистрация пока закрыта: сервер заполнен.</string>
     <string name="firstrun_signup_failed">Не удалось создать аккаунт. Проверьте имя и пароль и повторите попытку.</string>
     <string name="firstrun_signup_email_label">Электронная почта</string>
-    <string name="firstrun_signup_email_hint">Нужна только для сброса пароля, если вы его забудете.</string>
+    <string name="firstrun_signup_email_hint">Необязательно. Нужен только для сброса пароля, если вы его забудете.</string>
     <string name="firstrun_signup_email_required">Укажите адрес почты, чтобы позже можно было сбросить пароль</string>
     <string name="firstrun_signup_too_many">Слишком много регистраций с этого подключения. Подождите и попробуйте снова.</string>
+    <string name="firstrun_signup_password_hint">Не меньше 6 символов. Латинские буквы, цифры и символы, без эмодзи.</string>
+    <string name="firstrun_signup_username_taken">Это имя пользователя занято. Попробуйте другое.</string>
+    <string name="firstrun_signup_email_taken">Этот адрес электронной почты уже привязан к другой учётной записи.</string>
+    <string name="firstrun_signup_username_invalid">Имя пользователя: не меньше 3 символов, только латинские буквы, цифры, - и _.</string>
+    <string name="firstrun_signup_password_invalid">Пароль: не меньше 6 символов, только латинские буквы, цифры и символы.</string>
+    <string name="firstrun_signup_email_invalid">Адрес электронной почты выглядит неверно. Проверьте его или оставьте поле пустым.</string>
+    <string name="firstrun_signup_created_signin_failed">Учётная запись создана, но войти не удалось. Войдите с ней ниже.</string>
     <string name="firstrun_signin_reset_password">Сбросить пароль</string>
     <string name="firstrun_signin_reset_password_hint">Откроется playgameio.com в браузере. Вернитесь сюда, чтобы войти.</string>
     <string name="firstrun_romm_sign_in_connecting">Вход\u2026</string>

@@ -367,11 +367,25 @@
     <!-- Label of the email field on the sign-up form. Noun. -->
     <string name="firstrun_signup_email_label">Email</string>
     <!-- Line under the email field saying what the address is for. -->
-    <string name="firstrun_signup_email_hint">Used only to reset your password if you forget it.</string>
-    <!-- Shown when create account is pressed with the email still empty. -->
+    <string name="firstrun_signup_email_hint">Optional. Used only to reset your password if you forget it.</string>
+    <!-- Shown when this server refuses accounts without an email address. -->
     <string name="firstrun_signup_email_required">Enter an email address so you can reset your password later</string>
     <!-- Error when the server is refusing further sign-ups from this address for now. -->
     <string name="firstrun_signup_too_many">Too many sign-ups from this connection. Wait a while and try again.</string>
+    <!-- Line under the password field on the sign-up form giving the password rules. -->
+    <string name="firstrun_signup_password_hint">At least 6 characters. Letters, numbers and symbols, no accents or emoji.</string>
+    <!-- Error when another account already has the chosen username. -->
+    <string name="firstrun_signup_username_taken">That username is taken. Try another one.</string>
+    <!-- Error when another account already uses the email address. -->
+    <string name="firstrun_signup_email_taken">That email address already belongs to another account.</string>
+    <!-- Error when the username breaks the server's rules. -->
+    <string name="firstrun_signup_username_invalid">Usernames need at least 3 characters: letters, numbers, - and _ only.</string>
+    <!-- Error when the password breaks the server's rules. -->
+    <string name="firstrun_signup_password_invalid">Passwords need at least 6 characters, without accents or emoji.</string>
+    <!-- Error when the email address is not a valid address. -->
+    <string name="firstrun_signup_email_invalid">That email address does not look right. Check it, or leave it empty.</string>
+    <!-- Shown after the account was created but the automatic sign-in that follows failed; the form switches to sign-in. -->
+    <string name="firstrun_signup_created_signin_failed">Your account was created, but signing in failed. Sign in with it below.</string>
     <!-- Label on the sign-in button while the request is in flight. -->
     <!-- Button on the sign-in form that opens the reset page in a browser. Verb phrase. -->
     <string name="firstrun_signin_reset_password">Reset password</string>

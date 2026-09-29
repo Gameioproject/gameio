@@ -300,7 +300,7 @@ class RomMConnectionManager @Inject constructor(
                     .signUp(RomMSignUpRequest(username = username, password = password, email = email))
                 if (response.isSuccessful) return RomMResult.Success(Unit)
                 return RomMResult.Error(
-                    response.errorBody()?.string().orEmpty().ifBlank { "HTTP ${response.code()}" },
+                    parseDetail(response.errorBody()?.string()) ?: "HTTP ${response.code()}",
                     response.code()
                 )
             } catch (e: IOException) {
@@ -453,6 +453,7 @@ class RomMConnectionManager @Inject constructor(
                         when (response.code()) {
                             401 -> "Wrong username or password"
                             403 -> "That account is disabled"
+                            429 -> "Too many sign-in attempts"
                             400 -> parseDetail(response.errorBody()?.string())
                                 ?: "Too many sign-ins on this account. Remove one in the web app."
                             else -> "Sign-in failed (${response.code()})"
@@ -461,6 +462,7 @@ class RomMConnectionManager @Inject constructor(
                             401 -> SignInFailureReason.INVALID_CREDENTIALS
                             403 -> SignInFailureReason.ACCOUNT_UNAVAILABLE
                             400 -> SignInFailureReason.TOO_MANY_DEVICES
+                            429 -> SignInFailureReason.RATE_LIMITED
                             else -> SignInFailureReason.UNAVAILABLE
                         }
                     )
