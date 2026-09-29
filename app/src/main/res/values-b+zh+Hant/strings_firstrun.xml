@@ -123,22 +123,21 @@
     </plurals>
     <string name="firstrun_complete_hint">開始探索您的遊戲。在 Gameio 設定中管理遊戲庫同步。</string>
     <string name="firstrun_complete_button_start">開始遊玩</string>
-    <string name="firstrun_romm_sign_in_hint">使用你的 Gameio 帳號登入。</string>
     <string name="firstrun_romm_sign_in_button">登入</string>
 
     <string name="firstrun_signup_title">建立帳號</string>
-    <string name="firstrun_signup_test_notice">這是測試帳號。在Gameio測試期間，它以及其中儲存的內容可能會隨時被刪除。</string>
     <string name="firstrun_signup_button">建立帳號</string>
     <string name="firstrun_signup_working">正在建立帳號...</string>
     <string name="firstrun_signup_switch">還沒有帳號？建立一個</string>
     <string name="firstrun_signup_have_account">我已經有帳號了</string>
     <string name="firstrun_signup_full">暫時無法註冊：伺服器已滿。</string>
     <string name="firstrun_signup_failed">無法建立帳號。請檢查使用者名稱和密碼後再試一次。</string>
+    <string name="firstrun_signup_test_notice_short">測試帳號，可能會在沒有提醒的情況下被刪除。</string>
+    <string name="firstrun_signup_email_optional_label">電子郵件（選填）</string>
+    <string name="firstrun_signup_password_hint_short">至少 6 個字元，不含重音字母或表情符號</string>
     <string name="firstrun_signup_email_label">電子郵件</string>
-    <string name="firstrun_signup_email_hint">選填。僅用於在你忘記密碼時重設密碼。</string>
     <string name="firstrun_signup_email_required">請填寫電子郵件，以便日後重設密碼</string>
     <string name="firstrun_signup_too_many">此連線的註冊次數過多。請稍後再試。</string>
-    <string name="firstrun_signup_password_hint">至少 6 個字元。可使用英文字母、數字和符號，不能包含表情符號。</string>
     <string name="firstrun_signup_username_taken">此使用者名稱已被使用，請換一個。</string>
     <string name="firstrun_signup_email_taken">此電子郵件地址已屬於另一個帳號。</string>
     <string name="firstrun_signup_username_invalid">使用者名稱至少需要 3 個字元，只能包含英文字母、數字、- 和 _。</string>
@@ -146,7 +145,6 @@
     <string name="firstrun_signup_email_invalid">此電子郵件地址似乎不正確。請檢查，或留空。</string>
     <string name="firstrun_signup_created_signin_failed">帳號已建立，但登入失敗。請在下方用它登入。</string>
     <string name="firstrun_signin_reset_password">重設密碼</string>
-    <string name="firstrun_signin_reset_password_hint">將在瀏覽器中開啟 playgameio.com。完成後回到這裡登入。</string>
     <string name="firstrun_romm_sign_in_connecting">登入中\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">更換伺服器</string>
     <string name="firstrun_romm_credentials_required">請輸入使用者名稱和密碼</string>

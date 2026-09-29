@@ -165,14 +165,6 @@ internal fun RommLoginStep(
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold
                     )
-                    Spacer(modifier = Modifier.height(Dimens.spacingSm))
-                    Text(
-                        text = stringResource(R.string.firstrun_romm_sign_in_hint),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.bodySmall,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.widthIn(max = ConsoleUi.brandWidthDp.dp)
-                    )
                 }
             }
 
@@ -184,7 +176,7 @@ internal fun RommLoginStep(
                     onDismiss = onKeyboardDismiss,
                     placeholder = when (keyboardField) {
                         0 -> stringResource(R.string.settings_romm_config_username_label)
-                        2 -> stringResource(R.string.firstrun_signup_email_label)
+                        2 -> stringResource(R.string.firstrun_signup_email_optional_label)
                         else -> stringResource(R.string.settings_romm_config_password_label)
                     },
                     embedded = true,
@@ -208,45 +200,75 @@ internal fun RommLoginStep(
                             else R.string.firstrun_romm_sign_in_button
                         ),
                         style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.fillMaxWidth().padding(bottom = Dimens.spacingMd)
+                        modifier = Modifier.fillMaxWidth()
                     )
                     if (signUpMode) {
                         Text(
-                            text = stringResource(R.string.firstrun_signup_test_notice),
+                            text = stringResource(R.string.firstrun_signup_test_notice_short),
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.fillMaxWidth().padding(bottom = Dimens.spacingMd)
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.fillMaxWidth().padding(top = Dimens.spacingXs)
                         )
                     }
-                        SetupTextField(
-                            value = username,
-                            onValueChange = onUsernameChange,
-                            label = stringResource(R.string.settings_romm_config_username_label),
-                            gamepadFocused = focusedIndex == 0,
-                            focusRequester = usernameFocusRequester,
-                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                            keyboardActions = KeyboardActions(
-                                onNext = { passwordFocusRequester.requestFocus() }
-                            )
+                    Spacer(modifier = Modifier.height(Dimens.spacingMd))
+                    SetupTextField(
+                        value = username,
+                        onValueChange = onUsernameChange,
+                        label = stringResource(R.string.settings_romm_config_username_label),
+                        gamepadFocused = focusedIndex == 0,
+                        focusRequester = usernameFocusRequester,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        keyboardActions = KeyboardActions(
+                            onNext = { passwordFocusRequester.requestFocus() }
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(Dimens.spacingSm))
+                    SetupTextField(
+                        value = password,
+                        onValueChange = onPasswordChange,
+                        label = stringResource(R.string.settings_romm_config_password_label),
+                        gamepadFocused = focusedIndex == 1,
+                        focusRequester = passwordFocusRequester,
+                        isPassword = true,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Go
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onGo = {
+                                if (signUpMode) {
+                                    emailFocusRequester.requestFocus()
+                                } else if (!isConnecting && canConnect) {
+                                    keyboard?.hide()
+                                    focusManager.clearFocus()
+                                    onConnect()
+                                }
+                            }
+                        )
+                    )
+                    if (signUpMode) {
+                        Text(
+                            text = stringResource(R.string.firstrun_signup_password_hint_short),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.fillMaxWidth().padding(start = Dimens.spacingSm, top = Dimens.spacingXs)
                         )
                         Spacer(modifier = Modifier.height(Dimens.spacingSm))
                         SetupTextField(
-                            value = password,
-                            onValueChange = onPasswordChange,
-                            label = stringResource(R.string.settings_romm_config_password_label),
-                            gamepadFocused = focusedIndex == 1,
-                            focusRequester = passwordFocusRequester,
-                            isPassword = true,
+                            value = email,
+                            onValueChange = onEmailChange,
+                            label = stringResource(R.string.firstrun_signup_email_optional_label),
+                            gamepadFocused = focusedIndex == 2,
+                            focusRequester = emailFocusRequester,
                             keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Password,
+                                keyboardType = KeyboardType.Email,
                                 imeAction = ImeAction.Go
                             ),
                             keyboardActions = KeyboardActions(
                                 onGo = {
-                                    if (signUpMode) {
-                                        emailFocusRequester.requestFocus()
-                                    } else if (!isConnecting && canConnect) {
+                                    if (!isConnecting && canConnect) {
                                         keyboard?.hide()
                                         focusManager.clearFocus()
                                         onConnect()
@@ -254,98 +276,61 @@ internal fun RommLoginStep(
                                 }
                             )
                         )
-                        if (signUpMode) {
-                            Text(
-                                text = stringResource(R.string.firstrun_signup_password_hint),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.fillMaxWidth().padding(top = Dimens.spacingXs)
-                            )
-                            Spacer(modifier = Modifier.height(Dimens.spacingSm))
-                            SetupTextField(
-                                value = email,
-                                onValueChange = onEmailChange,
-                                label = stringResource(R.string.firstrun_signup_email_label),
-                                gamepadFocused = focusedIndex == 2,
-                                focusRequester = emailFocusRequester,
-                                keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Email,
-                                    imeAction = ImeAction.Go
-                                ),
-                                keyboardActions = KeyboardActions(
-                                    onGo = {
-                                        if (!isConnecting && canConnect) {
-                                            keyboard?.hide()
-                                            focusManager.clearFocus()
-                                            onConnect()
-                                        }
-                                    }
+                    }
+                    SetupError(error)
+                    Spacer(modifier = Modifier.height(Dimens.spacingMd))
+                    SetupPrimaryButton(
+                        text = when {
+                            isConnecting && signUpMode ->
+                                stringResource(R.string.firstrun_signup_working)
+                            isConnecting -> stringResource(R.string.firstrun_romm_sign_in_connecting)
+                            signUpMode -> stringResource(R.string.firstrun_signup_button)
+                            else -> stringResource(R.string.firstrun_romm_sign_in_button)
+                        },
+                        isFocused = focusedIndex == focus.connect,
+                        enabled = !isConnecting && canConnect,
+                        onClick = onConnect,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    if (googleAvailable) {
+                        SetupOrDivider(stringResource(R.string.firstrun_google_divider))
+                        SetupSecondaryButton(
+                            text = stringResource(R.string.firstrun_google_button),
+                            isFocused = focusedIndex == focus.google,
+                            enabled = !isConnecting,
+                            onClick = onGoogleSignIn,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                    val showToggle = onToggleSignUp != null
+                    if (showToggle || !signUpMode) {
+                        Spacer(modifier = Modifier.height(Dimens.spacingMd))
+                        Row(
+                            horizontalArrangement = if (showToggle && !signUpMode) Arrangement.SpaceBetween else Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            if (onToggleSignUp != null) {
+                                SetupLinkButton(
+                                    text = stringResource(
+                                        if (signUpMode) R.string.firstrun_signup_have_account
+                                        else R.string.firstrun_signup_switch
+                                    ),
+                                    isFocused = focusedIndex == focus.toggle,
+                                    enabled = !isConnecting,
+                                    onClick = onToggleSignUp
                                 )
-                            )
-                            Text(
-                                text = stringResource(R.string.firstrun_signup_email_hint),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.fillMaxWidth().padding(top = Dimens.spacingXs)
-                            )
+                            }
+                            if (!signUpMode) {
+                                SetupLinkButton(
+                                    text = stringResource(R.string.firstrun_signin_reset_password),
+                                    isFocused = focusedIndex == focus.reset,
+                                    enabled = !isConnecting,
+                                    onClick = onResetPassword
+                                )
+                            }
                         }
-                        SetupError(error)
-                        Spacer(modifier = Modifier.height(Dimens.spacingLg))
-                        Row(horizontalArrangement = Arrangement.spacedBy(Dimens.spacingMd)) {
-                            SetupPrimaryButton(
-                                text = when {
-                                    isConnecting && signUpMode ->
-                                        stringResource(R.string.firstrun_signup_working)
-                                    isConnecting -> stringResource(R.string.firstrun_romm_sign_in_connecting)
-                                    signUpMode -> stringResource(R.string.firstrun_signup_button)
-                                    else -> stringResource(R.string.firstrun_romm_sign_in_button)
-                                },
-                                isFocused = focusedIndex == focus.connect,
-                                enabled = !isConnecting && canConnect,
-                                onClick = onConnect
-                            )
-                        }
-                        if (googleAvailable) {
-                            Text(
-                                text = stringResource(R.string.firstrun_google_divider),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(vertical = Dimens.spacingSm)
-                            )
-                            SetupSecondaryButton(
-                                text = stringResource(R.string.firstrun_google_button),
-                                isFocused = focusedIndex == focus.google,
-                                enabled = !isConnecting,
-                                onClick = onGoogleSignIn
-                            )
-                        }
-                        if (onToggleSignUp != null) {
-                            Spacer(modifier = Modifier.height(Dimens.spacingSm))
-                            SetupSecondaryButton(
-                                text = stringResource(
-                                    if (signUpMode) R.string.firstrun_signup_have_account
-                                    else R.string.firstrun_signup_switch
-                                ),
-                                isFocused = focusedIndex == focus.toggle,
-                                enabled = !isConnecting,
-                                onClick = onToggleSignUp
-                            )
-                        }
-                        if (!signUpMode) {
-                            Spacer(modifier = Modifier.height(Dimens.spacingSm))
-                            SetupSecondaryButton(
-                                text = stringResource(R.string.firstrun_signin_reset_password),
-                                isFocused = focusedIndex == focus.reset,
-                                enabled = !isConnecting,
-                                onClick = onResetPassword
-                            )
-                            Text(
-                                text = stringResource(R.string.firstrun_signin_reset_password_hint),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.fillMaxWidth().padding(top = Dimens.spacingXs)
-                            )
-                        }
+                    }
                 }
             }
 

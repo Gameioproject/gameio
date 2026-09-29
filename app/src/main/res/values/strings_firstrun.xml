@@ -343,15 +343,11 @@
     <string name="firstrun_complete_hint">Start exploring your games. Manage library sync in Gameio settings.</string>
     <!-- Button that closes the wizard and opens the app. Verb phrase, imperative. -->
     <string name="firstrun_complete_button_start">Start Playing</string>
-    <!-- Line under that heading. "Gameio" is this app. -->
-    <string name="firstrun_romm_sign_in_hint">Sign in with your Gameio account.</string>
     <!-- Button that signs in. -->
     <string name="firstrun_romm_sign_in_button">Sign in</string>
 
     <!-- Title of the account creation form. Verb phrase. -->
     <string name="firstrun_signup_title">Create an account</string>
-    <!-- Warning shown above the sign-up fields while Gameio is in testing. -->
-    <string name="firstrun_signup_test_notice">This is a test account. It may be deleted without warning while Gameio is being tested, along with anything saved to it.</string>
     <!-- Button that creates the account. Verb phrase. -->
     <string name="firstrun_signup_button">Create account</string>
     <!-- The same button while the account is being created. -->
@@ -364,16 +360,18 @@
     <string name="firstrun_signup_full">Sign-up is closed for now: the server is full.</string>
     <!-- Error when account creation failed for any other reason. -->
     <string name="firstrun_signup_failed">The account could not be created. Check the name and password, then try again.</string>
+    <!-- One-line warning under the sign-up title while Gameio is in testing. -->
+    <string name="firstrun_signup_test_notice_short">Test account. It may be deleted without warning.</string>
+    <!-- Label of the optional email field on the sign-up form. -->
+    <string name="firstrun_signup_email_optional_label">Email (optional)</string>
+    <!-- Short password rules shown under the password field on the sign-up form. -->
+    <string name="firstrun_signup_password_hint_short">At least 6 characters, no accents or emoji</string>
     <!-- Label of the email field on the sign-up form. Noun. -->
     <string name="firstrun_signup_email_label">Email</string>
-    <!-- Line under the email field saying what the address is for. -->
-    <string name="firstrun_signup_email_hint">Optional. Used only to reset your password if you forget it.</string>
     <!-- Shown when this server refuses accounts without an email address. -->
     <string name="firstrun_signup_email_required">Enter an email address so you can reset your password later</string>
     <!-- Error when the server is refusing further sign-ups from this address for now. -->
     <string name="firstrun_signup_too_many">Too many sign-ups from this connection. Wait a while and try again.</string>
-    <!-- Line under the password field on the sign-up form giving the password rules. -->
-    <string name="firstrun_signup_password_hint">At least 6 characters. Letters, numbers and symbols, no accents or emoji.</string>
     <!-- Error when another account already has the chosen username. -->
     <string name="firstrun_signup_username_taken">That username is taken. Try another one.</string>
     <!-- Error when another account already uses the email address. -->
@@ -389,8 +387,6 @@
     <!-- Label on the sign-in button while the request is in flight. -->
     <!-- Button on the sign-in form that opens the reset page in a browser. Verb phrase. -->
     <string name="firstrun_signin_reset_password">Reset password</string>
-    <!-- Line under that button saying where it goes and to come back. The web address is a domain and is never translated. -->
-    <string name="firstrun_signin_reset_password_hint">Opens playgameio.com in your browser. Come back here to sign in after.</string>
     <string name="firstrun_romm_sign_in_connecting">Signing in\u2026</string>
     <!-- Button that goes back to the server address field. -->
     <string name="firstrun_romm_sign_in_change_server">Change server</string>
