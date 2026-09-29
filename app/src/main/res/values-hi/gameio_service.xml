@@ -6,4 +6,6 @@
     <string name="gameio_login_unavailable">Gameio अभी उपलब्ध नहीं है। अपना कनेक्शन जाँचकर फिर कोशिश करें।</string>
     <string name="gameio_login_too_many_devices">इस खाते में बहुत सारे डिवाइस साइन इन हैं। Gameio वेब ऐप में एक हटाएँ, फिर पुनः प्रयास करें।</string>
     <string name="gameio_update_unavailable">अपडेट की जाँच नहीं हो सकी। कृपया फिर से कोशिश करें।</string>
+    <string name="gameio_login_google_rejected">Google इस खाते की पुष्टि नहीं कर सका। फिर कोशिश करें, या उपयोगकर्ता नाम और पासवर्ड इस्तेमाल करें।</string>
+    <string name="gameio_login_too_many_attempts">इस कनेक्शन से बहुत सारी साइन-इन कोशिशें हुई हैं। कुछ देर बाद फिर कोशिश करें।</string>
 </resources>

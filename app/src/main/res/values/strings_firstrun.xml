@@ -385,4 +385,14 @@
     <!-- Brand line under the wordmark on the welcome and sign-in screens. Not translated: it is
          the product's own tagline, the same words as on the website. -->
     <string name="firstrun_brand_tagline" translatable="false">Stremio for games.</string>
+    <!-- Button on the sign-in form that signs in or creates an account with Google. Google is a brand name and is never translated. -->
+    <string name="firstrun_google_button">Continue with Google</string>
+    <!-- Small word between the sign-in button and the Google button. -->
+    <string name="firstrun_google_divider">or</string>
+    <!-- Error when the device has no Google account to pick. -->
+    <string name="firstrun_google_no_account">There is no Google account on this device. Add one in Android settings, or use a username and password.</string>
+    <!-- Error when the device has no Google Play services to sign in with. -->
+    <string name="firstrun_google_unavailable">Google sign-in is not available on this device. Use a username and password instead.</string>
+    <!-- Error when Google sign-in failed for any other reason. -->
+    <string name="firstrun_google_failed">Google sign-in did not work. Try again, or use a username and password.</string>
 </resources>

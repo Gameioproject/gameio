@@ -6,4 +6,6 @@
     <string name="gameio_login_unavailable">Gameio ist gerade nicht verfügbar. Prüfe deine Verbindung und versuche es erneut.</string>
     <string name="gameio_login_too_many_devices">Zu viele Geräte sind bei diesem Konto angemeldet. Entferne eines in der Gameio-Web-App und versuche es erneut.</string>
     <string name="gameio_update_unavailable">Updates konnten nicht geprüft werden. Bitte erneut versuchen.</string>
+    <string name="gameio_login_google_rejected">Google konnte dieses Konto nicht bestätigen. Versuch es erneut oder nutze Benutzername und Passwort.</string>
+    <string name="gameio_login_too_many_attempts">Zu viele Anmeldeversuche über diese Verbindung. Warte eine Weile und versuch es erneut.</string>
 </resources>

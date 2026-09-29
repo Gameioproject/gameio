@@ -102,6 +102,8 @@ internal fun RommLoginStep(
     isConnecting: Boolean,
     signUpMode: Boolean = false,
     onToggleSignUp: (() -> Unit)? = null,
+    googleAvailable: Boolean = false,
+    onGoogleSignIn: () -> Unit = {},
     error: String?,
     focusedIndex: Int,
     rommFocusField: Int?,
@@ -124,9 +126,7 @@ internal fun RommLoginStep(
 
     val canConnect = username.isNotBlank() && password.isNotBlank() &&
         (!signUpMode || email.isNotBlank())
-    val connectIndex = if (signUpMode) 3 else 2
-    val toggleIndex = if (signUpMode) 4 else 3
-    val resetIndex = 4
+    val focus = RommLoginFocus(signUpMode = signUpMode, googleAvailable = googleAvailable)
 
     LaunchedEffect(rommFocusField) {
         when (rommFocusField) {
@@ -139,7 +139,7 @@ internal fun RommLoginStep(
         }
     }
     LaunchedEffect(focusedIndex) {
-        val onAField = focusedIndex <= if (signUpMode) 2 else 1
+        val onAField = focusedIndex <= focus.lastField
         if (!onAField) {
             keyboard?.hide()
             focusManager.clearFocus()
@@ -294,9 +294,23 @@ internal fun RommLoginStep(
                                     signUpMode -> stringResource(R.string.firstrun_signup_button)
                                     else -> stringResource(R.string.firstrun_romm_sign_in_button)
                                 },
-                                isFocused = focusedIndex == connectIndex,
+                                isFocused = focusedIndex == focus.connect,
                                 enabled = !isConnecting && canConnect,
                                 onClick = onConnect
+                            )
+                        }
+                        if (googleAvailable) {
+                            Text(
+                                text = stringResource(R.string.firstrun_google_divider),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(vertical = Dimens.spacingSm)
+                            )
+                            SetupSecondaryButton(
+                                text = stringResource(R.string.firstrun_google_button),
+                                isFocused = focusedIndex == focus.google,
+                                enabled = !isConnecting,
+                                onClick = onGoogleSignIn
                             )
                         }
                         if (onToggleSignUp != null) {
@@ -306,7 +320,7 @@ internal fun RommLoginStep(
                                     if (signUpMode) R.string.firstrun_signup_have_account
                                     else R.string.firstrun_signup_switch
                                 ),
-                                isFocused = focusedIndex == toggleIndex,
+                                isFocused = focusedIndex == focus.toggle,
                                 enabled = !isConnecting,
                                 onClick = onToggleSignUp
                             )
@@ -315,7 +329,7 @@ internal fun RommLoginStep(
                             Spacer(modifier = Modifier.height(Dimens.spacingSm))
                             SetupSecondaryButton(
                                 text = stringResource(R.string.firstrun_signin_reset_password),
-                                isFocused = focusedIndex == resetIndex,
+                                isFocused = focusedIndex == focus.reset,
                                 enabled = !isConnecting,
                                 onClick = onResetPassword
                             )

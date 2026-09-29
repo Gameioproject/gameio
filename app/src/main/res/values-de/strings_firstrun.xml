@@ -152,4 +152,9 @@
     <string name="firstrun_romm_sign_in_connecting">Anmeldung\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">Server wechseln</string>
     <string name="firstrun_romm_credentials_required">Gib deinen Benutzernamen und dein Passwort ein</string>
+    <string name="firstrun_google_button">Weiter mit Google</string>
+    <string name="firstrun_google_divider">oder</string>
+    <string name="firstrun_google_no_account">Auf diesem Gerät ist kein Google-Konto eingerichtet. Füge eines in den Android-Einstellungen hinzu oder nutze Benutzername und Passwort.</string>
+    <string name="firstrun_google_unavailable">Die Google-Anmeldung ist auf diesem Gerät nicht verfügbar. Nutze stattdessen Benutzername und Passwort.</string>
+    <string name="firstrun_google_failed">Die Google-Anmeldung hat nicht funktioniert. Versuch es erneut oder nutze Benutzername und Passwort.</string>
 </resources>

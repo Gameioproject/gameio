@@ -6,4 +6,8 @@
     <string name="gameio_login_unavailable">Gameio is unavailable right now. Check your connection and try again.</string>
     <string name="gameio_login_too_many_devices">Too many devices are signed in to this account. Remove one in the Gameio web app, then try again.</string>
     <string name="gameio_update_unavailable">Could not check for updates. Please try again.</string>
+    <!-- Error when the server did not accept the Google sign-in. -->
+    <string name="gameio_login_google_rejected">Google could not confirm this account. Try again, or use a username and password.</string>
+    <!-- Error when the server is refusing sign-in attempts from this connection for now. -->
+    <string name="gameio_login_too_many_attempts">Too many sign-in attempts from this connection. Wait a while and try again.</string>
 </resources>

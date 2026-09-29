@@ -143,4 +143,9 @@
     <string name="firstrun_romm_sign_in_connecting">登录中\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">更换服务器</string>
     <string name="firstrun_romm_credentials_required">请输入用户名和密码</string>
+    <string name="firstrun_google_button">使用 Google 继续</string>
+    <string name="firstrun_google_divider">或</string>
+    <string name="firstrun_google_no_account">此设备上没有 Google 账户。请在 Android 设置中添加，或使用用户名和密码。</string>
+    <string name="firstrun_google_unavailable">此设备不支持使用 Google 登录。请改用用户名和密码。</string>
+    <string name="firstrun_google_failed">使用 Google 登录失败。请重试，或使用用户名和密码。</string>
 </resources>

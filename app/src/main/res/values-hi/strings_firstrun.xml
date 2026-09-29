@@ -176,4 +176,9 @@
     <string name="firstrun_romm_sign_in_connecting">साइन इन हो रहा है\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">सर्वर बदलें</string>
     <string name="firstrun_romm_credentials_required">अपना उपयोगकर्ता नाम और पासवर्ड दर्ज करें</string>
+    <string name="firstrun_google_button">Google के साथ जारी रखें</string>
+    <string name="firstrun_google_divider">या</string>
+    <string name="firstrun_google_no_account">इस डिवाइस पर कोई Google खाता नहीं है। Android सेटिंग में एक जोड़ें, या उपयोगकर्ता नाम और पासवर्ड इस्तेमाल करें।</string>
+    <string name="firstrun_google_unavailable">इस डिवाइस पर Google से साइन इन उपलब्ध नहीं है। उपयोगकर्ता नाम और पासवर्ड इस्तेमाल करें।</string>
+    <string name="firstrun_google_failed">Google से साइन इन नहीं हो सका। फिर कोशिश करें, या उपयोगकर्ता नाम और पासवर्ड इस्तेमाल करें।</string>
 </resources>

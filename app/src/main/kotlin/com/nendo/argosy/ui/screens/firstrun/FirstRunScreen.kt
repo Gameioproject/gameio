@@ -64,6 +64,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.draw.alpha
 import com.nendo.argosy.R
+import com.nendo.argosy.data.remote.google.requestGoogleIdToken
 import com.nendo.argosy.ui.components.PermissionCard
 import com.nendo.argosy.ui.filebrowser.FileBrowserMode
 import com.nendo.argosy.ui.filebrowser.FileBrowserScreen
@@ -83,6 +84,12 @@ fun FirstRunScreen(
     LaunchedEffect(Unit) {
         viewModel.openResetPasswordEvent.collect { url ->
             runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.googleSignInRequest.collect { clientId ->
+            viewModel.onGoogleIdTokenResult(requestGoogleIdToken(context, clientId))
         }
     }
 
@@ -193,6 +200,8 @@ fun FirstRunScreen(
                     isConnecting = uiState.isConnecting,
                     signUpMode = uiState.signUpMode,
                     onToggleSignUp = { viewModel.toggleSignUpMode() },
+                    googleAvailable = uiState.googleClientId != null,
+                    onGoogleSignIn = { viewModel.signInWithGoogle() },
                     error = firstRunErrorText(uiState.connectionError),
                     focusedIndex = uiState.focusedIndex,
                     rommFocusField = uiState.rommFocusField,

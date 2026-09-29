@@ -161,4 +161,9 @@
     <string name="firstrun_romm_sign_in_connecting">Iniciando sesión\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">Cambiar de servidor</string>
     <string name="firstrun_romm_credentials_required">Escribe tu nombre de usuario y contraseña</string>
+    <string name="firstrun_google_button">Continuar con Google</string>
+    <string name="firstrun_google_divider">o</string>
+    <string name="firstrun_google_no_account">No hay ninguna cuenta de Google en este dispositivo. Añade una en los ajustes de Android o usa un nombre de usuario y una contraseña.</string>
+    <string name="firstrun_google_unavailable">El inicio de sesión con Google no está disponible en este dispositivo. Usa un nombre de usuario y una contraseña.</string>
+    <string name="firstrun_google_failed">El inicio de sesión con Google no ha funcionado. Inténtalo de nuevo o usa un nombre de usuario y una contraseña.</string>
 </resources>

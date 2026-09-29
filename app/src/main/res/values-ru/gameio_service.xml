@@ -6,4 +6,6 @@
     <string name="gameio_login_unavailable">Gameio сейчас недоступен. Проверьте подключение и повторите попытку.</string>
     <string name="gameio_login_too_many_devices">К этой учётной записи подключено слишком много устройств. Удалите одно в веб-приложении Gameio и попробуйте снова.</string>
     <string name="gameio_update_unavailable">Не удалось проверить обновления. Повторите попытку.</string>
+    <string name="gameio_login_google_rejected">Google не смог подтвердить этот аккаунт. Попробуйте ещё раз или войдите по имени пользователя и паролю.</string>
+    <string name="gameio_login_too_many_attempts">Слишком много попыток входа с этого подключения. Подождите и попробуйте снова.</string>
 </resources>

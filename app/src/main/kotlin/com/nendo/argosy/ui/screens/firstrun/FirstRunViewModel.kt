@@ -15,6 +15,7 @@ import android.app.Application
 import com.nendo.argosy.data.repository.PlatformRepository
 import com.nendo.argosy.data.local.entity.PlatformEntity
 import com.nendo.argosy.data.preferences.UserPreferencesRepository
+import com.nendo.argosy.data.remote.google.GoogleIdTokenResult
 import com.nendo.argosy.data.remote.romm.SignInResult
 import com.nendo.argosy.data.remote.romm.DEFAULT_SERVER_URL
 import com.nendo.argosy.data.remote.romm.RomMRepository
@@ -96,6 +97,7 @@ data class FirstRunUiState(
     val rommEmail: String = "",
     val isConnecting: Boolean = false,
     val signUpMode: Boolean = false,
+    val googleClientId: String? = null,
     val connectionError: FirstRunError? = null,
     val rommGameCount: Int = 0,
     val rommPlatformCount: Int = 0,
@@ -151,6 +153,16 @@ class FirstRunViewModel @Inject constructor(
 
     private val _openResetPasswordEvent = MutableSharedFlow<String>()
     val openResetPasswordEvent: SharedFlow<String> = _openResetPasswordEvent.asSharedFlow()
+
+    private val _googleSignInRequest = MutableSharedFlow<String>()
+    val googleSignInRequest: SharedFlow<String> = _googleSignInRequest.asSharedFlow()
+
+    init {
+        viewModelScope.launch {
+            val clientId = romMRepository.googleClientId(DEFAULT_SERVER_URL)
+            _uiState.update { it.copy(googleClientId = clientId) }
+        }
+    }
 
     fun nextStep() {
         _uiState.update { state ->
@@ -443,7 +455,7 @@ class FirstRunViewModel @Inject constructor(
         val state = _uiState.value
         return when (state.currentStep) {
             FirstRunStep.WELCOME -> 0
-            FirstRunStep.ROMM_LOGIN -> 4
+            FirstRunStep.ROMM_LOGIN -> state.loginFocus().max
             FirstRunStep.ROMM_SUCCESS -> 0
             FirstRunStep.PERMISSIONS -> 4
             FirstRunStep.ADDONS -> 0
@@ -663,6 +675,43 @@ class FirstRunViewModel @Inject constructor(
         }
     }
 
+    fun signInWithGoogle() {
+        val state = _uiState.value
+        val clientId = state.googleClientId ?: return
+        if (state.isConnecting) return
+        _uiState.update { it.copy(isConnecting = true, connectionError = null) }
+        viewModelScope.launch { _googleSignInRequest.emit(clientId) }
+    }
+
+    fun onGoogleIdTokenResult(result: GoogleIdTokenResult) {
+        val errorRes = when (result) {
+            is GoogleIdTokenResult.Success -> {
+                viewModelScope.launch { finishGoogleSignIn(result.idToken) }
+                return
+            }
+            GoogleIdTokenResult.Cancelled -> null
+            GoogleIdTokenResult.NoAccount -> R.string.firstrun_google_no_account
+            GoogleIdTokenResult.Unsupported -> R.string.firstrun_google_unavailable
+            GoogleIdTokenResult.Failed -> R.string.firstrun_google_failed
+        }
+        _uiState.update {
+            it.copy(isConnecting = false, connectionError = errorRes?.let { res -> FirstRunError(textRes = res) })
+        }
+    }
+
+    private suspend fun finishGoogleSignIn(idToken: String) {
+        when (val result = romMRepository.connectWithGoogle(DEFAULT_SERVER_URL, idToken)) {
+            is SignInResult.Connected, is SignInResult.AddedAccount -> {
+                val username = preferencesRepository.preferences.first().rommUsername.orEmpty()
+                _uiState.update { it.copy(rommUsername = username, rommPassword = "", signUpMode = false) }
+                onAuthSuccess()
+            }
+            is SignInResult.Failed -> _uiState.update {
+                it.copy(isConnecting = false, connectionError = FirstRunError(textRes = result.messageRes))
+            }
+        }
+    }
+
     private suspend fun onAuthSuccess() {
         when (val summary = romMRepository.getLibrarySummary()) {
             is RomMResult.Success -> {
@@ -809,16 +858,15 @@ class FirstRunViewModel @Inject constructor(
         when (state.currentStep) {
             FirstRunStep.WELCOME -> nextStep()
             FirstRunStep.ROMM_LOGIN -> {
+                val focus = state.loginFocus()
                 val emailIndex = if (state.signUpMode) EMAIL_FIELD_INDEX else NO_INDEX
-                val connectIndex = if (state.signUpMode) 3 else 2
-                val toggleIndex = if (state.signUpMode) 4 else 3
-                val resetIndex = if (state.signUpMode) NO_INDEX else 4
                 when (state.focusedIndex) {
                     0, 1 -> openKeyboard(state.focusedIndex)
                     emailIndex -> openKeyboard(EMAIL_FIELD_INDEX)
-                    connectIndex -> if (!state.isConnecting && canConnect(state)) connectToRomm()
-                    toggleIndex -> toggleSignUpMode()
-                    resetIndex -> openPasswordReset()
+                    focus.connect -> if (!state.isConnecting && canConnect(state)) connectToRomm()
+                    focus.google -> signInWithGoogle()
+                    focus.toggle -> toggleSignUpMode()
+                    focus.reset -> openPasswordReset()
                 }
             }
             FirstRunStep.ROMM_SUCCESS -> nextStep()
@@ -893,6 +941,9 @@ class FirstRunViewModel @Inject constructor(
     fun toggleSetupFavorite(gameId: Long) = favoritesDelegate.toggle(gameId, viewModelScope)
     fun loadMoreSetupFavorites() = favoritesDelegate.loadMore(viewModelScope)
     fun finishFavoriteSelection() = favoritesDelegate.leave(::nextStep)
+
+    private fun FirstRunUiState.loginFocus() =
+        RommLoginFocus(signUpMode = signUpMode, googleAvailable = googleClientId != null)
 
     private fun canConnect(state: FirstRunUiState): Boolean =
             state.rommUsername.isNotBlank() &&

@@ -12,4 +12,7 @@ val SignInResult.Failed.messageRes: Int
         SignInFailureReason.ACCOUNT_UNAVAILABLE -> R.string.gameio_login_account_unavailable
         SignInFailureReason.TOO_MANY_DEVICES -> R.string.gameio_login_too_many_devices
         SignInFailureReason.UNAVAILABLE -> R.string.gameio_login_unavailable
+        SignInFailureReason.GOOGLE_REJECTED -> R.string.gameio_login_google_rejected
+        SignInFailureReason.SIGNUP_FULL -> R.string.firstrun_signup_full
+        SignInFailureReason.RATE_LIMITED -> R.string.gameio_login_too_many_attempts
     }
