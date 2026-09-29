@@ -62,12 +62,6 @@ fun PermissionCard(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = Dimens.settingsItemMinHeight)
-            .argosyFocusIndicators(
-                focused = isFocused,
-                indicators = FocusIndicators.RowBloom,
-                tint = focusAccent,
-                shape = shape
-            )
             .clip(shape)
             .clickableNoFocus(onClick = onClick)
             .background(backgroundColor, shape)

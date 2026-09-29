@@ -31,8 +31,6 @@ object ComponentDefaults {
         const val cellSizeDp = 14
         const val dotSizeDp = 1.5f
         const val gridAlpha = 0.07f
-        const val glowAlpha = 0.08f
-        const val glowRadiusRatio = 0.8f
     }
 
     object Pixel {
@@ -154,7 +152,7 @@ object ComponentDefaults {
         const val blur = 40
         const val saturation = 100f
         const val opacity = 100
-        const val useGameBackground = true
+        const val useGameBackground = false
         val gradientPreset = GradientPreset.BALANCED
         const val gradientAdvanced = false
         const val videoWallpaperEnabled = false
@@ -304,18 +302,9 @@ object ComponentDefaults {
         const val washAlpha = 0.2f
         const val washMidAlpha = 0.07f
         const val washEndPercent = 0.78f
-        const val barGlowAlpha = 0.4f
-        const val bloomAlpha = 0.22f
-        const val tiltDegrees = 7f
-        const val tiltTipRatio = 0.4f
-        const val shineBandPercent = 0.46f
-        const val shineAlpha = 0.6f
         const val scanlineAlpha = 0.055f
         const val scanlineSpacingDp = 3
         const val scanlineThicknessDp = 1
-        const val driftTravelPercent = 0.03f
-        const val driftScaleMin = 1.06f
-        const val driftScaleMax = 1.1f
     }
 
     object ConsoleUi {

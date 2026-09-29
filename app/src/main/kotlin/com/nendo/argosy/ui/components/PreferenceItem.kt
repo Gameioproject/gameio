@@ -104,12 +104,6 @@ internal fun preferenceModifier(
     return Modifier
         .fillMaxWidth()
         .heightIn(min = Dimens.settingsItemMinHeight)
-        .argosyFocusIndicators(
-            focused = isFocused,
-            indicators = FocusIndicators.RowBloom,
-            tint = accent,
-            shape = preferenceShape
-        )
         .clip(preferenceShape)
         .background(background)
         .argosyFocusIndicators(
