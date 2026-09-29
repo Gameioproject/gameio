@@ -101,7 +101,7 @@ fun GameSourcesModal(
                 val match = state.sourceChoices[index]
                 val kind = stringResource(match.source.kindLabelRes)
                 OptionItem(label = match.source.filename, icon = Icons.Default.Download,
-                    value = listOfNotNull(kind, match.source.region, match.source.size?.let(::formatBytes), match.addonName).joinToString(" · "),
+                    description = listOfNotNull(kind, match.source.region, match.source.size?.let(::formatBytes), match.addonName).joinToString(" · "),
                     isFocused = state.focusedIndex == index, onClick = { delegate.focus(index); activate(index) })
             }
             item("retry") {
