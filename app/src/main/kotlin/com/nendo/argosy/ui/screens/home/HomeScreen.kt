@@ -1060,7 +1060,8 @@ fun HomeScreen(
                                     InputButton.DPAD_VERTICAL to
                                         stringResource(R.string.home_footer_game_platform)
                                 },
-                                InputButton.A to when {
+                                InputButton.A to stringResource(R.string.home_footer_game_details),
+                                InputButton.X to when {
                                     focusedGame.needsInstall ->
                                         stringResource(R.string.home_footer_game_install)
                                     focusedGame.isDownloaded ->
@@ -1072,7 +1073,6 @@ fun HomeScreen(
                                 } else {
                                     stringResource(R.string.home_footer_game_favorite)
                                 },
-                                InputButton.X to stringResource(R.string.home_footer_game_details),
                                 InputButton.LT to stringResource(R.string.home_footer_search),
                                 InputButton.RT to stringResource(R.string.home_footer_library_only),
                                 InputButton.RS to stringResource(R.string.home_footer_game_hide_guide)
@@ -1083,7 +1083,8 @@ fun HomeScreen(
                                     InputButton.LT -> viewModel.navigateToSearch()
                                     InputButton.RT -> viewModel.toggleInstalledOnly()
                                     InputButton.RS -> footerController.toggle()
-                                    InputButton.A -> {
+                                    InputButton.A -> onGameSelect(focusedGame.id)
+                                    InputButton.X -> {
                                         when {
                                             focusedGame.needsInstall -> viewModel.installApk(focusedGame.id)
                                             focusedGame.isDownloaded -> viewModel.launchGame(focusedGame.id)
@@ -1092,7 +1093,6 @@ fun HomeScreen(
                                         }
                                     }
                                     InputButton.Y -> viewModel.toggleFavorite(focusedGame.id)
-                                    InputButton.X -> onGameSelect(focusedGame.id)
                                     else -> {}
                                 }
                             }

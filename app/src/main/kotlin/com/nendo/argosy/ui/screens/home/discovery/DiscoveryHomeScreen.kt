@@ -124,6 +124,7 @@ fun DiscoveryHomeScreen(state: HomeUiState, viewModel: HomeViewModel, onGameSele
                 }
                 FooterSpacer()
             }
+            val onGameRow = state.discoveryOnGame
             FooterHints(
                 hints = listOf(
                     InputButton.DPAD_VERTICAL to stringResource(R.string.discovery_explore),
@@ -132,9 +133,12 @@ fun DiscoveryHomeScreen(state: HomeUiState, viewModel: HomeViewModel, onGameSele
                     InputButton.RT to stringResource(R.string.discovery_library_only),
                     InputButton.RS to stringResource(R.string.discovery_hide_guide),
                     InputButton.Y to stringResource(R.string.discovery_favorite),
-                    InputButton.X to stringResource(R.string.discovery_details),
+                    InputButton.X to stringResource(
+                        state.focusedGame?.takeIf { onGameRow }?.let(::discoveryPrimaryLabel)
+                            ?: R.string.discovery_details),
                     InputButton.A to stringResource(
-                        state.focusedGame?.let(::discoveryPrimaryLabel) ?: R.string.discovery_explore)
+                        if (onGameRow && state.focusedGame != null) R.string.discovery_details
+                        else R.string.discovery_explore)
                 ), variant = FooterVariant.SUBTLE
             )
         }

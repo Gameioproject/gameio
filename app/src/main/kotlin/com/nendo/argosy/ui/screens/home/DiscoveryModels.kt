@@ -112,6 +112,9 @@ val HomeUiState.discoverySections: List<DiscoverySection>
         }
     }
 
+val HomeUiState.discoveryOnGame: Boolean
+    get() = discoveryFocus.zone == DiscoveryFocus.HERO || discoveryFocus.zone >= DiscoveryFocus.FIRST_ROW
+
 val HomeUiState.discoveryItems: List<HomeRowItem>
     get() = when {
         discoveryFocus.zone >= DiscoveryFocus.FIRST_ROW ->
