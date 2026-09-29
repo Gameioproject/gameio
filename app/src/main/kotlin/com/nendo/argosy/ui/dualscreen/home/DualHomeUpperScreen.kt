@@ -88,7 +88,7 @@ data class DualHomeShowcaseState(
     val titleId: String? = null,
     val isFavorite: Boolean = false,
     val isDownloaded: Boolean = true,
-    val useGameBackground: Boolean = true,
+    val useGameBackground: Boolean = false,
     val customWallpaperPath: String? = null
 )
 
