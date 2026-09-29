@@ -11,6 +11,7 @@ import com.nendo.argosy.ui.components.AutoGridMove
 import com.nendo.argosy.ui.components.TileEditMode
 import com.nendo.argosy.ui.screens.home.HomeRow
 import com.nendo.argosy.ui.screens.home.HomeRowItem
+import com.nendo.argosy.ui.screens.home.discoveryOnGame
 import com.nendo.argosy.ui.screens.home.isDiscoveryHome
 import com.nendo.argosy.ui.screens.home.HomeUiState
 import kotlinx.coroutines.flow.StateFlow
@@ -359,17 +360,7 @@ class HomeInputHandler(
             isCustomGrid(state) -> confirmCustomGridCell()
             else -> {
                 when (val item = state.focusedItem) {
-                    is HomeRowItem.Game -> {
-                        val game = item.game
-                        val indicator = state.downloadIndicatorFor(game.id)
-                        when {
-                            game.needsInstall -> actions.installApk(game.id)
-                            game.isDownloaded -> actions.launchGame(game.id)
-                            indicator.isPaused || indicator.isQueued -> actions.resumeDownload(game.id)
-                            game.isSteamGame -> actions.queueSteamDownload(game.id)
-                            else -> actions.queueDownload(game.id)
-                        }
-                    }
+                    is HomeRowItem.Game -> openGameDetails(state, item.game.id)
                     is HomeRowItem.Media -> actions.confirmFocusedMedia()
                     is HomeRowItem.ViewAll -> actions.navigateToLibrary(item.platformId, item.sourceFilter)
                     null -> when {
@@ -648,10 +639,25 @@ class HomeInputHandler(
         }
         if (!isCustomGrid(state) && state.isMediaRow) return InputResult.UNHANDLED
         val game = state.focusedGame ?: return InputResult.UNHANDLED
+        if (state.isDiscoveryHome && !state.discoveryOnGame) {
+            openGameDetails(state, game.id)
+            return InputResult.HANDLED
+        }
+        val indicator = state.downloadIndicatorFor(game.id)
+        when {
+            game.needsInstall -> actions.installApk(game.id)
+            game.isDownloaded -> actions.launchGame(game.id)
+            indicator.isPaused || indicator.isQueued -> actions.resumeDownload(game.id)
+            game.isSteamGame -> actions.queueSteamDownload(game.id)
+            else -> actions.queueDownload(game.id)
+        }
+        return InputResult.HANDLED
+    }
+
+    private fun openGameDetails(state: HomeUiState, gameId: Long) {
         actions.setNavigationContext(
             state.currentItems.filterIsInstance<HomeRowItem.Game>().map { it.game.id }
         )
-        onGameSelect(game.id)
-        return InputResult.HANDLED
+        onGameSelect(gameId)
     }
 }

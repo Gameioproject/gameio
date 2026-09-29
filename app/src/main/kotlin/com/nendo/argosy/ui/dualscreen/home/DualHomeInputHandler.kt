@@ -276,7 +276,7 @@ class DualHomeInputHandler(
                             InputResult.HANDLED
                         }
                         game != null -> {
-                            confirmGame(game)
+                            onSelectGame(game.id)
                             InputResult.HANDLED
                         }
                         else -> InputResult.UNHANDLED
@@ -292,7 +292,7 @@ class DualHomeInputHandler(
                 }
                 val game = state.selectedGame
                 if (game != null) {
-                    onSelectGame(game.id)
+                    confirmGame(game)
                     InputResult.HANDLED
                 } else InputResult.UNHANDLED
             }
@@ -371,12 +371,12 @@ class DualHomeInputHandler(
             }
             com.nendo.argosy.ui.input.GamepadEvent.Confirm -> {
                 val game = viewModel.focusedCollectionGame()
-                if (game != null) confirmGame(game)
+                if (game != null) onSelectGame(game.id)
                 InputResult.HANDLED
             }
             com.nendo.argosy.ui.input.GamepadEvent.ContextMenu -> {
                 val game = viewModel.focusedCollectionGame()
-                if (game != null) onSelectGame(game.id)
+                if (game != null) confirmGame(game)
                 InputResult.HANDLED
             }
             com.nendo.argosy.ui.input.GamepadEvent.Back -> {
@@ -574,13 +574,13 @@ class DualHomeInputHandler(
             com.nendo.argosy.ui.input.GamepadEvent.Confirm -> {
                 val state = viewModel.uiState.value
                 val game = state.libraryGames.getOrNull(state.libraryFocusedIndex)
-                if (game != null) confirmGame(game)
+                if (game != null) onSelectGame(game.id)
                 InputResult.HANDLED
             }
             com.nendo.argosy.ui.input.GamepadEvent.ContextMenu -> {
                 val state = viewModel.uiState.value
                 val game = state.libraryGames.getOrNull(state.libraryFocusedIndex)
-                if (game != null) onSelectGame(game.id)
+                if (game != null) confirmGame(game)
                 InputResult.HANDLED
             }
             com.nendo.argosy.ui.input.GamepadEvent.PrevSection -> {
