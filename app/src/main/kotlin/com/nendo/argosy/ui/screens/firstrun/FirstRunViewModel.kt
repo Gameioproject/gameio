@@ -88,6 +88,8 @@ data class FirstRunError(
 private const val EMAIL_FIELD_INDEX = 2
 private const val NO_INDEX = -1
 private const val PASSWORD_RESET_URL = "https://playgameio.com/forgot-password"
+private const val SIGNUP_MIN_PASSWORD_LENGTH = 6
+private val SIGNUP_USERNAME_PATTERN = Regex("^[A-Za-z0-9_-]{3,}$")
 
 data class FirstRunUiState(
     val currentStep: FirstRunStep = FirstRunStep.WELCOME,
@@ -600,13 +602,7 @@ class FirstRunViewModel @Inject constructor(
                 is RomMResult.Error -> _uiState.update {
                     it.copy(
                         isConnecting = false,
-                        connectionError = FirstRunError(
-                            textRes = when (result.code) {
-                                403 -> R.string.firstrun_signup_full
-                                429 -> R.string.firstrun_signup_too_many
-                                else -> R.string.firstrun_signup_failed
-                            }
-                        )
+                        connectionError = FirstRunError(textRes = signUpErrorRes(result.code, result.message))
                     )
                 }
             }
@@ -627,10 +623,34 @@ class FirstRunViewModel @Inject constructor(
             is SignInResult.Failed -> _uiState.update {
                 it.copy(
                     isConnecting = false,
-                    connectionError = FirstRunError(textRes = result.messageRes)
+                    rommPassword = "",
+                    signUpMode = false,
+                    connectionError = FirstRunError(textRes = R.string.firstrun_signup_created_signin_failed)
                 )
             }
         }
+    }
+
+    @StringRes
+    private fun signUpErrorRes(code: Int?, detail: String): Int = when {
+        code == 403 -> R.string.firstrun_signup_full
+        code == 429 -> R.string.firstrun_signup_too_many
+        code != 400 -> R.string.firstrun_signup_failed
+        detail.startsWith("User with email") -> R.string.firstrun_signup_email_taken
+        detail.startsWith("An email address is required") -> R.string.firstrun_signup_email_required
+        detail.startsWith("Username") && detail.endsWith("already exists") -> R.string.firstrun_signup_username_taken
+        detail.startsWith("Username") -> R.string.firstrun_signup_username_invalid
+        detail.startsWith("Password") -> R.string.firstrun_signup_password_invalid
+        detail.startsWith("Email") || detail.startsWith("Invalid email") -> R.string.firstrun_signup_email_invalid
+        else -> R.string.firstrun_signup_failed
+    }
+
+    @StringRes
+    private fun localSignUpProblem(state: FirstRunUiState): Int? = when {
+        !SIGNUP_USERNAME_PATTERN.matches(state.rommUsername) -> R.string.firstrun_signup_username_invalid
+        state.rommPassword.length < SIGNUP_MIN_PASSWORD_LENGTH ||
+            state.rommPassword.any { it.code > 127 } -> R.string.firstrun_signup_password_invalid
+        else -> null
     }
 
     fun connectToRomm() {
@@ -643,10 +663,8 @@ class FirstRunViewModel @Inject constructor(
             return
         }
         if (state.signUpMode) {
-            if (state.rommEmail.isBlank()) {
-                _uiState.update {
-                    it.copy(connectionError = FirstRunError(textRes = R.string.firstrun_signup_email_required))
-                }
+            localSignUpProblem(state)?.let { problem ->
+                _uiState.update { it.copy(connectionError = FirstRunError(textRes = problem)) }
                 return
             }
             signUpThenConnect(state.rommUsername, state.rommPassword, state.rommEmail)
@@ -947,8 +965,7 @@ class FirstRunViewModel @Inject constructor(
 
     private fun canConnect(state: FirstRunUiState): Boolean =
             state.rommUsername.isNotBlank() &&
-            state.rommPassword.isNotBlank() &&
-            (!state.signUpMode || state.rommEmail.isNotBlank())
+            state.rommPassword.isNotBlank()
 
     fun proceedFromPlatformSelect() {
         nextStep()

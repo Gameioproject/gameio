@@ -135,9 +135,16 @@
     <string name="firstrun_signup_full">暂时无法注册：服务器已满。</string>
     <string name="firstrun_signup_failed">无法创建账户。请检查用户名和密码后重试。</string>
     <string name="firstrun_signup_email_label">电子邮箱</string>
-    <string name="firstrun_signup_email_hint">仅在你忘记密码时用于重置密码。</string>
+    <string name="firstrun_signup_email_hint">可选。仅用于在你忘记密码时重置密码。</string>
     <string name="firstrun_signup_email_required">请填写电子邮箱，以便日后重置密码</string>
     <string name="firstrun_signup_too_many">此连接的注册次数过多。请稍后再试。</string>
+    <string name="firstrun_signup_password_hint">至少 6 个字符。可使用英文字母、数字和符号，不能包含表情符号。</string>
+    <string name="firstrun_signup_username_taken">该用户名已被占用，请换一个。</string>
+    <string name="firstrun_signup_email_taken">该电子邮件地址已属于另一个账户。</string>
+    <string name="firstrun_signup_username_invalid">用户名至少需要 3 个字符，只能包含英文字母、数字、- 和 _。</string>
+    <string name="firstrun_signup_password_invalid">密码至少需要 6 个字符，只能包含英文字母、数字和符号。</string>
+    <string name="firstrun_signup_email_invalid">该电子邮件地址似乎不正确。请检查，或留空。</string>
+    <string name="firstrun_signup_created_signin_failed">账户已创建，但登录失败。请在下方用它登录。</string>
     <string name="firstrun_signin_reset_password">重置密码</string>
     <string name="firstrun_signin_reset_password_hint">将在浏览器中打开 playgameio.com。完成后回到这里登录。</string>
     <string name="firstrun_romm_sign_in_connecting">登录中\u2026</string>
