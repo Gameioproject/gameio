@@ -141,22 +141,21 @@
     </plurals>
     <string name="firstrun_complete_hint">Explora tus juegos. Gestiona la sincronización de la biblioteca en los ajustes de Gameio.</string>
     <string name="firstrun_complete_button_start">Empezar a jugar</string>
-    <string name="firstrun_romm_sign_in_hint">Inicia sesión con tu cuenta de Gameio.</string>
     <string name="firstrun_romm_sign_in_button">Iniciar sesión</string>
 
     <string name="firstrun_signup_title">Crear una cuenta</string>
-    <string name="firstrun_signup_test_notice">Esta es una cuenta de prueba. Puede eliminarse sin aviso mientras se prueba Gameio, junto con todo lo que guardes en ella.</string>
     <string name="firstrun_signup_button">Crear cuenta</string>
     <string name="firstrun_signup_working">Creando cuenta...</string>
     <string name="firstrun_signup_switch">¿No tienes cuenta? Crea una</string>
     <string name="firstrun_signup_have_account">Ya tengo una cuenta</string>
     <string name="firstrun_signup_full">El registro está cerrado por ahora: el servidor está lleno.</string>
     <string name="firstrun_signup_failed">No se pudo crear la cuenta. Comprueba el nombre y la contraseña e inténtalo de nuevo.</string>
+    <string name="firstrun_signup_test_notice_short">Cuenta de prueba. Puede eliminarse sin previo aviso.</string>
+    <string name="firstrun_signup_email_optional_label">Correo electrónico (opcional)</string>
+    <string name="firstrun_signup_password_hint_short">Al menos 6 caracteres, sin acentos ni emoji</string>
     <string name="firstrun_signup_email_label">Correo electrónico</string>
-    <string name="firstrun_signup_email_hint">Opcional. Solo se usa para restablecer tu contraseña si la olvidas.</string>
     <string name="firstrun_signup_email_required">Introduce un correo electrónico para poder restablecer tu contraseña más adelante</string>
     <string name="firstrun_signup_too_many">Demasiados registros desde esta conexión. Espera un poco e inténtalo de nuevo.</string>
-    <string name="firstrun_signup_password_hint">Al menos 6 caracteres. Letras, números y símbolos, sin acentos ni emojis.</string>
     <string name="firstrun_signup_username_taken">Ese nombre de usuario ya existe. Prueba con otro.</string>
     <string name="firstrun_signup_email_taken">Ese correo electrónico ya pertenece a otra cuenta.</string>
     <string name="firstrun_signup_username_invalid">Los nombres de usuario necesitan al menos 3 caracteres: solo letras, números, - y _.</string>
@@ -164,7 +163,6 @@
     <string name="firstrun_signup_email_invalid">Ese correo electrónico no parece correcto. Revísalo o déjalo vacío.</string>
     <string name="firstrun_signup_created_signin_failed">Tu cuenta se creó, pero no se pudo iniciar sesión. Inicia sesión con ella abajo.</string>
     <string name="firstrun_signin_reset_password">Restablecer contraseña</string>
-    <string name="firstrun_signin_reset_password_hint">Abre playgameio.com en el navegador. Vuelve aquí para iniciar sesión.</string>
     <string name="firstrun_romm_sign_in_connecting">Iniciando sesión\u2026</string>
     <string name="firstrun_romm_sign_in_change_server">Cambiar de servidor</string>
     <string name="firstrun_romm_credentials_required">Escribe tu nombre de usuario y contraseña</string>

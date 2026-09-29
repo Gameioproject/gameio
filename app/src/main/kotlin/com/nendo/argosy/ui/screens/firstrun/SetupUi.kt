@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -100,16 +102,46 @@ internal fun SetupPrimaryButton(
     isFocused: Boolean,
     onClick: () -> Unit,
     enabled: Boolean = true,
-    icon: ImageVector? = null
-) = SetupButton(text, isFocused, onClick, enabled, primary = true, icon = icon)
+    icon: ImageVector? = null,
+    modifier: Modifier = Modifier
+) = SetupButton(text, isFocused, onClick, enabled, SetupButtonWeight.PRIMARY, icon, modifier)
 
 @Composable
 internal fun SetupSecondaryButton(
     text: String,
     isFocused: Boolean,
     onClick: () -> Unit,
+    enabled: Boolean = true,
+    modifier: Modifier = Modifier
+) = SetupButton(text, isFocused, onClick, enabled, SetupButtonWeight.SECONDARY, modifier = modifier)
+
+@Composable
+internal fun SetupLinkButton(
+    text: String,
+    isFocused: Boolean,
+    onClick: () -> Unit,
     enabled: Boolean = true
-) = SetupButton(text, isFocused, onClick, enabled, primary = false)
+) = SetupButton(text, isFocused, onClick, enabled, SetupButtonWeight.LINK)
+
+@Composable
+internal fun SetupOrDivider(text: String) {
+    val line = MaterialTheme.colorScheme.outlineVariant
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSm),
+        modifier = Modifier.fillMaxWidth().padding(vertical = Dimens.spacingSm)
+    ) {
+        HorizontalDivider(thickness = Dimens.borderThin, color = line, modifier = Modifier.weight(1f))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        HorizontalDivider(thickness = Dimens.borderThin, color = line, modifier = Modifier.weight(1f))
+    }
+}
+
+private enum class SetupButtonWeight { PRIMARY, SECONDARY, LINK }
 
 /**
  * One button in the setup wizard, in the two weights the flow uses.
@@ -127,29 +159,37 @@ private fun SetupButton(
     isFocused: Boolean,
     onClick: () -> Unit,
     enabled: Boolean,
-    primary: Boolean,
-    icon: ImageVector? = null
+    weight: SetupButtonWeight,
+    icon: ImageVector? = null,
+    modifier: Modifier = Modifier
 ) {
     val colors = MaterialTheme.colorScheme
     val shape = RoundedCornerShape(Dimens.radiusMd)
     val active = isFocused && enabled
     val fill = when {
         active -> colors.primary
+        weight == SetupButtonWeight.LINK -> Color.Transparent
         !enabled -> colors.surfaceVariant
-        primary -> colors.primary.copy(alpha = REST_PRIMARY_FILL_ALPHA)
+        weight == SetupButtonWeight.PRIMARY -> colors.primary.copy(alpha = REST_PRIMARY_FILL_ALPHA)
         else -> colors.surface
     }
     val ink = when {
         active -> colors.onPrimary
         !enabled -> colors.onSurfaceVariant
+        weight == SetupButtonWeight.LINK -> colors.onSurfaceVariant
         else -> colors.onSurface
+    }
+    val border = when (weight) {
+        SetupButtonWeight.PRIMARY -> colors.outline
+        SetupButtonWeight.SECONDARY -> colors.outlineVariant
+        SetupButtonWeight.LINK -> Color.Transparent
     }
     Row(
         horizontalArrangement = Arrangement.spacedBy(Dimens.spacingSm, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.heightIn(min = Dimens.buttonHeight)
+        modifier = modifier.heightIn(min = Dimens.buttonHeight)
             .background(fill, shape)
-            .border(Dimens.borderThin, if (primary) colors.outline else colors.outlineVariant, shape)
+            .border(Dimens.borderThin, border, shape)
             .argosyFocusIndicators(
                 focused = isFocused,
                 indicators = FocusIndicators(fill = true, ring = true),
@@ -159,12 +199,15 @@ private fun SetupButton(
                 shape = shape
             )
             .clickableNoFocus(enabled = enabled, onClick = onClick)
-            .padding(horizontal = Dimens.spacingLg, vertical = Dimens.spacingSm)
+            .padding(
+                horizontal = if (weight == SetupButtonWeight.LINK) Dimens.spacingSm else Dimens.spacingLg,
+                vertical = Dimens.spacingSm
+            )
     ) {
         if (icon != null) Icon(icon, contentDescription = null, tint = ink, modifier = Modifier.size(Dimens.iconSm))
         Text(
             text = text,
-            style = MaterialTheme.typography.titleSmall,
+            style = if (weight == SetupButtonWeight.LINK) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.titleSmall,
             fontWeight = if (active) FontWeight.SemiBold else FontWeight.Medium,
             color = ink,
             maxLines = 1
