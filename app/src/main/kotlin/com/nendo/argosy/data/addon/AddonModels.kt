@@ -66,7 +66,7 @@ data class AddonLookupFailure(val addonId: String, val reason: AddonFailure)
 enum class AddonFailure {
     INVALID_MANIFEST, UNSUPPORTED_VERSION, INVALID_SOURCE, FILE_UNREADABLE,
     TOO_LARGE, UNTRUSTED_HOST, NETWORK, NOT_FOUND, STORAGE, REMOVED,
-    ACCOUNT_REQUIRED, ACCOUNT_REJECTED, SOURCE_NOT_READY, NO_ADDONS, INTEGRITY
+    ACCOUNT_REQUIRED, ACCOUNT_REJECTED, SOURCE_NOT_READY, NO_ADDONS, INTEGRITY, DEBRID_LIMITED
 }
 
 class AddonException(val reason: AddonFailure, cause: Throwable? = null) : Exception(reason.name, cause)

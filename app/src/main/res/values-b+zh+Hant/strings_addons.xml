@@ -47,7 +47,8 @@
     <string name="addons_error_removed">此附加元件已移除、停用或更新。請重新開啟遊戲以重新整理來源。</string>
     <string name="addons_error_account_required">此來源需要你的 Real-Debrid 帳戶。請在設定 &gt; 附加元件中連線。</string>
     <string name="addons_error_account_rejected">Real-Debrid 權杖無效或帳戶不是進階帳戶。請檢查帳戶後重試。</string>
-    <string name="addons_error_not_ready">此來源尚未準備好。請稍後重試或選擇其他來源。</string>
+    <string name="addons_error_not_ready">Real-Debrid 上還沒有準備好這個遊戲，已開始下載到你的帳戶。較大的遊戲可能需要一段時間。請幾分鐘後重試，或選擇其他來源。</string>
+    <string name="addons_error_debrid_limited">Real-Debrid 正忙或你的帳戶已達到限制。請等待幾分鐘後重試。</string>
     <string name="addons_error_no_addons">請在設定 &gt; 附加元件中匯入附加元件以下載此遊戲。本機遊戲仍可使用。</string>
     <string name="addons_error_integrity">下載的檔案與來源不符。請重試或選擇其他來源。</string>
     <string name="addons_account_reset">重設帳戶</string>

@@ -106,7 +106,7 @@ class AddonDebridResolver internal constructor(
         form: Map<String, String>? = null,
         allowMissing: Boolean = false
     ): JSONObject? {
-        if (nowMillis() < retryAfterMillis) throw AddonException(AddonFailure.SOURCE_NOT_READY)
+        if (nowMillis() < retryAfterMillis) throw AddonException(AddonFailure.DEBRID_LIMITED)
         val request = Request.Builder().url(API.newBuilder().addPathSegments(path).build())
             .header("Authorization", "Bearer $token").apply {
                 form?.let { values -> post(FormBody.Builder().apply {
@@ -119,7 +119,7 @@ class AddonDebridResolver internal constructor(
                 if (response.code == 401) throw AddonException(AddonFailure.ACCOUNT_REJECTED)
                 if (response.code == 429) {
                     retryAfterMillis = cooldown(response.header("Retry-After"), nowMillis())
-                    throw AddonException(AddonFailure.SOURCE_NOT_READY)
+                    throw AddonException(AddonFailure.DEBRID_LIMITED)
                 }
                 if (response.code in setOf(202, 204)) return@use JSONObject()
                 val body = response.body ?: throw AddonException(AddonFailure.NETWORK)
@@ -129,11 +129,11 @@ class AddonDebridResolver internal constructor(
                 if (!response.isSuccessful || json.has("error")) {
                     val reason = when (json.optInt("error_code", -1)) {
                         8, 9, 14, 15, 20 -> AddonFailure.ACCOUNT_REJECTED
-                        5, 18, 19, 21, 23, 25, 34, 36 -> AddonFailure.SOURCE_NOT_READY
+                        5, 18, 19, 21, 23, 25, 34, 36 -> AddonFailure.DEBRID_LIMITED
                         2, 7, 16, 24, 28, 29, 30, 35 -> AddonFailure.INVALID_SOURCE
                         else -> if (response.code == 403) AddonFailure.ACCOUNT_REJECTED else AddonFailure.NETWORK
                     }
-                    if (reason == AddonFailure.SOURCE_NOT_READY) retryAfterMillis = cooldown(response.header("Retry-After"), nowMillis())
+                    if (reason == AddonFailure.DEBRID_LIMITED) retryAfterMillis = cooldown(response.header("Retry-After"), nowMillis())
                     throw AddonException(reason)
                 }
                 json

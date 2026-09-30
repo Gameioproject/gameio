@@ -47,7 +47,8 @@
     <string name="addons_error_removed">Cette extension a été supprimée, désactivée ou mise à jour. Rouvrez le jeu pour actualiser ses sources.</string>
     <string name="addons_error_account_required">Cette source nécessite votre compte Real-Debrid. Connectez-le dans Paramètres &gt; Extensions.</string>
     <string name="addons_error_account_rejected">Le jeton Real-Debrid est invalide ou le compte n’est pas premium. Vérifiez votre compte et réessayez.</string>
-    <string name="addons_error_not_ready">Cette source n’est pas encore prête. Réessayez plus tard ou choisissez une autre source.</string>
+    <string name="addons_error_not_ready">Real-Debrid n’a pas encore ce jeu prêt, il a donc commencé à le télécharger sur votre compte. Les gros jeux peuvent prendre un moment. Réessayez dans quelques minutes ou choisissez une autre source.</string>
+    <string name="addons_error_debrid_limited">Real-Debrid est occupé ou votre compte a atteint une limite. Patientez quelques minutes puis réessayez.</string>
     <string name="addons_error_no_addons">Importez une extension dans Paramètres &gt; Extensions pour télécharger ce jeu. Vos jeux locaux fonctionnent toujours.</string>
     <string name="addons_error_integrity">Le fichier téléchargé ne correspond pas à la source. Réessayez ou choisissez une autre source.</string>
     <string name="addons_account_reset">Réinitialiser le compte</string>

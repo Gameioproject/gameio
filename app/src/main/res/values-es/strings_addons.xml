@@ -47,7 +47,8 @@
     <string name="addons_error_removed">Este complemento se eliminó, desactivó o actualizó. Abre el juego de nuevo para actualizar sus fuentes.</string>
     <string name="addons_error_account_required">Esta fuente necesita tu cuenta Real-Debrid. Conéctala en Ajustes &gt; Complementos.</string>
     <string name="addons_error_account_rejected">El token Real-Debrid no es válido o la cuenta no es premium. Comprueba tu cuenta y reintenta.</string>
-    <string name="addons_error_not_ready">Esta fuente aún no está lista. Reintenta más tarde o elige otra.</string>
+    <string name="addons_error_not_ready">Real-Debrid aún no tiene este juego listo, así que empezó a descargarlo en tu cuenta. Los juegos grandes pueden tardar. Reintenta en unos minutos o elige otra fuente.</string>
+    <string name="addons_error_debrid_limited">Real-Debrid está ocupado o tu cuenta alcanzó un límite. Espera unos minutos y vuelve a intentarlo.</string>
     <string name="addons_error_no_addons">Importa un complemento en Ajustes &gt; Complementos para descargar este juego. Tus juegos locales siguen funcionando.</string>
     <string name="addons_error_integrity">El archivo descargado no coincide con la fuente. Reintenta o elige otra fuente.</string>
     <string name="addons_account_reset">Restablecer cuenta</string>

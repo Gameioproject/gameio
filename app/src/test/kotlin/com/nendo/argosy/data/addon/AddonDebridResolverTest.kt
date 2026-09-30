@@ -120,9 +120,9 @@ class AddonDebridResolverTest {
         val credentials = credentials()
         val client = client(requests, listOf(Reply(429, retryAfter = "120"), Reply(200, """{"type":"premium"}""")))
         val resolver = AddonDebridResolver(credentials, client) { now }
-        assertFailure(AddonFailure.SOURCE_NOT_READY) { resolver.setToken("new-token") }
+        assertFailure(AddonFailure.DEBRID_LIMITED) { resolver.setToken("new-token") }
         now += 119_000
-        assertFailure(AddonFailure.SOURCE_NOT_READY) { resolver.setToken("new-token") }
+        assertFailure(AddonFailure.DEBRID_LIMITED) { resolver.setToken("new-token") }
         assertEquals(1, requests.size)
         now += 1001
         resolver.setToken("new-token")
@@ -141,7 +141,7 @@ class AddonDebridResolverTest {
     @Test fun `account traffic limit is retryable instead of rejecting credentials`() = runTest {
         val credentials = credentials()
         val resolver = resolver(credentials, mutableListOf(), Reply(403, """{"error":"traffic_exhausted","error_code":23}"""))
-        assertFailure(AddonFailure.SOURCE_NOT_READY) { resolver.setToken("user-token") }
+        assertFailure(AddonFailure.DEBRID_LIMITED) { resolver.setToken("user-token") }
         coVerify(exactly = 0) { credentials.save(any()) }
     }
 

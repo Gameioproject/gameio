@@ -47,7 +47,8 @@
     <string name="addons_error_removed">यह ऐड-ऑन हटाया, बंद या अपडेट किया गया है। स्रोत ताज़ा करने के लिए गेम फिर खोलें।</string>
     <string name="addons_error_account_required">इस स्रोत के लिए आपका Real-Debrid खाता चाहिए। सेटिंग &gt; ऐड-ऑन में इसे जोड़ें।</string>
     <string name="addons_error_account_rejected">Real-Debrid टोकन अमान्य है या खाता प्रीमियम नहीं है। खाता जाँचें और फिर कोशिश करें।</string>
-    <string name="addons_error_not_ready">यह स्रोत अभी तैयार नहीं है। बाद में कोशिश करें या दूसरा स्रोत चुनें।</string>
+    <string name="addons_error_not_ready">Real-Debrid पर यह गेम अभी तैयार नहीं है, इसलिए उसने इसे आपके खाते में डाउनलोड करना शुरू कर दिया है। बड़े गेम में समय लग सकता है। कुछ मिनट बाद फिर कोशिश करें या दूसरा स्रोत चुनें।</string>
+    <string name="addons_error_debrid_limited">Real-Debrid व्यस्त है या आपका खाता किसी सीमा तक पहुंच गया है। कुछ मिनट रुककर फिर कोशिश करें।</string>
     <string name="addons_error_no_addons">यह गेम डाउनलोड करने के लिए सेटिंग &gt; ऐड-ऑन में ऐड-ऑन आयात करें। स्थानीय गेम अभी भी काम करते हैं।</string>
     <string name="addons_error_integrity">डाउनलोड की गई फ़ाइल स्रोत से मेल नहीं खाती। फिर कोशिश करें या दूसरा स्रोत चुनें।</string>
     <string name="addons_account_reset">खाता रीसेट करें</string>

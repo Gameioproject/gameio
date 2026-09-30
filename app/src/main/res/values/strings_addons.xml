@@ -47,7 +47,8 @@
     <string name="addons_error_removed">This add-on was removed, disabled or updated. Open the game again to refresh its sources.</string>
     <string name="addons_error_account_required">This source needs your Real-Debrid account. Connect it in Settings &gt; Add-ons.</string>
     <string name="addons_error_account_rejected">The Real-Debrid token is invalid or the account is not premium. Check your account and try again.</string>
-    <string name="addons_error_not_ready">This source is not ready yet. Try again later or choose another source.</string>
+    <string name="addons_error_not_ready">Real-Debrid does not have this game ready yet, so it started downloading it to your account. Larger games can take a while. Try again in a few minutes, or choose another source.</string>
+    <string name="addons_error_debrid_limited">Real-Debrid is busy or your account reached a limit. Wait a few minutes and try again.</string>
     <string name="addons_error_no_addons">Import an add-on in Settings &gt; Add-ons to download this game. Your local games still work.</string>
     <string name="addons_error_integrity">The downloaded file does not match the source. Retry or choose another source.</string>
     <string name="addons_account_reset">Reset account</string>

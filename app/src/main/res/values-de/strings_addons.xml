@@ -47,7 +47,8 @@
     <string name="addons_error_removed">Dieses Add-on wurde entfernt, deaktiviert oder aktualisiert. Öffne das Spiel erneut, um die Quellen zu aktualisieren.</string>
     <string name="addons_error_account_required">Diese Quelle benötigt dein Real-Debrid-Konto. Verbinde es unter Einstellungen &gt; Add-ons.</string>
     <string name="addons_error_account_rejected">Das Real-Debrid-Token ist ungültig oder das Konto hat keinen Premium-Status. Prüfe dein Konto und versuche es erneut.</string>
-    <string name="addons_error_not_ready">Diese Quelle ist noch nicht bereit. Versuche es später erneut oder wähle eine andere Quelle.</string>
+    <string name="addons_error_not_ready">Real-Debrid hat dieses Spiel noch nicht bereit und lädt es jetzt in dein Konto. Größere Spiele können eine Weile dauern. Versuche es in ein paar Minuten erneut oder wähle eine andere Quelle.</string>
+    <string name="addons_error_debrid_limited">Real-Debrid ist ausgelastet oder dein Konto hat ein Limit erreicht. Warte ein paar Minuten und versuche es erneut.</string>
     <string name="addons_error_no_addons">Importiere unter Einstellungen &gt; Add-ons ein Add-on, um dieses Spiel herunterzuladen. Lokale Spiele funktionieren weiterhin.</string>
     <string name="addons_error_integrity">Die heruntergeladene Datei stimmt nicht mit der Quelle überein. Versuche es erneut oder wähle eine andere Quelle.</string>
     <string name="addons_account_reset">Konto zurücksetzen</string>

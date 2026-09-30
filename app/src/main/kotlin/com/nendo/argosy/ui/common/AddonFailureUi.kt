@@ -22,6 +22,7 @@ val AddonFailure.messageRes: Int
         AddonFailure.ACCOUNT_REQUIRED -> R.string.addons_error_account_required
         AddonFailure.ACCOUNT_REJECTED -> R.string.addons_error_account_rejected
         AddonFailure.SOURCE_NOT_READY -> R.string.addons_error_not_ready
+        AddonFailure.DEBRID_LIMITED -> R.string.addons_error_debrid_limited
     }
 
 fun AddonFailure.toNotificationText(): NotificationText = NotificationText.Res(messageRes)

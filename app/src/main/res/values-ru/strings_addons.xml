@@ -47,7 +47,8 @@
     <string name="addons_error_removed">Дополнение удалено, отключено или обновлено. Откройте игру снова, чтобы обновить источники.</string>
     <string name="addons_error_account_required">Для этого источника нужна ваша учётная запись Real-Debrid. Подключите её в Настройки &gt; Дополнения.</string>
     <string name="addons_error_account_rejected">Токен Real-Debrid недействителен или учётная запись не премиум. Проверьте её и повторите попытку.</string>
-    <string name="addons_error_not_ready">Источник ещё не готов. Повторите попытку позже или выберите другой.</string>
+    <string name="addons_error_not_ready">У Real-Debrid этой игры ещё нет, поэтому он начал загружать её в ваш аккаунт. Большие игры могут загружаться долго. Повторите попытку через несколько минут или выберите другой источник.</string>
+    <string name="addons_error_debrid_limited">Real-Debrid перегружен или ваш аккаунт достиг лимита. Подождите несколько минут и повторите попытку.</string>
     <string name="addons_error_no_addons">Импортируйте дополнение в Настройки &gt; Дополнения, чтобы скачать эту игру. Локальные игры по-прежнему работают.</string>
     <string name="addons_error_integrity">Загруженный файл не соответствует источнику. Повторите попытку или выберите другой источник.</string>
     <string name="addons_account_reset">Сбросить учётную запись</string>
