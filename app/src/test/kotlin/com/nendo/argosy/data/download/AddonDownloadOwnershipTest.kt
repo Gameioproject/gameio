@@ -46,6 +46,7 @@ class AddonDownloadOwnershipTest {
 
     @Before fun setup() {
         Dispatchers.setMain(StandardTestDispatcher())
+        linkedPath = null
         platform = temporary.newFolder("nes")
         every { context.filesDir } returns temporary.newFolder("private")
         every { context.getExternalFilesDir(null) } returns temporary.newFolder("external")
@@ -71,65 +72,55 @@ class AddonDownloadOwnershipTest {
 
     @After fun tearDown() { Dispatchers.resetMain() }
 
-    @Test fun `extraction cannot overwrite a copied game with identical title and archive name`() = runTest {
+    @Test fun `extraction installs into the platform folder where other frontends look`() = runTest {
         runCurrent()
-        val localArchive = File(platform, "Game.zip").apply { writeText("local archive") }
-        val localRom = File(platform, "Game/Game.nes").apply { parentFile!!.mkdirs(); writeText("local variant") }
         val entry = entry().copy(isMultiFileRom = true)
         coEvery { queue.getByGameId(7) } returns entry
-        val directory = storage.directory(platform, 7, entry.addonSourceJson!!)
-        zip(File(directory, "Game.zip"), "new game")
+        zip(File(platform, "Game.zip"), "new game")
         val result = downloads.retryExtraction(7)
         assertTrue(result.toString(), result is DownloadManager.ExtractionResult.Success)
-        assertEquals("local archive", localArchive.readText())
-        assertEquals("local variant", localRom.readText())
         assertEquals("new game", File(linkedPath!!).readText())
-        assertTrue(linkedPath!!.startsWith(directory.path + File.separator))
+        assertTrue(
+            "installed outside the platform folder: $linkedPath",
+            linkedPath!!.startsWith(platform.path + File.separator)
+        )
+        assertFalse(File(platform, ".gameio-addons").exists())
     }
 
-    @Test fun `staged move cannot overwrite another games final or partial file`() = runTest {
+    @Test fun `staged move lands the game in the platform folder`() = runTest {
         runCurrent()
-        val local = File(platform, "Game.nes").apply { writeText("local game") }
-        val partial = File(platform, "Game.nes.partial").apply { writeText("other transfer") }
-        val entry = entry()
-        coEvery { queue.getByGameId(7) } returns entry
-        val directory = storage.directory(platform, 7, entry.addonSourceJson!!)
-        val area = staging.open(StagingManifest(11, 7, "Game", "Game.zip", directory.path, StagingPhase.MOVING, "Game.nes"))
-        File(area.outputDir, "Game.nes").writeText("new game")
-        val result = downloads.retryExtraction(7)
-        assertTrue(result.toString(), result is DownloadManager.ExtractionResult.Success)
-        assertEquals("local game", local.readText())
-        assertEquals("other transfer", partial.readText())
-        assertEquals("new game", File(linkedPath!!).readText())
-    }
-
-    @Test fun `legacy staging is never deployed or cleaned as an addon destination`() = runTest {
-        runCurrent()
-        val local = File(platform, "Game.nes").apply { writeText("local game") }
         val entry = entry()
         coEvery { queue.getByGameId(7) } returns entry
         val area = staging.open(StagingManifest(11, 7, "Game", "Game.zip", platform.path, StagingPhase.MOVING, "Game.nes"))
         File(area.outputDir, "Game.nes").writeText("new game")
         val result = downloads.retryExtraction(7)
+        assertTrue(result.toString(), result is DownloadManager.ExtractionResult.Success)
+        assertEquals(File(platform, "Game.nes").path, linkedPath)
+        assertEquals("new game", File(linkedPath!!).readText())
+    }
+
+    @Test fun `staging for another game is still refused`() = runTest {
+        runCurrent()
+        val entry = entry()
+        coEvery { queue.getByGameId(7) } returns entry
+        val area = staging.open(StagingManifest(11, 8, "Other", "Other.zip", platform.path, StagingPhase.MOVING, "Other.nes"))
+        File(area.outputDir, "Other.nes").writeText("someone else")
+        val result = downloads.retryExtraction(7)
         assertEquals(DownloadManager.ExtractionResult.Failure(DownloadFailureReason.Addon(AddonFailure.STORAGE)), result)
-        assertEquals("local game", local.readText())
         assertTrue(area.root.exists())
         assertNull(linkedPath)
     }
 
-    @Test fun `redownload only deletes the selected owned transfer`() = runTest {
+    @Test fun `redownload deletes this games transfer and leaves other games alone`() = runTest {
         runCurrent()
-        val local = File(platform, "Game.zip").apply { writeText("keep local") }
-        val otherPartial = File(platform, "Game.zip.tmp").apply { writeText("keep other") }
+        val otherGame = File(platform, "Other.zip").apply { writeText("keep other game") }
         val entry = entry()
         coEvery { queue.getByGameId(7) } returns entry
-        val directory = storage.directory(platform, 7, entry.addonSourceJson!!)
-        val owned = File(directory, "Game.zip").apply { writeText("owned invalid archive") }
+        val owned = File(platform, "Game.zip").apply { writeText("owned invalid archive") }
         assertEquals(owned, downloads.getDownloadPath(entry))
         downloads.deleteFileAndRedownload(7)
         assertFalse(owned.exists())
-        assertEquals("keep local", local.readText())
-        assertEquals("keep other", otherPartial.readText())
+        assertEquals("keep other game", otherGame.readText())
     }
 
     @Test fun `same source retry retains queue id partial bytes and staging`() = runTest {
@@ -145,13 +136,20 @@ class AddonDownloadOwnershipTest {
         coVerify(exactly = 0) { queue.insert(any()) }
     }
 
-    @Test fun `addon replacing legacy row leaves unrelated legacy partial untouched`() = runTest {
+    @Test fun `addon replacing legacy row transfers into the platform folder`() = runTest {
         runCurrent()
-        val legacyPartial = File(platform, "Game.zip.tmp").apply { writeText("legacy partial") }
-        coEvery { queue.getByGameId(7) } returns entry().copy(addonSourceJson = null, tempFilePath = legacyPartial.path)
+        val otherPartial = File(platform, "Other.zip.tmp").apply { writeText("another transfer") }
+        coEvery { queue.getByGameId(7) } returns entry().copy(addonSourceJson = null, tempFilePath = File(platform, "Game.zip.tmp").path)
         downloads.enqueueDownload(7, 7000018, "Game.zip", "Game", "nes", null, addonSourceJson = entry().addonSourceJson)
-        assertEquals("legacy partial", legacyPartial.readText())
-        coVerify { queue.insert(match { it.tempFilePath != legacyPartial.path && it.addonSourceJson != null }) }
+        assertEquals("another transfer", otherPartial.readText())
+        coVerify {
+            queue.insert(
+                match {
+                    it.addonSourceJson != null &&
+                        it.tempFilePath == File(platform, "Game.zip.tmp").path
+                }
+            )
+        }
     }
 
     @Test fun `legacy force redownload after cutover preserves global files and partials`() = runTest {

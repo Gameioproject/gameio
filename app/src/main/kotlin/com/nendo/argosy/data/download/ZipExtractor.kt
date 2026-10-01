@@ -10,6 +10,13 @@ import java.io.File
 
 private const val TAG = "ZipExtractor"
 
+/**
+ * What an archive turned into on disk, and which of it a player launches.
+ *
+ * [launchPath] answers with a file wherever the archive holds one, falling back to the
+ * biggest file in the tree for a layout this platform does not advertise: an install
+ * recorded against a folder is one nothing can open, and it reads as downloaded anyway.
+ */
 data class ExtractedFolderRom(
     val primaryFile: File?,
     val discFiles: List<File>,
@@ -48,7 +55,7 @@ data class ExtractedFolderRom(
             realFiles.filter { it.parentFile?.absolutePath == gameFolder.absolutePath }
                 .maxByOrNull { it.length() }
                 ?.let { return it.absolutePath }
-            if (realFiles.size == 1) return realFiles[0].absolutePath
+            realFiles.maxByOrNull { it.length() }?.let { return it.absolutePath }
 
             return gameFolder.absolutePath
         }

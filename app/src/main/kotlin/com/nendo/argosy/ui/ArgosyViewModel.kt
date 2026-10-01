@@ -354,6 +354,7 @@ class ArgosyViewModel @Inject constructor(
                 libretroMigrationUseCase.cleanupRemovedCores()
                 emulatorUpdateManager.checkIfNeeded()
 
+                gameRepository.liftAddonInstallsIntoPlatformFolder()
                 gameRepository.repairFolderRomPointers()
                 gameRepository.repairVariantFilePointers()
                 gameRepository.repairUnnecessaryM3uPointers()

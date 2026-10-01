@@ -313,11 +313,15 @@ class DownloadManager @Inject constructor(
         }
     }
 
+    /**
+     * Where a finished download lives: the platform folder, whoever supplied it.
+     *
+     * An add-on game used to install into a hidden per-source folder, which kept two sources
+     * from overwriting each other but also kept the game out of every other frontend on the
+     * device and made a working download look like a failed one.
+     */
     private suspend fun getInstallDir(progress: DownloadProgress, create: Boolean = true): File = withContext(Dispatchers.IO) {
-        val platformDir = getDownloadDir(progress.platformSlug)
-        progress.addonSourceJson?.let {
-            addonStorage.directory(platformDir, progress.gameId, it, create)
-        } ?: platformDir
+        getDownloadDir(progress.platformSlug)
     }
 
     private suspend fun validateStaging(area: StagingArea, progress: DownloadProgress) = withContext(Dispatchers.IO) {
@@ -601,11 +605,7 @@ class DownloadManager @Inject constructor(
             downloadQueueDao.deleteByGameId(gameId)
         }
 
-        val platformDir = withContext(Dispatchers.IO) {
-            addonSourceJson?.let {
-                addonStorage.directory(getDownloadDir(platformSlug), gameId, it)
-            } ?: getDownloadDir(platformSlug)
-        }
+        val platformDir = withContext(Dispatchers.IO) { getDownloadDir(platformSlug) }
         val diskFileName = FileNames.sanitize(fileName)
         val tempFilePath = File(platformDir, "${diskFileName}.tmp").absolutePath
 
@@ -1378,7 +1378,9 @@ class DownloadManager @Inject constructor(
         }
         Log.d(TAG, "linkCompletedDownload: path=$finalPath, gameTitle=${progress.gameTitle}")
 
-        if (progress.isGameFileDownload && !File(finalPath).exists()) {
+        val installed = File(finalPath)
+        val installedIsEmptyFolder = installed.isDirectory && installed.listFiles().isNullOrEmpty()
+        if (!installed.exists() || installedIsEmptyFolder) {
             Logger.warn(
                 TAG,
                 "Download finalize failed | game=${progress.gameTitle} file=${progress.fileName} " +
@@ -1588,6 +1590,17 @@ class DownloadManager @Inject constructor(
             )
         }
 
+        occupiedByAnotherFile(area, progress, destinationDir)?.let { occupied ->
+            Logger.warn(
+                TAG,
+                "Deploy refused, a file this download does not own is already there | " +
+                    "game=${progress.gameTitle} path=${occupied.absolutePath}"
+            )
+            return StagedDeployResult.Failure(
+                DownloadResult.Failure(DownloadFailureReason.MoveToStorageFailed)
+            )
+        }
+
         downloadQueueDao.updateState(progress.id, DownloadState.MOVING.name)
         updateProgress(
             progress.copy(
@@ -1630,6 +1643,27 @@ class DownloadManager @Inject constructor(
                 "path=${finalFile.absolutePath}"
         )
         return StagedDeployResult.Success(finalFile.absolutePath)
+    }
+
+    /**
+     * The first file this deploy would replace without having put it there.
+     *
+     * Games install into the platform folder so every frontend can see them, which puts them
+     * next to ROMs the player copied in by hand. Ownership is answered by the database rather
+     * than by where the file sits: a path this game already records is its own earlier
+     * download and is replaced, anything else is someone else's and stops the deploy.
+     */
+    private suspend fun occupiedByAnotherFile(
+        area: StagingArea,
+        progress: DownloadProgress,
+        destinationDir: File
+    ): File? = withContext(Dispatchers.IO) {
+        val ownPath = gameDao.getById(progress.gameId)?.localPath
+        val prefixLength = area.outputDir.absolutePath.length + 1
+        area.outputDir.walkTopDown()
+            .filter { it.isFile }
+            .map { File(destinationDir, it.absolutePath.substring(prefixLength)) }
+            .firstOrNull { it.exists() && it.absolutePath != ownPath }
     }
 
     private suspend fun resumeStagedDeploy(area: StagingArea, progress: DownloadProgress): DownloadResult {

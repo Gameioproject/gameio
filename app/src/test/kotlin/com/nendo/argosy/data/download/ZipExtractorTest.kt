@@ -427,6 +427,30 @@ class ZipExtractorTest {
     }
 
     @Test
+    fun `launchPath points at the game when a nested folder holds several files`() {
+        val zipFile = File(tempDir, "nba.zip")
+        createTestZip(
+            zipFile,
+            mapOf(
+                "NBA Street (USA)/NBA Street (USA).gcz" to "the game itself, by far the biggest",
+                "NBA Street (USA)/readme.txt" to "notes",
+                "NBA Street (USA)/cover.png" to "art"
+            )
+        )
+
+        val result = ZipExtractor.extractFolderRom(zipFile, "NBA Street", tempDir, "ps2")
+
+        assertTrue(
+            "launchPath must be a file, was ${result.launchPath}",
+            File(result.launchPath).isFile
+        )
+        assertTrue(
+            "launchPath should be the game, was ${result.launchPath}",
+            result.launchPath.endsWith(".gcz")
+        )
+    }
+
+    @Test
     fun `launchPath points at single extracted sfc file from 7z-style folder layout`() {
         val zipFile = File(tempDir, "mario.zip")
         createTestZip(zipFile, mapOf("Super Mario World/smw.sfc" to "snes rom bytes"))

@@ -45,6 +45,11 @@ import javax.inject.Singleton
 private const val TAG = "GameRepository"
 private const val COVER_RATIO_TOLERANCE = 0.001f
 
+/**
+ * The folder add-on downloads used to install into, before games moved beside every other ROM.
+ */
+private const val ADDON_INSTALL_DIR = ".gameio-addons"
+
 data class PlatformStats(
     val platformId: Long,
     val platformName: String,
@@ -370,6 +375,61 @@ class GameRepository @Inject constructor(
             Log.w(TAG, "validateLocalFiles: kept $withheld pointers whose volume could not be read")
         }
         invalidated + invalidatedFiles
+    }
+
+    /**
+     * Carries games out of the old hidden add-on folder into the platform folder.
+     *
+     * Downloads from an add-on used to install under `<platform>/.gameio-addons/<id>/<hash>/
+     * content/`, where no other frontend could see them and this app's own discovery skipped
+     * them for starting with a dot. Each snapshot moves as a whole so a multi-file game keeps
+     * its shape, and a name already taken in the platform folder leaves that game where it is
+     * rather than overwriting what the player put there.
+     */
+    suspend fun liftAddonInstallsIntoPlatformFolder(): Int = withContext(Dispatchers.IO) {
+        if (!isStorageReady()) return@withContext 0
+        val marker = "${File.separator}$ADDON_INSTALL_DIR${File.separator}"
+        val snapshots = gameDao.getGamesWithLocalPathInfo()
+            .mapNotNull { info ->
+                val path = info.localPath ?: return@mapNotNull null
+                val at = path.indexOf(marker)
+                if (at < 0) return@mapNotNull null
+                val contentDir = File(path).parentFile ?: return@mapNotNull null
+                Triple(info.id, File(path.substring(0, at)), contentDir)
+            }
+        var moved = 0
+        for ((gameId, platformDir, contentDir) in snapshots) {
+            if (!contentDir.isDirectory || !platformDir.isDirectory) continue
+            val carried = contentDir.walkTopDown().filter { it.isFile }.toList()
+            if (carried.isEmpty()) continue
+            val prefix = contentDir.absolutePath.length + 1
+            val plan = carried.map { it to File(platformDir, it.absolutePath.substring(prefix)) }
+            if (plan.any { (_, target) -> target.exists() }) {
+                Log.w(TAG, "liftAddonInstalls: platform folder already holds a name game $gameId uses, left in place")
+                continue
+            }
+            val done = plan.all { (source, target) ->
+                target.parentFile?.mkdirs()
+                source.renameTo(target) || runCatching {
+                    source.copyTo(target, overwrite = false)
+                    source.delete()
+                }.getOrDefault(false)
+            }
+            if (!done) {
+                Log.w(TAG, "liftAddonInstalls: could not carry game $gameId out of ${contentDir.absolutePath}")
+                continue
+            }
+            plan.forEach { (source, target) ->
+                gameFileDao.updateLocalPathByOldPath(source.absolutePath, target.absolutePath)
+            }
+            val snapshotRoot = contentDir.parentFile
+            gameDao.relocateLocalPath(gameId, File(platformDir, plan.first().second.name).absolutePath)
+            snapshotRoot?.deleteRecursively()
+            moved++
+            Log.d(TAG, "liftAddonInstalls: moved game $gameId into ${platformDir.absolutePath}")
+        }
+        if (moved > 0) Log.i(TAG, "liftAddonInstalls: carried $moved game(s) into their platform folder")
+        moved
     }
 
     suspend fun repairFolderRomPointers(): Int = withContext(Dispatchers.IO) {
